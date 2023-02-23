@@ -70,7 +70,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
+    <Compile Include="Implementation\UsuarioImpl.cs" />
+    <Compile Include="Interfaces\IUsuario.cs" />
+    <Compile Include="Model\Session.cs" />
+    <Compile Include="Model\Usuario.cs" />
+    <Compile Include="winLogin.xaml.cs">
+      <DependentUpon>winLogin.xaml</DependentUpon>
+    </Compile>
+    <Page Include="winEmpleado.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -82,10 +89,14 @@
     <Compile Include="Implementation\DataBase.cs" />
     <Compile Include="Interfaces\IDao.cs" />
     <Compile Include="Interfaces\IEmpleado.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="winEmpleado.xaml.cs">
+      <DependentUpon>winEmpleado.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="winLogin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\BaseClass.cs" />

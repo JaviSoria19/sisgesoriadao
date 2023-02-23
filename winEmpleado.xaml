@@ -1,4 +1,4 @@
-﻿<Window x:Class="sisgesoriadao.MainWindow"
+﻿<Window x:Class="sisgesoriadao.winEmpleado"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
      TextElement.FontWeight="Regular"
@@ -14,13 +14,15 @@
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
         Title="Sistema de Ventas - Planet Cell" Height="720" Width="1280"
-        WindowStartupLocation="CenterScreen" MaxWidth="1920" MaxHeight="1080">
+        WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="10">
-                <materialDesign:PackIcon Kind="PersonBox"/>
-                <TextBlock Text="BIENVENIDO, USUARIO"/>
-                <TextBlock Text="CERRAR SESIÓN" Margin="1000,0,0,0"/>
+                <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtBlockWelcome" Text="BIENVENIDO, USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <Button x:Name="btnLogout" ToolTip="CERRAR SESIÓN" Margin="20,0,0,0">
+                    <materialDesign:PackIcon Kind="Logout"/>
+                </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Label Content="NOMBRES:"/>

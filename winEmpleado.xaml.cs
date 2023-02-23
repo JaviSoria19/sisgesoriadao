@@ -22,12 +22,12 @@ namespace sisgesoriadao
     /// <summary>
     /// Lógica de interacción para MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class winEmpleado : Window
     {
         EmpleadoImpl implEmpleado;
         Empleado empleado;
         byte operacion;
-        public MainWindow()
+        public winEmpleado()
         {
             InitializeComponent();
         }
@@ -270,6 +270,11 @@ namespace sisgesoriadao
         {
             dtpFechaFin.SelectedDate = DateTime.Today;
             dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtBlockWelcome.Text = "Bienvenido, " + Session.NombreUsuario;
         }
     }
 }
