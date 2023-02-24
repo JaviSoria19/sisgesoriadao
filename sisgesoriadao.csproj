@@ -52,6 +52,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -77,6 +79,15 @@
     <Compile Include="winLogin.xaml.cs">
       <DependentUpon>winLogin.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winMainAdmin.xaml.cs">
+      <DependentUpon>winMainAdmin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="winMainSeller.xaml.cs">
+      <DependentUpon>winMainSeller.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="winUsuario.xaml.cs">
+      <DependentUpon>winUsuario.xaml</DependentUpon>
+    </Compile>
     <Page Include="winEmpleado.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -94,6 +105,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="winLogin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winMainAdmin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winMainSeller.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winUsuario.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

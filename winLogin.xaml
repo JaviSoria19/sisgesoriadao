@@ -13,7 +13,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
-        Title="Iniciar Sesión - Planet Cell" Height="400" Width="600"
+        Title="Iniciar Sesión - Sistema de Ventas" Height="400" Width="600"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <StackPanel Orientation="Vertical">
@@ -33,7 +33,7 @@
                 <Button x:Name="btnExit" Content="SALIR" Width="150" Margin="5" Click="btnExit_Click"/>
             </StackPanel>
             <materialDesign:Card Height="50" Margin="10">
-                <Label x:Name="lblInfo" Content="Status" VerticalAlignment="Center" FontWeight="Bold"/>
+                <Label x:Name="lblInfo" Content="STATUS:" VerticalAlignment="Center" FontWeight="Bold" Margin="5"/>
             </materialDesign:Card>
         </StackPanel>
         

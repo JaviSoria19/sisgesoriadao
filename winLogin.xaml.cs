@@ -30,7 +30,7 @@ namespace sisgesoriadao
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Application.Current.Shutdown();
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
@@ -43,9 +43,22 @@ namespace sisgesoriadao
                     session = implUsuario.Login(txtUserName.Text,txtPassword.Password);
                     if (session != null)
                     {
-                        winEmpleado winempleado = new winEmpleado();
-                        winempleado.Show();
-                        this.Close();
+                        switch (Session.Rol)
+                        {
+                            case 1:
+                                winMainAdmin winMainAdmin = new winMainAdmin();
+                                winMainAdmin.Show();
+                                this.Close();
+                                break;
+                            case 2:
+                                winMainSeller winMainSeller = new winMainSeller();
+                                winMainSeller.Show();
+                                this.Close();
+                                break;
+                            default:
+                                MessageBox.Show("Algo salió mal, intente nuevamente.");
+                                break;
+                        }
                     }
                     else
                     {

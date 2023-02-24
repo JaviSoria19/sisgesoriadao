@@ -13,8 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;//ADO.NET
-using MySql.Data.MySqlClient;//MySql.Data
-
 using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
 namespace sisgesoriadao
@@ -274,7 +272,14 @@ namespace sisgesoriadao
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            txtBlockWelcome.Text = "Bienvenido, " + Session.NombreUsuario;
+            txtBlockWelcome.Text = Session.NombreUsuario;
+        }
+
+        private void btnReturn_Click(object sender, RoutedEventArgs e)
+        {
+            winMainAdmin winMainAdmin = new winMainAdmin();
+            winMainAdmin.Show();
+            this.Close();
         }
     }
 }

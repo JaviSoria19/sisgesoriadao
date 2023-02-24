@@ -13,18 +13,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
-        Title="Sistema de Ventas - Planet Cell" Height="720" Width="1280"
+        Title="Sistema de Ventas - Empleados" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="10">
-                <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
-                <TextBlock x:Name="txtBlockWelcome" Text="BIENVENIDO, USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
-                <Button x:Name="btnLogout" ToolTip="CERRAR SESIÓN" Margin="20,0,0,0">
-                    <materialDesign:PackIcon Kind="Logout"/>
+                <Button x:Name="btnReturn" ToolTip="VOLVER A INICIO" Margin="0,0,20,0" Click="btnReturn_Click">
+                    <materialDesign:PackIcon Kind="ArrowLeftBold"/>
                 </Button>
+                <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="10">
+            
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="NOMBRES:"/>
                 <TextBox x:Name="txtNombre" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
                 <Label Content="PRIMER AP.:"/>
@@ -36,7 +37,8 @@
                 <Label Content="NRO. CARNET:"/>
                 <TextBox x:Name="txtNumeroCI" TextWrapping="Wrap" Margin="0,0,20,0" Width="120" MaxLength="10" IsEnabled="False"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="10">
+            
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Button x:Name="btnInsert" Content="INSERTAR" Margin="0,0,5,0" Click="btnInsert_Click"/>
                 <Button x:Name="btnUpdate" Content="MODIFICAR" Margin="5" Click="btnUpdate_Click"/>
                 <Button x:Name="btnDelete" Content="ELIMINAR" Margin="5" Click="btnDelete_Click"/>

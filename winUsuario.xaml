@@ -1,0 +1,43 @@
+﻿<Window x:Class="sisgesoriadao.winUsuario"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
+     Background="{DynamicResource MaterialDesignPaper}"
+     FontFamily="{DynamicResource MaterialDesignFont}"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:sisgesoriadao"
+        mc:Ignorable="d"
+        Title="Sistema de Ventas - Usuarios" Height="720" Width="1280"
+        WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Button x:Name="btnReturn" ToolTip="VOLVER A INICIO" Margin="0,0,20,0" Click="btnReturn_Click">
+                    <materialDesign:PackIcon Kind="ArrowLeftBold"/>
+                </Button>
+                <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <Label Content="USUARIO:"/>
+                <TextBox x:Name="txtUsuario" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
+                <Label Content="CONTRASEÑA:"/>
+                <TextBox x:Name="txtContrasenha" TextWrapping="Wrap" Margin="0,0,20,0" Width="130" MaxLength="30" IsEnabled="False"/>
+                <Label Content="CONFIRMAR CONTRASEÑA:"/>
+                <TextBox x:Name="txtReContrasenha" TextWrapping="Wrap" Margin="0,0,20,0" Width="130" MaxLength="30" IsEnabled="False"/>
+                <Label Content="ROL:"/>
+                <ComboBox x:Name="cbxRol">
+                </ComboBox>
+                <Label Content="PIN:"/>
+                <TextBox x:Name="txtPin" TextWrapping="Wrap" Margin="0,0,20,0" Width="80" MaxLength="6" IsEnabled="False"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
