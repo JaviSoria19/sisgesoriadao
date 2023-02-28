@@ -61,6 +61,18 @@
                     </Button>
                     <Label Content="PRODUCTOS" FontWeight="Bold" HorizontalAlignment="Center"/>
                 </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
+                    <Button x:Name="btnBrands" Width="100" Height="100" Click="btnProducts_Click">
+                        <materialDesign:PackIcon Kind="Tag" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <Label Content="MARCAS" FontWeight="Bold" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
+                    <Button x:Name="btnCategories" Width="100" Height="100" Click="btnProducts_Click">
+                        <materialDesign:PackIcon Kind="DotsSquare" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <Label Content="CATEGORIAS" FontWeight="Bold" HorizontalAlignment="Center"/>
+                </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Margin="20">

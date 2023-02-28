@@ -97,8 +97,8 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            string query = @"SELECT idEmpleado as ID, nombres as Nombres, CONCAT(primerApellido,' ',IFNULL(segundoApellido,' ')) AS Apellidos,
-                            numeroCelular AS Celular, numeroCI AS Carnet, fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM empleado WHERE estado=1 ORDER BY 6 DESC";
+            string query = @"SELECT idEmpleado as ID, nombres as Nombres, CONCAT(primerApellido,' ',IF(segundoApellido='-','',IFNULL(segundoApellido,''))) AS Apellidos,
+                            numeroCelular AS Celular, numeroCI AS Carnet, fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM empleado WHERE estado IN (1,2) ORDER BY 6 DESC";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -112,11 +112,11 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT idEmpleado as ID, nombres as Nombres, CONCAT(primerApellido,' ',IFNULL(segundoApellido,' ')) AS Apellidos,
+            string query = @"SELECT idEmpleado as ID, nombres as Nombres, CONCAT(primerApellido,' ',IF(segundoApellido='-','',IFNULL(segundoApellido,''))) AS Apellidos,
                                 numeroCelular AS Celular, numeroCI AS Carnet, fechaRegistro AS 'Fecha de Registro',
                                 IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM bdventacelular.empleado 
                                 WHERE (nombres LIKE @search OR primerApellido LIKE @search OR segundoApellido LIKE @search OR numeroCelular LIKE @search OR numeroCI LIKE @search) 
-                                AND estado = 1 AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin
+                                AND estado IN (1,2) AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                                 ORDER BY 6 DESC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@search", "%" + CadenaBusqueda + "%");
@@ -129,6 +129,37 @@ namespace sisgesoriadao.Implementation
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        public DataTable SelectEmployeesWithoutUsers()
+        {
+            string query = @"SELECT idEmpleado as ID, CONCAT(nombres, ' ',primerApellido,' ',IF(segundoApellido='-','',IFNULL(segundoApellido,''))) AS Nombre FROM empleado WHERE estado=1 ORDER BY 1 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public int UpdateCreatedUser(Empleado e)
+        {
+            string query = @"UPDATE empleado SET estado = 2 WHERE idEmpleado = @idEmpleado";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idEmpleado", e.IdEmpleado);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
         }
     }

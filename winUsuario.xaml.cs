@@ -21,11 +21,25 @@ namespace sisgesoriadao
     /// </summary>
     public partial class winUsuario : Window
     {
+        UsuarioImpl implUsuario;
+        Usuario usuario;
+        EmpleadoImpl implEmpleado;
+        Empleado empleado;
+        byte operacion;
         public winUsuario()
         {
             InitializeComponent();
         }
-
+        private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
+        {
+            Select();
+            SelectEmployees();
+        }
+        private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
+        {
+            dtpFechaFin.SelectedDate = DateTime.Today;
+            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
+        }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
@@ -41,14 +55,296 @@ namespace sisgesoriadao
             //retorna el valor de 1:
             //MessageBox.Show((cbxRol.SelectedItem as ComboboxItem).Value.ToString());
         }
+        private void Select()
+        {
+            try
+            {
+                implUsuario = new UsuarioImpl();
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implUsuario.Select().DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                dgvDatos.Columns[1].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implUsuario.Select().Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void SelectEmployees()
+        {
+            try
+            {
+                implEmpleado = new EmpleadoImpl();
+                dgvEmpleados.ItemsSource = null;
+                dgvEmpleados.ItemsSource = implEmpleado.SelectEmployeesWithoutUsers().DefaultView;
+                dgvEmpleados.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridEmpleados.Content = "NÚMERO DE REGISTROS: " + implEmpleado.SelectEmployeesWithoutUsers().Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void btnInsert_Click(object sender, RoutedEventArgs e)
+        {
+            if (empleado == null)
+            {
+                labelWarning(lblInfo);
+                lblInfo.Content = "PARA INSERTAR UN NUEVO USUARIO DEBE SELECCIONAR UN EMPLEADO.";
+            }
+            else
+            {
+                labelSuccess(lblInfo);
+                lblInfo.Content = "EMPLEADO SELECCIONADO: " + empleado.Nombres + " " + empleado.PrimerApellido + ",INGRESE LOS DATOS SOLICITADOS.";
+                EnabledButtons();
+                this.operacion = 1;
+            }
+        }
 
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            if (usuario != null)
+            {
+                labelClear(lblInfo);
+                EnabledButtons();
+                this.operacion = 2;
+            }
+            else
+            {
+                labelWarning(lblInfo);
+                lblInfo.Content = "¡PARA MODIFICAR UN USUARIO DEBE SELECCIONAR UN REGISTRO!";
+            }
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (usuario != null)
+            {
+                labelClear(lblInfo);
+                if (MessageBox.Show("Está realmente segur@ de eliminar el registro?", "Eliminar", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        implUsuario = new UsuarioImpl();
+                        int n = implUsuario.Delete(usuario);
+                        if (n > 0)
+                        {
+                            labelSuccess(lblInfo);
+                            lblInfo.Content = "REGISTRO ELIMINADO CON ÉXITO.";
+                            Select();
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                }
+            }
+            else
+            {
+                labelWarning(lblInfo);
+                lblInfo.Content = "¡PARA ELIMINAR UN EMPLEADO DEBE SELECCIONAR UN REGISTRO!";
+            }
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            switch (operacion)
+            {
+                //INSERT
+                case 1:
+                    if (txtContrasenha.Text != txtReContrasenha.Text)
+                    {
+                        MessageBox.Show("Las contraseñas no coinciden, por favor intente nuevamente.");
+                    }
+                    else
+                    {
+                        usuario = new Usuario(empleado.IdEmpleado, txtUsuario.Text.Trim(), txtContrasenha.Text.Trim(), byte.Parse((cbxRol.SelectedItem as ComboboxItem).Value.ToString()), txtPin.Text.Trim());
+                        implUsuario = new UsuarioImpl();
+                        try
+                        {
+                            int n = implUsuario.Insert(usuario);
+                            if (n > 0)
+                            {
+                                labelSuccess(lblInfo);
+                                lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
+                                Select();
+                                try
+                                {
+                                    int n2 = implEmpleado.UpdateCreatedUser(empleado);
+                                    if (n2 > 0)
+                                    {
+                                        SelectEmployees();
+                                        empleado = null;
+                                    }
+                                }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Segunda transacción no completada, comuníquese con el Administrador de Sistemas.");
+                                }
+                                DisabledButtons();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                        }
+                        //MessageBox.Show("ID Empleado: " + usuario.IdEmpleado + "Usuario: " + usuario.NombreUsuario + "Contraseña: " + usuario.Contrasenha + "Rol: " + usuario.Rol + "Pin: " + usuario.Pin);
+                    }
+                    break;
+                //UPDATE
+                case 2:
+                    usuario.NombreUsuario = txtUsuario.Text.Trim();
+                    usuario.Rol = byte.Parse((cbxRol.SelectedItem as ComboboxItem).Value.ToString());
+                    usuario.Pin = txtPin.Text.Trim();
+                    implUsuario = new UsuarioImpl();
+                    try
+                    {
+                        int n = implUsuario.Update(usuario);
+                        if (n > 0)
+                        {
+                            labelSuccess(lblInfo);
+                            lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
+                            Select();
+                            DisabledButtons();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            DisabledButtons();
+        }
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            if (txtBuscar.Text == null || txtBuscar.Text == "")
+            {
+                Select();
+            }
+            else
+            {
+                try
+                {
+                    dgvDatos.ItemsSource = null;
+                    dgvDatos.ItemsSource = implUsuario.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
+                    dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                    dgvDatos.Columns[1].Visibility = Visibility.Collapsed;
+                    lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implUsuario.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
             winMainAdmin winMainAdmin = new winMainAdmin();
             winMainAdmin.Show();
             this.Close();
         }
+        void EnabledButtons()
+        {
+            btnInsert.IsEnabled = false;
+            btnUpdate.IsEnabled = false;
+            btnDelete.IsEnabled = false;
 
+            btnSave.IsEnabled = true;
+            btnCancel.IsEnabled = true;
+
+            txtUsuario.IsEnabled = true;
+            txtUsuario.Focus();
+            txtContrasenha.IsEnabled = true;
+            txtReContrasenha.IsEnabled = true;
+            cbxRol.IsEnabled = true;
+            txtPin.IsEnabled = true;
+        }
+        void DisabledButtons()
+        {
+            btnInsert.IsEnabled = true;
+            btnUpdate.IsEnabled = true;
+            btnDelete.IsEnabled = true;
+
+            btnSave.IsEnabled = false;
+            btnCancel.IsEnabled = false;
+
+            txtUsuario.IsEnabled = false;
+            txtUsuario.Focus();
+            txtContrasenha.IsEnabled = false;
+            txtReContrasenha.IsEnabled = false;
+            cbxRol.IsEnabled = false;
+            txtPin.IsEnabled = false;
+        }
+        private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)
+            {
+                try
+                {
+                    DataRowView d = (DataRowView)dgvDatos.SelectedItem;
+                    byte id = byte.Parse(d.Row.ItemArray[0].ToString());
+                    implUsuario = new UsuarioImpl();
+                    usuario = implUsuario.Get(id);
+                    if (usuario != null)
+                    {
+                        //txtNombre.Text = empleado.Nombres.Trim();
+                        txtUsuario.Text = usuario.NombreUsuario.Trim();
+                        if (usuario.Rol == 1)
+                        {
+                            cbxRol.SelectedIndex = 0;
+                        }
+                        else
+                        {
+                            cbxRol.SelectedIndex = 1;
+                        }
+                        txtPin.Text = usuario.Pin;
+
+                        labelSuccess(lblInfo);
+                        lblInfo.Content = "USUARIO SELECCIONADO.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    throw;
+                }
+            }
+        }
+        private void dgvEmpleados_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgvEmpleados.SelectedItem != null && dgvEmpleados.Items.Count > 0)
+            {
+                try
+                {
+                    DataRowView d = (DataRowView)dgvEmpleados.SelectedItem;
+                    byte id = byte.Parse(d.Row.ItemArray[0].ToString());
+                    implEmpleado = new EmpleadoImpl();
+                    empleado = implEmpleado.Get(id);
+                    if (empleado != null)
+                    {
+                        //lblDataGridEmpleados.Content = empleado.IdEmpleado;
+                        labelSuccess(lblInfo);
+                        lblInfo.Content = "ATENCIÓN: UN EMPLEADO HA SIDO SELECCIONADO, AHORA PUEDE CREAR UN USUARIO.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    throw;
+                }
+            }
+        }
         private void TextBoxUppercase(object sender, KeyEventArgs e)
         {
             TextBox currentContainer = ((TextBox)sender);
@@ -56,6 +352,27 @@ namespace sisgesoriadao
 
             currentContainer.Text = currentContainer.Text.ToUpper();
             currentContainer.SelectionStart = caretPosition++;
+        }
+        public void labelClear(Label label)
+        {
+            label.Foreground = new SolidColorBrush(Colors.Transparent);
+            label.Background = new SolidColorBrush(Colors.Transparent);
+            label.Content = "";
+        }
+        public void labelSuccess(Label label)
+        {
+            label.Foreground = new SolidColorBrush(Colors.Black);
+            label.Background = new SolidColorBrush(Colors.SpringGreen);
+        }
+        public void labelWarning(Label label)
+        {
+            label.Foreground = new SolidColorBrush(Colors.Black);
+            label.Background = new SolidColorBrush(Colors.Gold);
+        }
+        public void labelDanger(Label label)
+        {
+            label.Foreground = new SolidColorBrush(Colors.Black);
+            label.Background = new SolidColorBrush(Colors.Red);
         }
         public class ComboboxItem
         {

@@ -23,8 +23,11 @@
                 </Button>
                 <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
                 <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="FaceAgent" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="EMPLEADOS" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
-            
+
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="NOMBRES:"/>
                 <TextBox x:Name="txtNombre" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
@@ -37,7 +40,7 @@
                 <Label Content="NRO. CARNET:"/>
                 <TextBox x:Name="txtNumeroCI" TextWrapping="Wrap" Margin="0,0,20,0" Width="120" MaxLength="10" IsEnabled="False"/>
             </StackPanel>
-            
+
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Button x:Name="btnInsert" Content="INSERTAR" Margin="0,0,5,0" Click="btnInsert_Click"/>
                 <Button x:Name="btnUpdate" Content="MODIFICAR" Margin="5" Click="btnUpdate_Click"/>
@@ -45,6 +48,7 @@
                 <Button x:Name="btnSave" Content="GUARDAR" Margin="5" IsEnabled="False" Click="btnSave_Click"/>
                 <Button x:Name="btnCancel" Content="CANCELAR" Margin="5" IsEnabled="False" Click="btnCancel_Click"/>
             </StackPanel>
+
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
                 <Label x:Name="lblInfo" Content="" Foreground="Blue" Background="Transparent" Margin="0,0,0,10" HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
@@ -68,9 +72,7 @@
                 </Border>
                 <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
             </StackPanel>
-            
+
         </StackPanel>
-        
-        
     </Grid>
 </Window>

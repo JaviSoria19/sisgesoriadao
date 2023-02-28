@@ -15,7 +15,7 @@
         mc:Ignorable="d"
         Title="Sistema de Ventas - Usuarios" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
-    <Grid>
+    <ScrollViewer>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Button x:Name="btnReturn" ToolTip="VOLVER A INICIO" Margin="0,0,20,0" Click="btnReturn_Click">
@@ -23,6 +23,9 @@
                 </Button>
                 <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
                 <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="TooltipUser" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="USUARIOS" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
@@ -33,11 +36,55 @@
                 <Label Content="CONFIRMAR CONTRASEÑA:"/>
                 <TextBox x:Name="txtReContrasenha" TextWrapping="Wrap" Margin="0,0,20,0" Width="130" MaxLength="30" IsEnabled="False"/>
                 <Label Content="ROL:"/>
-                <ComboBox x:Name="cbxRol">
+                <ComboBox x:Name="cbxRol" IsEnabled="False">
                 </ComboBox>
                 <Label Content="PIN:"/>
                 <TextBox x:Name="txtPin" TextWrapping="Wrap" Margin="0,0,20,0" Width="80" MaxLength="6" IsEnabled="False"/>
             </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <Button x:Name="btnInsert" Content="INSERTAR" Margin="0,0,5,0" Click="btnInsert_Click"/>
+                <Button x:Name="btnUpdate" Content="MODIFICAR" Margin="5" Click="btnUpdate_Click"/>
+                <Button x:Name="btnDelete" Content="ELIMINAR" Margin="5" Click="btnDelete_Click"/>
+                <Button x:Name="btnSave" Content="GUARDAR" Margin="5" IsEnabled="False" Click="btnSave_Click"/>
+                <Button x:Name="btnCancel" Content="CANCELAR" Margin="5" IsEnabled="False" Click="btnCancel_Click"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
+                <Label x:Name="lblInfo" Content="" Foreground="Blue" Background="Transparent" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                    <Label Content="Buscar:" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtBuscar" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="20" Height="22"/>
+                    <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0">
+                        <materialDesign:PackIcon Kind="Search"/>
+                    </Button>
+                    <Label Content="Desde:" VerticalAlignment="Center"/>
+                    <DatePicker x:Name="dtpFechaInicio" Margin="0,0,20,0"/>
+                    <Label Content="Hasta:" VerticalAlignment="Center"/>
+                    <DatePicker x:Name="dtpFechaFin" Loaded="dtpFechaFin_Loaded" />
+                </StackPanel>
+                <Border BorderBrush="Gray" BorderThickness="2">
+                    <DataGrid x:Name="dgvDatos"
+                  HorizontalAlignment="Left" VerticalAlignment="Top"
+                  Loaded="dgvDatos_Loaded" GridLinesVisibility="Horizontal"
+                  CanUserAddRows="False" IsReadOnly="True" 
+                  CanUserResizeRows="False" CanUserResizeColumns="False"
+                  SelectionChanged="dgvDatos_SelectionChanged" MaxHeight="363"/>
+                </Border>
+                <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
+                <TextBlock Text="EMPLEADOS SIN USUARIO:" Margin="0,20,0,20" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
+                <Border BorderBrush="Gray" BorderThickness="2">
+                    <DataGrid x:Name="dgvEmpleados"
+                  HorizontalAlignment="Left" VerticalAlignment="Top"
+                  Loaded="dgvDatos_Loaded" GridLinesVisibility="Horizontal"
+                  CanUserAddRows="False" IsReadOnly="True" 
+                  CanUserResizeRows="False" CanUserResizeColumns="False"
+                  SelectionChanged="dgvEmpleados_SelectionChanged" MaxHeight="363"/>
+                </Border>
+                <Label x:Name="lblDataGridEmpleados" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
+            </StackPanel>
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </Window>

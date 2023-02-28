@@ -33,6 +33,15 @@ namespace sisgesoriadao
         {
             Select();
         }
+        private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
+        {
+            dtpFechaFin.SelectedDate = DateTime.Today;
+            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtBlockWelcome.Text = Session.NombreUsuario;
+        }
         private void Select()
         {
             try
@@ -177,6 +186,12 @@ namespace sisgesoriadao
                 }
             }
         }
+        private void btnReturn_Click(object sender, RoutedEventArgs e)
+        {
+            winMainAdmin winMainAdmin = new winMainAdmin();
+            winMainAdmin.Show();
+            this.Close();
+        }
         void EnabledButtons()
         {
             btnInsert.IsEnabled = false;
@@ -225,6 +240,9 @@ namespace sisgesoriadao
                         txtSegundoApellido.Text = empleado.SegundoApellido.Trim();
                         txtNumeroCelular.Text = empleado.NumeroCelular.Trim();
                         txtNumeroCI.Text = empleado.NumeroCI.Trim();
+
+                        labelSuccess(lblInfo);
+                        lblInfo.Content = "EMPLEADO SELECCIONADO.";
                     }
                 }
                 catch (Exception ex)
@@ -262,24 +280,6 @@ namespace sisgesoriadao
         {
             label.Foreground = new SolidColorBrush(Colors.Black);
             label.Background = new SolidColorBrush(Colors.Red);
-        }
-
-        private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
-        {
-            dtpFechaFin.SelectedDate = DateTime.Today;
-            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            txtBlockWelcome.Text = Session.NombreUsuario;
-        }
-
-        private void btnReturn_Click(object sender, RoutedEventArgs e)
-        {
-            winMainAdmin winMainAdmin = new winMainAdmin();
-            winMainAdmin.Show();
-            this.Close();
         }
     }
 }
