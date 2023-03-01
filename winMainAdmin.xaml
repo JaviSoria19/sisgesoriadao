@@ -62,19 +62,19 @@
                     <Label Content="PRODUCTOS" FontWeight="Bold" HorizontalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
-                    <Button x:Name="btnBrands" Width="100" Height="100" Click="btnProducts_Click">
+                    <Button x:Name="btnBrands" Width="100" Height="100" Click="btnBrands_Click">
                         <materialDesign:PackIcon Kind="Tag" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
                     <Label Content="MARCAS" FontWeight="Bold" HorizontalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
-                    <Button x:Name="btnCategories" Width="100" Height="100" Click="btnProducts_Click">
+                    <Button x:Name="btnCategories" Width="100" Height="100" Click="btnCategories_Click">
                         <materialDesign:PackIcon Kind="DotsSquare" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
                     <Label Content="CATEGORIAS" FontWeight="Bold" HorizontalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
-                    <Button x:Name="btnReports" Width="100" Height="100" Click="btnProducts_Click">
+                    <Button x:Name="btnReports" Width="100" Height="100" Click="btnReports_Click">
                         <materialDesign:PackIcon Kind="ChartBar" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
                     <Label Content="REPORTES" FontWeight="Bold" HorizontalAlignment="Center"/>

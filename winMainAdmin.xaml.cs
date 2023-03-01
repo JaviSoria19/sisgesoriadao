@@ -80,5 +80,22 @@ namespace sisgesoriadao
         {
 
         }
+
+        private void btnBrands_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnCategories_Click(object sender, RoutedEventArgs e)
+        {
+            winCategoria winCategoria = new winCategoria();
+            winCategoria.Show();
+            this.Close();
+        }
+
+        private void btnReports_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
