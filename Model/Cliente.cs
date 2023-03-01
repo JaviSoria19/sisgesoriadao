@@ -6,36 +6,31 @@ using System.Threading.Tasks;
 
 namespace sisgesoriadao.Model
 {
-    public class Empleado:BaseClass
+    public class Cliente:BaseClass
     {
-        public byte IdEmpleado { get; set; }
+        public int IdCliente { get; set; }
         public string Nombres { get; set; }
         public string PrimerApellido { get; set; }
         public string SegundoApellido { get; set; }
         public string NumeroCelular { get; set; }
         public string NumeroCI { get; set; }
-
-        //constructor por defecto.
-        public Empleado()
+        public Cliente()
         {
 
         }
         /// <summary>
         /// GET & UPDATE
         /// </summary>
-        /// <param name="idEmpleado"></param>
+        /// <param name="idCliente"></param>
         /// <param name="nombres"></param>
         /// <param name="primerApellido"></param>
         /// <param name="segundoApellido"></param>
         /// <param name="numeroCelular"></param>
         /// <param name="numeroCI"></param>
-        /// <param name="estado"></param>
-        /// <param name="fechaRegistro"></param>
-        /// <param name="fechaActualizacion"></param>
-        public Empleado(byte idEmpleado, string nombres, string primerApellido, string segundoApellido, string numeroCelular, string numeroCI, byte estado, DateTime fechaRegistro, string fechaActualizacion)
-            :base(estado,fechaRegistro,fechaActualizacion)
+        public Cliente(int idCliente, string nombres, string primerApellido, string segundoApellido, string numeroCelular, string numeroCI, byte estado, DateTime fechaRegistro, string fechaActualizacion)
+            : base(estado, fechaRegistro, fechaActualizacion)
         {
-            IdEmpleado = idEmpleado;
+            IdCliente = idCliente;
             Nombres = nombres;
             PrimerApellido = primerApellido;
             SegundoApellido = segundoApellido;
@@ -50,7 +45,7 @@ namespace sisgesoriadao.Model
         /// <param name="segundoApellido"></param>
         /// <param name="numeroCelular"></param>
         /// <param name="numeroCI"></param>
-        public Empleado(string nombres, string primerApellido, string segundoApellido, string numeroCelular, string numeroCI)
+        public Cliente(string nombres, string primerApellido, string segundoApellido, string numeroCelular, string numeroCI)
         {
             Nombres = nombres;
             PrimerApellido = primerApellido;
@@ -61,10 +56,10 @@ namespace sisgesoriadao.Model
         /// <summary>
         /// DELETE
         /// </summary>
-        /// <param name="idEmpleado"></param>
-        public Empleado(byte idEmpleado)
+        /// <param name="idCliente"></param>
+        public Cliente(int idCliente)
         {
-            IdEmpleado = idEmpleado;
+            IdCliente = idCliente;
         }
     }
 }

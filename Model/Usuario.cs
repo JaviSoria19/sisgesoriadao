@@ -19,7 +19,18 @@ namespace sisgesoriadao.Model
         {
 
         }
-
+        /// <summary>
+        /// GET & UPDATE
+        /// </summary>
+        /// <param name="idUsuario"></param>
+        /// <param name="idEmpleado"></param>
+        /// <param name="nombreUsuario"></param>
+        /// <param name="contrasenha"></param>
+        /// <param name="rol"></param>
+        /// <param name="pin"></param>
+        /// <param name="estado"></param>
+        /// <param name="fechaRegistro"></param>
+        /// <param name="fechaActualizacion"></param>
         public Usuario(byte idUsuario, byte idEmpleado, string nombreUsuario, string contrasenha, byte rol, string pin, byte estado, DateTime fechaRegistro, string fechaActualizacion)
             :base(estado, fechaRegistro, fechaActualizacion)
         {

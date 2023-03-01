@@ -71,10 +71,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Implementation\ClienteImpl.cs" />
     <Compile Include="Implementation\UsuarioImpl.cs" />
+    <Compile Include="Interfaces\ICliente.cs" />
     <Compile Include="Interfaces\IUsuario.cs" />
+    <Compile Include="Model\Cliente.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Usuario.cs" />
+    <Compile Include="winCliente.xaml.cs">
+      <DependentUpon>winCliente.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winLogin.xaml.cs">
       <DependentUpon>winLogin.xaml</DependentUpon>
     </Compile>
@@ -87,6 +93,10 @@
     <Compile Include="winUsuario.xaml.cs">
       <DependentUpon>winUsuario.xaml</DependentUpon>
     </Compile>
+    <Page Include="winCliente.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="winEmpleado.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

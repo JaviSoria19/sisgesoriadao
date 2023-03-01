@@ -64,7 +64,9 @@ namespace sisgesoriadao
 
         private void btnCustomers_Click(object sender, RoutedEventArgs e)
         {
-
+            winCliente winCliente = new winCliente();
+            winCliente.Show();
+            this.Close();
         }
 
         private void btnBranches_Click(object sender, RoutedEventArgs e)
