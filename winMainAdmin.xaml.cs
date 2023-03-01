@@ -71,7 +71,9 @@ namespace sisgesoriadao
 
         private void btnBranches_Click(object sender, RoutedEventArgs e)
         {
-
+            winSucursal winSucursal = new winSucursal();
+            winSucursal.Show();
+            this.Close();
         }
 
         private void btnProducts_Click(object sender, RoutedEventArgs e)

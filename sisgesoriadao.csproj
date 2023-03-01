@@ -72,11 +72,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Implementation\ClienteImpl.cs" />
+    <Compile Include="Implementation\SucursalImpl.cs" />
     <Compile Include="Implementation\UsuarioImpl.cs" />
     <Compile Include="Interfaces\ICliente.cs" />
+    <Compile Include="Interfaces\ISucursal.cs" />
     <Compile Include="Interfaces\IUsuario.cs" />
     <Compile Include="Model\Cliente.cs" />
     <Compile Include="Model\Session.cs" />
+    <Compile Include="Model\Sucursal.cs" />
     <Compile Include="Model\Usuario.cs" />
     <Compile Include="winCliente.xaml.cs">
       <DependentUpon>winCliente.xaml</DependentUpon>
@@ -89,6 +92,9 @@
     </Compile>
     <Compile Include="winMainSeller.xaml.cs">
       <DependentUpon>winMainSeller.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="winSucursal.xaml.cs">
+      <DependentUpon>winSucursal.xaml</DependentUpon>
     </Compile>
     <Compile Include="winUsuario.xaml.cs">
       <DependentUpon>winUsuario.xaml</DependentUpon>
@@ -122,6 +128,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winMainSeller.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winSucursal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
