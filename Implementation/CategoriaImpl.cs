@@ -95,7 +95,7 @@ namespace sisgesoriadao.Implementation
         {
             string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM categoria AS C
                                 INNER JOIN usuario AS U ON C.idUsuario = U.idUsuario
-                                WHERE C.estado = 1 ORDER BY 3 DESC";
+                                WHERE C.estado = 1 ORDER BY 3 DESC, 2 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -113,7 +113,7 @@ namespace sisgesoriadao.Implementation
                                 INNER JOIN usuario AS U ON C.idUsuario = U.idUsuario
                                 WHERE (C.nombreCategoria LIKE @search) 
                                 AND C.estado = 1 AND C.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
-                                ORDER BY 3 DESC";
+                                ORDER BY 3 DESC, 2 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@search", "%" + CadenaBusqueda + "%");
             command.Parameters.AddWithValue("@FechaInicio", FechaInicio.ToString("yyyy-MM-dd"));

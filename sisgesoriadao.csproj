@@ -73,14 +73,20 @@
     </ApplicationDefinition>
     <Compile Include="Implementation\CategoriaImpl.cs" />
     <Compile Include="Implementation\ClienteImpl.cs" />
+    <Compile Include="Implementation\MarcaImpl.cs" />
+    <Compile Include="Implementation\ProductoImpl.cs" />
     <Compile Include="Implementation\SucursalImpl.cs" />
     <Compile Include="Implementation\UsuarioImpl.cs" />
     <Compile Include="Interfaces\ICategoria.cs" />
     <Compile Include="Interfaces\ICliente.cs" />
+    <Compile Include="Interfaces\IMarca.cs" />
+    <Compile Include="Interfaces\IProducto.cs" />
     <Compile Include="Interfaces\ISucursal.cs" />
     <Compile Include="Interfaces\IUsuario.cs" />
     <Compile Include="Model\Categoria.cs" />
     <Compile Include="Model\Cliente.cs" />
+    <Compile Include="Model\Marca.cs" />
+    <Compile Include="Model\Producto.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Sucursal.cs" />
     <Compile Include="Model\Usuario.cs" />
@@ -98,6 +104,9 @@
     </Compile>
     <Compile Include="winMainSeller.xaml.cs">
       <DependentUpon>winMainSeller.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="winMarca.xaml.cs">
+      <DependentUpon>winMarca.xaml</DependentUpon>
     </Compile>
     <Compile Include="winSucursal.xaml.cs">
       <DependentUpon>winSucursal.xaml</DependentUpon>
@@ -138,6 +147,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winMainSeller.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winMarca.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

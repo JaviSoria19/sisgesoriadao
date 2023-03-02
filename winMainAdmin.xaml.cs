@@ -83,7 +83,9 @@ namespace sisgesoriadao
 
         private void btnBrands_Click(object sender, RoutedEventArgs e)
         {
-
+            winMarca winMarca = new winMarca();
+            winMarca.Show();
+            this.Close();
         }
 
         private void btnCategories_Click(object sender, RoutedEventArgs e)

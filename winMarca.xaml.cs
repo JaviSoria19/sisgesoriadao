@@ -17,14 +17,14 @@ using sisgesoriadao.Implementation;
 namespace sisgesoriadao
 {
     /// <summary>
-    /// Lógica de interacción para winCategoria.xaml
+    /// Lógica de interacción para winMarca.xaml
     /// </summary>
-    public partial class winCategoria : Window
+    public partial class winMarca : Window
     {
-        CategoriaImpl implCategoria;
-        Categoria categoria;
+        MarcaImpl implMarca;
+        Marca marca;
         byte operacion;
-        public winCategoria()
+        public winMarca()
         {
             InitializeComponent();
         }
@@ -45,11 +45,11 @@ namespace sisgesoriadao
         {
             try
             {
-                implCategoria = new CategoriaImpl();
+                implMarca = new MarcaImpl();
                 dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implCategoria.Select().DefaultView;
+                dgvDatos.ItemsSource = implMarca.Select().DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implCategoria.Select().Rows.Count;
+                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implMarca.Select().Rows.Count;
             }
             catch (Exception ex)
             {
@@ -62,9 +62,10 @@ namespace sisgesoriadao
             EnabledButtons();
             this.operacion = 1;
         }
+
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            if (categoria != null)
+            if (marca != null)
             {
                 labelClear(lblInfo);
                 EnabledButtons();
@@ -73,20 +74,21 @@ namespace sisgesoriadao
             else
             {
                 labelWarning(lblInfo);
-                lblInfo.Content = "¡PARA MODIFICAR UNA CATEGORIA DEBE SELECCIONAR UN REGISTRO!";
+                lblInfo.Content = "¡PARA MODIFICAR UNA MARCA DEBE SELECCIONAR UN REGISTRO!";
             }
         }
+
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            if (categoria != null)
+            if (marca != null)
             {
                 labelClear(lblInfo);
                 if (MessageBox.Show("Está realmente segur@ de eliminar el registro?", "Eliminar", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
                     try
                     {
-                        implCategoria = new CategoriaImpl();
-                        int n = implCategoria.Delete(categoria);
+                        implMarca = new MarcaImpl();
+                        int n = implMarca.Delete(marca);
                         if (n > 0)
                         {
                             labelSuccess(lblInfo);
@@ -104,20 +106,21 @@ namespace sisgesoriadao
             else
             {
                 labelWarning(lblInfo);
-                lblInfo.Content = "¡PARA ELIMINAR UNA CATEGORIA DEBE SELECCIONAR UN REGISTRO!";
+                lblInfo.Content = "¡PARA ELIMINAR UNA MARCA DEBE SELECCIONAR UN REGISTRO!";
             }
         }
+
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             switch (operacion)
             {
                 //INSERT
                 case 1:
-                    categoria = new Categoria(txtCategoria.Text.Trim(), Session.IdUsuario);
-                    implCategoria = new CategoriaImpl();
+                    marca = new Marca(txtNombreMarca.Text.Trim(), Session.IdUsuario);
+                    implMarca = new MarcaImpl();
                     try
                     {
-                        int n = implCategoria.Insert(categoria);
+                        int n = implMarca.Insert(marca);
                         if (n > 0)
                         {
                             labelSuccess(lblInfo);
@@ -133,12 +136,12 @@ namespace sisgesoriadao
                     break;
                 //UPDATE
                 case 2:
-                    categoria.NombreCategoria = txtCategoria.Text.Trim();
-                    categoria.IdUsuario = Session.IdUsuario;
-                    implCategoria = new CategoriaImpl();
+                    marca.NombreMarca = txtNombreMarca.Text.Trim();
+                    marca.IdUsuario = Session.IdUsuario;
+                    implMarca = new MarcaImpl();
                     try
                     {
-                        int n = implCategoria.Update(categoria);
+                        int n = implMarca.Update(marca);
                         if (n > 0)
                         {
                             labelSuccess(lblInfo);
@@ -171,9 +174,9 @@ namespace sisgesoriadao
                 try
                 {
                     dgvDatos.ItemsSource = null;
-                    dgvDatos.ItemsSource = implCategoria.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
+                    dgvDatos.ItemsSource = implMarca.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
                     dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                    lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implCategoria.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+                    lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implMarca.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
                 }
                 catch (Exception ex)
                 {
@@ -196,8 +199,8 @@ namespace sisgesoriadao
             btnSave.IsEnabled = true;
             btnCancel.IsEnabled = true;
 
-            txtCategoria.IsEnabled = true;
-            txtCategoria.Focus();
+            txtNombreMarca.IsEnabled = true;
+            txtNombreMarca.Focus();
         }
         void DisabledButtons()
         {
@@ -208,7 +211,7 @@ namespace sisgesoriadao
             btnSave.IsEnabled = false;
             btnCancel.IsEnabled = false;
 
-            txtCategoria.IsEnabled = false;
+            txtNombreMarca.IsEnabled = false;
         }
         private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -218,14 +221,14 @@ namespace sisgesoriadao
                 {
                     DataRowView d = (DataRowView)dgvDatos.SelectedItem;
                     byte id = byte.Parse(d.Row.ItemArray[0].ToString());
-                    implCategoria = new CategoriaImpl();
-                    categoria = implCategoria.Get(id);
-                    if (categoria != null)
+                    implMarca = new MarcaImpl();
+                    marca = implMarca.Get(id);
+                    if (marca != null)
                     {
-                        txtCategoria.Text = categoria.NombreCategoria.Trim();
+                        txtNombreMarca.Text = marca.NombreMarca.Trim();
 
                         labelSuccess(lblInfo);
-                        lblInfo.Content = "CATEGORIA SELECCIONADA.";
+                        lblInfo.Content = "MARCA SELECCIONADA.";
                     }
                 }
                 catch (Exception ex)
