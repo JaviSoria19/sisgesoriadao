@@ -35,12 +35,32 @@ namespace sisgesoriadao
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            Login();
+        }
+        public void TextBoxUppercase(object sender, KeyEventArgs e)
+        {
+            TextBox currentContainer = ((TextBox)sender);
+            int caretPosition = currentContainer.SelectionStart;
+
+            currentContainer.Text = currentContainer.Text.ToUpper();
+            currentContainer.SelectionStart = caretPosition++;
+        }
+
+        private void txtPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Login();
+            }
+        }
+        void Login()
+        {
             if (txtUserName.Text != null && txtPassword != null)
             {
                 try
                 {
                     implUsuario = new UsuarioImpl();
-                    session = implUsuario.Login(txtUserName.Text,txtPassword.Password);
+                    session = implUsuario.Login(txtUserName.Text, txtPassword.Password);
                     if (session != null)
                     {
                         switch (Session.Rol)
@@ -73,13 +93,12 @@ namespace sisgesoriadao
                 }
             }
         }
-        public void TextBoxUppercase(object sender, KeyEventArgs e)
-        {
-            TextBox currentContainer = ((TextBox)sender);
-            int caretPosition = currentContainer.SelectionStart;
 
-            currentContainer.Text = currentContainer.Text.ToUpper();
-            currentContainer.SelectionStart = caretPosition++;
+        private void btnForgotPassword_Click(object sender, RoutedEventArgs e)
+        {
+            winRecoverPassword winRecoverPassword = new winRecoverPassword();
+            winRecoverPassword.Show();
+            this.Close();
         }
     }
 }

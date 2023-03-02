@@ -37,6 +37,45 @@ namespace sisgesoriadao.Implementation
             }
             return session;
         }
+        public Usuario SelectRecoverPasswordWithPin(string nombreUsuario, string pin)
+        {
+            Usuario u = null;
+            string query = @"SELECT idUsuario, nombreUsuario, rol FROM usuario WHERE nombreUsuario = @nombreUsuario AND pin = @pin AND estado = 1";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@nombreUsuario", nombreUsuario);
+            command.Parameters.AddWithValue("@pin", pin);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    u = new Usuario(byte.Parse(dt.Rows[0][0].ToString()),
+                        dt.Rows[0][1].ToString(), byte.Parse(dt.Rows[0][2].ToString()));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return u;
+        }
+        public int UpdateRecoverPasswordWithPin(byte IdUsuario, string NuevaContrasenha)
+        {
+            string query = @"UPDATE usuario SET 
+                contrasenha=MD5(@contrasenha), fechaActualizacion = CURRENT_TIMESTAMP WHERE idUsuario = @idUsuario";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idUsuario", IdUsuario);
+            command.Parameters.AddWithValue("@contrasenha", NuevaContrasenha);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
         public int Insert(Usuario u)
         {
             string query = @"INSERT INTO usuario (idEmpleado,nombreUsuario,contrasenha,rol,pin) 

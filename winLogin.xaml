@@ -13,7 +13,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
-        Title="Iniciar Sesión - Sistema de Ventas" Height="400" Width="600"
+        Title="Sistema de Ventas - Iniciar Sesión" Height="400" Width="600"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <StackPanel Orientation="Vertical">
@@ -26,13 +26,16 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <materialDesign:PackIcon Kind="Key" Height="40" Width="40" Margin="5"/>
-                <PasswordBox x:Name="txtPassword" Width="400" Margin="5" materialDesign:HintAssist.Hint="CONTRASEÑA" materialDesign:HintAssist.IsFloating="True" MaxLength="50"/>
+                <PasswordBox x:Name="txtPassword" Width="400" Margin="5" materialDesign:HintAssist.Hint="CONTRASEÑA" materialDesign:HintAssist.IsFloating="True" MaxLength="50" KeyDown="txtPassword_KeyDown"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
-                <Button x:Name="btnLogin" Content="INICIAR SESIÓN" Width="150" Margin="5" Click="btnLogin_Click"/>
-                <Button x:Name="btnExit" Content="SALIR" Width="150" Margin="5" Click="btnExit_Click"/>
+            <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="btnLogin" Content="INICIAR SESIÓN" Width="150" Margin="5" Click="btnLogin_Click"/>
+                    <Button x:Name="btnExit" Content="SALIR" Width="150" Margin="5" Click="btnExit_Click"/>
+                </StackPanel>
+                <Button x:Name="btnForgotPassword" Content="¿Olvidó su contraseña?" Foreground="Red" Background="Transparent" Margin="5" Click="btnForgotPassword_Click"/>
             </StackPanel>
-            <materialDesign:Card Height="50" Margin="10">
+            <materialDesign:Card Height="40" Margin="10">
                 <Label x:Name="lblInfo" Content="STATUS:" VerticalAlignment="Center" FontWeight="Bold" Margin="5"/>
             </materialDesign:Card>
         </StackPanel>

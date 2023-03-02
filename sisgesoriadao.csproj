@@ -108,6 +108,9 @@
     <Compile Include="winMarca.xaml.cs">
       <DependentUpon>winMarca.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winRecoverPassword.xaml.cs">
+      <DependentUpon>winRecoverPassword.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winSucursal.xaml.cs">
       <DependentUpon>winSucursal.xaml</DependentUpon>
     </Compile>
@@ -151,6 +154,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winMarca.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winRecoverPassword.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
