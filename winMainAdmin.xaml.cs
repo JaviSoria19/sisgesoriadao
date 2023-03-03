@@ -78,7 +78,9 @@ namespace sisgesoriadao
 
         private void btnProducts_Click(object sender, RoutedEventArgs e)
         {
-
+            winProducto winProducto = new winProducto();
+            winProducto.Show();
+            this.Close();
         }
 
         private void btnBrands_Click(object sender, RoutedEventArgs e)
