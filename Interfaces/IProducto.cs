@@ -10,5 +10,6 @@ namespace sisgesoriadao.Interfaces
     public interface IProducto : IDao<Producto>
     {
         Producto Get(int Id);
+        Producto GetBySNorIMEI(string CadenaBusqueda);
     }
 }

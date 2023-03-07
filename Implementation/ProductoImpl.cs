@@ -83,7 +83,7 @@ namespace sisgesoriadao.Implementation
         {
             Producto p = null;
             string query = @"SELECT idProducto, idSucursal, idMarca, idCategoria, nombreProducto, color, numeroSerie, precio, moneda, idUsuario, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM producto 
-                            WHERE idProducto=@idProducto";
+                                WHERE idProducto=@idProducto";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idProducto", Id);
             try
@@ -113,8 +113,42 @@ namespace sisgesoriadao.Implementation
                 throw ex;
             }
             return p;
-        }            
+        }
+        public Producto GetBySNorIMEI(string CadenaBusqueda)
+        {
+            Producto p = null;
+            string query = @"SELECT idProducto, idSucursal, idMarca, idCategoria, nombreProducto, color, numeroSerie, precio, moneda, idUsuario, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM producto 
+                                WHERE numeroSerie = @search AND estado = 1";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@search", CadenaBusqueda);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    p = new Producto(int.Parse(dt.Rows[0][0].ToString()),//id.
+                        byte.Parse(dt.Rows[0][1].ToString()),// id sucursal.
+                        byte.Parse(dt.Rows[0][2].ToString()), //id marca.
+                        byte.Parse(dt.Rows[0][3].ToString()), //id categoria.
+                        dt.Rows[0][4].ToString(), //nombre.
+                        dt.Rows[0][5].ToString(), //color.
+                        dt.Rows[0][6].ToString(), //sn o imei.
+                        double.Parse(dt.Rows[0][7].ToString()), //precio.
+                        dt.Rows[0][8].ToString(), //moneda.
+                        byte.Parse(dt.Rows[0][9].ToString()), //id usuario (session).
 
+                        byte.Parse(dt.Rows[0][10].ToString()), //estado, f. registro & f. actualización.
+                        DateTime.Parse(dt.Rows[0][11].ToString()),
+                        dt.Rows[0][12].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return p;
+        }
         public DataTable Select()
         {
             string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, M.nombreMarca AS Marca, P.nombreProducto AS Modelo, P.color AS Color, P.numeroSerie AS 'SN o IMEI', P.precio AS Precio, P.moneda AS Moneda, P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM producto AS P
@@ -153,6 +187,6 @@ namespace sisgesoriadao.Implementation
             {
                 throw;
             }
-        }        
+        }
     }
 }

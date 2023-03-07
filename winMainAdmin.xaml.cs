@@ -59,7 +59,9 @@ namespace sisgesoriadao
 
         private void btnSales_Click(object sender, RoutedEventArgs e)
         {
-
+            winVenta_Insert winVenta_Insert = new winVenta_Insert();
+            winVenta_Insert.Show();
+            this.Close();
         }
 
         private void btnCustomers_Click(object sender, RoutedEventArgs e)

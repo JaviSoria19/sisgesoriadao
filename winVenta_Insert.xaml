@@ -1,0 +1,87 @@
+﻿<Window x:Class="sisgesoriadao.winVenta_Insert"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
+     Background="{DynamicResource MaterialDesignPaper}"
+     FontFamily="{DynamicResource MaterialDesignFont}"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:sisgesoriadao"
+        mc:Ignorable="d"
+        Title="Sistema de Ventas - Registrar Venta" Height="720" Width="980"
+        WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Button x:Name="btnReturn" ToolTip="VOLVER A INICIO" Margin="0,0,20,0" Click="btnReturn_Click">
+                    <materialDesign:PackIcon Kind="ArrowLeftBold"/>
+                </Button>
+                <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="Cart" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="REGISTRAR VENTA" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Text="DETALLE CLIENTE" FontWeight="Bold" FontSize="20"/>
+                <StackPanel Orientation="Horizontal" Margin="15">
+                    <Label Content="CARNET o CELULAR: " VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtSearchCustomer" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" KeyUp="TextBoxUppercase" MaxLength="8" IsEnabled="True" Height="22"/>
+                    <Button x:Name="btnSearchCustomer" ToolTip="BUSCAR CLIENTE" Click="btnSearchCustomer_Click" Margin="0,0,0,0">
+                        <materialDesign:PackIcon Kind="Search"/>
+                    </Button>
+                    <Label x:Name="lblSearchCustomerInfo" Content="" Foreground="Black" Background="Transparent" Margin="20,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>
+                </StackPanel>
+                <StackPanel x:Name="stackpanelCustomerFound" Orientation="Horizontal" Margin="15,15,0,25" Visibility="Visible">
+                    <Label x:Name="lblCustomerNombre" Content="NOMBRE: -" FontWeight="Bold" Margin="0,0,50,0"/>
+                    <Label x:Name="lblCustomerNumeroCI" Content="C.I.: -" FontWeight="Bold" Margin="0,0,50,0"/>
+                    <Label x:Name="lblCustomerNumeroCelular" Content="CELULAR: -" FontWeight="Bold"/>
+                </StackPanel>                
+                <StackPanel x:Name="stackpanelCustomerForm" Orientation="Horizontal" Margin="15,15,0,0" Visibility="Collapsed">
+                    <Label Content="NOMBRES:"/>
+                    <TextBox x:Name="txtNombre" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="150" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
+                    <Label Content="PRIMER AP.:"/>
+                    <TextBox x:Name="txtPrimerApellido" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
+                    <Label Content="SEGUNDO AP.:"/>
+                    <TextBox x:Name="txtSegundoApellido" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
+                    <Label Content="NRO. CELULAR:"/>
+                    <TextBox x:Name="txtNumeroCelular" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="8" IsEnabled="False"/>
+                    <Label Content="NRO. CARNET:"/>
+                    <TextBox x:Name="txtNumeroCI" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="10" IsEnabled="False"/>
+                </StackPanel>
+                <StackPanel x:Name="stackpanelCustomerButtons" Orientation="Horizontal" Margin="15,25,0,25" Visibility="Collapsed">
+                    <Button x:Name="btnSaveNewCustomer" Content="REGISTRAR CLIENTE" IsEnabled="False" Click="btnSaveNewCustomer_Click"/>
+                    <Button x:Name="btnCancelNewCustomer" Content="CANCELAR" Margin="10,0,0,0" IsEnabled="False" Click="btnCancelNewCustomer_Click"/>
+                </StackPanel>
+                <TextBlock Text="DETALLE PRODUCTO" FontWeight="Bold" FontSize="20"/>
+                <StackPanel Orientation="Horizontal" Margin="15">
+                    <Label Content="IMEI o S/N: " VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtSearchProduct" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False" Height="22"/>
+                    <Button x:Name="btnSearchProduct" ToolTip="BUSCAR PRODUCTO" Click="btnSearchProduct_Click" Margin="0,0,0,0" IsEnabled="False">
+                        <materialDesign:PackIcon Kind="Search"/>
+                    </Button>
+                    <Label x:Name="lblSearchProductInfo" Content="" Foreground="Black" Background="Transparent" Margin="20,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="15,15,0,15">
+                    <Label x:Name="lblProductFound" Content="DESCRIPCION: -" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <Label Content="| PRECIO: " VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtPrecio" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="150" MaxLength="7" Height="22" IsEnabled="False"/>
+                    <Button x:Name="btnAddProduct" ToolTip="AÑADIR PRODUCTO" Click="btnAddProduct_Click" Margin="0,0,0,0" IsEnabled="False">
+                        <materialDesign:PackIcon Kind="CartAdd"/>
+                    </Button>
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <DataGrid x:Name="dgvProductos" CanUserAddRows="False" CanUserDeleteRows="False" Loaded="dgvProductos_Loaded" HorizontalAlignment="Center"/>
+                    <Label Content="TOTAL:" HorizontalAlignment="Right"/>
+                    <TextBlock x:Name="txtPrecioTotal" Text="Bs. 0" HorizontalAlignment="Right" FontSize="23" FontWeight="Bold"/>
+                </StackPanel>
+                <Button x:Name="btnSaveAndPDF" Content="REGISTRAR Y PDF" ToolTip="REGISTRAR VENTA Y GENERAR PDF" Click="btnSaveAndPDF_Click" Margin="0,15,0,0" IsEnabled="False" HorizontalAlignment="Right" Background="LimeGreen"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

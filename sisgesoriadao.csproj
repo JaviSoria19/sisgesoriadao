@@ -120,6 +120,9 @@
     <Compile Include="winUsuario.xaml.cs">
       <DependentUpon>winUsuario.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winVenta_Insert.xaml.cs">
+      <DependentUpon>winVenta_Insert.xaml</DependentUpon>
+    </Compile>
     <Page Include="winCategoria.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -173,6 +176,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winUsuario.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winVenta_Insert.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

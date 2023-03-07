@@ -95,6 +95,33 @@ namespace sisgesoriadao.Implementation
             }
             return c;
         }
+        public Cliente GetByCIorCelular(string CadenaBusqueda)
+        {
+            Cliente c = null;
+            string query = @"SELECT idCliente, nombres, primerApellido, IFNULL(segundoApellido,''), numeroCelular, numeroCI , estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM cliente 
+                                WHERE (numeroCelular = @search OR numeroCI = @search) AND estado = 1;";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@search", CadenaBusqueda);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    c = new Cliente(byte.Parse(dt.Rows[0][0].ToString()),
+                        dt.Rows[0][1].ToString(), dt.Rows[0][2].ToString(),
+                        dt.Rows[0][3].ToString(), dt.Rows[0][4].ToString(),
+                        dt.Rows[0][5].ToString(),
+                        byte.Parse(dt.Rows[0][6].ToString()),
+                        DateTime.Parse(dt.Rows[0][7].ToString()),
+                        dt.Rows[0][8].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return c;
+        }
         public DataTable Select()
         {
             string query = @"SELECT idCliente as ID, nombres as Nombres, CONCAT(primerApellido,' ',IF(segundoApellido='-','',IFNULL(segundoApellido,''))) AS Apellidos,

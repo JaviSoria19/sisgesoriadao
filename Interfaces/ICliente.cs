@@ -11,5 +11,6 @@ namespace sisgesoriadao.Interfaces
     public interface ICliente:IDao<Cliente>
     {
         Cliente Get(int Id);
+        Cliente GetByCIorCelular(string CadenaBusqueda);
     }
 }
