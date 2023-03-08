@@ -11,5 +11,6 @@ namespace sisgesoriadao.Interfaces
     public interface ICategoria :IDao<Categoria>
     {
         Categoria Get(byte Id);
+        DataTable SelectForComboBox();
     }
 }

@@ -15,7 +15,7 @@
         mc:Ignorable="d"
         Title="Sistema de Ventas - Productos" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
-    <Grid>
+    <ScrollViewer>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Button x:Name="btnReturn" ToolTip="VOLVER A INICIO" Margin="0,0,20,0" Click="btnReturn_Click">
@@ -38,7 +38,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="NOMBRE:"/>
-                <TextBox x:Name="txtNombreProducto" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" KeyUp="TextBoxUppercase" MaxLength="8" IsEnabled="False"/>
+                <TextBox x:Name="txtNombreProducto" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" KeyUp="TextBoxUppercase" MaxLength="50" IsEnabled="False"/>
                 <Label Content="COLOR:"/>
                 <TextBox x:Name="txtColor" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" KeyUp="TextBoxUppercase" MaxLength="10" IsEnabled="False"/>
                 <Label Content="S/N o IMEI:"/>
@@ -79,6 +79,30 @@
                 </Border>
                 <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
             </StackPanel>
+
+            <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
+                <TextBlock Text="PRODUCTOS VENDIDOS" FontWeight="Bold" FontSize="16" Margin="0,20,0,10" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                    <Label Content="Buscar:" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtBuscar_Vendidos" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="20" Height="22"/>
+                    <Button x:Name="btnSearch_Vendidos" ToolTip="BUSCAR REGISTROS" Margin="0,0,20,0" Click="btnSearch_Vendidos_Click">
+                        <materialDesign:PackIcon Kind="Search"/>
+                    </Button>
+                    <Label Content="Desde:" VerticalAlignment="Center"/>
+                    <DatePicker x:Name="dtpFechaInicio_Vendidos" Margin="0,0,20,0"/>
+                    <Label Content="Hasta:" VerticalAlignment="Center"/>
+                    <DatePicker x:Name="dtpFechaFin_Vendidos"/>
+                </StackPanel>
+                <Border BorderBrush="Gray" BorderThickness="2">
+                    <DataGrid x:Name="dgvDatos_Vendidos"
+                  HorizontalAlignment="Left" VerticalAlignment="Top"
+                  Loaded="dgvDatos_Vendidos_Loaded" GridLinesVisibility="Horizontal"
+                  CanUserAddRows="False" IsReadOnly="True" 
+                  CanUserResizeRows="False" CanUserResizeColumns="False"
+                  MaxHeight="363"/>
+                </Border>
+                <Label x:Name="lblDataGridRows_Vendidos" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
+            </StackPanel>
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </Window>

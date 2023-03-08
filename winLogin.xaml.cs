@@ -23,6 +23,7 @@ namespace sisgesoriadao
     {
         UsuarioImpl implUsuario;
         Usuario session;
+        SucursalImpl implSucursal;
         public winLogin()
         {
             InitializeComponent();
@@ -63,6 +64,9 @@ namespace sisgesoriadao
                     session = implUsuario.Login(txtUserName.Text, txtPassword.Password);
                     if (session != null)
                     {
+                        Session.Sucursal_IdSucursal = 1;
+                        implSucursal = new SucursalImpl();
+                        implSucursal.GetBranchForSession(Session.Sucursal_IdSucursal);
                         switch (Session.Rol)
                         {
                             case 1:

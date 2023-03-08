@@ -11,5 +11,7 @@ namespace sisgesoriadao.Interfaces
     public interface ISucursal : IDao<Sucursal>
     {
         Sucursal Get(byte Id);
+        DataTable SelectForComboBox();
+        void GetBranchForSession(byte IdSucursal);
     }
 }

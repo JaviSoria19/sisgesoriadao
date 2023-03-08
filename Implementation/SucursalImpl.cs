@@ -105,6 +105,20 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+        public DataTable SelectForComboBox()
+        {
+            string query = @"SELECT idSucursal, nombreSucursal FROM sucursal WHERE estado = 1";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
             string query = @"SELECT idSucursal as ID, nombreSucursal as Sucursal, direccion AS Direccion, correo AS Correo, 
@@ -123,6 +137,29 @@ namespace sisgesoriadao.Implementation
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        public void GetBranchForSession(byte IdSucursal)
+        {
+            string query = @"SELECT nombreSucursal, direccion, correo FROM sucursal 
+                            WHERE idSucursal=@idSucursal AND estado = 1";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idSucursal", IdSucursal);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    Session.Sucursal_NombreSucursal = dt.Rows[0][0].ToString();
+                    Session.Sucursal_Direccion = dt.Rows[0][1].ToString();
+                    Session.Sucursal_correo = dt.Rows[0][2].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
         }
     }

@@ -11,5 +11,7 @@ namespace sisgesoriadao.Interfaces
     {
         Producto Get(int Id);
         Producto GetBySNorIMEI(string CadenaBusqueda);
+        DataTable SelectSoldProducts();
+        DataTable SelectLikeSoldProducts(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin);
     }
 }

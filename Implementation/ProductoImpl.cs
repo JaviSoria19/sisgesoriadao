@@ -188,5 +188,44 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+        public DataTable SelectSoldProducts()
+        {
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CONCAT(M.nombreMarca, ' ', P.nombreProducto, ' ', P.color ) AS 'Modelo', P.numeroSerie AS 'SN o IMEI', P.precio AS Precio, P.moneda AS Moneda, IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Venta' FROM producto AS P
+                                INNER JOIN sucursal AS S ON P.idSucursal = S.idSucursal
+                                INNER JOIN marca AS M ON P.idMarca = M.idMarca
+                                INNER JOIN categoria AS C ON P.idCategoria = C.idCategoria
+                                WHERE P.estado = 2 ORDER BY 8 DESC, 2 ASC, 3 ASC, 4 ASC";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public DataTable SelectLikeSoldProducts(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
+        {
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CONCAT(M.nombreMarca, ' ', P.nombreProducto, ' ', P.color ) AS 'Modelo', P.numeroSerie AS 'SN o IMEI', P.precio AS Precio, P.moneda AS Moneda, IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Venta' FROM producto AS P
+                                INNER JOIN sucursal AS S ON P.idSucursal = S.idSucursal
+                                INNER JOIN marca AS M ON P.idMarca = M.idMarca
+                                INNER JOIN categoria AS C ON P.idCategoria = C.idCategoria
+                                WHERE (S.nombreSucursal LIKE @search OR C.nombreCategoria LIKE @search OR M.nombreMarca LIKE @search OR P.nombreProducto LIKE @search OR P.color LIKE @search OR P.numeroSerie LIKE @search OR P.precio LIKE @search OR P.moneda LIKE @search) 
+                                AND P.estado = 2 ORDER BY 8 DESC, 2 ASC, 3 ASC, 4 ASC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@search", "%" + CadenaBusqueda + "%");
+            command.Parameters.AddWithValue("@FechaInicio", FechaInicio.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", FechaFin.ToString("yyyy-MM-dd") + " 23:59:59");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

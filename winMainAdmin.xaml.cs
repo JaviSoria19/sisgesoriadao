@@ -30,7 +30,7 @@ namespace sisgesoriadao
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            txtBlockWelcome.Text = "Bienvenid@, " + Session.NombreUsuario;
+            txtBlockWelcome.Text = "Bienvenid@ a " + Session.Sucursal_NombreSucursal + " , " + Session.NombreUsuario;
         }
 
         private void btnLogout_Click(object sender, RoutedEventArgs e)

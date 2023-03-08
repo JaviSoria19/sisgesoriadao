@@ -13,7 +13,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
-        Title="Sistema de Ventas - Registrar Venta" Height="720" Width="980"
+        Title="Sistema de Ventas - Registrar Venta" Height="720" Width="800"
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
     <ScrollViewer>
         <StackPanel Orientation="Vertical">
@@ -21,6 +21,9 @@
                 <Button x:Name="btnReturn" ToolTip="VOLVER A INICIO" Margin="0,0,20,0" Click="btnReturn_Click">
                     <materialDesign:PackIcon Kind="ArrowLeftBold"/>
                 </Button>
+                <materialDesign:PackIcon Kind="Store" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtSucursal" Text="SUCURSAL" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
                 <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
                 <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
@@ -79,6 +82,10 @@
                     <DataGrid x:Name="dgvProductos" CanUserAddRows="False" CanUserDeleteRows="False" Loaded="dgvProductos_Loaded" HorizontalAlignment="Center"/>
                     <Label Content="TOTAL:" HorizontalAlignment="Right"/>
                     <TextBlock x:Name="txtPrecioTotal" Text="Bs. 0" HorizontalAlignment="Right" FontSize="23" FontWeight="Bold"/>
+                    <Label Content="MONEDA:" HorizontalAlignment="Right"/>
+                    <ComboBox x:Name="cbxCurrency" IsEnabled="False" HorizontalAlignment="Right" FontWeight="Bold"/>
+                    <Label Content="MÉTODO DE PAGO:" HorizontalAlignment="Right"/>
+                    <ComboBox x:Name="cbxPaymentMethod" IsEnabled="False" HorizontalAlignment="Right" FontWeight="Bold"/>
                 </StackPanel>
                 <Button x:Name="btnSaveAndPDF" Content="REGISTRAR Y PDF" ToolTip="REGISTRAR VENTA Y GENERAR PDF" Click="btnSaveAndPDF_Click" Margin="0,15,0,0" IsEnabled="False" HorizontalAlignment="Right" Background="LimeGreen"/>
             </StackPanel>

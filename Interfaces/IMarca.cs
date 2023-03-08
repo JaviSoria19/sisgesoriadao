@@ -11,5 +11,6 @@ namespace sisgesoriadao.Interfaces
     public interface IMarca : IDao<Marca>
     {
         Marca Get(byte Id);
+        DataTable SelectForComboBox();
     }
 }

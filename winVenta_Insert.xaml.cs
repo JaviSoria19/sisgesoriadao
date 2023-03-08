@@ -31,7 +31,6 @@ namespace sisgesoriadao
 
         VentaImpl implVenta;
         Venta venta;
-
         public winVenta_Insert()
         {
             InitializeComponent();
@@ -41,6 +40,17 @@ namespace sisgesoriadao
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
             txtSearchCustomer.Focus();
+            txtSucursal.Text = Session.Sucursal_NombreSucursal;
+
+            cbxPaymentMethod.Items.Add(new ComboboxItem("EFECTIVO", 1));
+            cbxPaymentMethod.Items.Add(new ComboboxItem("TRANSFERENCIA BANCARIA", 2));
+            cbxPaymentMethod.Items.Add(new ComboboxItem("TARJETA", 3));
+            cbxPaymentMethod.Items.Add(new ComboboxItem("MIXTO", 4));
+            cbxPaymentMethod.SelectedIndex = 0;
+
+            cbxCurrency.Items.Add("BS.");
+            cbxCurrency.Items.Add("USD.");
+            cbxCurrency.SelectedIndex = 0;
         }
 
         private void btnReturn_Click(object sender, RoutedEventArgs e)
@@ -225,7 +235,7 @@ namespace sisgesoriadao
             {
                 producto.Precio = double.Parse(txtPrecio.Text);
                 //ASIGNA EL VALOR TOTAL DE TODOS LOS PRODUCTOS
-                precioTotal = precioTotal + producto.Precio;
+                precioTotal += producto.Precio;
                 txtPrecioTotal.Text = "Bs. " + precioTotal;
 
                 listaProducto.Add(producto);
@@ -233,6 +243,8 @@ namespace sisgesoriadao
                 if (btnSaveAndPDF.IsEnabled == false)
                 {
                     btnSaveAndPDF.IsEnabled = true;
+                    cbxCurrency.IsEnabled = true;
+                    cbxPaymentMethod.IsEnabled = true;
                 }
                 producto = null;
             }
@@ -242,21 +254,42 @@ namespace sisgesoriadao
                 lblSearchProductInfo.Content = "NO PUEDE AÑADIR EL MISMO PRODUCTO 2 VECES.";
             }
         }
+        private void btnSaveAndPDF_Click(object sender, RoutedEventArgs e)
+        {
+            venta = new Venta(cliente.IdCliente,Session.IdUsuario,precioTotal,byte.Parse((cbxPaymentMethod.SelectedItem as ComboboxItem).Valor.ToString()), cbxCurrency.Text,Session.Sucursal_IdSucursal);
+            implVenta = new VentaImpl();
+            string mensaje = implVenta.InsertTransaction(listaProducto, venta);
+            if (mensaje == "LA VENTA SE REGISTRÓ CON ÉXITO.")
+            {
 
+            }
+            else
+            {
+                MessageBox.Show(mensaje);
+            }
+        }
         private void dgvProductos_Loaded(object sender, RoutedEventArgs e)
         {
-            DataGridTextColumn columna1 = new DataGridTextColumn();
-            columna1.Header = "Cantidad";
-            columna1.Binding = new Binding("cantidad");
-            DataGridTextColumn columna2 = new DataGridTextColumn();
-            columna2.Header = "Producto";
-            columna2.Binding = new Binding("producto");
-            DataGridTextColumn columna3 = new DataGridTextColumn();
-            columna3.Header = "SN/IMEI";
-            columna3.Binding = new Binding("numeroSerie");
-            DataGridTextColumn columna4 = new DataGridTextColumn();
-            columna4.Header = "Precio";
-            columna4.Binding = new Binding("precio");
+            DataGridTextColumn columna1 = new DataGridTextColumn
+            {
+                Header = "Cantidad",
+                Binding = new Binding("cantidad")
+            };
+            DataGridTextColumn columna2 = new DataGridTextColumn
+            {
+                Header = "Producto",
+                Binding = new Binding("producto")
+            };
+            DataGridTextColumn columna3 = new DataGridTextColumn
+            {
+                Header = "SN/IMEI",
+                Binding = new Binding("numeroSerie")
+            };
+            DataGridTextColumn columna4 = new DataGridTextColumn
+            {
+                Header = "Precio",
+                Binding = new Binding("precio")
+            };
             dgvProductos.Columns.Add(columna1);
             dgvProductos.Columns.Add(columna2);
             dgvProductos.Columns.Add(columna3);
@@ -269,13 +302,24 @@ namespace sisgesoriadao
             public string numeroSerie { get; set; }
             public double precio { get; set; }
         }
-
-        private void btnSaveAndPDF_Click(object sender, RoutedEventArgs e)
+        public class ComboboxItem
         {
-            venta = new Venta(cliente.IdCliente,Session.IdUsuario,precioTotal,1,"BS.",1);
-            implVenta = new VentaImpl();
-            string mensaje = implVenta.InsertTransaction(listaProducto, venta);
-            MessageBox.Show(mensaje);
+            public string Texto { get; set; }
+            public byte Valor { get; set; }
+
+            public override string ToString()
+            {
+                return Texto;
+            }
+            public ComboboxItem(string texto, byte valor)
+            {
+                Texto = texto;
+                Valor = valor;
+            }
+            public ComboboxItem()
+            {
+
+            }
         }
     }
 }

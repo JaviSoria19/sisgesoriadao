@@ -17,7 +17,7 @@
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
     <Grid>
         <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal" Margin="10" >
+            <StackPanel Orientation="Horizontal" Margin="10">
                 <Button x:Name="btnLogout" ToolTip="CERRAR SESIÓN" HorizontalAlignment="Right" Margin="0,0,20,0" Click="btnLogout_Click">
                     <materialDesign:PackIcon Kind="Logout"/>
                 </Button>

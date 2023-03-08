@@ -26,6 +26,11 @@ namespace sisgesoriadao
         ProductoImpl implProducto;
         Producto producto;
         byte operacion;
+
+        //Implementaciones para obtener ID's y Nombres para los Combobox
+        SucursalImpl implSucursal;
+        MarcaImpl implMarca;
+        CategoriaImpl implCategoria;
         public winProducto()
         {
             InitializeComponent();
@@ -38,15 +43,17 @@ namespace sisgesoriadao
         {
             dtpFechaFin.SelectedDate = DateTime.Today;
             dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
+            dtpFechaFin_Vendidos.SelectedDate = DateTime.Today;
+            dtpFechaInicio_Vendidos.SelectedDate = new DateTime(2023, 01, 01);
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
             cbxGetCategoriaFromDatabase();
-            cbxGetMarcaFromDatabase();
-            cbxGetSucursalFromDatabase();
-            cbxMoneda.Items.Add("BS");
-            cbxMoneda.Items.Add("USD");
+            cbxSelectMarcaFromDatabase();
+            cbxSelectSucursalFromDatabase();
+            cbxMoneda.Items.Add("BS.");
+            cbxMoneda.Items.Add("USD.");
             cbxMoneda.SelectedIndex = 0;
         }
         private void Select()
@@ -58,6 +65,21 @@ namespace sisgesoriadao
                 dgvDatos.ItemsSource = implProducto.Select().DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implProducto.Select().Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void SelectSold()
+        {
+            try
+            {
+                implProducto = new ProductoImpl();
+                dgvDatos_Vendidos.ItemsSource = null;
+                dgvDatos_Vendidos.ItemsSource = implProducto.SelectSoldProducts().DefaultView;
+                dgvDatos_Vendidos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows_Vendidos.Content = "NÚMERO DE REGISTROS: " + implProducto.SelectSoldProducts().Rows.Count;
             }
             catch (Exception ex)
             {
@@ -295,7 +317,7 @@ namespace sisgesoriadao
                                 break;
                             }
                         }
-                        if (producto.Moneda == "BS")
+                        if (producto.Moneda == "BS.")
                         {
                             cbxMoneda.SelectedIndex = 0;
                         }
@@ -368,21 +390,28 @@ namespace sisgesoriadao
                 Texto = texto;
                 Valor = valor;
             }
+            public ComboboxItem()
+            {
+
+            }
         }
-        void cbxGetSucursalFromDatabase()
+        void cbxSelectSucursalFromDatabase()
         {
-            string connectionString = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
-            MySqlConnection connection = new MySqlConnection(connectionString);
-            string query = "SELECT idSucursal, nombreSucursal FROM sucursal WHERE estado = 1";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            MySqlDataReader mySqldr;
             try
             {
-                connection.Open();
-                mySqldr = cmd.ExecuteReader();
-                while (mySqldr.Read())
+                List<ComboboxItem> listcomboboxSucursal = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implSucursal = new SucursalImpl();
+                dataTable = implSucursal.SelectForComboBox();
+                listcomboboxSucursal = (from DataRow dr in dataTable.Rows
+                                        select new ComboboxItem()
+                                        {
+                                            Valor = Convert.ToByte(dr["idSucursal"]),
+                                            Texto = dr["nombreSucursal"].ToString()
+                                        }).ToList();
+                foreach (var item in listcomboboxSucursal)
                 {
-                    cbxSucursal.Items.Add(new ComboboxItem(mySqldr.GetString("nombreSucursal"),mySqldr.GetByte("idSucursal")));
+                    cbxSucursal.Items.Add(item);
                 }
                 cbxSucursal.SelectedIndex = 0;
             }
@@ -390,25 +419,24 @@ namespace sisgesoriadao
             {
                 MessageBox.Show(ex.Message);
             }
-            finally
-            {
-                connection.Close();
-            }
         }
-        void cbxGetMarcaFromDatabase()
+        void cbxSelectMarcaFromDatabase()
         {
-            string connectionString = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
-            MySqlConnection connection = new MySqlConnection(connectionString);
-            string query = "SELECT idMarca, nombreMarca FROM marca WHERE estado = 1";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            MySqlDataReader mySqldr;
             try
             {
-                connection.Open();
-                mySqldr = cmd.ExecuteReader();
-                while (mySqldr.Read())
+                List<ComboboxItem> listcomboboxMarca = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implMarca = new MarcaImpl();
+                dataTable = implMarca.SelectForComboBox();
+                listcomboboxMarca = (from DataRow dr in dataTable.Rows
+                                        select new ComboboxItem()
+                                        {
+                                            Valor = Convert.ToByte(dr["idMarca"]),
+                                            Texto = dr["nombreMarca"].ToString()
+                                        }).ToList();
+                foreach (var item in listcomboboxMarca)
                 {
-                    cbxMarca.Items.Add(new ComboboxItem(mySqldr.GetString("nombreMarca"), mySqldr.GetByte("idMarca")));
+                    cbxMarca.Items.Add(item);
                 }
                 cbxMarca.SelectedIndex = 0;
             }
@@ -416,25 +444,24 @@ namespace sisgesoriadao
             {
                 MessageBox.Show(ex.Message);
             }
-            finally
-            {
-                connection.Close();
-            }
         }
         void cbxGetCategoriaFromDatabase()
         {
-            string connectionString = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
-            MySqlConnection connection = new MySqlConnection(connectionString);
-            string query = "SELECT idCategoria, nombreCategoria FROM categoria WHERE estado = 1";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            MySqlDataReader mySqldr;
             try
             {
-                connection.Open();
-                mySqldr = cmd.ExecuteReader();
-                while (mySqldr.Read())
+                List<ComboboxItem> listcomboboxCategoria = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implCategoria = new CategoriaImpl();
+                dataTable = implCategoria.SelectForComboBox();
+                listcomboboxCategoria = (from DataRow dr in dataTable.Rows
+                                     select new ComboboxItem()
+                                     {
+                                         Valor = Convert.ToByte(dr["idCategoria"]),
+                                         Texto = dr["nombreCategoria"].ToString()
+                                     }).ToList();
+                foreach (var item in listcomboboxCategoria)
                 {
-                    cbxCategoria.Items.Add(new ComboboxItem(mySqldr.GetString("nombreCategoria"), mySqldr.GetByte("idCategoria")));
+                    cbxCategoria.Items.Add(item);
                 }
                 cbxCategoria.SelectedIndex = 0;
             }
@@ -442,9 +469,32 @@ namespace sisgesoriadao
             {
                 MessageBox.Show(ex.Message);
             }
-            finally
+        }
+
+        private void dgvDatos_Vendidos_Loaded(object sender, RoutedEventArgs e)
+        {
+            SelectSold();
+        }
+
+        private void btnSearch_Vendidos_Click(object sender, RoutedEventArgs e)
+        {
+            if (txtBuscar_Vendidos.Text == null || txtBuscar_Vendidos.Text == "")
             {
-                connection.Close();
+                SelectSold();
+            }
+            else
+            {
+                try
+                {
+                    dgvDatos_Vendidos.ItemsSource = null;
+                    dgvDatos_Vendidos.ItemsSource = implProducto.SelectLikeSoldProducts(txtBuscar_Vendidos.Text.Trim(), dtpFechaInicio_Vendidos.SelectedDate.Value.Date, dtpFechaFin_Vendidos.SelectedDate.Value.Date).DefaultView;
+                    dgvDatos_Vendidos.Columns[0].Visibility = Visibility.Collapsed;
+                    lblDataGridRows_Vendidos.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeSoldProducts(txtBuscar_Vendidos.Text.Trim(), dtpFechaInicio_Vendidos.SelectedDate.Value.Date, dtpFechaFin_Vendidos.SelectedDate.Value.Date).Rows.Count;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
     }

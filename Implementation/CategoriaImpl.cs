@@ -107,6 +107,20 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+        public DataTable SelectForComboBox()
+        {
+            string query = @"SELECT idCategoria, nombreCategoria FROM categoria WHERE estado = 1";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
             string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM categoria AS C
