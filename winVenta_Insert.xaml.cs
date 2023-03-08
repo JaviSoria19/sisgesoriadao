@@ -29,6 +29,9 @@ namespace sisgesoriadao
         double precioTotal = 0;
         List<Producto> listaProducto = new List<Producto>();
 
+        VentaImpl implVenta;
+        Venta venta;
+
         public winVenta_Insert()
         {
             InitializeComponent();
@@ -269,14 +272,10 @@ namespace sisgesoriadao
 
         private void btnSaveAndPDF_Click(object sender, RoutedEventArgs e)
         {
-            string texto = "ID CLIENTE: " + cliente.IdCliente + " | USUARIO: " + Session.IdUsuario + " \n";
-            foreach (var item in listaProducto)
-            {
-                texto = texto + ("ID: " + item.IdProducto + ", ID SUCURSAL: " + item.IdSucursal +
-                    ", ID MARCA: "+ item.IdMarca + ", ID CATEGORIA: " + item.IdCategoria +
-                    ", NOMBRE: "+ item.NombreProducto + ", COLOR: "+ item.Color + ", SN: " + item.NumeroSerie + ", PRECIO: " + item.Precio + " \n");
-            }
-            MessageBox.Show(texto);
+            venta = new Venta(cliente.IdCliente,Session.IdUsuario,precioTotal,1,"BS.",1);
+            implVenta = new VentaImpl();
+            string mensaje = implVenta.InsertTransaction(listaProducto, venta);
+            MessageBox.Show(mensaje);
         }
     }
 }

@@ -77,12 +77,14 @@
     <Compile Include="Implementation\ProductoImpl.cs" />
     <Compile Include="Implementation\SucursalImpl.cs" />
     <Compile Include="Implementation\UsuarioImpl.cs" />
+    <Compile Include="Implementation\VentaImpl.cs" />
     <Compile Include="Interfaces\ICategoria.cs" />
     <Compile Include="Interfaces\ICliente.cs" />
     <Compile Include="Interfaces\IMarca.cs" />
     <Compile Include="Interfaces\IProducto.cs" />
     <Compile Include="Interfaces\ISucursal.cs" />
     <Compile Include="Interfaces\IUsuario.cs" />
+    <Compile Include="Interfaces\IVenta.cs" />
     <Compile Include="Model\Categoria.cs" />
     <Compile Include="Model\Cliente.cs" />
     <Compile Include="Model\Marca.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Sucursal.cs" />
     <Compile Include="Model\Usuario.cs" />
+    <Compile Include="Model\Venta.cs" />
     <Compile Include="winCategoria.xaml.cs">
       <DependentUpon>winCategoria.xaml</DependentUpon>
     </Compile>
