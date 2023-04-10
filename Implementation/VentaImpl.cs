@@ -11,10 +11,9 @@ namespace sisgesoriadao.Implementation
 {
     public class VentaImpl : DataBase, IVenta
     {
-        string connectionString = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
         public string InsertTransaction(List<Producto> ListaProductos, Venta venta)
         {
-            MySqlConnection connection = new MySqlConnection(connectionString);
+            MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
             connection.Open();
             MySqlCommand command = connection.CreateCommand();
             MySqlTransaction myTrans;
@@ -26,21 +25,22 @@ namespace sisgesoriadao.Implementation
             try
             {
                 //REGISTRO DE LA VENTA.
-                command.CommandText = @"INSERT INTO venta (idCliente,idUsuario,total,metodoPago,moneda,idSucursal) 
-                            VALUES(@idCliente, @idUsuario, @total, @metodoPago, @moneda, @idSucursal)";
+                command.CommandText = @"INSERT INTO venta (idCliente,idUsuario,idSucursal,totalUSD,totalBOB,saldo,observaciones) 
+                            VALUES(@idCliente,@idUsuario,@idSucursal,@totalUSD,@totalBOB,@saldo,@observaciones)";
                 command.Parameters.AddWithValue("@idCliente", venta.IdCliente);
                 command.Parameters.AddWithValue("@idUsuario", venta.IdUsuario);
-                command.Parameters.AddWithValue("@total", venta.Total);
-                command.Parameters.AddWithValue("@metodoPago", venta.MetodoPago);
-                command.Parameters.AddWithValue("@moneda", venta.Moneda);
                 command.Parameters.AddWithValue("@idSucursal", venta.IdSucursal);
+                command.Parameters.AddWithValue("@totalUSD", venta.TotalUSD);
+                command.Parameters.AddWithValue("@totalBOB", venta.TotalBOB);
+                command.Parameters.AddWithValue("@saldo", venta.Saldo);
+                command.Parameters.AddWithValue("@observaciones", venta.Observaciones);
                 command.ExecuteNonQuery();
 
                 foreach (var item in ListaProductos)
                 {
                     //REGISTRO DEL DETALLE DE VENTA.
-                    command.CommandText = @"INSERT INTO detalle_venta (idVenta,idProducto,precio,descuento,cantidad)
-                            VALUES((SELECT MAX(idVenta) FROM venta), " + item.IdProducto + ", " + item.Precio + ", (SELECT precio - " + item.Precio + " FROM producto WHERE idProducto = " + item.IdProducto + ") , 1)";
+                    command.CommandText = @"INSERT INTO detalle_venta (idVenta,idProducto,cantidad,precioUSD,precioBOB,descuento,garantia)
+                            VALUES((SELECT MAX(idVenta) FROM venta)," + item.IdProducto + ",1," + item.PrecioVentaUSD + "," + item.PrecioVentaBOB + ")";
                     command.ExecuteNonQuery();
 
                     command.CommandText = "UPDATE producto SET estado = 2, fechaActualizacion = CURRENT_TIMESTAMP WHERE idProducto = " + item.IdProducto;

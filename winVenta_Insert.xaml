@@ -83,7 +83,7 @@
                     <Label Content="TOTAL:" HorizontalAlignment="Right"/>
                     <TextBlock x:Name="txtPrecioTotal" Text="Bs. 0" HorizontalAlignment="Right" FontSize="23" FontWeight="Bold"/>
                     <Label Content="MONEDA:" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="cbxCurrency" IsEnabled="False" HorizontalAlignment="Right" FontWeight="Bold"/>
+                    <ComboBox x:Name="cbxCurrency" IsEnabled="False" HorizontalAlignment="Right" FontWeight="Bold" SelectionChanged="cbxCurrency_SelectionChanged"/>
                     <Label Content="MÉTODO DE PAGO:" HorizontalAlignment="Right"/>
                     <ComboBox x:Name="cbxPaymentMethod" IsEnabled="False" HorizontalAlignment="Right" FontWeight="Bold"/>
                 </StackPanel>

@@ -12,6 +12,7 @@ namespace sisgesoriadao.Model
         public string NombreSucursal { get; set; }
         public string Direccion { get; set; }
         public string Correo { get; set; }
+        public string Telefono { get; set; }
         public Sucursal()
         {
 
@@ -23,13 +24,18 @@ namespace sisgesoriadao.Model
         /// <param name="nombreSucursal"></param>
         /// <param name="direccion"></param>
         /// <param name="correo"></param>
-        public Sucursal(byte idSucursal, string nombreSucursal, string direccion, string correo, byte estado, DateTime fechaRegistro, string fechaActualizacion)
+        /// <param name="telefono"></param>
+        /// <param name="estado"></param>
+        /// <param name="fechaRegistro"></param>
+        /// <param name="fechaActualizacion"></param>
+        public Sucursal(byte idSucursal, string nombreSucursal, string direccion, string correo, string telefono, byte estado, DateTime fechaRegistro, string fechaActualizacion)
             : base(estado, fechaRegistro, fechaActualizacion)
         {
             IdSucursal = idSucursal;
             NombreSucursal = nombreSucursal;
             Direccion = direccion;
             Correo = correo;
+            Telefono = telefono;
         }
         /// <summary>
         /// INSERT
@@ -37,12 +43,15 @@ namespace sisgesoriadao.Model
         /// <param name="nombreSucursal"></param>
         /// <param name="direccion"></param>
         /// <param name="correo"></param>
-        public Sucursal(string nombreSucursal, string direccion, string correo)
+        /// <param name="telefono"></param>
+        public Sucursal(string nombreSucursal, string direccion, string correo, string telefono)
         {
             NombreSucursal = nombreSucursal;
             Direccion = direccion;
             Correo = correo;
+            Telefono = telefono;
         }
+
         /// <summary>
         /// DELETE
         /// </summary>

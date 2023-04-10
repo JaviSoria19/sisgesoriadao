@@ -11,10 +11,12 @@ namespace sisgesoriadao.Model
         public int IdVenta { get; set; }
         public int IdCliente { get; set; }
         public byte IdUsuario { get; set; }
-        public double Total { get; set; }
-        public byte MetodoPago { get; set; }
-        public string Moneda { get; set; }
         public byte IdSucursal { get; set; }
+        public double TotalUSD { get; set; }
+        public double TotalBOB { get; set; }
+        public double Saldo { get; set; }
+        public string Observaciones { get; set; }
+        
         public Venta()
         {
 
@@ -25,41 +27,45 @@ namespace sisgesoriadao.Model
         /// <param name="idVenta"></param>
         /// <param name="idCliente"></param>
         /// <param name="idUsuario"></param>
-        /// <param name="total"></param>
-        /// <param name="metodoPago"></param>
-        /// <param name="moneda"></param>
         /// <param name="idSucursal"></param>
+        /// <param name="totalUSD"></param>
+        /// <param name="totalBOB"></param>
+        /// <param name="saldo"></param>
+        /// <param name="observaciones"></param>
         /// <param name="estado"></param>
         /// <param name="fechaRegistro"></param>
         /// <param name="fechaActualizacion"></param>
-        public Venta(int idVenta, int idCliente, byte idUsuario, double total, byte metodoPago, string moneda, byte idSucursal, byte estado, DateTime fechaRegistro, string fechaActualizacion)
+        public Venta(int idVenta, int idCliente, byte idUsuario, byte idSucursal, double totalUSD, double totalBOB, double saldo, string observaciones, byte estado, DateTime fechaRegistro, string fechaActualizacion)
             : base(estado, fechaRegistro, fechaActualizacion)
         {
             IdVenta = idVenta;
             IdCliente = idCliente;
             IdUsuario = idUsuario;
-            Total = total;
-            MetodoPago = metodoPago;
-            Moneda = moneda;
             IdSucursal = idSucursal;
+            TotalUSD = totalUSD;
+            TotalBOB = totalBOB;
+            Saldo = saldo;
+            Observaciones = observaciones;
         }
         /// <summary>
         /// INSERT
         /// </summary>
         /// <param name="idCliente"></param>
         /// <param name="idUsuario"></param>
-        /// <param name="total"></param>
-        /// <param name="metodoPago"></param>
-        /// <param name="moneda"></param>
         /// <param name="idSucursal"></param>
-        public Venta(int idCliente, byte idUsuario, double total, byte metodoPago, string moneda, byte idSucursal)
+        /// <param name="totalUSD"></param>
+        /// <param name="totalBOB"></param>
+        /// <param name="saldo"></param>
+        /// <param name="observaciones"></param>
+        public Venta(int idCliente, byte idUsuario, byte idSucursal, double totalUSD, double totalBOB, double saldo, string observaciones)
         {
             IdCliente = idCliente;
             IdUsuario = idUsuario;
-            Total = total;
-            MetodoPago = metodoPago;
-            Moneda = moneda;
             IdSucursal = idSucursal;
+            TotalUSD = totalUSD;
+            TotalBOB = totalBOB;
+            Saldo = saldo;
+            Observaciones = observaciones;
         }
         /// <summary>
         /// "DELETE"

@@ -30,11 +30,17 @@
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="NOMBRE:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtNombreSucursal" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" KeyUp="TextBoxUppercase" MaxLength="50" IsEnabled="False"/>
                 <Label Content="DIRECCION:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtDireccion" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="200" KeyUp="TextBoxUppercase" MaxLength="100" IsEnabled="False"/>
                 <Label Content="CORREO:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtCorreo" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="140" MaxLength="40" IsEnabled="False"/>
+                <Label Content="TELEFONO:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtTelefono" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="False" PreviewTextInput="txtTelefono_PreviewTextInput"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">

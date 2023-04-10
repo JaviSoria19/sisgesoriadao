@@ -71,6 +71,7 @@ namespace sisgesoriadao
 
         private void btnSearchCustomer_Click(object sender, RoutedEventArgs e)
         {
+            /*
             if (string.IsNullOrEmpty(txtSearchCustomer.Text)==false)
             {
                 try
@@ -105,12 +106,13 @@ namespace sisgesoriadao
                     throw;
                 }
             }
+            */
         }
         private void btnSaveNewCustomer_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(txtNombre.Text) == false && string.IsNullOrEmpty(txtPrimerApellido.Text) == false && string.IsNullOrEmpty(txtNumeroCelular.Text) == false && string.IsNullOrEmpty(txtNumeroCI.Text) == false)
             {
-                cliente = new Cliente(txtNombre.Text.Trim(), txtPrimerApellido.Text.Trim(), txtSegundoApellido.Text.Trim(), txtNumeroCelular.Text.Trim(), txtNumeroCI.Text.Trim());
+                cliente = new Cliente(txtNombre.Text.Trim(), txtNumeroCelular.Text.Trim(), txtNumeroCI.Text.Trim());
                 implCliente = new ClienteImpl();
                 try
                 {
@@ -194,12 +196,13 @@ namespace sisgesoriadao
 
         private void btnSearchProduct_Click(object sender, RoutedEventArgs e)
         {
+            /*
             if (string.IsNullOrEmpty(txtSearchProduct.Text) ==false)
             {
                 try
                 {
                     implProducto = new ProductoImpl();
-                    producto = implProducto.GetBySNorIMEI(txtSearchProduct.Text);
+                    producto = implProducto.GetByIdentifierOrCode(txtSearchProduct.Text);
                     if (producto != null)
                     {
                         //RELLENA LA INFORMACIÓN DEL PRODUCTO EN UN LABEL.
@@ -227,16 +230,37 @@ namespace sisgesoriadao
                     throw;
                 }
             }
+            */
         }
 
         private void btnAddProduct_Click(object sender, RoutedEventArgs e)
         {
+            /*
             if (producto != null)
             {
                 producto.Precio = double.Parse(txtPrecio.Text);
                 //ASIGNA EL VALOR TOTAL DE TODOS LOS PRODUCTOS
-                precioTotal += producto.Precio;
-                txtPrecioTotal.Text = "Bs. " + precioTotal;
+                if (producto.Moneda == "USD." && cbxCurrency.Text == "BS.")
+                {
+                    precioTotal += Math.Round((producto.Precio * 6.97),2);
+                    txtPrecioTotal.Text = "Bs. " + precioTotal;
+                }
+                else if(producto.Moneda == "BS." && cbxCurrency.Text == "USD.")
+                {
+                    precioTotal += Math.Round((producto.Precio / 6.97),2);
+                    txtPrecioTotal.Text = "USD. " + precioTotal;
+                }
+                else if (producto.Moneda == "BS." && cbxCurrency.Text == "BS.")
+                {
+                    precioTotal += producto.Precio;
+                    txtPrecioTotal.Text = "Bs. " + precioTotal;
+                }
+                else
+                {
+                    precioTotal += producto.Precio;
+                    txtPrecioTotal.Text = "USD. " + precioTotal;
+                }
+                
 
                 listaProducto.Add(producto);
                 dgvProductos.Items.Add(new DataGridRowDetalle { cantidad = 1, producto = producto.NombreProducto + " " + producto.Color, numeroSerie = producto.NumeroSerie, precio = producto.Precio });
@@ -253,9 +277,11 @@ namespace sisgesoriadao
                 labelWarning(lblSearchProductInfo);
                 lblSearchProductInfo.Content = "NO PUEDE AÑADIR EL MISMO PRODUCTO 2 VECES.";
             }
+            */
         }
         private void btnSaveAndPDF_Click(object sender, RoutedEventArgs e)
         {
+            /*
             venta = new Venta(cliente.IdCliente,Session.IdUsuario,precioTotal,byte.Parse((cbxPaymentMethod.SelectedItem as ComboboxItem).Valor.ToString()), cbxCurrency.Text,Session.Sucursal_IdSucursal);
             implVenta = new VentaImpl();
             string mensaje = implVenta.InsertTransaction(listaProducto, venta);
@@ -267,6 +293,7 @@ namespace sisgesoriadao
             {
                 MessageBox.Show(mensaje);
             }
+            */
         }
         private void dgvProductos_Loaded(object sender, RoutedEventArgs e)
         {
@@ -319,6 +346,19 @@ namespace sisgesoriadao
             public ComboboxItem()
             {
 
+            }
+        }
+        private void cbxCurrency_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbxCurrency.SelectedIndex == 0)
+            {
+                precioTotal = Math.Round((precioTotal * 6.97),2);
+                txtPrecioTotal.Text = "Bs. " + precioTotal;
+            }
+            else
+            {
+                precioTotal = Math.Round((precioTotal / 6.97),2);
+                txtPrecioTotal.Text = "USD. " + precioTotal;
             }
         }
     }

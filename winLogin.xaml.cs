@@ -23,7 +23,6 @@ namespace sisgesoriadao
     {
         UsuarioImpl implUsuario;
         Usuario session;
-        SucursalImpl implSucursal;
         public winLogin()
         {
             InitializeComponent();
@@ -64,29 +63,13 @@ namespace sisgesoriadao
                     session = implUsuario.Login(txtUserName.Text, txtPassword.Password);
                     if (session != null)
                     {
-                        Session.Sucursal_IdSucursal = 1;
-                        implSucursal = new SucursalImpl();
-                        implSucursal.GetBranchForSession(Session.Sucursal_IdSucursal);
-                        switch (Session.Rol)
-                        {
-                            case 1:
-                                winMainAdmin winMainAdmin = new winMainAdmin();
-                                winMainAdmin.Show();
-                                this.Close();
-                                break;
-                            case 2:
-                                winMainSeller winMainSeller = new winMainSeller();
-                                winMainSeller.Show();
-                                this.Close();
-                                break;
-                            default:
-                                MessageBox.Show("Algo salió mal, intente nuevamente.");
-                                break;
-                        }
+                        winLogin_Sucursal winLogin_Sucursal = new winLogin_Sucursal();
+                        winLogin_Sucursal.Show();
+                        this.Close();
                     }
                     else
                     {
-                        lblInfo.Content = "STATUS: USUARIO O CONTRASEÑA INCORRECTOS, INTENTE NUEVAMENTE.";
+                        lblInfo.Content = "ESTADO: USUARIO O CONTRASEÑA INCORRECTOS, INTENTE NUEVAMENTE.";
                         lblInfo.Foreground = new SolidColorBrush(Colors.Red);
                     }
                 }

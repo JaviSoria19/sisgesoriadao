@@ -27,12 +27,10 @@ namespace sisgesoriadao
         {
             InitializeComponent();
         }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = "Bienvenid@ a " + Session.Sucursal_NombreSucursal + " , " + Session.NombreUsuario;
         }
-
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("¿Está segur@ de cerrar la sesión actual?", "CERRAR SESIÓN", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
@@ -42,63 +40,41 @@ namespace sisgesoriadao
                 this.Close();
             }
         }
-
         private void btnEmployees_Click(object sender, RoutedEventArgs e)
         {
             winEmpleado winEmpleado = new winEmpleado();
             winEmpleado.Show();
-            this.Close();
         }
-
         private void btnUsers_Click(object sender, RoutedEventArgs e)
         {
             winUsuario winUsuario = new winUsuario();
             winUsuario.Show();
-            this.Close();
         }
-
         private void btnSales_Click(object sender, RoutedEventArgs e)
         {
             winVenta_Insert winVenta_Insert = new winVenta_Insert();
             winVenta_Insert.Show();
-            this.Close();
         }
-
         private void btnCustomers_Click(object sender, RoutedEventArgs e)
         {
             winCliente winCliente = new winCliente();
             winCliente.Show();
-            this.Close();
         }
-
         private void btnBranches_Click(object sender, RoutedEventArgs e)
         {
             winSucursal winSucursal = new winSucursal();
             winSucursal.Show();
-            this.Close();
         }
-
         private void btnProducts_Click(object sender, RoutedEventArgs e)
         {
             winProducto winProducto = new winProducto();
             winProducto.Show();
-            this.Close();
         }
-
-        private void btnBrands_Click(object sender, RoutedEventArgs e)
-        {
-            winMarca winMarca = new winMarca();
-            winMarca.Show();
-            this.Close();
-        }
-
         private void btnCategories_Click(object sender, RoutedEventArgs e)
         {
             winCategoria winCategoria = new winCategoria();
             winCategoria.Show();
-            this.Close();
         }
-
         private void btnReports_Click(object sender, RoutedEventArgs e)
         {
 

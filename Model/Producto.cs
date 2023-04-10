@@ -10,14 +10,17 @@ namespace sisgesoriadao.Model
     {
         public int IdProducto { get; set; }
         public byte IdSucursal { get; set; }
-        public byte IdMarca { get; set; }
         public byte IdCategoria { get; set; }
-        public string NombreProducto { get; set; }
-        public string Color { get; set; }
-        public string NumeroSerie { get; set; }
-        public double Precio { get; set; }
-        public string Moneda { get; set; }
+        public int IdSublote { get; set; }
         public byte IdUsuario { get; set; }
+        public string CodigoSublote { get; set; }
+        public string NombreProducto { get; set; }
+        public string Identificador { get; set; }
+        public double CostoUSD { get; set; }
+        public double CostoBOB { get; set; }
+        public double PrecioVentaUSD { get; set; }
+        public double PrecioVentaBOB { get; set; }
+        public string Observaciones { get; set; }
         public Producto()
         {
 
@@ -27,51 +30,66 @@ namespace sisgesoriadao.Model
         /// </summary>
         /// <param name="idProducto"></param>
         /// <param name="idSucursal"></param>
-        /// <param name="idMarca"></param>
         /// <param name="idCategoria"></param>
-        /// <param name="nombreProducto"></param>
-        /// <param name="color"></param>
-        /// <param name="numeroSerie"></param>
-        /// <param name="precio"></param>
-        /// <param name="moneda"></param>
+        /// <param name="idSublote"></param>
         /// <param name="idUsuario"></param>
-        public Producto(int idProducto, byte idSucursal, byte idMarca, byte idCategoria, string nombreProducto, string color, string numeroSerie, double precio, string moneda, byte idUsuario, byte estado, DateTime fechaRegistro, string fechaActualizacion)
+        /// <param name="codigoSublote"></param>
+        /// <param name="nombreProducto"></param>
+        /// <param name="identificador"></param>
+        /// <param name="costoUSD"></param>
+        /// <param name="costoBOB"></param>
+        /// <param name="precioVentaUSD"></param>
+        /// <param name="precioVentaBOB"></param>
+        /// <param name="observaciones"></param>
+        /// <param name="estado"></param>
+        /// <param name="fechaRegistro"></param>
+        /// <param name="fechaActualizacion"></param>
+        public Producto(int idProducto, byte idSucursal, byte idCategoria, int idSublote, byte idUsuario, string codigoSublote, string nombreProducto, string identificador, double costoUSD, double costoBOB, double precioVentaUSD, double precioVentaBOB, string observaciones, byte estado, DateTime fechaRegistro, string fechaActualizacion)
             : base(estado, fechaRegistro, fechaActualizacion)
         {
             IdProducto = idProducto;
             IdSucursal = idSucursal;
-            IdMarca = idMarca;
             IdCategoria = idCategoria;
-            NombreProducto = nombreProducto;
-            Color = color;
-            NumeroSerie = numeroSerie;
-            Precio = precio;
-            Moneda = moneda;
+            IdSublote = idSublote;
             IdUsuario = idUsuario;
+            CodigoSublote = codigoSublote;
+            NombreProducto = nombreProducto;
+            Identificador = identificador;
+            CostoUSD = costoUSD;
+            CostoBOB = costoBOB;
+            PrecioVentaUSD = precioVentaUSD;
+            PrecioVentaBOB = precioVentaBOB;
+            Observaciones = observaciones;
         }
         /// <summary>
         /// INSERT
         /// </summary>
         /// <param name="idSucursal"></param>
-        /// <param name="idMarca"></param>
         /// <param name="idCategoria"></param>
-        /// <param name="nombreProducto"></param>
-        /// <param name="color"></param>
-        /// <param name="numeroSerie"></param>
-        /// <param name="precio"></param>
-        /// <param name="moneda"></param>
+        /// <param name="idSublote"></param>
         /// <param name="idUsuario"></param>
-        public Producto(byte idSucursal, byte idMarca, byte idCategoria, string nombreProducto, string color, string numeroSerie, double precio, string moneda, byte idUsuario)
+        /// <param name="codigoSublote"></param>
+        /// <param name="nombreProducto"></param>
+        /// <param name="identificador"></param>
+        /// <param name="costoUSD"></param>
+        /// <param name="costoBOB"></param>
+        /// <param name="precioVentaUSD"></param>
+        /// <param name="precioVentaBOB"></param>
+        /// <param name="observaciones"></param>
+        public Producto(byte idSucursal, byte idCategoria, int idSublote, byte idUsuario, string codigoSublote, string nombreProducto, string identificador, double costoUSD, double costoBOB, double precioVentaUSD, double precioVentaBOB, string observaciones)
         {
             IdSucursal = idSucursal;
-            IdMarca = idMarca;
             IdCategoria = idCategoria;
-            NombreProducto = nombreProducto;
-            Color = color;
-            NumeroSerie = numeroSerie;
-            Precio = precio;
-            Moneda = moneda;
+            IdSublote = idSublote;
             IdUsuario = idUsuario;
+            CodigoSublote = codigoSublote;
+            NombreProducto = nombreProducto;
+            Identificador = identificador;
+            CostoUSD = costoUSD;
+            CostoBOB = costoBOB;
+            PrecioVentaUSD = precioVentaUSD;
+            PrecioVentaBOB = precioVentaBOB;
+            Observaciones = observaciones;
         }
         /// <summary>
         /// DELETE

@@ -29,16 +29,15 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                <Label Content="NOMBRES:"/>
-                <TextBox x:Name="txtNombre" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
-                <Label Content="PRIMER AP.:"/>
-                <TextBox x:Name="txtPrimerApellido" TextWrapping="Wrap" Margin="0,0,20,0" Width="120" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
-                <Label Content="SEGUNDO AP.:"/>
-                <TextBox x:Name="txtSegundoApellido" TextWrapping="Wrap" Margin="0,0,20,0" Width="120" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
+                <Label Content="NOMBRE COMPLETO:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtNombre" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="150" KeyUp="TextBoxUppercase" MaxLength="60" IsEnabled="False"/>
                 <Label Content="NRO. CELULAR:"/>
-                <TextBox x:Name="txtNumeroCelular" TextWrapping="Wrap" Margin="0,0,20,0" Width="120" MaxLength="8" IsEnabled="False"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtNumeroCelular" TextWrapping="Wrap" Margin="0,0,20,0" Width="120" MaxLength="15" IsEnabled="False"/>
                 <Label Content="NRO. CARNET:"/>
-                <TextBox x:Name="txtNumeroCI" TextWrapping="Wrap" Margin="0,0,20,0" Width="120" MaxLength="10" IsEnabled="False"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtNumeroCI" TextWrapping="Wrap" Margin="0,0,20,0" Width="120" MaxLength="15" IsEnabled="False" PreviewTextInput="txtNumeroCI_PreviewTextInput"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">

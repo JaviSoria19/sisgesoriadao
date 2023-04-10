@@ -30,7 +30,12 @@
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="CATEGORIA:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtCategoria" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
+                <Label Content="GARANTIA:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtGarantia" TextWrapping="Wrap" Margin="0,0,0,0" MinWidth="50" MaxLength="2" IsEnabled="False" PreviewTextInput="txtGarantia_PreviewTextInput"/>
+                <Label Content="MESES."/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">

@@ -28,18 +28,28 @@
                 <TextBlock Text="USUARIOS" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <TextBlock Text="Nota: Para modificar su contraseña diríjase a "/>
+                <TextBlock Text="Inicio de sesión → ¿Olvidó su contraseña?" FontWeight="Bold"/>
+            </StackPanel>
+
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="USUARIO:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtUsuario" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
                 <Label Content="CONTRASEÑA:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtContrasenha" TextWrapping="Wrap" Margin="0,0,20,0" Width="130" MaxLength="30" IsEnabled="False"/>
                 <Label Content="CONFIRMAR CONTRASEÑA:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtReContrasenha" TextWrapping="Wrap" Margin="0,0,20,0" Width="130" MaxLength="30" IsEnabled="False"/>
                 <Label Content="ROL:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <ComboBox x:Name="cbxRol" IsEnabled="False">
                 </ComboBox>
                 <Label Content="PIN:"/>
-                <TextBox x:Name="txtPin" TextWrapping="Wrap" Margin="0,0,20,0" Width="80" MaxLength="6" IsEnabled="False"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtPin" TextWrapping="Wrap" Margin="0,0,20,0" Width="80" MaxLength="6" IsEnabled="False" PreviewTextInput="txtPin_PreviewTextInput"/>
             </StackPanel>
             
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
@@ -72,7 +82,8 @@
                   SelectionChanged="dgvDatos_SelectionChanged" MaxHeight="363"/>
                 </Border>
                 <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
-                <TextBlock Text="EMPLEADOS SIN USUARIO:" Margin="0,20,0,20" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="EMPLEADOS SIN USUARIO:" Margin="0,30,0,0" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Seleccione un empleado de la tabla para insertar un nuevo usuario:" Margin="10"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
                 <Border BorderBrush="Gray" BorderThickness="2">

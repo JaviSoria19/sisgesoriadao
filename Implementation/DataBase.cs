@@ -4,15 +4,15 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using sisgesoriadao.Model;
 using MySql.Data.MySqlClient;//MySql.Data
 namespace sisgesoriadao.Implementation
 {
     public class DataBase
     {
-        string connectionString = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
         public MySqlCommand CreateBasicCommand()
         {
-            MySqlConnection connection = new MySqlConnection(connectionString);
+            MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
             MySqlCommand command = new MySqlCommand();
             command.Connection = connection;
             return command;

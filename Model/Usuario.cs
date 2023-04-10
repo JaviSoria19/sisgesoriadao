@@ -10,6 +10,7 @@ namespace sisgesoriadao.Model
     {
         public byte IdUsuario { get; set; }
         public byte IdEmpleado { get; set; }
+        public byte IdAjustes { get; set; }
         public string NombreUsuario { get; set; }
         public string Contrasenha { get; set; }
         public byte Rol { get; set; }
@@ -24,6 +25,7 @@ namespace sisgesoriadao.Model
         /// </summary>
         /// <param name="idUsuario"></param>
         /// <param name="idEmpleado"></param>
+        /// <param name="idAjustes"></param>
         /// <param name="nombreUsuario"></param>
         /// <param name="contrasenha"></param>
         /// <param name="rol"></param>
@@ -31,11 +33,12 @@ namespace sisgesoriadao.Model
         /// <param name="estado"></param>
         /// <param name="fechaRegistro"></param>
         /// <param name="fechaActualizacion"></param>
-        public Usuario(byte idUsuario, byte idEmpleado, string nombreUsuario, string contrasenha, byte rol, string pin, byte estado, DateTime fechaRegistro, string fechaActualizacion)
-            :base(estado, fechaRegistro, fechaActualizacion)
+        public Usuario(byte idUsuario, byte idEmpleado, byte idAjustes, string nombreUsuario, string contrasenha, byte rol, string pin, byte estado, DateTime fechaRegistro, string fechaActualizacion)
+            : base(estado, fechaRegistro, fechaActualizacion)
         {
             IdUsuario = idUsuario;
             IdEmpleado = idEmpleado;
+            IdAjustes = idAjustes;
             NombreUsuario = nombreUsuario;
             Contrasenha = contrasenha;
             Rol = rol;
@@ -45,13 +48,15 @@ namespace sisgesoriadao.Model
         /// INSERT
         /// </summary>
         /// <param name="idEmpleado"></param>
+        /// <param name="idAjustes"></param>
         /// <param name="nombreUsuario"></param>
         /// <param name="contrasenha"></param>
         /// <param name="rol"></param>
         /// <param name="pin"></param>
-        public Usuario(byte idEmpleado, string nombreUsuario, string contrasenha, byte rol, string pin)
+        public Usuario(byte idEmpleado, byte idAjustes, string nombreUsuario, string contrasenha, byte rol, string pin)
         {
             IdEmpleado = idEmpleado;
+            IdAjustes = idAjustes;
             NombreUsuario = nombreUsuario;
             Contrasenha = contrasenha;
             Rol = rol;

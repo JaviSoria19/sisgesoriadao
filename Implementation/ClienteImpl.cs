@@ -13,12 +13,10 @@ namespace sisgesoriadao.Implementation
     {
         public int Insert(Cliente c)
         {
-            string query = @"INSERT INTO cliente (nombres,primerApellido,segundoApellido,numeroCelular,numeroCI) 
-                            VALUES (@nombres,@primerApellido,@segundoApellido,@numeroCelular,@numeroCI)";
+            string query = @"INSERT INTO cliente (nombre,numeroCelular,numeroCI) 
+                            VALUES (@nombre,@numeroCelular,@numeroCI)";
             MySqlCommand command = CreateBasicCommand(query);
-            command.Parameters.AddWithValue("@nombres", c.Nombres);
-            command.Parameters.AddWithValue("@primerApellido", c.PrimerApellido);
-            command.Parameters.AddWithValue("@segundoApellido", c.SegundoApellido);
+            command.Parameters.AddWithValue("@nombre", c.Nombre);
             command.Parameters.AddWithValue("@numeroCelular", c.NumeroCelular);
             command.Parameters.AddWithValue("@numeroCI", c.NumeroCI);
             try
@@ -34,14 +32,11 @@ namespace sisgesoriadao.Implementation
         public int Update(Cliente c)
         {
             string query = @"UPDATE cliente SET 
-                nombres=@nombres, primerApellido=@primerApellido,
-                segundoApellido=@segundoApellido, numeroCelular=@numeroCelular,
+                nombre=@nombre, numeroCelular=@numeroCelular,
                 numeroCI=@numeroCI, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCliente = @idCliente";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCliente", c.IdCliente);
-            command.Parameters.AddWithValue("@nombres", c.Nombres);
-            command.Parameters.AddWithValue("@primerApellido", c.PrimerApellido);
-            command.Parameters.AddWithValue("@segundoApellido", c.SegundoApellido);
+            command.Parameters.AddWithValue("@nombre", c.Nombre);
             command.Parameters.AddWithValue("@numeroCelular", c.NumeroCelular);
             command.Parameters.AddWithValue("@numeroCI", c.NumeroCI);
             try
@@ -72,7 +67,7 @@ namespace sisgesoriadao.Implementation
         public Cliente Get(int Id)
         {
             Cliente c = null;
-            string query = @"SELECT idCliente, nombres, primerApellido, IFNULL(segundoApellido,'-'), numeroCelular, numeroCI , estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM cliente 
+            string query = @"SELECT idCliente, nombre, numeroCelular, numeroCI , estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM cliente 
                             WHERE idCliente=@idCliente";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCliente", Id);
@@ -81,11 +76,15 @@ namespace sisgesoriadao.Implementation
                 DataTable dt = ExecuteDataTableCommand(command);
                 if (dt.Rows.Count > 0)
                 {
-                    c = new Cliente(byte.Parse(dt.Rows[0][0].ToString()),
-                        dt.Rows[0][1].ToString(), dt.Rows[0][2].ToString(),
-                        dt.Rows[0][3].ToString(), dt.Rows[0][4].ToString(),
-                        dt.Rows[0][5].ToString(), byte.Parse(dt.Rows[0][6].ToString()),
-                        DateTime.Parse(dt.Rows[0][7].ToString()), dt.Rows[0][8].ToString());
+                    c = new Cliente(byte.Parse(dt.Rows[0][0].ToString()),   /*idCliente*/
+                        dt.Rows[0][1].ToString(),                           /*nombre*/
+                        dt.Rows[0][2].ToString(),                           /*numeroCelular*/
+                        dt.Rows[0][3].ToString(),                           /*numeroCI*/
+
+                        /*Estado, Fecha de Registro, Fecha de Actualización.*/
+                        byte.Parse(dt.Rows[0][4].ToString()),
+                        DateTime.Parse(dt.Rows[0][5].ToString()),
+                        dt.Rows[0][6].ToString());
                 }
             }
             catch (Exception ex)
@@ -98,7 +97,7 @@ namespace sisgesoriadao.Implementation
         public Cliente GetByCIorCelular(string CadenaBusqueda)
         {
             Cliente c = null;
-            string query = @"SELECT idCliente, nombres, primerApellido, IFNULL(segundoApellido,''), numeroCelular, numeroCI , estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM cliente 
+            string query = @"SELECT idCliente, nombre, numeroCelular, numeroCI , estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM cliente 
                                 WHERE (numeroCelular = @search OR numeroCI = @search) AND estado = 1;";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@search", CadenaBusqueda);
@@ -107,13 +106,15 @@ namespace sisgesoriadao.Implementation
                 DataTable dt = ExecuteDataTableCommand(command);
                 if (dt.Rows.Count > 0)
                 {
-                    c = new Cliente(byte.Parse(dt.Rows[0][0].ToString()),
-                        dt.Rows[0][1].ToString(), dt.Rows[0][2].ToString(),
-                        dt.Rows[0][3].ToString(), dt.Rows[0][4].ToString(),
-                        dt.Rows[0][5].ToString(),
-                        byte.Parse(dt.Rows[0][6].ToString()),
-                        DateTime.Parse(dt.Rows[0][7].ToString()),
-                        dt.Rows[0][8].ToString());
+                    c = new Cliente(byte.Parse(dt.Rows[0][0].ToString()),   /*idCliente*/
+                        dt.Rows[0][1].ToString(),                           /*nombre*/
+                        dt.Rows[0][2].ToString(),                           /*numeroCelular*/
+                        dt.Rows[0][3].ToString(),                           /*numeroCI*/
+
+                        /*Estado, Fecha de Registro, Fecha de Actualización.*/
+                        byte.Parse(dt.Rows[0][4].ToString()),
+                        DateTime.Parse(dt.Rows[0][5].ToString()),
+                        dt.Rows[0][6].ToString());
                 }
             }
             catch (Exception ex)
@@ -124,8 +125,8 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            string query = @"SELECT idCliente as ID, nombres as Nombres, CONCAT(primerApellido,' ',IF(segundoApellido='-','',IFNULL(segundoApellido,''))) AS Apellidos,
-                            numeroCelular AS Celular, numeroCI AS Carnet, fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM cliente WHERE estado = 1 ORDER BY 6 DESC";
+            string query = @"SELECT idCliente as ID, nombre as Nombre, numeroCelular AS Celular, numeroCI AS Carnet, fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion' 
+                                FROM cliente WHERE estado = 1 ORDER BY 5 DESC";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -139,10 +140,8 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT idCliente as ID, nombres as Nombres, CONCAT(primerApellido,' ',IF(segundoApellido='-','',IFNULL(segundoApellido,''))) AS Apellidos,
-                                numeroCelular AS Celular, numeroCI AS Carnet, fechaRegistro AS 'Fecha de Registro',
-                                IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM cliente 
-                                WHERE (nombres LIKE @search OR primerApellido LIKE @search OR segundoApellido LIKE @search OR numeroCelular LIKE @search OR numeroCI LIKE @search) 
+            string query = @"SELECT idCliente as ID, nombre as Nombre, numeroCelular AS Celular, numeroCI AS Carnet, fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion'
+                                FROM cliente WHERE (nombre LIKE @search OR numeroCelular LIKE @search OR numeroCI LIKE @search) 
                                 AND estado = 1 AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                                 ORDER BY 6 DESC"; 
             MySqlCommand command = CreateBasicCommand(query);

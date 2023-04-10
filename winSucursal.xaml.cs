@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using System.Data;//ADO.NET
 using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
+using System.Text.RegularExpressions;
+
 namespace sisgesoriadao
 {
     /// <summary>
@@ -113,44 +115,60 @@ namespace sisgesoriadao
             {
                 //INSERT
                 case 1:
-                    sucursal = new Sucursal(txtNombreSucursal.Text.Trim(), txtDireccion.Text.Trim(), txtCorreo.Text.Trim());
-                    implSucursal = new SucursalImpl();
-                    try
+                    if (string.IsNullOrEmpty(txtNombreSucursal.Text) != true && string.IsNullOrEmpty(txtDireccion.Text) != true &&
+                        string.IsNullOrEmpty(txtCorreo.Text) != true && string.IsNullOrEmpty(txtTelefono.Text) != true)
                     {
-                        int n = implSucursal.Insert(sucursal);
-                        if (n > 0)
+                        sucursal = new Sucursal(txtNombreSucursal.Text.Trim(), txtDireccion.Text.Trim(), txtCorreo.Text.Trim(), txtTelefono.Text.Trim());
+                        implSucursal = new SucursalImpl();
+                        try
                         {
-                            labelSuccess(lblInfo);
-                            lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
-                            Select();
-                            DisabledButtons();
+                            int n = implSucursal.Insert(sucursal);
+                            if (n > 0)
+                            {
+                                labelSuccess(lblInfo);
+                                lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
+                                Select();
+                                DisabledButtons();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
                         }
                     }
-                    catch (Exception)
+                    else
                     {
-                        MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                        MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
                     }
                     break;
                 //UPDATE
                 case 2:
-                    sucursal.NombreSucursal = txtNombreSucursal.Text.Trim();
-                    sucursal.Direccion = txtDireccion.Text.Trim();
-                    sucursal.Correo = txtCorreo.Text.Trim();
-                    implSucursal = new SucursalImpl();
-                    try
+                    if (string.IsNullOrEmpty(txtNombreSucursal.Text) != true && string.IsNullOrEmpty(txtDireccion.Text) != true &&
+                        string.IsNullOrEmpty(txtCorreo.Text) != true && string.IsNullOrEmpty(txtTelefono.Text) != true)
                     {
-                        int n = implSucursal.Update(sucursal);
-                        if (n > 0)
+                        sucursal.NombreSucursal = txtNombreSucursal.Text.Trim();
+                        sucursal.Direccion = txtDireccion.Text.Trim();
+                        sucursal.Correo = txtCorreo.Text.Trim();
+                        implSucursal = new SucursalImpl();
+                        try
                         {
-                            labelSuccess(lblInfo);
-                            lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
-                            Select();
-                            DisabledButtons();
+                            int n = implSucursal.Update(sucursal);
+                            if (n > 0)
+                            {
+                                labelSuccess(lblInfo);
+                                lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
+                                Select();
+                                DisabledButtons();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
                         }
                     }
-                    catch (Exception)
+                    else
                     {
-                        MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                        MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
                     }
                     break;
                 default:
@@ -186,8 +204,6 @@ namespace sisgesoriadao
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
-            winMainAdmin winMainAdmin = new winMainAdmin();
-            winMainAdmin.Show();
             this.Close();
         }
         void EnabledButtons()
@@ -232,7 +248,7 @@ namespace sisgesoriadao
                         txtNombreSucursal.Text = sucursal.NombreSucursal.Trim();
                         txtDireccion.Text = sucursal.Direccion.Trim();
                         txtCorreo.Text = sucursal.Correo.Trim();
-
+                        txtTelefono.Text = sucursal.Telefono.Trim();
                         labelSuccess(lblInfo);
                         lblInfo.Content = "SUCURSAL SELECCIONADA.";
                     }
@@ -273,5 +289,17 @@ namespace sisgesoriadao
             label.Foreground = new SolidColorBrush(Colors.Black);
             label.Background = new SolidColorBrush(Colors.Red);
         }
+
+        private void txtTelefono_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !IsTextAllowed(e.Text);
+        }
+        //--------->VALIDACIÓN PARA QUE EL TEXTBOX SOLO PERMITA NÚMEROS (Y EN ESTE CASO, UN PUNTO.)<---------
+        private static readonly Regex _regex = new Regex("[^0-9-]+"); //regex that matches disallowed text
+        private static bool IsTextAllowed(string text)
+        {
+            return !_regex.IsMatch(text);
+        }
+        //------------------------------------------------------><---------------------------------------------
     }
 }

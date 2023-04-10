@@ -13,11 +13,12 @@ namespace sisgesoriadao.Implementation
     {
         public int Insert(Categoria c)
         {
-            string query = @"INSERT INTO categoria (nombreCategoria,idUsuario) 
-                            VALUES (@nombreCategoria,@idUsuario)";
+            string query = @"INSERT INTO categoria (idUsuario,nombreCategoria,garantia) 
+                            VALUES (@idUsuario,@nombreCategoria,@garantia)";
             MySqlCommand command = CreateBasicCommand(query);
-            command.Parameters.AddWithValue("@nombreCategoria", c.NombreCategoria);
             command.Parameters.AddWithValue("@idUsuario", c.IdUsuario);
+            command.Parameters.AddWithValue("@nombreCategoria", c.NombreCategoria);
+            command.Parameters.AddWithValue("@garantia", c.Garantia);
             try
             {
                 return ExecuteBasicCommand(command);
@@ -31,11 +32,12 @@ namespace sisgesoriadao.Implementation
         public int Update(Categoria c)
         {
             string query = @"UPDATE categoria SET 
-                nombreCategoria=@nombreCategoria, idUsuario=@idUsuario, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCategoria = @idCategoria";
+                idUsuario=@idUsuario, nombreCategoria=@nombreCategoria, garantia=@garantia, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCategoria = @idCategoria";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCategoria", c.IdCategoria);
-            command.Parameters.AddWithValue("@nombreCategoria", c.NombreCategoria);
             command.Parameters.AddWithValue("@idUsuario", c.IdUsuario);
+            command.Parameters.AddWithValue("@nombreCategoria", c.NombreCategoria);
+            command.Parameters.AddWithValue("@garantia", c.Garantia);
             try
             {
                 return ExecuteBasicCommand(command);
@@ -65,7 +67,7 @@ namespace sisgesoriadao.Implementation
         public Categoria Get(byte Id)
         {
             Categoria c = null;
-            string query = @"SELECT idCategoria, nombreCategoria, idUsuario, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM categoria 
+            string query = @"SELECT idCategoria, idUsuario, nombreCategoria, garantia, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM categoria 
                             WHERE idCategoria=@idCategoria";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCategoria", Id);
@@ -74,13 +76,15 @@ namespace sisgesoriadao.Implementation
                 DataTable dt = ExecuteDataTableCommand(command);
                 if (dt.Rows.Count > 0)
                 {
-                    c = new Categoria(byte.Parse(dt.Rows[0][0].ToString()),
-                        dt.Rows[0][1].ToString(),
-                        byte.Parse(dt.Rows[0][2].ToString()),
+                    c = new Categoria(byte.Parse(dt.Rows[0][0].ToString()),     /*idCategoria*/
+                        byte.Parse(dt.Rows[0][1].ToString()),                   /*idUsuario*/
+                        dt.Rows[0][2].ToString(),                               /*nombreCategoria*/
+                        byte.Parse(dt.Rows[0][3].ToString()),                   /*garantia*/
 
-                        byte.Parse(dt.Rows[0][3].ToString()),
-                        DateTime.Parse(dt.Rows[0][4].ToString()), 
-                        dt.Rows[0][5].ToString());
+                        //Estado, FechaRegistro y FechaActualizacion.
+                        byte.Parse(dt.Rows[0][4].ToString()),
+                        DateTime.Parse(dt.Rows[0][5].ToString()), 
+                        dt.Rows[0][6].ToString());
                 }
             }
             catch (Exception ex)
@@ -93,7 +97,7 @@ namespace sisgesoriadao.Implementation
         
         public DataTable Select()
         {
-            string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM categoria AS C
+            string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.garantia AS Garantia,C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM categoria AS C
                                 INNER JOIN usuario AS U ON C.idUsuario = U.idUsuario
                                 WHERE C.estado = 1 ORDER BY 3 DESC, 2 ASC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -123,9 +127,9 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM categoria AS C
+            string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.garantia AS Garantia, C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM categoria AS C
                                 INNER JOIN usuario AS U ON C.idUsuario = U.idUsuario
-                                WHERE (C.nombreCategoria LIKE @search) 
+                                WHERE (C.nombreCategoria LIKE @search OR C.garantia LIKE @search) 
                                 AND C.estado = 1 AND C.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                                 ORDER BY 3 DESC, 2 ASC";
             MySqlCommand command = CreateBasicCommand(query);

@@ -28,17 +28,26 @@
                 <TextBlock Text="EMPLEADOS" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Text="Para tener acceso al sistema, debe crear primero un empleado, después crear su usuario correspondiente." Margin="0,0,0,5"/>
+                <TextBlock Text="Nota: La información personal de los empleados no se mostrará en ningún lugar, solo para referencia interna." FontWeight="Bold"/>
+            </StackPanel>
+            
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="NOMBRES:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtNombre" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
                 <Label Content="PRIMER AP.:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtPrimerApellido" TextWrapping="Wrap" Margin="0,0,20,0" Width="120" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
                 <Label Content="SEGUNDO AP.:"/>
                 <TextBox x:Name="txtSegundoApellido" TextWrapping="Wrap" Margin="0,0,20,0" Width="120" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
                 <Label Content="NRO. CELULAR:"/>
-                <TextBox x:Name="txtNumeroCelular" TextWrapping="Wrap" Margin="0,0,20,0" Width="120" MaxLength="8" IsEnabled="False"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtNumeroCelular" TextWrapping="Wrap" Margin="0,0,20,0" Width="120" MaxLength="15" IsEnabled="False"/>
                 <Label Content="NRO. CARNET:"/>
-                <TextBox x:Name="txtNumeroCI" TextWrapping="Wrap" Margin="0,0,20,0" Width="120" MaxLength="10" IsEnabled="False"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtNumeroCI" TextWrapping="Wrap" Margin="0,0,20,0" Width="120" MaxLength="15" IsEnabled="False"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">

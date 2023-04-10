@@ -10,7 +10,7 @@ namespace sisgesoriadao.Interfaces
     public interface IProducto : IDao<Producto>
     {
         Producto Get(int Id);
-        Producto GetBySNorIMEI(string CadenaBusqueda);
+        Producto GetByIdentifierOrCode(string CadenaBusqueda);
         DataTable SelectSoldProducts();
         DataTable SelectLikeSoldProducts(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin);
     }

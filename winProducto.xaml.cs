@@ -29,7 +29,6 @@ namespace sisgesoriadao
 
         //Implementaciones para obtener ID's y Nombres para los Combobox
         SucursalImpl implSucursal;
-        MarcaImpl implMarca;
         CategoriaImpl implCategoria;
         public winProducto()
         {
@@ -50,11 +49,7 @@ namespace sisgesoriadao
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
             cbxGetCategoriaFromDatabase();
-            cbxSelectMarcaFromDatabase();
             cbxSelectSucursalFromDatabase();
-            cbxMoneda.Items.Add("BS.");
-            cbxMoneda.Items.Add("USD.");
-            cbxMoneda.SelectedIndex = 0;
         }
         private void Select()
         {
@@ -147,14 +142,17 @@ namespace sisgesoriadao
                 case 1:
                     producto = new Producto(
                         byte.Parse((cbxSucursal.SelectedItem as ComboboxItem).Valor.ToString()),
-                        byte.Parse((cbxMarca.SelectedItem as ComboboxItem).Valor.ToString()),
                         byte.Parse((cbxCategoria.SelectedItem as ComboboxItem).Valor.ToString()),
+                        1,
+                        Session.IdUsuario,
+                        "CODIGOSUBLOTE",
                         txtNombreProducto.Text.Trim(),
-                        txtColor.Text.Trim(),
-                        txtNumeroSerie.Text.Trim(),
-                        double.Parse(txtPrecio.Text.Trim()),
-                        cbxMoneda.Text,
-                        Session.IdUsuario
+                        txtIdentificador.Text.Trim(),
+                        double.Parse(txtCostoUSD.Text.Trim()),
+                        double.Parse(txtCostoBOB.Text.Trim()),
+                        double.Parse(txtPrecioUSD.Text.Trim()),
+                        double.Parse(txtPrecioBOB.Text.Trim()),
+                        txtObservaciones.Text.Trim()
                         );
                     implProducto = new ProductoImpl();
                     try
@@ -176,14 +174,17 @@ namespace sisgesoriadao
                 //UPDATE
                 case 2:
                     producto.IdSucursal = byte.Parse((cbxSucursal.SelectedItem as ComboboxItem).Valor.ToString());
-                    producto.IdMarca = byte.Parse((cbxMarca.SelectedItem as ComboboxItem).Valor.ToString());
                     producto.IdCategoria = byte.Parse((cbxCategoria.SelectedItem as ComboboxItem).Valor.ToString());
-                    producto.NombreProducto = txtNombreProducto.Text.Trim();
-                    producto.Color = txtColor.Text.Trim();
-                    producto.NumeroSerie = txtNumeroSerie.Text.Trim();
-                    producto.Precio = double.Parse(txtPrecio.Text.Trim());
-                    producto.Moneda = cbxMoneda.Text;
+                    //
+                    producto.IdSublote = 1;
+                    //
                     producto.IdUsuario = Session.IdUsuario;
+                    producto.NombreProducto = txtNombreProducto.Text.Trim();
+                    producto.Identificador = txtIdentificador.Text.Trim();
+                    producto.CostoUSD = double.Parse(txtCostoUSD.Text.Trim());
+                    producto.CostoBOB = double.Parse(txtCostoBOB.Text.Trim());
+                    producto.PrecioVentaUSD = double.Parse(txtPrecioUSD.Text.Trim());
+                    producto.PrecioVentaBOB = double.Parse(txtPrecioBOB.Text.Trim());
                     implProducto = new ProductoImpl();
                     try
                     {
@@ -234,8 +235,6 @@ namespace sisgesoriadao
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
-            winMainAdmin winMainAdmin = new winMainAdmin();
-            winMainAdmin.Show();
             this.Close();
         }
         void EnabledButtons()
@@ -249,13 +248,13 @@ namespace sisgesoriadao
 
             txtNombreProducto.IsEnabled = true;
             txtNombreProducto.Focus();
-            txtColor.IsEnabled = true;
-            txtNumeroSerie.IsEnabled = true;
-            txtPrecio.IsEnabled = true;
-            cbxMoneda.IsEnabled = true;
+            txtIdentificador.IsEnabled = true;
+            txtCostoUSD.IsEnabled = true;
+            txtCostoBOB.IsEnabled = true;
+            txtPrecioUSD.IsEnabled = true;
+            txtPrecioBOB.IsEnabled = true;
 
             cbxSucursal.IsEnabled = true;
-            cbxMarca.IsEnabled = true;
             cbxCategoria.IsEnabled = true;
         }
         void DisabledButtons()
@@ -268,13 +267,12 @@ namespace sisgesoriadao
             btnCancel.IsEnabled = false;
 
             txtNombreProducto.IsEnabled = false;
-            txtColor.IsEnabled = false;
-            txtNumeroSerie.IsEnabled = false;
-            txtPrecio.IsEnabled = false;
-            cbxMoneda.IsEnabled = false;
+            txtCostoUSD.IsEnabled = false;
+            txtCostoBOB.IsEnabled = false;
+            txtPrecioUSD.IsEnabled = false;
+            txtPrecioBOB.IsEnabled = false;
 
             cbxSucursal.IsEnabled = false;
-            cbxMarca.IsEnabled = false;
             cbxCategoria.IsEnabled = false;
         }
         private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -290,17 +288,8 @@ namespace sisgesoriadao
                     if (producto != null)
                     {
                         txtNombreProducto.Text = producto.NombreProducto.Trim();
-                        txtColor.Text = producto.Color.Trim();
-                        txtNumeroSerie.Text = producto.NumeroSerie.Trim();
-                        txtPrecio.Text = producto.Precio.ToString();
-                        for (int i = 0; i < cbxMarca.Items.Count; i++)
-                        {
-                            cbxMarca.SelectedIndex = i;
-                            if ((cbxMarca.SelectedItem as ComboboxItem).Valor == producto.IdMarca)
-                            {
-                                break;
-                            }
-                        }
+                        txtIdentificador.Text = producto.Identificador.Trim();
+
                         for (int i = 0; i < cbxSucursal.Items.Count; i++)
                         {
                             cbxSucursal.SelectedIndex = i;
@@ -317,6 +306,7 @@ namespace sisgesoriadao
                                 break;
                             }
                         }
+                        /*
                         if (producto.Moneda == "BS.")
                         {
                             cbxMoneda.SelectedIndex = 0;
@@ -325,6 +315,7 @@ namespace sisgesoriadao
                         {
                             cbxMoneda.SelectedIndex = 1;
                         }
+                        */
                         labelSuccess(lblInfo);
                         lblInfo.Content = "PRODUCTO SELECCIONADO.";
                     }
@@ -414,31 +405,6 @@ namespace sisgesoriadao
                     cbxSucursal.Items.Add(item);
                 }
                 cbxSucursal.SelectedIndex = 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        void cbxSelectMarcaFromDatabase()
-        {
-            try
-            {
-                List<ComboboxItem> listcomboboxMarca = new List<ComboboxItem>();
-                DataTable dataTable = new DataTable();
-                implMarca = new MarcaImpl();
-                dataTable = implMarca.SelectForComboBox();
-                listcomboboxMarca = (from DataRow dr in dataTable.Rows
-                                        select new ComboboxItem()
-                                        {
-                                            Valor = Convert.ToByte(dr["idMarca"]),
-                                            Texto = dr["nombreMarca"].ToString()
-                                        }).ToList();
-                foreach (var item in listcomboboxMarca)
-                {
-                    cbxMarca.Items.Add(item);
-                }
-                cbxMarca.SelectedIndex = 0;
             }
             catch (Exception ex)
             {

@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using System.Data;//ADO.NET
 using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
+using System.Text.RegularExpressions;
+
 namespace sisgesoriadao
 {
     /// <summary>
@@ -113,43 +115,58 @@ namespace sisgesoriadao
             {
                 //INSERT
                 case 1:
-                    categoria = new Categoria(txtCategoria.Text.Trim(), Session.IdUsuario);
-                    implCategoria = new CategoriaImpl();
-                    try
+                    if (string.IsNullOrEmpty(txtCategoria.Text)!=true && string.IsNullOrEmpty(txtGarantia.Text) != true)
                     {
-                        int n = implCategoria.Insert(categoria);
-                        if (n > 0)
+                        categoria = new Categoria(Session.IdUsuario, txtCategoria.Text.Trim(), byte.Parse(txtGarantia.Text.Trim()));
+                        implCategoria = new CategoriaImpl();
+                        try
                         {
-                            labelSuccess(lblInfo);
-                            lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
-                            Select();
-                            DisabledButtons();
+                            int n = implCategoria.Insert(categoria);
+                            if (n > 0)
+                            {
+                                labelSuccess(lblInfo);
+                                lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
+                                Select();
+                                DisabledButtons();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
                         }
                     }
-                    catch (Exception)
+                    else
                     {
-                        MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                        MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
                     }
                     break;
                 //UPDATE
                 case 2:
-                    categoria.NombreCategoria = txtCategoria.Text.Trim();
-                    categoria.IdUsuario = Session.IdUsuario;
-                    implCategoria = new CategoriaImpl();
-                    try
+                    if (string.IsNullOrEmpty(txtCategoria.Text) != true && string.IsNullOrEmpty(txtGarantia.Text) != true)
                     {
-                        int n = implCategoria.Update(categoria);
-                        if (n > 0)
+                        categoria.NombreCategoria = txtCategoria.Text.Trim();
+                        categoria.Garantia = byte.Parse(txtGarantia.Text.Trim());
+                        categoria.IdUsuario = Session.IdUsuario;
+                        implCategoria = new CategoriaImpl();
+                        try
                         {
-                            labelSuccess(lblInfo);
-                            lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
-                            Select();
-                            DisabledButtons();
+                            int n = implCategoria.Update(categoria);
+                            if (n > 0)
+                            {
+                                labelSuccess(lblInfo);
+                                lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
+                                Select();
+                                DisabledButtons();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
                         }
                     }
-                    catch (Exception)
+                    else
                     {
-                        MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                        MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
                     }
                     break;
                 default:
@@ -183,8 +200,6 @@ namespace sisgesoriadao
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
-            winMainAdmin winMainAdmin = new winMainAdmin();
-            winMainAdmin.Show();
             this.Close();
         }
         void EnabledButtons()
@@ -198,6 +213,7 @@ namespace sisgesoriadao
 
             txtCategoria.IsEnabled = true;
             txtCategoria.Focus();
+            txtGarantia.IsEnabled = true;
         }
         void DisabledButtons()
         {
@@ -209,6 +225,7 @@ namespace sisgesoriadao
             btnCancel.IsEnabled = false;
 
             txtCategoria.IsEnabled = false;
+            txtGarantia.IsEnabled = false;
         }
         private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -223,7 +240,7 @@ namespace sisgesoriadao
                     if (categoria != null)
                     {
                         txtCategoria.Text = categoria.NombreCategoria.Trim();
-
+                        txtGarantia.Text = categoria.Garantia.ToString().Trim();
                         labelSuccess(lblInfo);
                         lblInfo.Content = "CATEGORIA SELECCIONADA.";
                     }
@@ -264,5 +281,17 @@ namespace sisgesoriadao
             label.Foreground = new SolidColorBrush(Colors.Black);
             label.Background = new SolidColorBrush(Colors.Red);
         }
+
+        private void txtGarantia_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !IsTextAllowed(e.Text);
+        }
+        //--------->VALIDACIÓN PARA QUE EL TEXTBOX SOLO PERMITA NÚMEROS (Y EN ESTE CASO, UN PUNTO.)<---------
+        private static readonly Regex _regex = new Regex("[^0-9-]+"); //regex that matches disallowed text
+        private static bool IsTextAllowed(string text)
+        {
+            return !_regex.IsMatch(text);
+        }
+        //------------------------------------------------------><---------------------------------------------
     }
 }

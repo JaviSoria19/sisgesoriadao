@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using System.Data;//ADO.NET
 using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
+using System.Text.RegularExpressions;
+
 namespace sisgesoriadao
 {
     /// <summary>
@@ -113,46 +115,58 @@ namespace sisgesoriadao
             {
                 //INSERT
                 case 1:
-                    cliente = new Cliente(txtNombre.Text.Trim(), txtPrimerApellido.Text.Trim(), txtSegundoApellido.Text.Trim(), txtNumeroCelular.Text.Trim(), txtNumeroCI.Text.Trim());
-                    implCliente = new ClienteImpl();
-                    try
+                    if (string.IsNullOrEmpty(txtNombre.Text) != true && string.IsNullOrEmpty(txtNumeroCelular.Text) != true && string.IsNullOrEmpty(txtNumeroCI.Text) != true)
                     {
-                        int n = implCliente.Insert(cliente);
-                        if (n > 0)
+                        cliente = new Cliente(txtNombre.Text.Trim(), txtNumeroCelular.Text.Trim(), txtNumeroCI.Text.Trim());
+                        implCliente = new ClienteImpl();
+                        try
                         {
-                            labelSuccess(lblInfo);
-                            lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
-                            Select();
-                            DisabledButtons();
+                            int n = implCliente.Insert(cliente);
+                            if (n > 0)
+                            {
+                                labelSuccess(lblInfo);
+                                lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
+                                Select();
+                                DisabledButtons();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
                         }
                     }
-                    catch (Exception)
+                    else
                     {
-                        MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                        MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
                     }
                     break;
                 //UPDATE
                 case 2:
-                    cliente.Nombres = txtNombre.Text.Trim();
-                    cliente.PrimerApellido = txtPrimerApellido.Text.Trim();
-                    cliente.SegundoApellido = txtSegundoApellido.Text.Trim();
-                    cliente.NumeroCelular = txtNumeroCelular.Text.Trim();
-                    cliente.NumeroCI = txtNumeroCI.Text.Trim();
-                    implCliente = new ClienteImpl();
-                    try
+                    if (string.IsNullOrEmpty(txtNombre.Text) != true && string.IsNullOrEmpty(txtNumeroCelular.Text) != true && string.IsNullOrEmpty(txtNumeroCI.Text) != true)
                     {
-                        int n = implCliente.Update(cliente);
-                        if (n > 0)
+                        cliente.Nombre = txtNombre.Text.Trim();
+                        cliente.NumeroCelular = txtNumeroCelular.Text.Trim();
+                        cliente.NumeroCI = txtNumeroCI.Text.Trim();
+                        implCliente = new ClienteImpl();
+                        try
                         {
-                            labelSuccess(lblInfo);
-                            lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
-                            Select();
-                            DisabledButtons();
+                            int n = implCliente.Update(cliente);
+                            if (n > 0)
+                            {
+                                labelSuccess(lblInfo);
+                                lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
+                                Select();
+                                DisabledButtons();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
                         }
                     }
-                    catch (Exception)
+                    else
                     {
-                        MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                        MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
                     }
                     break;
                 default:
@@ -186,8 +200,6 @@ namespace sisgesoriadao
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
-            winMainAdmin winMainAdmin = new winMainAdmin();
-            winMainAdmin.Show();
             this.Close();
         }
         void EnabledButtons()
@@ -203,8 +215,6 @@ namespace sisgesoriadao
             txtNombre.Focus();
             txtNumeroCelular.IsEnabled = true;
             txtNumeroCI.IsEnabled = true;
-            txtPrimerApellido.IsEnabled = true;
-            txtSegundoApellido.IsEnabled = true;
         }
         void DisabledButtons()
         {
@@ -218,8 +228,6 @@ namespace sisgesoriadao
             txtNombre.IsEnabled = false;
             txtNumeroCelular.IsEnabled = false;
             txtNumeroCI.IsEnabled = false;
-            txtPrimerApellido.IsEnabled = false;
-            txtSegundoApellido.IsEnabled = false;
         }
         private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -233,9 +241,7 @@ namespace sisgesoriadao
                     cliente = implCliente.Get(id);
                     if (cliente != null)
                     {
-                        txtNombre.Text = cliente.Nombres.Trim();
-                        txtPrimerApellido.Text = cliente.PrimerApellido.Trim();
-                        txtSegundoApellido.Text = cliente.SegundoApellido.Trim();
+                        txtNombre.Text = cliente.Nombre.Trim();
                         txtNumeroCelular.Text = cliente.NumeroCelular.Trim();
                         txtNumeroCI.Text = cliente.NumeroCI.Trim();
 
@@ -279,5 +285,17 @@ namespace sisgesoriadao
             label.Foreground = new SolidColorBrush(Colors.Black);
             label.Background = new SolidColorBrush(Colors.Red);
         }
+
+        private void txtNumeroCI_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !IsTextAllowed(e.Text);
+        }
+        //--------->VALIDACIÓN PARA QUE EL TEXTBOX SOLO PERMITA NÚMEROS (Y EN ESTE CASO, UN PUNTO.)<---------
+        private static readonly Regex _regex = new Regex("[^0-9,-]+"); //regex that matches disallowed text
+        private static bool IsTextAllowed(string text)
+        {
+            return !_regex.IsMatch(text);
+        }
+        //------------------------------------------------------><---------------------------------------------
     }
 }

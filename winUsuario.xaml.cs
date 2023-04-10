@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using System.Data;//ADO.NET
 using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
+using System.Text.RegularExpressions;
+
 namespace sisgesoriadao
 {
     /// <summary>
@@ -91,7 +93,7 @@ namespace sisgesoriadao
             if (empleado == null)
             {
                 labelWarning(lblInfo);
-                lblInfo.Content = "PARA INSERTAR UN NUEVO USUARIO DEBE SELECCIONAR UN EMPLEADO.";
+                lblInfo.Content = "PARA AÑADIR UN NUEVO USUARIO DEBE SELECCIONAR UN EMPLEADO QUE NO TENGA UN USUARIO.";
             }
             else
             {
@@ -133,6 +135,7 @@ namespace sisgesoriadao
                             labelSuccess(lblInfo);
                             lblInfo.Content = "REGISTRO ELIMINADO CON ÉXITO.";
                             Select();
+                            SelectEmployees();
                         }
                     }
                     catch (Exception)
@@ -155,35 +158,69 @@ namespace sisgesoriadao
             {
                 //INSERT
                 case 1:
-                    if (txtContrasenha.Text != txtReContrasenha.Text)
+                    //VALIDACIÓN DE DATOS.
+                    if (string.IsNullOrEmpty(txtUsuario.Text)!=true && string.IsNullOrEmpty(txtPin.Text)!=true && string.IsNullOrEmpty(txtContrasenha.Text)!=true && string.IsNullOrEmpty(txtReContrasenha.Text)!=true)
                     {
-                        MessageBox.Show("Las contraseñas no coinciden, por favor intente nuevamente.");
+                        if (txtContrasenha.Text != txtReContrasenha.Text)
+                        {
+                            MessageBox.Show("Las contraseñas no coinciden, por favor intente nuevamente.");
+                        }
+                        else
+                        {
+                            usuario = new Usuario(empleado.IdEmpleado, 1, txtUsuario.Text.Trim(), txtContrasenha.Text.Trim(), byte.Parse((cbxRol.SelectedItem as ComboboxItem).Value.ToString()), txtPin.Text.Trim());
+                            implUsuario = new UsuarioImpl();
+                            try
+                            {
+                                int n = implUsuario.Insert(usuario);
+                                if (n > 0)
+                                {
+                                    labelSuccess(lblInfo);
+                                    lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
+                                    Select();
+                                    try
+                                    {
+                                        int n2 = implEmpleado.UpdateCreatedUser(empleado);
+                                        if (n2 > 0)
+                                        {
+                                            SelectEmployees();
+                                            empleado = null;
+                                        }
+                                    }
+                                    catch (Exception)
+                                    {
+                                        MessageBox.Show("Segunda transacción no completada, comuníquese con el Administrador de Sistemas.");
+                                    }
+                                    DisabledButtons();
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                            }
+                            //MessageBox.Show("ID Empleado: " + usuario.IdEmpleado + "Usuario: " + usuario.NombreUsuario + "Contraseña: " + usuario.Contrasenha + "Rol: " + usuario.Rol + "Pin: " + usuario.Pin);
+                        }
                     }
                     else
                     {
-                        usuario = new Usuario(empleado.IdEmpleado, txtUsuario.Text.Trim(), txtContrasenha.Text.Trim(), byte.Parse((cbxRol.SelectedItem as ComboboxItem).Value.ToString()), txtPin.Text.Trim());
+                        MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
+                    }
+                    break;
+                //UPDATE
+                case 2:
+                    if (string.IsNullOrEmpty(txtUsuario.Text) != true && string.IsNullOrEmpty(txtPin.Text) != true)
+                    {
+                        usuario.NombreUsuario = txtUsuario.Text.Trim();
+                        usuario.Rol = byte.Parse((cbxRol.SelectedItem as ComboboxItem).Value.ToString());
+                        usuario.Pin = txtPin.Text.Trim();
                         implUsuario = new UsuarioImpl();
                         try
                         {
-                            int n = implUsuario.Insert(usuario);
+                            int n = implUsuario.Update(usuario);
                             if (n > 0)
                             {
                                 labelSuccess(lblInfo);
-                                lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
+                                lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
                                 Select();
-                                try
-                                {
-                                    int n2 = implEmpleado.UpdateCreatedUser(empleado);
-                                    if (n2 > 0)
-                                    {
-                                        SelectEmployees();
-                                        empleado = null;
-                                    }
-                                }
-                                catch (Exception)
-                                {
-                                    MessageBox.Show("Segunda transacción no completada, comuníquese con el Administrador de Sistemas.");
-                                }
                                 DisabledButtons();
                             }
                         }
@@ -191,31 +228,13 @@ namespace sisgesoriadao
                         {
                             MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
                         }
-                        //MessageBox.Show("ID Empleado: " + usuario.IdEmpleado + "Usuario: " + usuario.NombreUsuario + "Contraseña: " + usuario.Contrasenha + "Rol: " + usuario.Rol + "Pin: " + usuario.Pin);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Por favor rellene el usuario y el pin. (*)");
                     }
                     break;
-                //UPDATE
-                case 2:
-                    usuario.NombreUsuario = txtUsuario.Text.Trim();
-                    usuario.Rol = byte.Parse((cbxRol.SelectedItem as ComboboxItem).Value.ToString());
-                    usuario.Pin = txtPin.Text.Trim();
-                    implUsuario = new UsuarioImpl();
-                    try
-                    {
-                        int n = implUsuario.Update(usuario);
-                        if (n > 0)
-                        {
-                            labelSuccess(lblInfo);
-                            lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
-                            Select();
-                            DisabledButtons();
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
-                    }
-                    break;
+
                 default:
                     break;
             }
@@ -250,8 +269,6 @@ namespace sisgesoriadao
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
-            winMainAdmin winMainAdmin = new winMainAdmin();
-            winMainAdmin.Show();
             this.Close();
         }
         void EnabledButtons()
@@ -298,7 +315,6 @@ namespace sisgesoriadao
                     usuario = implUsuario.Get(id);
                     if (usuario != null)
                     {
-                        //txtNombre.Text = empleado.Nombres.Trim();
                         txtUsuario.Text = usuario.NombreUsuario.Trim();
                         if (usuario.Rol == 1)
                         {
@@ -374,6 +390,13 @@ namespace sisgesoriadao
             label.Foreground = new SolidColorBrush(Colors.Black);
             label.Background = new SolidColorBrush(Colors.Red);
         }
+        //--------->VALIDACIÓN PARA QUE EL TEXTBOX SOLO PERMITA NÚMEROS (Y EN ESTE CASO, UN PUNTO.)<---------
+        private static readonly Regex _regex = new Regex("[^0-9]+"); //regex that matches disallowed text
+        private static bool IsTextAllowed(string text)
+        {
+            return !_regex.IsMatch(text);
+        }
+        //------------------------------------------------------><---------------------------------------------
         public class ComboboxItem
         {
             public string Text { get; set; }
@@ -383,6 +406,11 @@ namespace sisgesoriadao
             {
                 return Text;
             }
+        }
+
+        private void txtPin_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !IsTextAllowed(e.Text);
         }
     }
 }

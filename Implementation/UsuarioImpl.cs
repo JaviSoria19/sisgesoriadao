@@ -78,8 +78,8 @@ namespace sisgesoriadao.Implementation
         }
         public int Insert(Usuario u)
         {
-            string query = @"INSERT INTO usuario (idEmpleado,nombreUsuario,contrasenha,rol,pin) 
-                            VALUES (@idEmpleado,@nombreUsuario,MD5(@contrasenha),@rol,@pin)";
+            string query = @"INSERT INTO usuario (idEmpleado,idAjustes,nombreUsuario,contrasenha,rol,pin) 
+                            VALUES (@idEmpleado,1,@nombreUsuario,MD5(@contrasenha),@rol,@pin)";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idEmpleado", u.IdEmpleado);
             command.Parameters.AddWithValue("@nombreUsuario", u.NombreUsuario);
@@ -118,9 +118,11 @@ namespace sisgesoriadao.Implementation
         }
         public int Delete(Usuario u)
         {
-            string query = @"UPDATE usuario SET estado = 0, fechaActualizacion = CURRENT_TIMESTAMP WHERE idUsuario = @idUsuario";
+            string query = @"UPDATE usuario SET estado = 0, fechaActualizacion = CURRENT_TIMESTAMP WHERE idUsuario = @idUsuario;
+                             UPDATE empleado SET estado = 1, fechaActualizacion = CURRENT_TIMESTAMP WHERE idEmpleado = @idEmpleado";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idUsuario", u.IdUsuario);
+            command.Parameters.AddWithValue("@idEmpleado", u.IdEmpleado);
             try
             {
                 return ExecuteBasicCommand(command);
@@ -134,7 +136,7 @@ namespace sisgesoriadao.Implementation
         public Usuario Get(byte Id)
         {
             Usuario u = null;
-            string query = @"SELECT idUsuario, idEmpleado, nombreUsuario, contrasenha, rol, pin, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM usuario 
+            string query = @"SELECT idUsuario, idEmpleado, idAjustes, nombreUsuario, contrasenha, rol, pin, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM usuario 
                             WHERE idUsuario=@idUsuario";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idUsuario", Id);
@@ -143,11 +145,18 @@ namespace sisgesoriadao.Implementation
                 DataTable dt = ExecuteDataTableCommand(command);
                 if (dt.Rows.Count > 0)
                 {
-                    u = new Usuario(byte.Parse(dt.Rows[0][0].ToString()),
-                        byte.Parse(dt.Rows[0][1].ToString()), dt.Rows[0][2].ToString(),
-                        dt.Rows[0][3].ToString(), byte.Parse(dt.Rows[0][4].ToString()),
-                        dt.Rows[0][5].ToString(), byte.Parse(dt.Rows[0][6].ToString()),
-                        DateTime.Parse(dt.Rows[0][7].ToString()), dt.Rows[0][8].ToString());
+                    u = new Usuario(byte.Parse(dt.Rows[0][0].ToString()),   /*idUsuario*/
+                        byte.Parse(dt.Rows[0][1].ToString()),               /*idEmpleado*/
+                        byte.Parse(dt.Rows[0][2].ToString()),               /*idAjustes*/
+                        dt.Rows[0][3].ToString(),                           /*nombreUsuario*/
+                        dt.Rows[0][4].ToString(),                           /*contrasenha*/
+                        byte.Parse(dt.Rows[0][5].ToString()),               /*rol*/
+                        dt.Rows[0][6].ToString(),                           /*pin*/
+
+                        /*Estado, F. Registro & F. Actualizacion.*/
+                        byte.Parse(dt.Rows[0][7].ToString()),
+                        DateTime.Parse(dt.Rows[0][8].ToString()),
+                        dt.Rows[0][9].ToString());
                 }
             }
             catch (Exception ex)

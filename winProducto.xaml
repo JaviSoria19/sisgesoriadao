@@ -33,20 +33,24 @@
                 <ComboBox x:Name="cbxSucursal" IsEnabled="False"/>
                 <Label Content="CATEGORIA:"/>
                 <ComboBox x:Name="cbxCategoria" IsEnabled="False"/>
-                <Label Content="MARCA:"/>
-                <ComboBox x:Name="cbxMarca" IsEnabled="False"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="NOMBRE:"/>
                 <TextBox x:Name="txtNombreProducto" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" KeyUp="TextBoxUppercase" MaxLength="50" IsEnabled="False"/>
-                <Label Content="COLOR:"/>
-                <TextBox x:Name="txtColor" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" KeyUp="TextBoxUppercase" MaxLength="10" IsEnabled="False"/>
                 <Label Content="S/N o IMEI:"/>
-                <TextBox x:Name="txtNumeroSerie" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="30" IsEnabled="False"/>
-                <Label Content="PRECIO:"/>
-                <TextBox x:Name="txtPrecio" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput"/>
-                <Label Content="MONEDA:"/>
-                <ComboBox x:Name="cbxMoneda" IsEnabled="False"/>
+                <TextBox x:Name="txtIdentificador" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="30" IsEnabled="False"/>
+                <Label Content="C. $:"/>
+                <TextBox x:Name="txtCostoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput"/>
+                <Label Content="C. BS:"/>
+                <TextBox x:Name="txtCostoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput"/>
+                <Label Content="P. $:"/>
+                <TextBox x:Name="txtPrecioUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput"/>
+                <Label Content="P. BS:"/>
+                <TextBox x:Name="txtPrecioBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <Label Content="OBSERVACIONES:"/>
+                <TextBox x:Name="txtObservaciones" TextWrapping="Wrap" MinWidth="120" KeyUp="TextBoxUppercase" MaxLength="199" IsEnabled="False"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Button x:Name="btnInsert" Content="INSERTAR" Margin="0,0,5,0" Click="btnInsert_Click"/>
@@ -75,7 +79,7 @@
                   Loaded="dgvDatos_Loaded" GridLinesVisibility="Horizontal"
                   CanUserAddRows="False" IsReadOnly="True" 
                   CanUserResizeRows="False" CanUserResizeColumns="False"
-                  SelectionChanged="dgvDatos_SelectionChanged" MaxHeight="363"/>
+                  SelectionChanged="dgvDatos_SelectionChanged" MaxHeight="363" MaxWidth="1880"/>
                 </Border>
                 <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
             </StackPanel>
@@ -99,7 +103,7 @@
                   Loaded="dgvDatos_Vendidos_Loaded" GridLinesVisibility="Horizontal"
                   CanUserAddRows="False" IsReadOnly="True" 
                   CanUserResizeRows="False" CanUserResizeColumns="False"
-                  MaxHeight="363"/>
+                  MaxHeight="363" MaxWidth="1880"/>
                 </Border>
                 <Label x:Name="lblDataGridRows_Vendidos" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
             </StackPanel>

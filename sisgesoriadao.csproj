@@ -73,21 +73,18 @@
     </ApplicationDefinition>
     <Compile Include="Implementation\CategoriaImpl.cs" />
     <Compile Include="Implementation\ClienteImpl.cs" />
-    <Compile Include="Implementation\MarcaImpl.cs" />
     <Compile Include="Implementation\ProductoImpl.cs" />
     <Compile Include="Implementation\SucursalImpl.cs" />
     <Compile Include="Implementation\UsuarioImpl.cs" />
     <Compile Include="Implementation\VentaImpl.cs" />
     <Compile Include="Interfaces\ICategoria.cs" />
     <Compile Include="Interfaces\ICliente.cs" />
-    <Compile Include="Interfaces\IMarca.cs" />
     <Compile Include="Interfaces\IProducto.cs" />
     <Compile Include="Interfaces\ISucursal.cs" />
     <Compile Include="Interfaces\IUsuario.cs" />
     <Compile Include="Interfaces\IVenta.cs" />
     <Compile Include="Model\Categoria.cs" />
     <Compile Include="Model\Cliente.cs" />
-    <Compile Include="Model\Marca.cs" />
     <Compile Include="Model\Producto.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Sucursal.cs" />
@@ -102,14 +99,14 @@
     <Compile Include="winLogin.xaml.cs">
       <DependentUpon>winLogin.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winLogin_Sucursal.xaml.cs">
+      <DependentUpon>winLogin_Sucursal.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winMainAdmin.xaml.cs">
       <DependentUpon>winMainAdmin.xaml</DependentUpon>
     </Compile>
     <Compile Include="winMainSeller.xaml.cs">
       <DependentUpon>winMainSeller.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="winMarca.xaml.cs">
-      <DependentUpon>winMarca.xaml</DependentUpon>
     </Compile>
     <Compile Include="winProducto.xaml.cs">
       <DependentUpon>winProducto.xaml</DependentUpon>
@@ -154,15 +151,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="winLogin_Sucursal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="winMainAdmin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winMainSeller.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="winMarca.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

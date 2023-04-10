@@ -114,47 +114,68 @@ namespace sisgesoriadao
             {
                 //INSERT
                 case 1:
-                    empleado = new Empleado(txtNombre.Text.Trim(), txtPrimerApellido.Text.Trim(), txtSegundoApellido.Text.Trim(), txtNumeroCelular.Text.Trim(), txtNumeroCI.Text.Trim());
-                    implEmpleado = new EmpleadoImpl();
-                    try
+                    //VALIDACIÓN DE DATOS.
+                    if (string.IsNullOrEmpty(txtNombre.Text)!=true && string.IsNullOrEmpty(txtPrimerApellido.Text) != true &&
+                        string.IsNullOrEmpty(txtNumeroCelular.Text) != true && string.IsNullOrEmpty(txtNumeroCI.Text) != true
+                        )
                     {
-                        int n = implEmpleado.Insert(empleado);
-                        if (n>0)
+                        empleado = new Empleado(txtNombre.Text.Trim(), txtPrimerApellido.Text.Trim(), txtSegundoApellido.Text.Trim(), txtNumeroCelular.Text.Trim(), txtNumeroCI.Text.Trim());
+                        implEmpleado = new EmpleadoImpl();
+                        try
                         {
-                            labelSuccess(lblInfo);
-                            lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
-                            Select();
-                            DisabledButtons();
+                            int n = implEmpleado.Insert(empleado);
+                            if (n > 0)
+                            {
+                                labelSuccess(lblInfo);
+                                lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
+                                Select();
+                                DisabledButtons();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
                         }
                     }
-                    catch (Exception)
+                    else
                     {
-                        MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                        MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
                     }
                     break;
                 //UPDATE
                 case 2:
-                    empleado.Nombres = txtNombre.Text.Trim();
-                    empleado.PrimerApellido = txtPrimerApellido.Text.Trim();
-                    empleado.SegundoApellido = txtSegundoApellido.Text.Trim();
-                    empleado.NumeroCelular = txtNumeroCelular.Text.Trim();
-                    empleado.NumeroCI = txtNumeroCI.Text.Trim();
-                    implEmpleado = new EmpleadoImpl();
-                    try
+                    //VALIDACIÓN DE DATOS.
+                    if (string.IsNullOrEmpty(txtNombre.Text) != true && string.IsNullOrEmpty(txtPrimerApellido.Text) != true &&
+                        string.IsNullOrEmpty(txtNumeroCelular.Text) != true && string.IsNullOrEmpty(txtNumeroCI.Text) != true
+                        )
                     {
-                        int n = implEmpleado.Update(empleado);
-                        if (n > 0)
+                        empleado.Nombres = txtNombre.Text.Trim();
+                        empleado.PrimerApellido = txtPrimerApellido.Text.Trim();
+                        empleado.SegundoApellido = txtSegundoApellido.Text.Trim();
+                        empleado.NumeroCelular = txtNumeroCelular.Text.Trim();
+                        empleado.NumeroCI = txtNumeroCI.Text.Trim();
+                        implEmpleado = new EmpleadoImpl();
+                        try
                         {
-                            labelSuccess(lblInfo);
-                            lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
-                            Select();
-                            DisabledButtons();
+                            int n = implEmpleado.Update(empleado);
+                            if (n > 0)
+                            {
+                                labelSuccess(lblInfo);
+                                lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
+                                Select();
+                                DisabledButtons();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
                         }
                     }
-                    catch (Exception)
+                    else
                     {
-                        MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                        MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
                     }
+
                     break;
                 default:
                     break;
@@ -187,8 +208,6 @@ namespace sisgesoriadao
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
-            winMainAdmin winMainAdmin = new winMainAdmin();
-            winMainAdmin.Show();
             this.Close();
         }
         void EnabledButtons()
