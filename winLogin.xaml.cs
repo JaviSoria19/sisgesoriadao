@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 
 using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
+using System.Data;
+
 namespace sisgesoriadao
 {
     /// <summary>
@@ -23,29 +25,23 @@ namespace sisgesoriadao
     {
         UsuarioImpl implUsuario;
         Usuario session;
+        AjusteImpl implAjuste;
         public winLogin()
         {
             InitializeComponent();
         }
-
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            cbxGetUsuarioFromDatabase();
+        }
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
-
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             Login();
         }
-        public void TextBoxUppercase(object sender, KeyEventArgs e)
-        {
-            TextBox currentContainer = ((TextBox)sender);
-            int caretPosition = currentContainer.SelectionStart;
-
-            currentContainer.Text = currentContainer.Text.ToUpper();
-            currentContainer.SelectionStart = caretPosition++;
-        }
-
         private void txtPassword_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -55,14 +51,26 @@ namespace sisgesoriadao
         }
         void Login()
         {
-            if (txtUserName.Text != null && txtPassword != null)
+            if (txtPassword != null)
             {
                 try
                 {
                     implUsuario = new UsuarioImpl();
-                    session = implUsuario.Login(txtUserName.Text, txtPassword.Password);
+                    session = implUsuario.Login(cbxUsuario.Text, txtPassword.Password);
                     if (session != null)
                     {
+
+                        try
+                        {
+                            implAjuste = new AjusteImpl();
+                            implAjuste.Get();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                            throw;
+                        }
+
                         winLogin_Sucursal winLogin_Sucursal = new winLogin_Sucursal();
                         winLogin_Sucursal.Show();
                         this.Close();
@@ -86,6 +94,42 @@ namespace sisgesoriadao
             winRecoverPassword winRecoverPassword = new winRecoverPassword();
             winRecoverPassword.Show();
             this.Close();
+        }
+        void cbxGetUsuarioFromDatabase()
+        {
+            try
+            {
+                List<ComboboxItem> listcomboboxUsuario = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implUsuario = new UsuarioImpl();
+                dataTable = implUsuario.SelectForComboBox();
+                listcomboboxUsuario = (from DataRow dr in dataTable.Rows
+                                     select new ComboboxItem()
+                                     {
+                                         Texto = dr["nombreUsuario"].ToString()
+                                     }).ToList();
+                foreach (var item in listcomboboxUsuario)
+                {
+                    cbxUsuario.Items.Add(item);
+                }
+                cbxUsuario.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        public class ComboboxItem
+        {
+            public string Texto { get; set; }
+            public override string ToString()
+            {
+                return Texto;
+            }
+            public ComboboxItem()
+            {
+
+            }
         }
     }
 }

@@ -30,6 +30,7 @@ namespace sisgesoriadao
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = "Bienvenid@ a " + Session.Sucursal_NombreSucursal + " , " + Session.NombreUsuario;
+            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
         }
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
@@ -39,6 +40,11 @@ namespace sisgesoriadao
                 winLogin.Show();
                 this.Close();
             }
+        }
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            winAjuste winAjuste = new winAjuste();
+            winAjuste.Show();
         }
         private void btnEmployees_Click(object sender, RoutedEventArgs e)
         {

@@ -14,15 +14,19 @@
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
         Title="Sistema de Ventas - Iniciar Sesión" Height="400" Width="600"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded">
     <Grid>
-        <StackPanel Orientation="Vertical">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="41*"/>
+            <ColumnDefinition Width="157*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical" Grid.ColumnSpan="2" Margin="0,0,-0.4,0.4">
             <materialDesign:ColorZone Background="Red" Height="60">
                 <TextBlock Text="¡BIENVENIDO!" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="20" FontWeight="Bold"/>
             </materialDesign:ColorZone>
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <materialDesign:PackIcon Kind="User" Height="40" Width="40" Margin="5"/>
-                <TextBox x:Name="txtUserName" Width="400" Margin="5" materialDesign:HintAssist.Hint="USUARIO" materialDesign:HintAssist.IsFloating="True" KeyUp="TextBoxUppercase" MaxLength="50"/>
+                <ComboBox x:Name="cbxUsuario" IsEnabled="True" Width="400"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <materialDesign:PackIcon Kind="Key" Height="40" Width="40" Margin="5"/>
@@ -39,6 +43,6 @@
                 <Label x:Name="lblInfo" Content="ESTADO: INGRESE SU USUARIO Y CONTRASEÑA PARA ACCEDER." VerticalAlignment="Center" FontWeight="Bold" Margin="5"/>
             </materialDesign:Card>
         </StackPanel>
-        
+
     </Grid>
 </Window>

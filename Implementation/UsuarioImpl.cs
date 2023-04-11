@@ -204,5 +204,20 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public DataTable SelectForComboBox()
+        {
+            string query = @"SELECT nombreUsuario FROM usuario WHERE estado = 1";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

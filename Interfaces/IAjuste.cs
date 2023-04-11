@@ -8,10 +8,8 @@ using System.Data;
 
 namespace sisgesoriadao.Interfaces
 {
-    public interface IUsuario:IDao<Usuario>
+    public interface IAjuste: IDao<Ajuste>
     {
-        Usuario Get(byte Id);
-        Usuario Login(string nombreUsuario, string contrasenha);
-        DataTable SelectForComboBox();
+        Ajuste Get();
     }
 }

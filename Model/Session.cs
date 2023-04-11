@@ -8,6 +8,8 @@ namespace sisgesoriadao.Model
 {
     public static class Session
     {
+        //Cadena de conexión requerida para llamar a la base de datos.
+        public static string CadenaConexionBdD { get; set; } = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
         //Atributo indispensable para manejar la totalidad del sistema.
         public static byte IdUsuario { get; set; }
         //Atributo de referencia para dar a conocer al usuario que ha iniciado sesión correctamente.
@@ -20,7 +22,8 @@ namespace sisgesoriadao.Model
         public static string Sucursal_Direccion { get; set; }
         public static string Sucursal_Correo { get; set; }
         public static string Sucursal_Telefono { get; set; }
-        //Cadena de conexión requerida para llamar a la base de datos.
-        public static string CadenaConexionBdD { get; set; } = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
+        //Atributos requeridos para regular el tipo de cambio y el límite de descuento de productos debajo del costo establecido.
+        public static double Ajuste_Cambio_Dolar { get; set; }
+        public static byte Ajuste_Limite_Descuento { get; set; }
     }
 }

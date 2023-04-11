@@ -22,7 +22,12 @@
                     <materialDesign:PackIcon Kind="Logout"/>
                 </Button>
                 <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
-                <TextBlock x:Name="txtBlockWelcome" Text="BIENVENIDO, USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock x:Name="txtBlockWelcome" Text="BIENVENIDO, USUARIO" Margin="5,0,40,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="Dollar" Width="25" Height="25" VerticalAlignment="Center" ToolTip="CAMBIO DEL DÓLAR"/>
+                <TextBlock x:Name="txtCambioDolar" Text="6,97" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <Button x:Name="btnSettings" ToolTip="AJUSTES" HorizontalAlignment="Right" Margin="10,0,0,0" Click="btnSettings_Click">
+                    <materialDesign:PackIcon Kind="Settings"/>
+                </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
