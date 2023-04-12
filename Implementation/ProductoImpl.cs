@@ -174,7 +174,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C. USD', P.costoBOB AS 'C. Bs.', P.precioVentaUSD AS 'P. USD', P.precioVentaBOB AS 'P. BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM producto AS P
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM producto AS P
                                 INNER JOIN sucursal AS S ON P.idSucursal = S.idSucursal
                                 INNER JOIN categoria AS C ON P.idCategoria = C.idCategoria
                                 WHERE P.estado = 1 ORDER BY 10 ASC, 2 ASC, 3 ASC";
@@ -191,7 +191,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C. USD', P.costoBOB AS 'C. Bs.', P.precioVentaUSD AS 'P. USD', P.precioVentaBOB AS 'P. BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM producto AS P
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM producto AS P
                                 INNER JOIN sucursal AS S ON P.idSucursal = S.idSucursal
                                 INNER JOIN categoria AS C ON P.idCategoria = C.idCategoria
                                 WHERE (S.nombreSucursal LIKE @search OR C.nombreCategoria LIKE @search OR P.nombreProducto LIKE @search OR P.identificador LIKE @search)
@@ -246,6 +246,106 @@ namespace sisgesoriadao.Implementation
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        public string GetCodeFormatToInsertProducts()
+        {
+            string codigoSublote = null;
+            string query = @"SELECT CONCAT(L.codigoLote, MAX(L.idLote),'-',MAX(S.idSublote)) AS Codigo FROM lote AS L
+                                INNER JOIN sublote AS S ON L.idLote = S.idLote LIMIT 1";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    codigoSublote = dt.Rows[0][0].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return codigoSublote;
+        }
+
+        public int GetSubBatchToInsertProducts()
+        {
+            int idSublote = 0;
+            string query = @"SELECT MAX(idSublote) FROM sublote";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    idSublote = int.Parse(dt.Rows[0][0].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return idSublote;
+        }
+
+        public string InsertTransaction(List<Producto> ListaProductos, int idLote)
+        {
+            MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
+            connection.Open();
+            MySqlCommand command = connection.CreateCommand();
+            MySqlTransaction myTrans;
+            myTrans = connection.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            command.Connection = connection;
+            command.Transaction = myTrans;
+            try
+            {
+                //AÑADIENDO NUEVO SUBLOTE PARA EL SIGUIENTE LOTE.
+                command.CommandText = @"INSERT INTO sublote (idLote) VALUES (@idLote);";
+                command.Parameters.AddWithValue("@idLote", idLote);
+                command.ExecuteNonQuery();
+                foreach (var producto in ListaProductos)
+                {
+                    //REGISTRO DEL LOTE.
+                    command.CommandText = @"INSERT INTO producto 
+                                (idSucursal,idCategoria,idSublote,idUsuario,codigoSublote,nombreProducto,identificador,costoUSD,costoBOB,precioVentaUSD,precioVentaBOB,observaciones) 
+                                VALUES 
+                                ('" + producto.IdSucursal + "','" + producto.IdCategoria + "','" + producto.IdSublote + "','" + producto.IdUsuario +
+                                "','" + producto.CodigoSublote + "','" + producto.NombreProducto + "','" + producto.Identificador +
+                                "','" + producto.CostoUSD + "','" + producto.CostoBOB + "','" + producto.PrecioVentaUSD + "','" + producto.PrecioVentaBOB + "','" + producto.Observaciones +"')";
+                    command.ExecuteNonQuery();
+                    command.CommandText = @"INSERT INTO historial (idProducto,detalle) VALUES
+                                ((SELECT MAX(idProducto) FROM producto),'PRODUCTO INGRESADO POR EL USUARIO " + Session.NombreUsuario + " EN SUCURSAL " + Session.Sucursal_NombreSucursal +"')";
+                    command.ExecuteNonQuery();
+                }
+                //command.CommandText = "Insert into mytable (id, desc) VALUES (101, 'Description')";
+                //command.ExecuteNonQuery();
+                myTrans.Commit();
+                return "LA VENTA SE REGISTRÓ CON ÉXITO.";
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (MySqlException ex)
+                {
+                    if (myTrans.Connection != null)
+                    {
+                        return "Una excepción del tipo " + ex.GetType() + " se encontró mientras se estaba intentando revertir la transacción.";
+                    }
+                }
+                return e.Message;
+            }
+            finally
+            {
+                connection.Close();
             }
         }
     }

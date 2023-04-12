@@ -120,6 +120,9 @@
     <Compile Include="winProducto.xaml.cs">
       <DependentUpon>winProducto.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winProducto_Insert.xaml.cs">
+      <DependentUpon>winProducto_Insert.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winRecoverPassword.xaml.cs">
       <DependentUpon>winRecoverPassword.xaml</DependentUpon>
     </Compile>
@@ -177,6 +180,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winProducto.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winProducto_Insert.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

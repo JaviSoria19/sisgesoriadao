@@ -83,9 +83,9 @@ namespace sisgesoriadao
         }
         private void btnInsert_Click(object sender, RoutedEventArgs e)
         {
-            labelClear(lblInfo);
-            EnabledButtons();
-            this.operacion = 1;
+            winProducto_Insert winProducto_Insert = new winProducto_Insert();
+            winProducto_Insert.Show();
+            this.Close();
         }
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
