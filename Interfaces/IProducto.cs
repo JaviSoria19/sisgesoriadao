@@ -11,10 +11,11 @@ namespace sisgesoriadao.Interfaces
     {
         Producto Get(int Id);
         Producto GetByIdentifierOrCode(string CadenaBusqueda);
-        String GetCodeFormatToInsertProducts();
-        int GetSubBatchToInsertProducts();
+        String GetCodeFormatToInsertProducts(int IdLote);
+        int GetSubBatchToInsertProducts(int IdLote);
         DataTable SelectSoldProducts();
         DataTable SelectLikeSoldProducts(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin);
+        DataTable SelectBatchForComboBox();
         string InsertTransaction(List<Producto> ListaProductos, int idLote);
     }
 }

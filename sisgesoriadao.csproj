@@ -91,6 +91,7 @@
     <Compile Include="Model\Ajuste.cs" />
     <Compile Include="Model\Categoria.cs" />
     <Compile Include="Model\Cliente.cs" />
+    <Compile Include="Model\Lote.cs" />
     <Compile Include="Model\Producto.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Sucursal.cs" />

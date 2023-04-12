@@ -76,6 +76,11 @@ namespace sisgesoriadao
             winProducto winProducto = new winProducto();
             winProducto.Show();
         }
+        private void btnAddProducts_Click(object sender, RoutedEventArgs e)
+        {
+            winProducto_Insert winProducto_Insert = new winProducto_Insert();
+            winProducto_Insert.Show();
+        }
         private void btnCategories_Click(object sender, RoutedEventArgs e)
         {
             winCategoria winCategoria = new winCategoria();
@@ -84,6 +89,6 @@ namespace sisgesoriadao
         private void btnReports_Click(object sender, RoutedEventArgs e)
         {
 
-        }
+        }        
     }
 }

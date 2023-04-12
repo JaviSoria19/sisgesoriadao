@@ -15,7 +15,7 @@
         mc:Ignorable="d"
         Title="Sistema de Ventas - Inicio (Admin)" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
-    <Grid>
+    <ScrollViewer>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Button x:Name="btnLogout" ToolTip="CERRAR SESIÓN" HorizontalAlignment="Right" Margin="0,0,20,0" Click="btnLogout_Click">
@@ -29,54 +29,68 @@
                     <materialDesign:PackIcon Kind="Settings"/>
                 </Button>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
-                    <Button x:Name="btnEmployees" Width="100" Height="100" Click="btnEmployees_Click">
-                        <materialDesign:PackIcon Kind="FaceAgent" Width="80" Height="80" HorizontalAlignment="Center"/>
-                    </Button>
-                    <Label Content="EMPLEADOS" FontWeight="Bold" HorizontalAlignment="Center"/>
-                </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
-                    <Button x:Name="btnUsers" Width="100" Height="100" Click="btnUsers_Click">
-                        <materialDesign:PackIcon Kind="TooltipUser" Width="80" Height="80" HorizontalAlignment="Center"/>
-                    </Button>
-                    <Label Content="USUARIOS" FontWeight="Bold" HorizontalAlignment="Center"/>
-                </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
+            
+            <TextBlock Text="GESTIONAR VENTAS" Margin="10,0,0,0" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnSales" Width="100" Height="100" Click="btnSales_Click">
                         <materialDesign:PackIcon Kind="Cart" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
                     <Label Content="VENTAS" FontWeight="Bold" HorizontalAlignment="Center"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnCustomers" Width="100" Height="100" Click="btnCustomers_Click">
                         <materialDesign:PackIcon Kind="Users" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
                     <Label Content="CLIENTES" FontWeight="Bold" HorizontalAlignment="Center"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
+            </StackPanel>
+
+            <TextBlock Text="GESTIONAR NEGOCIO" Margin="5,0,0,0" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold"/>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnEmployees" Width="100" Height="100" Click="btnEmployees_Click">
+                        <materialDesign:PackIcon Kind="FaceAgent" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="EMPLEADOS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnUsers" Width="100" Height="100" Click="btnUsers_Click">
+                        <materialDesign:PackIcon Kind="TooltipUser" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="USUARIOS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>                
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnBranches" Width="100" Height="100" Click="btnBranches_Click">
                         <materialDesign:PackIcon Kind="Store" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
-                    <Label Content="SUCURSALES" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="SUCURSALES" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,15,1,0">
+                    <Button x:Name="btnAddProducts" Width="100" Height="100" Click="btnAddProducts_Click">
+                        <materialDesign:PackIcon Kind="PackageVariantAdd" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="AÑADIR PRODUCTOS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnProducts" Width="100" Height="100" Click="btnProducts_Click">
                         <materialDesign:PackIcon Kind="PackageVariantClosed" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
-                    <Label Content="PRODUCTOS" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="VER PRODUCTOS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnCategories" Width="100" Height="100" Click="btnCategories_Click">
                         <materialDesign:PackIcon Kind="DotsSquare" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
-                    <Label Content="CATEGORIAS" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="CATEGORIAS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnReports" Width="100" Height="100" Click="btnReports_Click">
                         <materialDesign:PackIcon Kind="ChartBar" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
-                    <Label Content="ESTADÍSTICAS" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="ESTADÍSTICAS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
@@ -94,5 +108,5 @@
                 
             </StackPanel>
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </Window>

@@ -40,6 +40,7 @@ namespace sisgesoriadao
             txtBlockWelcome.Text = Session.NombreUsuario;
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
             cbxGetCategoriaFromDatabase();
+            cbxGetLoteFromDatabase();
             GetCodigoSubLoteFromDatabase();
             GetIDSubLoteFromDatabase();
             txtSucursal.Text = "Sucursal: " + Session.Sucursal_NombreSucursal;
@@ -127,8 +128,6 @@ namespace sisgesoriadao
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
-            winProducto winProducto = new winProducto();
-            winProducto.Show();
             this.Close();
         }
 
@@ -138,26 +137,40 @@ namespace sisgesoriadao
         }
         private void btnRemove_Click(object sender, RoutedEventArgs e)
         {
-            if (dgvProductos != null && listaproductos != null)
+            if (dgvProductos.Items.IsEmpty != true && listaproductos != null)
             {
                 dgvProductos.Items.RemoveAt(contador-2);
                 listaproductos.RemoveAt(contador-2);
                 contador--;
                 txtCodigoSublote.Text = codigoSublote + "-" + contador;
             }
+            if (contador == 1)
+            {
+                cbxLote.IsEnabled = true;
+                cbxCategoria.IsEnabled = true;
+            }
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             implProducto = new ProductoImpl();
-            string mensaje = implProducto.InsertTransaction(listaproductos,1/*<---REMOVER ESTE 1*/);
-            if (mensaje == "LA VENTA SE REGISTRÓ CON ÉXITO.")
+            string mensaje = implProducto.InsertTransaction(listaproductos, (cbxLote.SelectedItem as ComboboxItem).Valor);
+            if (mensaje == "LOTE REGISTRADO EXITOSAMENTE.")
             {
                 MessageBox.Show(mensaje + "\n IMPRIMIENDO LAS ETIQUETAS...");
                 //insertar código para imprimir etiquetas DYMO
+                this.Close();
             }
             else
             {
                 MessageBox.Show(mensaje);
+            }
+        }
+        private void cbxLote_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (contador==1)
+            {
+                GetCodigoSubLoteFromDatabase();
+                GetIDSubLoteFromDatabase();
             }
         }
         private void txtCostoUSD_KeyUp(object sender, KeyEventArgs e)
@@ -255,6 +268,12 @@ namespace sisgesoriadao
                     txtCodigoSublote.Text = codigoSublote + "-" + contador;
                     txtIdentificador.Text = "";
                     txtIdentificador.Focus();
+
+                    if (contador!=1)
+                    {
+                        cbxLote.IsEnabled = false;
+                        cbxCategoria.IsEnabled = false;
+                    }
                 }
                 else
                 {
@@ -269,13 +288,13 @@ namespace sisgesoriadao
         public class ComboboxItem
         {
             public string Texto { get; set; }
-            public byte Valor { get; set; }
+            public int Valor { get; set; }
 
             public override string ToString()
             {
                 return Texto;
             }
-            public ComboboxItem(string texto, byte valor)
+            public ComboboxItem(string texto, int valor)
             {
                 Texto = texto;
                 Valor = valor;
@@ -310,12 +329,37 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
+        void cbxGetLoteFromDatabase()
+        {
+            try
+            {
+                List<ComboboxItem> listcomboboxLote = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implProducto = new ProductoImpl();
+                dataTable = implProducto.SelectBatchForComboBox();
+                listcomboboxLote = (from DataRow dr in dataTable.Rows
+                                         select new ComboboxItem()
+                                         {
+                                             Valor = Convert.ToInt32(dr["idLote"]),
+                                             Texto = dr["codigoLote"].ToString()
+                                         }).ToList();
+                foreach (var item in listcomboboxLote)
+                {
+                    cbxLote.Items.Add(item);
+                }
+                cbxLote.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
         void GetCodigoSubLoteFromDatabase()
         {
             try
             {
                 implProducto = new ProductoImpl();
-                codigoSublote = implProducto.GetCodeFormatToInsertProducts();
+                codigoSublote = implProducto.GetCodeFormatToInsertProducts((cbxLote.SelectedItem as ComboboxItem).Valor);
                 txtCodigoSublote.Text = codigoSublote + "-" + contador;
             }
             catch (Exception ex)
@@ -328,7 +372,7 @@ namespace sisgesoriadao
             try
             {
                 implProducto = new ProductoImpl();
-                idSublote = implProducto.GetSubBatchToInsertProducts();
+                idSublote = implProducto.GetSubBatchToInsertProducts((cbxLote.SelectedItem as ComboboxItem).Valor);
             }
             catch (Exception ex)
             {

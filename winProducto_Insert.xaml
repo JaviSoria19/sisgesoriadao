@@ -32,38 +32,47 @@
 
             <StackPanel Orientation="Vertical" Margin="10">
                 <TextBlock Margin="0,0,0,5" TextWrapping="Wrap">
-                    ATENCIÓN: Estimad@ usuari@, todos los campos son obligatorios a excepción de las observaciones, se le recomienda seguir los siguientes pasos: 
+                    <Bold>ATENCION:</Bold> Estimad@ usuari@, todos los campos son obligatorios a excepción de las observaciones, se le recomienda seguir los siguientes pasos: 
                     <LineBreak/>
-                    1) Procure seleccionar la categoria correctamente.
+                    <Bold>1)</Bold> Procure seleccionar la categoria correctamente.
                     <LineBreak/>
-                    2) Rellene primero todos los campos a excepción del Número de Serie (S/N) o IMEI.
+                    <Bold>2)</Bold> Rellene primero todos los campos a excepción del Número de Serie (S/N) o IMEI.
                     <LineBreak/>
-                    3) Ingrese el S/N o IMEI de su producto y (en caso de no tener un lector de código de barras y/o QR) presione la tecla ENTER o haga clic en el botón de Añadir.
+                    <Bold>3)</Bold> Ingrese el S/N o IMEI de su producto y (en caso de no tener un lector de código de barras y/o QR) presione la tecla <Bold>ENTER</Bold> o haga clic en el botón <Bold>AÑADIR</Bold>.
                     <LineBreak/>
-                    4) Guarde los productos para imprimir las etiquetas que contienen el código correspondiente.
+                    <Bold>4)</Bold> Presione <Bold>GUARDAR</Bold> para registrar los productos e imprimir las etiquetas que contienen el código correspondiente.
                 </TextBlock>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <TextBlock x:Name="txtSucursal" Text="Sucursal" Margin="0,0,20,0" VerticalAlignment="Center" FontWeight="Bold"/>
+                <Label Content="LOTE:"/>
+                <ComboBox x:Name="cbxLote" IsEnabled="True" SelectionChanged="cbxLote_SelectionChanged"/>
                 <Label Content="CATEGORIA:"/>
                 <ComboBox x:Name="cbxCategoria" IsEnabled="True"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="CÓDIGO:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtCodigoSublote" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="55" MaxLength="50" IsEnabled="False"/>
                 <Label Content="NOMBRE:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtNombreProducto" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" KeyUp="TextBoxUppercase" MaxLength="50" IsEnabled="True"/>
                 <Label Content="S/N o IMEI:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtIdentificador" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="30" IsEnabled="True" KeyDown="txtIdentificador_KeyDown"/>
                 <Label Content="C. $:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtCostoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtCostoUSD_KeyUp"/>
                 <Label Content="C. BS:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtCostoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtCostoBOB_KeyUp"/>
                 <Label Content="P. $:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtPrecioUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPrecioUSD_KeyUp"/>
                 <Label Content="P. BS:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtPrecioBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPrecioBOB_KeyUp"/>
             </StackPanel>
 
