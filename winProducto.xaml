@@ -66,7 +66,7 @@
                 <Label x:Name="lblInfo" Content="" Foreground="Blue" Background="Transparent" Margin="0,0,0,10" HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                     <Label Content="Buscar:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtBuscar" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="20" Height="22"/>
+                    <TextBox x:Name="txtBuscar" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="20" Height="22" KeyDown="txtBuscar_KeyDown"/>
                     <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>

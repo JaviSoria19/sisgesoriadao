@@ -317,20 +317,6 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
-        public DataTable SelectBatchForComboBox()
-        {
-            string query = @"SELECT idLote,codigoLote FROM lote WHERE estado = 1 ORDER BY idLote DESC";
-            MySqlCommand command = CreateBasicCommand(query);
-            try
-            {
-                return ExecuteDataTableCommand(command);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
         public string GetCodeFormatToInsertProducts(int IdLote)
         {
             string codigoSublote = null;
@@ -375,6 +361,136 @@ namespace sisgesoriadao.Implementation
                 throw ex;
             }
             return idSublote;
+        }
+
+        public DataTable SelectProductHistory(string CadenaBusqueda)
+        {
+            string query = @"SELECT P.codigoSublote AS Codigo, P.identificador AS 'IMEI o SN', H.detalle AS Detalle, H.fechaRegistro AS 'Fecha de Registro' FROM historial AS H
+                            INNER JOIN producto AS P ON H.idProducto = P.idProducto 
+                            WHERE (P.identificador LIKE @search OR P.codigoSublote LIKE @search) ORDER BY 4 DESC, 1 ASC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@search", CadenaBusqueda);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public int InsertBatch(Lote l)
+        {
+            string query = @"INSERT INTO lote (idUsuario,codigoLote) VALUES (@idUsuario,@codigoLote);
+                             INSERT INTO sublote (idLote) SELECT MAX(idLote) FROM lote";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idUsuario", l.IdUsuario);
+            command.Parameters.AddWithValue("@codigoLote", l.CodigoLote);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        public int UpdateBatch(Lote l)
+        {
+            string query = @"UPDATE lote SET 
+                idUsuario=@idUsuario, codigoLote=@codigoLote, fechaActualizacion = CURRENT_TIMESTAMP WHERE idLote = @idLote";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idUsuario", l.IdUsuario);
+            command.Parameters.AddWithValue("@codigoLote", l.CodigoLote);
+            command.Parameters.AddWithValue("@idLote", l.IdLote);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        public Lote GetBatch(int Id)
+        {
+            Lote l = null;
+            string query = @"SELECT idLote, idUsuario, codigoLote, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM lote
+                                WHERE idLote=@idLote";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idLote", Id);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    l = new Lote(int.Parse(dt.Rows[0][0].ToString()),       /*idLote*/
+                        byte.Parse(dt.Rows[0][1].ToString()),               /*idUsuario*/
+                        dt.Rows[0][2].ToString(),                           /*codigoLote*/
+                        /*estado, f. registro & f. actualización.*/
+                        byte.Parse(dt.Rows[0][3].ToString()),
+                        DateTime.Parse(dt.Rows[0][4].ToString()),
+                        dt.Rows[0][ 5].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return l;
+        }
+        public DataTable SelectBatch()
+        {
+            string query = @"SELECT L.idLote AS ID, U.nombreUsuario AS Usuario, L.codigoLote AS 'Codigo', L.fechaRegistro AS 'Fecha de Registro', IFNULL(L.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM lote AS L
+                                INNER JOIN usuario AS U ON L.idUsuario = U.idUsuario
+                                WHERE L.estado = 1 ORDER BY 4 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public DataTable SelectLikeBatch(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
+        {
+            string query = @"SELECT L.idLote AS ID, U.nombreUsuario AS Usuario, L.codigoLote AS 'Codigo', L.fechaRegistro AS 'Fecha de Registro', IFNULL(L.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM lote AS L
+                                INNER JOIN usuario AS U ON L.idUsuario = U.idUsuario
+                                WHERE (U.nombreUsuario LIKE @search OR L.codigoLote LIKE @search)
+                                AND L.estado = 1 AND L.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
+                                ORDER BY 4 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@search", "%" + CadenaBusqueda + "%");
+            command.Parameters.AddWithValue("@FechaInicio", FechaInicio.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", FechaFin.ToString("yyyy-MM-dd") + " 23:59:59");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public DataTable SelectBatchForComboBox()
+        {
+            string query = @"SELECT idLote,codigoLote FROM lote WHERE estado = 1 ORDER BY idLote DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

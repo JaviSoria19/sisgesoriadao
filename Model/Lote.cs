@@ -8,7 +8,7 @@ namespace sisgesoriadao.Model
 {
     public class Lote : BaseClass
     {
-        public byte IdLote { get; set; }
+        public int IdLote { get; set; }
         public byte IdUsuario { get; set; }
         public string CodigoLote { get; set; }
         public Lote()
@@ -24,7 +24,7 @@ namespace sisgesoriadao.Model
         /// <param name="estado"></param>
         /// <param name="fechaRegistro"></param>
         /// <param name="fechaActualizacion"></param>
-        public Lote(byte idLote, byte idUsuario, string codigoLote, byte estado, DateTime fechaRegistro, string fechaActualizacion)
+        public Lote(int idLote, byte idUsuario, string codigoLote, byte estado, DateTime fechaRegistro, string fechaActualizacion)
             : base(estado, fechaRegistro, fechaActualizacion)
         {
             IdLote = idLote;
@@ -45,7 +45,7 @@ namespace sisgesoriadao.Model
         /// DELETE
         /// </summary>
         /// <param name="idLote"></param>
-        public Lote(byte idLote)
+        public Lote(int idLote)
         {
             IdLote = idLote;
         }

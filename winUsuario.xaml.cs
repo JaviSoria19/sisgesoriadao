@@ -73,6 +73,21 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
+        private void SelectLike()
+        {
+            try
+            {
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implUsuario.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                dgvDatos.Columns[1].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implUsuario.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
         private void SelectEmployees()
         {
             try
@@ -253,18 +268,7 @@ namespace sisgesoriadao
             }
             else
             {
-                try
-                {
-                    dgvDatos.ItemsSource = null;
-                    dgvDatos.ItemsSource = implUsuario.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
-                    dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                    dgvDatos.Columns[1].Visibility = Visibility.Collapsed;
-                    lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implUsuario.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+                SelectLike();
             }
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
@@ -411,6 +415,21 @@ namespace sisgesoriadao
         private void txtPin_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !IsTextAllowed(e.Text);
+        }
+
+        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (string.IsNullOrEmpty(txtBuscar.Text))
+                {
+                    Select();
+                }
+                else
+                {
+                    SelectLike();
+                }
+            }
         }
     }
 }

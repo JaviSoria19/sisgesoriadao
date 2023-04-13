@@ -81,6 +81,16 @@ namespace sisgesoriadao
             winProducto_Insert winProducto_Insert = new winProducto_Insert();
             winProducto_Insert.Show();
         }
+        private void btnBatches_Click(object sender, RoutedEventArgs e)
+        {
+            winProducto_Lote winProducto_Lote = new winProducto_Lote();
+            winProducto_Lote.Show();
+        }
+        private void btnHistoryProducts_Click(object sender, RoutedEventArgs e)
+        {
+            winProducto_Historial winProducto_Historial = new winProducto_Historial();
+            winProducto_Historial.Show();
+        }
         private void btnCategories_Click(object sender, RoutedEventArgs e)
         {
             winCategoria winCategoria = new winCategoria();
@@ -89,6 +99,6 @@ namespace sisgesoriadao
         private void btnReports_Click(object sender, RoutedEventArgs e)
         {
 
-        }        
+        }
     }
 }

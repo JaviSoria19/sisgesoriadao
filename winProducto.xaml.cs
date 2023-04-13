@@ -66,6 +66,20 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
+        private void SelectLike()
+        {
+            try
+            {
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implProducto.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
         private void SelectSold()
         {
             try
@@ -138,39 +152,6 @@ namespace sisgesoriadao
         {
             switch (operacion)
             {
-                //INSERT
-                case 1:
-                    producto = new Producto(
-                        byte.Parse((cbxSucursal.SelectedItem as ComboboxItem).Valor.ToString()),
-                        byte.Parse((cbxCategoria.SelectedItem as ComboboxItem).Valor.ToString()),
-                        1,
-                        Session.IdUsuario,
-                        "CODIGOSUBLOTE",
-                        txtNombreProducto.Text.Trim(),
-                        txtIdentificador.Text.Trim(),
-                        double.Parse(txtCostoUSD.Text.Trim()),
-                        double.Parse(txtCostoBOB.Text.Trim()),
-                        double.Parse(txtPrecioUSD.Text.Trim()),
-                        double.Parse(txtPrecioBOB.Text.Trim()),
-                        txtObservaciones.Text.Trim()
-                        );
-                    implProducto = new ProductoImpl();
-                    try
-                    {
-                        int n = implProducto.Insert(producto);
-                        if (n > 0)
-                        {
-                            labelSuccess(lblInfo);
-                            lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
-                            Select();
-                            DisabledButtons();
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
-                    }
-                    break;
                 //UPDATE
                 case 2:
                     producto.IdSucursal = byte.Parse((cbxSucursal.SelectedItem as ComboboxItem).Valor.ToString());
@@ -216,17 +197,7 @@ namespace sisgesoriadao
             }
             else
             {
-                try
-                {
-                    dgvDatos.ItemsSource = null;
-                    dgvDatos.ItemsSource = implProducto.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
-                    dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                    lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+                SelectLike();
             }
         }
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -326,6 +297,20 @@ namespace sisgesoriadao
                     throw;
                 }
             }
+        }
+        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (string.IsNullOrEmpty(txtBuscar.Text))
+                {
+                    Select();
+                }
+                else
+                {
+                    SelectLike();
+                }
+            }            
         }
         private void txtPrecio_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {

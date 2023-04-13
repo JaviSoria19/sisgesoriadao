@@ -58,6 +58,20 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
+        private void SelectLike()
+        {
+            try
+            {
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implCategoria.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implCategoria.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
         private void btnInsert_Click(object sender, RoutedEventArgs e)
         {
             labelClear(lblInfo);
@@ -185,17 +199,7 @@ namespace sisgesoriadao
             }
             else
             {
-                try
-                {
-                    dgvDatos.ItemsSource = null;
-                    dgvDatos.ItemsSource = implCategoria.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
-                    dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                    lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implCategoria.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+                SelectLike();
             }
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
@@ -291,6 +295,21 @@ namespace sisgesoriadao
         private static bool IsTextAllowed(string text)
         {
             return !_regex.IsMatch(text);
+        }
+
+        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (string.IsNullOrEmpty(txtBuscar.Text))
+                {
+                    Select();
+                }
+                else
+                {
+                    SelectLike();
+                }
+            }
         }
         //------------------------------------------------------><---------------------------------------------
     }

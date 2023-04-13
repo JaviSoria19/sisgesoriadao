@@ -121,8 +121,14 @@
     <Compile Include="winProducto.xaml.cs">
       <DependentUpon>winProducto.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winProducto_Historial.xaml.cs">
+      <DependentUpon>winProducto_Historial.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winProducto_Insert.xaml.cs">
       <DependentUpon>winProducto_Insert.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="winProducto_Lote.xaml.cs">
+      <DependentUpon>winProducto_Lote.xaml</DependentUpon>
     </Compile>
     <Compile Include="winRecoverPassword.xaml.cs">
       <DependentUpon>winRecoverPassword.xaml</DependentUpon>
@@ -184,7 +190,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="winProducto_Historial.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="winProducto_Insert.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winProducto_Lote.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
