@@ -31,7 +31,7 @@
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="CÓDIGO DE LOTE:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <TextBox x:Name="txtCodigoLote" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False" KeyDown="txtCodigoLote_KeyDown"/>
+                <TextBox x:Name="txtCodigoLote" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="30" KeyUp="TextBoxUppercase" IsEnabled="False" KeyDown="txtCodigoLote_KeyDown"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">

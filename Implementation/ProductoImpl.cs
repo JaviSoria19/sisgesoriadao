@@ -53,7 +53,7 @@ namespace sisgesoriadao.Implementation
                     command.ExecuteNonQuery();
 
                     command.CommandText = @"INSERT INTO historial (idProducto,detalle) VALUES
-                                ((SELECT MAX(idProducto) FROM producto),'PRODUCTO INGRESADO POR EL USUARIO " + Session.NombreUsuario + " EN SUCURSAL " + Session.Sucursal_NombreSucursal + "')";
+                                ((SELECT MAX(idProducto) FROM producto),'PRODUCTO INGRESADO POR EL USUARIO: " + Session.NombreUsuario + ", EN SUCURSAL: " + Session.Sucursal_NombreSucursal + "')";
                     command.ExecuteNonQuery();
                 }
                 //command.CommandText = "Insert into mytable (id, desc) VALUES (101, 'Description')";
@@ -203,14 +203,14 @@ namespace sisgesoriadao.Implementation
             }
             return p;
         }
-        public Producto GetByIdentifierOrCode(string CadenaBusqueda)
+        public Producto GetByCode(string CadenaBusqueda)
         {
             Producto p = null;
             string query = @"SELECT idProducto, idSucursal, idCategoria, idSublote, idCondicion, idUsuario,
                                 codigoSublote, nombreProducto, identificador,
                                 costoUSD, costoBOB, precioVentaUSD, precioVentaBOB, observaciones,
                                 estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM producto
-                                WHERE identificador = @search OR codigoSublote = @search";
+                                WHERE codigoSublote = @search";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@search", CadenaBusqueda);
             try
@@ -499,6 +499,75 @@ namespace sisgesoriadao.Implementation
             {
 
                 throw;
+            }
+        }
+        public DataTable SelectProductNamesForComboBox()
+        {
+            string query = @"SELECT nombreProducto FROM PRODUCTO GROUP BY 1";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public string UpdateBranchMovementTransaction(List<Producto> ListaProductos, byte IdSucursalDestino, string SucursalDestino)
+        {
+            MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
+            connection.Open();
+            MySqlCommand command = connection.CreateCommand();
+            MySqlTransaction myTrans;
+            myTrans = connection.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            command.Connection = connection;
+            command.Transaction = myTrans;
+            try
+            {
+                foreach (var producto in ListaProductos)
+                {
+                    //ACTUALIZACION DE LA SUCURSAL Y EL ESTADO.
+                    command.CommandText = @"UPDATE producto SET idSucursal=@idSucursal, estado = 3 WHERE idProducto = @idProducto";
+                    command.Parameters.AddWithValue("@idSucursal", IdSucursalDestino);
+                    command.Parameters.AddWithValue("@idProducto", producto.IdProducto);
+                    command.ExecuteNonQuery();
+                    //INSERCIÓN DE HISTORIAL DE PRODUCTO.
+                    command.CommandText = @"INSERT INTO historial (idProducto,detalle) VALUES
+                                (@idProductoTwo,@detalle)";
+                    command.Parameters.AddWithValue("@idProductoTwo", producto.IdProducto);
+                    command.Parameters.AddWithValue("@detalle", "PRODUCTO TRANSFERIDO A LA SUCURSAL: " + SucursalDestino + ", POR EL USUARIO: " + Session.NombreUsuario);
+                    command.ExecuteNonQuery();
+                    //LIMPIEZA DE PARÁMETROS YA UTILIZADOS EN EL CICLO ANTERIOR PARA PROSEGUIR, CASO CONTRARIO LANZA ERROR.
+                    command.Parameters.Clear();
+                }
+                //command.CommandText = "Insert into mytable (id, desc) VALUES (101, 'Description')";
+                //command.ExecuteNonQuery();
+                myTrans.Commit();
+                return "PRODUCTOS TRANSFERIDOS EXITOSAMENTE.";
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (MySqlException ex)
+                {
+                    if (myTrans.Connection != null)
+                    {
+                        return "Una excepción del tipo " + ex.GetType() + " se encontró mientras se estaba intentando revertir la transacción.";
+                    }
+                }
+                return e.Message;
+            }
+            finally
+            {
+                connection.Close();
             }
         }
     }

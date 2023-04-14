@@ -40,6 +40,9 @@
     <ApplicationIcon>iconosisgesoria.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotNetProjects.Input.Toolkit, Version=6.1.94.0, Culture=neutral, PublicKeyToken=79778c5f2eed289b, processorArchitecture=MSIL">
+      <HintPath>packages\DotNetProjects.WpfToolkit.Input.6.1.94\lib\net40\DotNetProjects.Input.Toolkit.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors, Version=2.1.1.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>packages\MaterialDesignColors.2.1.1\lib\net462\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -136,6 +139,9 @@
     <Compile Include="winProducto_Lote.xaml.cs">
       <DependentUpon>winProducto_Lote.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winProducto_Transferencia.xaml.cs">
+      <DependentUpon>winProducto_Transferencia.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winRecoverPassword.xaml.cs">
       <DependentUpon>winRecoverPassword.xaml</DependentUpon>
     </Compile>
@@ -209,6 +215,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winProducto_Lote.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winProducto_Transferencia.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

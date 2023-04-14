@@ -12,6 +12,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
+        xmlns:controls="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
         mc:Ignorable="d"
         Title="Sistema de Ventas - Añadir nuevo lote" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
@@ -60,7 +61,7 @@
                 <TextBox x:Name="txtCodigoSublote" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="55" MaxLength="50" IsEnabled="False"/>
                 <Label Content="NOMBRE:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <TextBox x:Name="txtNombreProducto" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" KeyUp="TextBoxUppercase" MaxLength="50" IsEnabled="True"/>
+                <controls:AutoCompleteBox x:Name="acbtxtNombreProducto" Margin="0,0,20,0" MinWidth="120" IsEnabled="True" FilterMode="Contains"/>
                 <Label Content="S/N o IMEI:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtIdentificador" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="30" IsEnabled="True" KeyDown="txtIdentificador_KeyDown"/>

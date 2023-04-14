@@ -108,14 +108,6 @@ namespace sisgesoriadao
                 }
             }
         }
-        private void TextBoxUppercase(object sender, KeyEventArgs e)
-        {
-            TextBox currentContainer = ((TextBox)sender);
-            int caretPosition = currentContainer.SelectionStart;
-
-            currentContainer.Text = currentContainer.Text.ToUpper();
-            currentContainer.SelectionStart = caretPosition++;
-        }
         private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -136,6 +128,14 @@ namespace sisgesoriadao
             {
                 OperacionCRUD();
             }
+        }
+        private void TextBoxUppercase(object sender, KeyEventArgs e)
+        {
+            TextBox currentContainer = ((TextBox)sender);
+            int caretPosition = currentContainer.SelectionStart;
+
+            currentContainer.Text = currentContainer.Text.ToUpper();
+            currentContainer.SelectionStart = caretPosition++;
         }
         void OperacionCRUD()
         {

@@ -30,7 +30,7 @@
                 </Button>
             </StackPanel>
             
-            <TextBlock Text="GESTIONAR VENTAS" Margin="10,0,0,0" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <TextBlock Text="GESTIONAR VENTAS Y PRODUCTOS" Margin="10,0,0,0" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold"/>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
@@ -45,11 +45,12 @@
                     </Button>
                     <Label Content="CLIENTES" FontWeight="Bold" HorizontalAlignment="Center"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,15,1,0">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnAddProducts" Width="100" Height="100" Click="btnAddProducts_Click">
                         <materialDesign:PackIcon Kind="PackageVariantAdd" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
-                    <TextBlock Text="AÑADIR PRODUCTOS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="AÑADIR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="NUEVO LOTE" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnProducts" Width="100" Height="100" Click="btnProducts_Click">
@@ -57,21 +58,31 @@
                     </Button>
                     <TextBlock Text="VER PRODUCTOS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,15,0,0">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnHistoryProducts" Width="100" Height="100" Click="btnHistoryProducts_Click">
                         <materialDesign:PackIcon Kind="History" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
-                    <TextBlock Text="HISTORIAL DE PRODUCTO" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="HISTORIAL" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="DE PRODUCTO" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
-                    <Button x:Name="btnBatches" Width="100" Height="100" Click="btnBatches_Click">
-                        <materialDesign:PackIcon Kind="LayersTriple" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    <Button x:Name="btnTransferProducts" Width="100" Height="100" Click="btnTransferProducts_Click">
+                        <materialDesign:PackIcon Kind="BoxArrowUp" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
-                    <TextBlock Text="LOTES" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="TRANSFERIR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="PRODUCTOS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnReceiveProducts" Width="100" Height="100" Click="btnReceiveProducts_Click">
+                        <materialDesign:PackIcon Kind="BoxArrowDown" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="RECIBIR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="PRODUCTOS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+                
             </StackPanel>
 
-            <TextBlock Text="GESTIONAR INFORMACIÓN" Margin="5,0,0,0" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <TextBlock Text="GESTIONAR INFORMACIÓN" Margin="0,15,0,0" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold"/>
             
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
@@ -109,6 +120,12 @@
                         <materialDesign:PackIcon Kind="ChartBar" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
                     <TextBlock Text="ESTADÍSTICAS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnBatches" Width="100" Height="100" Click="btnBatches_Click">
+                        <materialDesign:PackIcon Kind="LayersTriple" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="LOTES" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">

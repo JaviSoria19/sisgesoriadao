@@ -96,6 +96,16 @@ namespace sisgesoriadao
             winCondicion winCondicion = new winCondicion();
             winCondicion.Show();
         }
+        private void btnTransferProducts_Click(object sender, RoutedEventArgs e)
+        {
+            winProducto_Transferencia winProducto_Transferencia = new winProducto_Transferencia();
+            winProducto_Transferencia.Show();
+        }
+
+        private void btnReceiveProducts_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
         private void btnReports_Click(object sender, RoutedEventArgs e)
         {
 
@@ -104,6 +114,6 @@ namespace sisgesoriadao
         {
             txtBlockWelcome.Text = "Bienvenid@ a " + Session.Sucursal_NombreSucursal + " , " + Session.NombreUsuario;
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
-        }
+        }        
     }
 }

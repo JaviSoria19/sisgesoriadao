@@ -46,18 +46,7 @@ namespace sisgesoriadao
         }
         private void btnRemove_Click(object sender, RoutedEventArgs e)
         {
-            if (dgvProductos.Items.IsEmpty != true && listaproductos != null)
-            {
-                dgvProductos.Items.RemoveAt(contador-2);
-                listaproductos.RemoveAt(contador-2);
-                contador--;
-                txtCodigoSublote.Text = codigoSublote + "-" + contador;
-            }
-            if (contador == 1)
-            {
-                cbxLote.IsEnabled = true;
-                cbxCategoria.IsEnabled = true;
-            }
+            removeFromDataGridandList();
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
@@ -91,6 +80,7 @@ namespace sisgesoriadao
             cbxGetCategoriaFromDatabase();
             cbxGetLoteFromDatabase();
             cbxGetCondicionFromDatabase();
+            cbxGetNombreProductoFromDatabase();
             GetCodigoSubLoteFromDatabase();
             GetIDSubLoteFromDatabase();
             txtSucursal.Text = "Sucursal: " + Session.Sucursal_NombreSucursal;
@@ -245,7 +235,7 @@ namespace sisgesoriadao
 
         void addToDataGrid_andList()
         {
-            if (string.IsNullOrEmpty(txtNombreProducto.Text) != true && string.IsNullOrEmpty(txtIdentificador.Text) != true &&
+            if (string.IsNullOrEmpty(acbtxtNombreProducto.Text) != true && string.IsNullOrEmpty(txtIdentificador.Text) != true &&
                 string.IsNullOrEmpty(txtCostoUSD.Text) != true && string.IsNullOrEmpty(txtCostoBOB.Text) != true &&
                 string.IsNullOrEmpty(txtPrecioUSD.Text) != true && string.IsNullOrEmpty(txtPrecioBOB.Text) != true)
             {
@@ -259,7 +249,7 @@ namespace sisgesoriadao
                         IdCondicion = byte.Parse((cbxCondicion.SelectedItem as ComboboxItem).Valor.ToString()),
                         IdUsuario = Session.IdUsuario,
                         CodigoSublote = txtCodigoSublote.Text,
-                        NombreProducto = txtNombreProducto.Text,
+                        NombreProducto = acbtxtNombreProducto.Text,
                         Identificador = txtIdentificador.Text,
                         CostoUSD = double.Parse(txtCostoUSD.Text),
                         CostoBOB = double.Parse(txtCostoBOB.Text),
@@ -275,7 +265,7 @@ namespace sisgesoriadao
                         byte.Parse((cbxCondicion.SelectedItem as ComboboxItem).Valor.ToString()),
                         Session.IdUsuario,
                         txtCodigoSublote.Text,
-                        txtNombreProducto.Text,
+                        acbtxtNombreProducto.Text,
                         txtIdentificador.Text,
                         double.Parse(txtCostoUSD.Text),
                         double.Parse(txtCostoBOB.Text),
@@ -293,6 +283,7 @@ namespace sisgesoriadao
                     {
                         cbxLote.IsEnabled = false;
                         cbxCategoria.IsEnabled = false;
+                        cbxCondicion.IsEnabled = false;
                     }
                 }
                 else
@@ -304,7 +295,23 @@ namespace sisgesoriadao
             {
                 MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
             }
-        }        
+        }    
+        void removeFromDataGridandList()
+        {
+            if (dgvProductos.Items.IsEmpty != true && listaproductos != null)
+            {
+                dgvProductos.Items.RemoveAt(contador - 2);
+                listaproductos.RemoveAt(contador - 2);
+                contador--;
+                txtCodigoSublote.Text = codigoSublote + "-" + contador;
+            }
+            if (contador == 1)
+            {
+                cbxLote.IsEnabled = true;
+                cbxCategoria.IsEnabled = true;
+                cbxCondicion.IsEnabled = true;
+            }
+        }
         void cbxGetCondicionFromDatabase()
         {
             try
@@ -349,6 +356,26 @@ namespace sisgesoriadao
                     cbxCategoria.Items.Add(item);
                 }
                 cbxCategoria.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        void cbxGetNombreProductoFromDatabase()
+        {
+            try
+            {
+                List<ComboboxItem> listcomboboxNombreProducto = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implProducto = new ProductoImpl();
+                dataTable = implProducto.SelectProductNamesForComboBox();
+                listcomboboxNombreProducto = (from DataRow dr in dataTable.Rows
+                                         select new ComboboxItem()
+                                         {
+                                             Texto = dr["nombreProducto"].ToString()
+                                         }).ToList();
+                acbtxtNombreProducto.ItemsSource = listcomboboxNombreProducto;
             }
             catch (Exception ex)
             {

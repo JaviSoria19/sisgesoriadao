@@ -10,12 +10,13 @@ namespace sisgesoriadao.Interfaces
     public interface IProducto : IDao<Producto>
     {
         Producto Get(int Id);
-        Producto GetByIdentifierOrCode(string CadenaBusqueda);
+        Producto GetByCode(string CadenaBusqueda);
         String GetCodeFormatToInsertProducts(int IdLote);
         int GetSubBatchToInsertProducts(int IdLote);
         DataTable SelectProductHistory(string CadenaBusqueda);
         DataTable SelectSoldProducts();
         DataTable SelectLikeSoldProducts(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin);
+        DataTable SelectProductNamesForComboBox();
         //LOTES
         int InsertBatch(Lote l);
         int UpdateBatch(Lote l);
@@ -25,5 +26,6 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectBatchForComboBox();
         //FIN LOTES
         string InsertTransaction(List<Producto> ListaProductos, int idLote);
+        string UpdateBranchMovementTransaction(List<Producto> ListaProductos, byte idSucursalDestino, string nombreSucursalDestino);
     }
 }

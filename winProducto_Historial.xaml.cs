@@ -54,10 +54,6 @@ namespace sisgesoriadao
                     Select();
                 }
             }
-            else
-            {
-                MessageBox.Show("Por favor rellene el campo de búsqueda. (*)");
-            }
         }
         private void Select()
         {
