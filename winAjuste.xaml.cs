@@ -29,12 +29,6 @@ namespace sisgesoriadao
         {
             InitializeComponent();
         }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            GetSettings();
-        }
-
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(txtCambioDolar.Text) != true && string.IsNullOrEmpty(txtLimiteDescuento.Text) != true)
@@ -63,16 +57,18 @@ namespace sisgesoriadao
                 MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
             }
         }
-
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            GetSettings();
         }
         private void txtCambioDolar_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !IsTextAllowed(e.Text);
         }
-
         private void txtLimiteDescuento_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !IsTextAllowed2(e.Text);

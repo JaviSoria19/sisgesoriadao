@@ -29,49 +29,7 @@ namespace sisgesoriadao
         public winSucursal()
         {
             InitializeComponent();
-        }
-        private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
-        {
-            Select();
-        }
-        private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
-        {
-            dtpFechaFin.SelectedDate = DateTime.Today;
-            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
-        }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            txtBlockWelcome.Text = Session.NombreUsuario;
-        }
-        private void Select()
-        {
-            try
-            {
-                implSucursal = new SucursalImpl();
-                dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implSucursal.Select().DefaultView;
-                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implSucursal.Select().Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        private void SelectLike()
-        {
-            try
-            {
-                dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implSucursal.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
-                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implSucursal.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
+        }        
         private void btnInsert_Click(object sender, RoutedEventArgs e)
         {
             labelClear(lblInfo);
@@ -223,6 +181,7 @@ namespace sisgesoriadao
             txtNombreSucursal.Focus();
             txtDireccion.IsEnabled = true;
             txtCorreo.IsEnabled = true;
+            txtTelefono.IsEnabled = true;
         }
         void DisabledButtons()
         {
@@ -236,6 +195,20 @@ namespace sisgesoriadao
             txtNombreSucursal.IsEnabled = false;
             txtDireccion.IsEnabled = false;
             txtCorreo.IsEnabled = false;
+            txtTelefono.IsEnabled = false;
+        }        
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtBlockWelcome.Text = Session.NombreUsuario;
+        }
+        private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
+        {
+            Select();
+        }
+        private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
+        {
+            dtpFechaFin.SelectedDate = DateTime.Today;
+            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
         }
         private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -264,6 +237,20 @@ namespace sisgesoriadao
                 }
             }
         }
+        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (string.IsNullOrEmpty(txtBuscar.Text))
+                {
+                    Select();
+                }
+                else
+                {
+                    SelectLike();
+                }
+            }
+        }
         private void TextBoxUppercase(object sender, KeyEventArgs e)
         {
             TextBox currentContainer = ((TextBox)sender);
@@ -271,6 +258,35 @@ namespace sisgesoriadao
 
             currentContainer.Text = currentContainer.Text.ToUpper();
             currentContainer.SelectionStart = caretPosition++;
+        }
+        private void Select()
+        {
+            try
+            {
+                implSucursal = new SucursalImpl();
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implSucursal.Select().DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implSucursal.Select().Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void SelectLike()
+        {
+            try
+            {
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implSucursal.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implSucursal.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         public void labelClear(Label label)
         {
@@ -303,22 +319,7 @@ namespace sisgesoriadao
         private static bool IsTextAllowed(string text)
         {
             return !_regex.IsMatch(text);
-        }
-
-        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                if (string.IsNullOrEmpty(txtBuscar.Text))
-                {
-                    Select();
-                }
-                else
-                {
-                    SelectLike();
-                }
-            }
-        }
+        }        
         //------------------------------------------------------><---------------------------------------------
     }
 }

@@ -31,78 +31,7 @@ namespace sisgesoriadao
         public winUsuario()
         {
             InitializeComponent();
-        }
-        private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
-        {
-            Select();
-            SelectEmployees();
-        }
-        private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
-        {
-            dtpFechaFin.SelectedDate = DateTime.Today;
-            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
-        }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            txtBlockWelcome.Text = Session.NombreUsuario;
-            ComboboxItem item = new ComboboxItem();
-            item.Text = "ADMINISTRADOR";
-            item.Value = 1;
-            cbxRol.Items.Add(item);
-            ComboboxItem item2 = new ComboboxItem();
-            item2.Text = "VENDEDOR";
-            item2.Value = 2;
-            cbxRol.Items.Add(item2);
-            cbxRol.SelectedIndex = 0;
-            //retorna el valor de 1:
-            //MessageBox.Show((cbxRol.SelectedItem as ComboboxItem).Value.ToString());
-        }
-        private void Select()
-        {
-            try
-            {
-                implUsuario = new UsuarioImpl();
-                dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implUsuario.Select().DefaultView;
-                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                dgvDatos.Columns[1].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implUsuario.Select().Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        private void SelectLike()
-        {
-            try
-            {
-                dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implUsuario.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
-                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                dgvDatos.Columns[1].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implUsuario.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        private void SelectEmployees()
-        {
-            try
-            {
-                implEmpleado = new EmpleadoImpl();
-                dgvEmpleados.ItemsSource = null;
-                dgvEmpleados.ItemsSource = implEmpleado.SelectEmployeesWithoutUsers().DefaultView;
-                dgvEmpleados.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridEmpleados.Content = "NÚMERO DE REGISTROS: " + implEmpleado.SelectEmployeesWithoutUsers().Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
+        }        
         private void btnInsert_Click(object sender, RoutedEventArgs e)
         {
             if (empleado == null)
@@ -118,7 +47,6 @@ namespace sisgesoriadao
                 this.operacion = 1;
             }
         }
-
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
             if (usuario != null)
@@ -133,7 +61,6 @@ namespace sisgesoriadao
                 lblInfo.Content = "¡PARA MODIFICAR UN USUARIO DEBE SELECCIONAR UN REGISTRO!";
             }
         }
-
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
             if (usuario != null)
@@ -166,7 +93,6 @@ namespace sisgesoriadao
                 lblInfo.Content = "¡PARA ELIMINAR UN EMPLEADO DEBE SELECCIONAR UN REGISTRO!";
             }
         }
-
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             switch (operacion)
@@ -254,12 +180,10 @@ namespace sisgesoriadao
                     break;
             }
         }
-
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             DisabledButtons();
         }
-
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             if (txtBuscar.Text == null || txtBuscar.Text == "")
@@ -275,37 +199,30 @@ namespace sisgesoriadao
         {
             this.Close();
         }
-        void EnabledButtons()
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            btnInsert.IsEnabled = false;
-            btnUpdate.IsEnabled = false;
-            btnDelete.IsEnabled = false;
-
-            btnSave.IsEnabled = true;
-            btnCancel.IsEnabled = true;
-
-            txtUsuario.IsEnabled = true;
-            txtUsuario.Focus();
-            txtContrasenha.IsEnabled = true;
-            txtReContrasenha.IsEnabled = true;
-            cbxRol.IsEnabled = true;
-            txtPin.IsEnabled = true;
+            txtBlockWelcome.Text = Session.NombreUsuario;
+            ComboboxItem item = new ComboboxItem();
+            item.Text = "ADMINISTRADOR";
+            item.Value = 1;
+            cbxRol.Items.Add(item);
+            ComboboxItem item2 = new ComboboxItem();
+            item2.Text = "VENDEDOR";
+            item2.Value = 2;
+            cbxRol.Items.Add(item2);
+            cbxRol.SelectedIndex = 0;
+            //retorna el valor de 1:
+            //MessageBox.Show((cbxRol.SelectedItem as ComboboxItem).Value.ToString());
         }
-        void DisabledButtons()
+        private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
         {
-            btnInsert.IsEnabled = true;
-            btnUpdate.IsEnabled = true;
-            btnDelete.IsEnabled = true;
-
-            btnSave.IsEnabled = false;
-            btnCancel.IsEnabled = false;
-
-            txtUsuario.IsEnabled = false;
-            txtUsuario.Focus();
-            txtContrasenha.IsEnabled = false;
-            txtReContrasenha.IsEnabled = false;
-            cbxRol.IsEnabled = false;
-            txtPin.IsEnabled = false;
+            Select();
+            SelectEmployees();
+        }
+        private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
+        {
+            dtpFechaFin.SelectedDate = DateTime.Today;
+            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
         }
         private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -365,6 +282,20 @@ namespace sisgesoriadao
                 }
             }
         }
+        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (string.IsNullOrEmpty(txtBuscar.Text))
+                {
+                    Select();
+                }
+                else
+                {
+                    SelectLike();
+                }
+            }
+        }
         private void TextBoxUppercase(object sender, KeyEventArgs e)
         {
             TextBox currentContainer = ((TextBox)sender);
@@ -372,6 +303,84 @@ namespace sisgesoriadao
 
             currentContainer.Text = currentContainer.Text.ToUpper();
             currentContainer.SelectionStart = caretPosition++;
+        }
+        private void Select()
+        {
+            try
+            {
+                implUsuario = new UsuarioImpl();
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implUsuario.Select().DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                dgvDatos.Columns[1].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implUsuario.Select().Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void SelectLike()
+        {
+            try
+            {
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implUsuario.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                dgvDatos.Columns[1].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implUsuario.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void SelectEmployees()
+        {
+            try
+            {
+                implEmpleado = new EmpleadoImpl();
+                dgvEmpleados.ItemsSource = null;
+                dgvEmpleados.ItemsSource = implEmpleado.SelectEmployeesWithoutUsers().DefaultView;
+                dgvEmpleados.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridEmpleados.Content = "NÚMERO DE REGISTROS: " + implEmpleado.SelectEmployeesWithoutUsers().Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        void EnabledButtons()
+        {
+            btnInsert.IsEnabled = false;
+            btnUpdate.IsEnabled = false;
+            btnDelete.IsEnabled = false;
+
+            btnSave.IsEnabled = true;
+            btnCancel.IsEnabled = true;
+
+            txtUsuario.IsEnabled = true;
+            txtUsuario.Focus();
+            txtContrasenha.IsEnabled = true;
+            txtReContrasenha.IsEnabled = true;
+            cbxRol.IsEnabled = true;
+            txtPin.IsEnabled = true;
+        }
+        void DisabledButtons()
+        {
+            btnInsert.IsEnabled = true;
+            btnUpdate.IsEnabled = true;
+            btnDelete.IsEnabled = true;
+
+            btnSave.IsEnabled = false;
+            btnCancel.IsEnabled = false;
+
+            txtUsuario.IsEnabled = false;
+            txtUsuario.Focus();
+            txtContrasenha.IsEnabled = false;
+            txtReContrasenha.IsEnabled = false;
+            cbxRol.IsEnabled = false;
+            txtPin.IsEnabled = false;
         }
         public void labelClear(Label label)
         {
@@ -400,7 +409,11 @@ namespace sisgesoriadao
         {
             return !_regex.IsMatch(text);
         }
-        //------------------------------------------------------><---------------------------------------------
+        //------------------------------------------------------><---------------------------------------------        
+        private void txtPin_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !IsTextAllowed(e.Text);
+        }
         public class ComboboxItem
         {
             public string Text { get; set; }
@@ -409,26 +422,6 @@ namespace sisgesoriadao
             public override string ToString()
             {
                 return Text;
-            }
-        }
-
-        private void txtPin_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = !IsTextAllowed(e.Text);
-        }
-
-        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                if (string.IsNullOrEmpty(txtBuscar.Text))
-                {
-                    Select();
-                }
-                else
-                {
-                    SelectLike();
-                }
             }
         }
     }

@@ -48,8 +48,10 @@
                 <TextBlock x:Name="txtSucursal" Text="Sucursal" Margin="0,0,20,0" VerticalAlignment="Center" FontWeight="Bold"/>
                 <Label Content="LOTE:"/>
                 <ComboBox x:Name="cbxLote" IsEnabled="True" SelectionChanged="cbxLote_SelectionChanged"/>
-                <Label Content="CATEGORIA:"/>
+                <Label Content="CATEGORIA:" Margin="15,0,0,0"/>
                 <ComboBox x:Name="cbxCategoria" IsEnabled="True"/>
+                <Label Content="CONDICION:" Margin="15,0,0,0"/>
+                <ComboBox x:Name="cbxCondicion" IsEnabled="True"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">

@@ -30,10 +30,6 @@ namespace sisgesoriadao
         {
             InitializeComponent();
         }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            cbxGetUsuarioFromDatabase();
-        }
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
@@ -42,12 +38,26 @@ namespace sisgesoriadao
         {
             Login();
         }
+        private void btnForgotPassword_Click(object sender, RoutedEventArgs e)
+        {
+            winRecoverPassword winRecoverPassword = new winRecoverPassword();
+            winRecoverPassword.Show();
+            this.Close();
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            cbxGetUsuarioFromDatabase();
+        }
         private void txtPassword_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 Login();
             }
+        }
+        private void txtPassword_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtPassword.Focus();
         }
         void Login()
         {
@@ -87,14 +97,7 @@ namespace sisgesoriadao
                     throw;
                 }
             }
-        }
-
-        private void btnForgotPassword_Click(object sender, RoutedEventArgs e)
-        {
-            winRecoverPassword winRecoverPassword = new winRecoverPassword();
-            winRecoverPassword.Show();
-            this.Close();
-        }
+        }        
         void cbxGetUsuarioFromDatabase()
         {
             try

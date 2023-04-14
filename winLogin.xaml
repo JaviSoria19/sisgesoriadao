@@ -30,7 +30,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <materialDesign:PackIcon Kind="Key" Height="40" Width="40" Margin="5"/>
-                <PasswordBox x:Name="txtPassword" Width="400" Margin="5" materialDesign:HintAssist.Hint="CONTRASEÑA" materialDesign:HintAssist.IsFloating="True" MaxLength="50" KeyDown="txtPassword_KeyDown"/>
+                <PasswordBox x:Name="txtPassword" Width="400" Margin="5" materialDesign:HintAssist.Hint="CONTRASEÑA" materialDesign:HintAssist.IsFloating="True" MaxLength="50" KeyDown="txtPassword_KeyDown" Loaded="txtPassword_Loaded"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal">

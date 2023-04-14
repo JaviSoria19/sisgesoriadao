@@ -30,19 +30,6 @@ namespace sisgesoriadao
         {
             InitializeComponent();
         }
-        private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
-        {
-            Select();
-        }
-        private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
-        {
-            dtpFechaFin.SelectedDate = DateTime.Today;
-            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
-        }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            txtBlockWelcome.Text = Session.NombreUsuario;
-        }
         private void btnInsert_Click(object sender, RoutedEventArgs e)
         {
             labelClear(lblInfo);
@@ -177,6 +164,19 @@ namespace sisgesoriadao
         {
             this.Close();
         }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtBlockWelcome.Text = Session.NombreUsuario;
+        }
+        private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
+        {
+            Select();
+        }
+        private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
+        {
+            dtpFechaFin.SelectedDate = DateTime.Today;
+            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
+        }
         private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -190,6 +190,41 @@ namespace sisgesoriadao
                     SelectLike();
                 }
             }
+        }
+        private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)
+            {
+                try
+                {
+                    DataRowView d = (DataRowView)dgvDatos.SelectedItem;
+                    byte id = byte.Parse(d.Row.ItemArray[0].ToString());
+                    implCliente = new ClienteImpl();
+                    cliente = implCliente.Get(id);
+                    if (cliente != null)
+                    {
+                        txtNombre.Text = cliente.Nombre.Trim();
+                        txtNumeroCelular.Text = cliente.NumeroCelular.Trim();
+                        txtNumeroCI.Text = cliente.NumeroCI.Trim();
+
+                        labelSuccess(lblInfo);
+                        lblInfo.Content = "CLIENTE SELECCIONADO.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    throw;
+                }
+            }
+        }
+        private void TextBoxUppercase(object sender, KeyEventArgs e)
+        {
+            TextBox currentContainer = ((TextBox)sender);
+            int caretPosition = currentContainer.SelectionStart;
+
+            currentContainer.Text = currentContainer.Text.ToUpper();
+            currentContainer.SelectionStart = caretPosition++;
         }
         private void Select()
         {
@@ -246,41 +281,6 @@ namespace sisgesoriadao
             txtNombre.IsEnabled = false;
             txtNumeroCelular.IsEnabled = false;
             txtNumeroCI.IsEnabled = false;
-        }
-        private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)
-            {
-                try
-                {
-                    DataRowView d = (DataRowView)dgvDatos.SelectedItem;
-                    byte id = byte.Parse(d.Row.ItemArray[0].ToString());
-                    implCliente = new ClienteImpl();
-                    cliente = implCliente.Get(id);
-                    if (cliente != null)
-                    {
-                        txtNombre.Text = cliente.Nombre.Trim();
-                        txtNumeroCelular.Text = cliente.NumeroCelular.Trim();
-                        txtNumeroCI.Text = cliente.NumeroCI.Trim();
-
-                        labelSuccess(lblInfo);
-                        lblInfo.Content = "CLIENTE SELECCIONADO.";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    throw;
-                }
-            }
-        }
-        private void TextBoxUppercase(object sender, KeyEventArgs e)
-        {
-            TextBox currentContainer = ((TextBox)sender);
-            int caretPosition = currentContainer.SelectionStart;
-
-            currentContainer.Text = currentContainer.Text.ToUpper();
-            currentContainer.SelectionStart = caretPosition++;
         }
         public void labelClear(Label label)
         {

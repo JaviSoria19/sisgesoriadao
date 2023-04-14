@@ -27,11 +27,6 @@ namespace sisgesoriadao
         {
             InitializeComponent();
         }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            txtBlockWelcome.Text = "Bienvenid@ a " + Session.Sucursal_NombreSucursal + " , " + Session.NombreUsuario;
-            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
-        }
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("¿Está segur@ de cerrar la sesión actual?", "CERRAR SESIÓN", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
@@ -96,9 +91,19 @@ namespace sisgesoriadao
             winCategoria winCategoria = new winCategoria();
             winCategoria.Show();
         }
+        private void btnConditionsProducts_Click(object sender, RoutedEventArgs e)
+        {
+            winCondicion winCondicion = new winCondicion();
+            winCondicion.Show();
+        }
         private void btnReports_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtBlockWelcome.Text = "Bienvenid@ a " + Session.Sucursal_NombreSucursal + " , " + Session.NombreUsuario;
+            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
         }
     }
 }

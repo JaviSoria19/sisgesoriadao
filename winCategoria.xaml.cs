@@ -29,20 +29,7 @@ namespace sisgesoriadao
         public winCategoria()
         {
             InitializeComponent();
-        }
-        private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
-        {
-            Select();
-        }
-        private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
-        {
-            dtpFechaFin.SelectedDate = DateTime.Today;
-            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
-        }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            txtBlockWelcome.Text = Session.NombreUsuario;
-        }
+        }              
         private void Select()
         {
             try
@@ -206,30 +193,18 @@ namespace sisgesoriadao
         {
             this.Close();
         }
-        void EnabledButtons()
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            btnInsert.IsEnabled = false;
-            btnUpdate.IsEnabled = false;
-            btnDelete.IsEnabled = false;
-
-            btnSave.IsEnabled = true;
-            btnCancel.IsEnabled = true;
-
-            txtCategoria.IsEnabled = true;
-            txtCategoria.Focus();
-            txtGarantia.IsEnabled = true;
+            txtBlockWelcome.Text = Session.NombreUsuario;
         }
-        void DisabledButtons()
+        private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
         {
-            btnInsert.IsEnabled = true;
-            btnUpdate.IsEnabled = true;
-            btnDelete.IsEnabled = true;
-
-            btnSave.IsEnabled = false;
-            btnCancel.IsEnabled = false;
-
-            txtCategoria.IsEnabled = false;
-            txtGarantia.IsEnabled = false;
+            Select();
+        }
+        private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
+        {
+            dtpFechaFin.SelectedDate = DateTime.Today;
+            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
         }
         private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -256,6 +231,20 @@ namespace sisgesoriadao
                 }
             }
         }
+        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (string.IsNullOrEmpty(txtBuscar.Text))
+                {
+                    Select();
+                }
+                else
+                {
+                    SelectLike();
+                }
+            }
+        }
         private void TextBoxUppercase(object sender, KeyEventArgs e)
         {
             TextBox currentContainer = ((TextBox)sender);
@@ -264,6 +253,31 @@ namespace sisgesoriadao
             currentContainer.Text = currentContainer.Text.ToUpper();
             currentContainer.SelectionStart = caretPosition++;
         }
+        void EnabledButtons()
+        {
+            btnInsert.IsEnabled = false;
+            btnUpdate.IsEnabled = false;
+            btnDelete.IsEnabled = false;
+
+            btnSave.IsEnabled = true;
+            btnCancel.IsEnabled = true;
+
+            txtCategoria.IsEnabled = true;
+            txtCategoria.Focus();
+            txtGarantia.IsEnabled = true;
+        }
+        void DisabledButtons()
+        {
+            btnInsert.IsEnabled = true;
+            btnUpdate.IsEnabled = true;
+            btnDelete.IsEnabled = true;
+
+            btnSave.IsEnabled = false;
+            btnCancel.IsEnabled = false;
+
+            txtCategoria.IsEnabled = false;
+            txtGarantia.IsEnabled = false;
+        }        
         public void labelClear(Label label)
         {
             label.Foreground = new SolidColorBrush(Colors.Transparent);
@@ -295,21 +309,6 @@ namespace sisgesoriadao
         private static bool IsTextAllowed(string text)
         {
             return !_regex.IsMatch(text);
-        }
-
-        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                if (string.IsNullOrEmpty(txtBuscar.Text))
-                {
-                    Select();
-                }
-                else
-                {
-                    SelectLike();
-                }
-            }
         }
         //------------------------------------------------------><---------------------------------------------
     }

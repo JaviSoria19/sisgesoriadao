@@ -27,7 +27,6 @@ namespace sisgesoriadao
         {
             InitializeComponent();
         }
-
         private void btnSend_Click(object sender, RoutedEventArgs e)
         {
             if (txtUserName.Text != null && txtPin.Password != null)
@@ -59,23 +58,12 @@ namespace sisgesoriadao
                 }
             }
         }
-
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
             winLogin winLogin = new winLogin();
             winLogin.Show();
             this.Close();
         }
-
-        private void TextBoxUppercase(object sender, KeyEventArgs e)
-        {
-            TextBox currentContainer = ((TextBox)sender);
-            int caretPosition = currentContainer.SelectionStart;
-
-            currentContainer.Text = currentContainer.Text.ToUpper();
-            currentContainer.SelectionStart = caretPosition++;
-        }
-
         private void btnConfirmPassword_Click(object sender, RoutedEventArgs e)
         {
             if (txtPassword.Password != txtRePassword.Password)
@@ -102,5 +90,13 @@ namespace sisgesoriadao
                 }
             }
         }
+        private void TextBoxUppercase(object sender, KeyEventArgs e)
+        {
+            TextBox currentContainer = ((TextBox)sender);
+            int caretPosition = currentContainer.SelectionStart;
+
+            currentContainer.Text = currentContainer.Text.ToUpper();
+            currentContainer.SelectionStart = caretPosition++;
+        }        
     }
 }

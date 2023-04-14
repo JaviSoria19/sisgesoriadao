@@ -27,11 +27,7 @@ namespace sisgesoriadao
         public winLogin_Sucursal()
         {
             InitializeComponent();
-        }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            cbxGetSucursalFromDatabase();
-        }
+        }        
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             Session.Sucursal_IdSucursal = (cbxSucursal.SelectedItem as ComboboxItem).Valor;
@@ -59,6 +55,10 @@ namespace sisgesoriadao
             winLogin winLogin = new winLogin();
             winLogin.Show();
             this.Close();
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            cbxGetSucursalFromDatabase();
         }
         void cbxGetSucursalFromDatabase()
         {

@@ -25,6 +25,7 @@ namespace sisgesoriadao
     {
         CategoriaImpl implCategoria;
         ProductoImpl implProducto;
+        CondicionImpl implCondicion;
         List<Producto> listaproductos = new List<Producto>();
         int contador=1;
         string codigoSublote;
@@ -33,99 +34,7 @@ namespace sisgesoriadao
         public winProducto_Insert()
         {
             InitializeComponent();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            txtBlockWelcome.Text = Session.NombreUsuario;
-            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
-            cbxGetCategoriaFromDatabase();
-            cbxGetLoteFromDatabase();
-            GetCodigoSubLoteFromDatabase();
-            GetIDSubLoteFromDatabase();
-            txtSucursal.Text = "Sucursal: " + Session.Sucursal_NombreSucursal;
-            txtObservaciones.Text = "-";
-        }
-        private void dgvProductos_Loaded(object sender, RoutedEventArgs e)
-        {
-            DataGridTextColumn columna1 = new DataGridTextColumn
-            {
-                Header = "ID SUCURSAL",
-                Binding = new Binding("IdSucursal")
-            };
-            DataGridTextColumn columna2 = new DataGridTextColumn
-            {
-                Header = "ID CATEGORIA",
-                Binding = new Binding("IdCategoria")
-            };
-            DataGridTextColumn columna3 = new DataGridTextColumn
-            {
-                Header = "ID SUBLOTE",
-                Binding = new Binding("IdSublote")
-            };
-            DataGridTextColumn columna4 = new DataGridTextColumn
-            {
-                Header = "ID USUARIO",
-                Binding = new Binding("IdUsuario")
-            };
-            DataGridTextColumn columna5 = new DataGridTextColumn
-            {
-                Header = "Codigo",
-                Binding = new Binding("CodigoSublote")
-            };
-            DataGridTextColumn columna6 = new DataGridTextColumn
-            {
-                Header = "Producto",
-                Binding = new Binding("NombreProducto")
-            };
-            DataGridTextColumn columna7 = new DataGridTextColumn
-            {
-                Header = "SN/IMEI",
-                Binding = new Binding("Identificador")
-            };
-            DataGridTextColumn columna8 = new DataGridTextColumn
-            {
-                Header = "C. $.",
-                Binding = new Binding("CostoUSD")
-            };
-            DataGridTextColumn columna9 = new DataGridTextColumn
-            {
-                Header = "C. Bs.",
-                Binding = new Binding("CostoBOB")
-            };
-            DataGridTextColumn columna10 = new DataGridTextColumn
-            {
-                Header = "P. $.",
-                Binding = new Binding("PrecioVentaUSD")
-            };
-            DataGridTextColumn columna11 = new DataGridTextColumn
-            {
-                Header = "P. Bs.",
-                Binding = new Binding("PrecioVentaBOB")
-            };
-            DataGridTextColumn columna12 = new DataGridTextColumn
-            {
-                Header = "Obs.",
-                Binding = new Binding("Observaciones")
-            };
-            dgvProductos.Columns.Add(columna1);
-            dgvProductos.Columns.Add(columna2);
-            dgvProductos.Columns.Add(columna3);
-            dgvProductos.Columns.Add(columna4);
-            dgvProductos.Columns.Add(columna5);
-            dgvProductos.Columns.Add(columna6);
-            dgvProductos.Columns.Add(columna7);
-            dgvProductos.Columns.Add(columna8);
-            dgvProductos.Columns.Add(columna9);
-            dgvProductos.Columns.Add(columna10);
-            dgvProductos.Columns.Add(columna11);
-            dgvProductos.Columns.Add(columna12);
-
-            dgvProductos.Columns[0].Visibility = Visibility.Collapsed;
-            dgvProductos.Columns[1].Visibility = Visibility.Collapsed;
-            dgvProductos.Columns[2].Visibility = Visibility.Collapsed;
-            dgvProductos.Columns[3].Visibility = Visibility.Collapsed;
-        }
+        }        
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -152,18 +61,127 @@ namespace sisgesoriadao
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            implProducto = new ProductoImpl();
-            string mensaje = implProducto.InsertTransaction(listaproductos, (cbxLote.SelectedItem as ComboboxItem).Valor);
-            if (mensaje == "LOTE REGISTRADO EXITOSAMENTE.")
+            if (listaproductos.Count > 0)
             {
-                MessageBox.Show(mensaje + "\n IMPRIMIENDO LAS ETIQUETAS...");
-                //insertar código para imprimir etiquetas DYMO
-                this.Close();
+                if (MessageBox.Show("¿Está seguro de haber ingresado todos los datos correctamente? \n Cantidad de productos ingresados al lote: " + listaproductos.Count + ". \n Presione SI para continuar.", "Confirmar lote", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    implProducto = new ProductoImpl();
+                    string mensaje = implProducto.InsertTransaction(listaproductos, (cbxLote.SelectedItem as ComboboxItem).Valor);
+                    if (mensaje == "LOTE REGISTRADO EXITOSAMENTE.")
+                    {
+                        MessageBox.Show(mensaje + "\n IMPRIMIENDO LAS ETIQUETAS...");
+                        //insertar código para imprimir etiquetas DYMO
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show(mensaje);
+                    }
+                }                
             }
             else
             {
-                MessageBox.Show(mensaje);
+                MessageBox.Show("¡Debe ingresar como mínimo 1 producto al lote!");
             }
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtBlockWelcome.Text = Session.NombreUsuario;
+            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
+            cbxGetCategoriaFromDatabase();
+            cbxGetLoteFromDatabase();
+            cbxGetCondicionFromDatabase();
+            GetCodigoSubLoteFromDatabase();
+            GetIDSubLoteFromDatabase();
+            txtSucursal.Text = "Sucursal: " + Session.Sucursal_NombreSucursal;
+            txtObservaciones.Text = "-";
+        }
+        private void dgvProductos_Loaded(object sender, RoutedEventArgs e)
+        {
+            DataGridTextColumn columna1 = new DataGridTextColumn
+            {
+                Header = "ID SUCURSAL",
+                Binding = new Binding("IdSucursal")
+            };
+            DataGridTextColumn columna2 = new DataGridTextColumn
+            {
+                Header = "ID CATEGORIA",
+                Binding = new Binding("IdCategoria")
+            };
+            DataGridTextColumn columna3 = new DataGridTextColumn
+            {
+                Header = "ID SUBLOTE",
+                Binding = new Binding("IdSublote")
+            };
+            DataGridTextColumn columna4 = new DataGridTextColumn
+            {
+                Header = "ID CONDICION",
+                Binding = new Binding("IdCondicion")
+            };
+            DataGridTextColumn columna5 = new DataGridTextColumn
+            {
+                Header = "ID USUARIO",
+                Binding = new Binding("IdUsuario")
+            };
+            DataGridTextColumn columna6 = new DataGridTextColumn
+            {
+                Header = "Codigo",
+                Binding = new Binding("CodigoSublote")
+            };
+            DataGridTextColumn columna7 = new DataGridTextColumn
+            {
+                Header = "Producto",
+                Binding = new Binding("NombreProducto")
+            };
+            DataGridTextColumn columna8 = new DataGridTextColumn
+            {
+                Header = "SN/IMEI",
+                Binding = new Binding("Identificador")
+            };
+            DataGridTextColumn columna9 = new DataGridTextColumn
+            {
+                Header = "C. $.",
+                Binding = new Binding("CostoUSD")
+            };
+            DataGridTextColumn columna10 = new DataGridTextColumn
+            {
+                Header = "C. Bs.",
+                Binding = new Binding("CostoBOB")
+            };
+            DataGridTextColumn columna11 = new DataGridTextColumn
+            {
+                Header = "P. $.",
+                Binding = new Binding("PrecioVentaUSD")
+            };
+            DataGridTextColumn columna12 = new DataGridTextColumn
+            {
+                Header = "P. Bs.",
+                Binding = new Binding("PrecioVentaBOB")
+            };
+            DataGridTextColumn columna13 = new DataGridTextColumn
+            {
+                Header = "Obs.",
+                Binding = new Binding("Observaciones")
+            };
+            dgvProductos.Columns.Add(columna1);
+            dgvProductos.Columns.Add(columna2);
+            dgvProductos.Columns.Add(columna3);
+            dgvProductos.Columns.Add(columna4);
+            dgvProductos.Columns.Add(columna5);
+            dgvProductos.Columns.Add(columna6);
+            dgvProductos.Columns.Add(columna7);
+            dgvProductos.Columns.Add(columna8);
+            dgvProductos.Columns.Add(columna9);
+            dgvProductos.Columns.Add(columna10);
+            dgvProductos.Columns.Add(columna11);
+            dgvProductos.Columns.Add(columna12);
+            dgvProductos.Columns.Add(columna13);
+
+            dgvProductos.Columns[0].Visibility = Visibility.Collapsed;
+            dgvProductos.Columns[1].Visibility = Visibility.Collapsed;
+            dgvProductos.Columns[2].Visibility = Visibility.Collapsed;
+            dgvProductos.Columns[3].Visibility = Visibility.Collapsed;
+            dgvProductos.Columns[4].Visibility = Visibility.Collapsed;
         }
         private void cbxLote_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -238,6 +256,7 @@ namespace sisgesoriadao
                         IdSucursal = Session.Sucursal_IdSucursal,
                         IdCategoria = byte.Parse((cbxCategoria.SelectedItem as ComboboxItem).Valor.ToString()),
                         IdSublote = idSublote,
+                        IdCondicion = byte.Parse((cbxCondicion.SelectedItem as ComboboxItem).Valor.ToString()),
                         IdUsuario = Session.IdUsuario,
                         CodigoSublote = txtCodigoSublote.Text,
                         NombreProducto = txtNombreProducto.Text,
@@ -253,6 +272,7 @@ namespace sisgesoriadao
                         Session.Sucursal_IdSucursal,
                         byte.Parse((cbxCategoria.SelectedItem as ComboboxItem).Valor.ToString()),
                         idSublote,
+                        byte.Parse((cbxCondicion.SelectedItem as ComboboxItem).Valor.ToString()),
                         Session.IdUsuario,
                         txtCodigoSublote.Text,
                         txtNombreProducto.Text,
@@ -284,24 +304,30 @@ namespace sisgesoriadao
             {
                 MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
             }
-        }
-        public class ComboboxItem
+        }        
+        void cbxGetCondicionFromDatabase()
         {
-            public string Texto { get; set; }
-            public int Valor { get; set; }
-
-            public override string ToString()
+            try
             {
-                return Texto;
+                List<ComboboxItem> listcomboboxCondicion = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implCondicion = new CondicionImpl();
+                dataTable = implCondicion.SelectForComboBox();
+                listcomboboxCondicion = (from DataRow dr in dataTable.Rows
+                                         select new ComboboxItem()
+                                         {
+                                             Valor = Convert.ToByte(dr["idCondicion"]),
+                                             Texto = dr["nombreCondicion"].ToString()
+                                         }).ToList();
+                foreach (var item in listcomboboxCondicion)
+                {
+                    cbxCondicion.Items.Add(item);
+                }
+                cbxCondicion.SelectedIndex = 0;
             }
-            public ComboboxItem(string texto, int valor)
+            catch (Exception ex)
             {
-                Texto = texto;
-                Valor = valor;
-            }
-            public ComboboxItem()
-            {
-
+                MessageBox.Show(ex.Message);
             }
         }
         void cbxGetCategoriaFromDatabase()
@@ -386,5 +412,24 @@ namespace sisgesoriadao
             return !_regex.IsMatch(text);
         }
         //------------------------------------------------------><---------------------------------------------
+        public class ComboboxItem
+        {
+            public string Texto { get; set; }
+            public int Valor { get; set; }
+
+            public override string ToString()
+            {
+                return Texto;
+            }
+            public ComboboxItem(string texto, int valor)
+            {
+                Texto = texto;
+                Valor = valor;
+            }
+            public ComboboxItem()
+            {
+
+            }
+        }
     }
 }

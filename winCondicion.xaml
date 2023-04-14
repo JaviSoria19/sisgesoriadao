@@ -1,4 +1,4 @@
-﻿<Window x:Class="sisgesoriadao.winProducto_Lote"
+﻿<Window x:Class="sisgesoriadao.winCondicion"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
      TextElement.FontWeight="Regular"
@@ -13,7 +13,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
-        Title="Sistema de Ventas - Lotes" Height="720" Width="1280"
+        Title="Sistema de Ventas - Categorias" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
     <Grid>
         <StackPanel Orientation="Vertical">
@@ -24,19 +24,20 @@
                 <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
                 <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
-                <materialDesign:PackIcon Kind="LayersTriple" Width="25" Height="25" VerticalAlignment="Center"/>
-                <TextBlock Text="LOTES" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="DotsSquare" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="CONDICIONES DE PRODUCTO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                <Label Content="CÓDIGO DE LOTE:"/>
+                <Label Content="CATEGORIA:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <TextBox x:Name="txtCodigoLote" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False" KeyDown="txtCodigoLote_KeyDown"/>
+                <TextBox x:Name="txtCondicion" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" KeyUp="TextBoxUppercase" MaxLength="30" IsEnabled="False"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Button x:Name="btnInsert" Content="INSERTAR" Margin="0,0,5,0" Click="btnInsert_Click"/>
                 <Button x:Name="btnUpdate" Content="MODIFICAR" Margin="5" Click="btnUpdate_Click"/>
+                <Button x:Name="btnDelete" Content="ELIMINAR" Margin="5" Click="btnDelete_Click"/>
                 <Button x:Name="btnSave" Content="GUARDAR" Margin="5" IsEnabled="False" Click="btnSave_Click"/>
                 <Button x:Name="btnCancel" Content="CANCELAR" Margin="5" IsEnabled="False" Click="btnCancel_Click"/>
             </StackPanel>

@@ -10,22 +10,22 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;//ADO.NET
 using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
+
 namespace sisgesoriadao
 {
     /// <summary>
-    /// Lógica de interacción para MainWindow.xaml
+    /// Lógica de interacción para winCondicion.xaml
     /// </summary>
-    public partial class winEmpleado : Window
+    public partial class winCondicion : Window
     {
-        EmpleadoImpl implEmpleado;
-        Empleado empleado;
+        CondicionImpl implCondicion;
+        Condicion condicion;
         byte operacion;
-        public winEmpleado()
+        public winCondicion()
         {
             InitializeComponent();
         }
@@ -37,7 +37,7 @@ namespace sisgesoriadao
         }
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            if (empleado != null)
+            if (condicion != null)
             {
                 labelClear(lblInfo);
                 EnabledButtons();
@@ -46,20 +46,20 @@ namespace sisgesoriadao
             else
             {
                 labelWarning(lblInfo);
-                lblInfo.Content = "¡PARA MODIFICAR UN EMPLEADO DEBE SELECCIONAR UN REGISTRO!";
+                lblInfo.Content = "¡PARA MODIFICAR UNA CATEGORIA DEBE SELECCIONAR UN REGISTRO!";
             }
         }
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            if (empleado!=null)
+            if (condicion != null)
             {
                 labelClear(lblInfo);
-                if (MessageBox.Show("Está realmente segur@ de eliminar el registro?","Eliminar",MessageBoxButton.YesNo,MessageBoxImage.Warning)==MessageBoxResult.Yes)
+                if (MessageBox.Show("Está realmente segur@ de eliminar el registro?", "Eliminar", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
                     try
                     {
-                        implEmpleado = new EmpleadoImpl();
-                        int n = implEmpleado.Delete(empleado);
+                        implCondicion = new CondicionImpl();
+                        int n = implCondicion.Delete(condicion);
                         if (n > 0)
                         {
                             labelSuccess(lblInfo);
@@ -77,7 +77,7 @@ namespace sisgesoriadao
             else
             {
                 labelWarning(lblInfo);
-                lblInfo.Content = "¡PARA ELIMINAR UN EMPLEADO DEBE SELECCIONAR UN REGISTRO!";
+                lblInfo.Content = "¡PARA ELIMINAR UNA CATEGORIA DEBE SELECCIONAR UN REGISTRO!";
             }
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -86,16 +86,13 @@ namespace sisgesoriadao
             {
                 //INSERT
                 case 1:
-                    //VALIDACIÓN DE DATOS.
-                    if (string.IsNullOrEmpty(txtNombre.Text)!=true && string.IsNullOrEmpty(txtPrimerApellido.Text) != true &&
-                        string.IsNullOrEmpty(txtNumeroCelular.Text) != true && string.IsNullOrEmpty(txtNumeroCI.Text) != true
-                        )
+                    if (string.IsNullOrEmpty(txtCondicion.Text) != true)
                     {
-                        empleado = new Empleado(txtNombre.Text.Trim(), txtPrimerApellido.Text.Trim(), txtSegundoApellido.Text.Trim(), txtNumeroCelular.Text.Trim(), txtNumeroCI.Text.Trim());
-                        implEmpleado = new EmpleadoImpl();
+                        condicion = new Condicion(Session.IdUsuario, txtCondicion.Text.Trim());
+                        implCondicion = new CondicionImpl();
                         try
                         {
-                            int n = implEmpleado.Insert(empleado);
+                            int n = implCondicion.Insert(condicion);
                             if (n > 0)
                             {
                                 labelSuccess(lblInfo);
@@ -116,20 +113,14 @@ namespace sisgesoriadao
                     break;
                 //UPDATE
                 case 2:
-                    //VALIDACIÓN DE DATOS.
-                    if (string.IsNullOrEmpty(txtNombre.Text) != true && string.IsNullOrEmpty(txtPrimerApellido.Text) != true &&
-                        string.IsNullOrEmpty(txtNumeroCelular.Text) != true && string.IsNullOrEmpty(txtNumeroCI.Text) != true
-                        )
+                    if (string.IsNullOrEmpty(txtCondicion.Text) != true)
                     {
-                        empleado.Nombres = txtNombre.Text.Trim();
-                        empleado.PrimerApellido = txtPrimerApellido.Text.Trim();
-                        empleado.SegundoApellido = txtSegundoApellido.Text.Trim();
-                        empleado.NumeroCelular = txtNumeroCelular.Text.Trim();
-                        empleado.NumeroCI = txtNumeroCI.Text.Trim();
-                        implEmpleado = new EmpleadoImpl();
+                        condicion.NombreCondicion = txtCondicion.Text.Trim();
+                        condicion.IdUsuario = Session.IdUsuario;
+                        implCondicion = new CondicionImpl();
                         try
                         {
-                            int n = implEmpleado.Update(empleado);
+                            int n = implCondicion.Update(condicion);
                             if (n > 0)
                             {
                                 labelSuccess(lblInfo);
@@ -147,7 +138,6 @@ namespace sisgesoriadao
                     {
                         MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
                     }
-
                     break;
                 default:
                     break;
@@ -159,7 +149,7 @@ namespace sisgesoriadao
         }
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            if (txtBuscar.Text==null || txtBuscar.Text=="")
+            if (txtBuscar.Text == null || txtBuscar.Text == "")
             {
                 Select();
             }
@@ -193,18 +183,13 @@ namespace sisgesoriadao
                 {
                     DataRowView d = (DataRowView)dgvDatos.SelectedItem;
                     byte id = byte.Parse(d.Row.ItemArray[0].ToString());
-                    implEmpleado = new EmpleadoImpl();
-                    empleado = implEmpleado.Get(id);
-                    if (empleado != null)
+                    implCondicion = new CondicionImpl();
+                    condicion = implCondicion.Get(id);
+                    if (condicion != null)
                     {
-                        txtNombre.Text = empleado.Nombres.Trim();
-                        txtPrimerApellido.Text = empleado.PrimerApellido.Trim();
-                        txtSegundoApellido.Text = empleado.SegundoApellido.Trim();
-                        txtNumeroCelular.Text = empleado.NumeroCelular.Trim();
-                        txtNumeroCI.Text = empleado.NumeroCI.Trim();
-
+                        txtCondicion.Text = condicion.NombreCondicion.Trim();
                         labelSuccess(lblInfo);
-                        lblInfo.Content = "EMPLEADO SELECCIONADO.";
+                        lblInfo.Content = "CATEGORIA SELECCIONADA.";
                     }
                 }
                 catch (Exception ex)
@@ -228,7 +213,7 @@ namespace sisgesoriadao
                 }
             }
         }
-        public void TextBoxUppercase(object sender, KeyEventArgs e)
+        private void TextBoxUppercase(object sender, KeyEventArgs e)
         {
             TextBox currentContainer = ((TextBox)sender);
             int caretPosition = currentContainer.SelectionStart;
@@ -240,11 +225,11 @@ namespace sisgesoriadao
         {
             try
             {
-                implEmpleado = new EmpleadoImpl();
+                implCondicion = new CondicionImpl();
                 dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implEmpleado.Select().DefaultView;
+                dgvDatos.ItemsSource = implCondicion.Select().DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implEmpleado.Select().Rows.Count;
+                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implCondicion.Select().Rows.Count;
             }
             catch (Exception ex)
             {
@@ -256,9 +241,9 @@ namespace sisgesoriadao
             try
             {
                 dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implEmpleado.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
+                dgvDatos.ItemsSource = implCondicion.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implEmpleado.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implCondicion.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
             }
             catch (Exception ex)
             {
@@ -274,12 +259,8 @@ namespace sisgesoriadao
             btnSave.IsEnabled = true;
             btnCancel.IsEnabled = true;
 
-            txtNombre.IsEnabled = true;
-            txtNombre.Focus();
-            txtNumeroCelular.IsEnabled = true;
-            txtNumeroCI.IsEnabled = true;
-            txtPrimerApellido.IsEnabled = true;
-            txtSegundoApellido.IsEnabled = true;
+            txtCondicion.IsEnabled = true;
+            txtCondicion.Focus();
         }
         void DisabledButtons()
         {
@@ -290,11 +271,7 @@ namespace sisgesoriadao
             btnSave.IsEnabled = false;
             btnCancel.IsEnabled = false;
 
-            txtNombre.IsEnabled = false;
-            txtNumeroCelular.IsEnabled = false;
-            txtNumeroCI.IsEnabled = false;
-            txtPrimerApellido.IsEnabled = false;
-            txtSegundoApellido.IsEnabled = false;
+            txtCondicion.IsEnabled = false;
         }
         public void labelClear(Label label)
         {
@@ -316,6 +293,6 @@ namespace sisgesoriadao
         {
             label.Foreground = new SolidColorBrush(Colors.Black);
             label.Background = new SolidColorBrush(Colors.Red);
-        }        
+        }
     }
 }

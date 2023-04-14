@@ -12,6 +12,7 @@ namespace sisgesoriadao.Model
         public byte IdSucursal { get; set; }
         public byte IdCategoria { get; set; }
         public int IdSublote { get; set; }
+        public byte IdCondicion { get; set; }
         public byte IdUsuario { get; set; }
         public string CodigoSublote { get; set; }
         public string NombreProducto { get; set; }
@@ -44,13 +45,14 @@ namespace sisgesoriadao.Model
         /// <param name="estado"></param>
         /// <param name="fechaRegistro"></param>
         /// <param name="fechaActualizacion"></param>
-        public Producto(int idProducto, byte idSucursal, byte idCategoria, int idSublote, byte idUsuario, string codigoSublote, string nombreProducto, string identificador, double costoUSD, double costoBOB, double precioVentaUSD, double precioVentaBOB, string observaciones, byte estado, DateTime fechaRegistro, string fechaActualizacion)
+        public Producto(int idProducto, byte idSucursal, byte idCategoria, int idSublote, byte idCondicion, byte idUsuario, string codigoSublote, string nombreProducto, string identificador, double costoUSD, double costoBOB, double precioVentaUSD, double precioVentaBOB, string observaciones, byte estado, DateTime fechaRegistro, string fechaActualizacion)
             : base(estado, fechaRegistro, fechaActualizacion)
         {
             IdProducto = idProducto;
             IdSucursal = idSucursal;
             IdCategoria = idCategoria;
             IdSublote = idSublote;
+            IdCondicion = idCondicion;
             IdUsuario = idUsuario;
             CodigoSublote = codigoSublote;
             NombreProducto = nombreProducto;
@@ -76,11 +78,12 @@ namespace sisgesoriadao.Model
         /// <param name="precioVentaUSD"></param>
         /// <param name="precioVentaBOB"></param>
         /// <param name="observaciones"></param>
-        public Producto(byte idSucursal, byte idCategoria, int idSublote, byte idUsuario, string codigoSublote, string nombreProducto, string identificador, double costoUSD, double costoBOB, double precioVentaUSD, double precioVentaBOB, string observaciones)
+        public Producto(byte idSucursal, byte idCategoria, int idSublote, byte idCondicion, byte idUsuario, string codigoSublote, string nombreProducto, string identificador, double costoUSD, double costoBOB, double precioVentaUSD, double precioVentaBOB, string observaciones)
         {
             IdSucursal = idSucursal;
             IdCategoria = idCategoria;
             IdSublote = idSublote;
+            IdCondicion = idCondicion;
             IdUsuario = idUsuario;
             CodigoSublote = codigoSublote;
             NombreProducto = nombreProducto;

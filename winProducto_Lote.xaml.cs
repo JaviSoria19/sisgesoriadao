@@ -27,11 +27,7 @@ namespace sisgesoriadao
         public winProducto_Lote()
         {
             InitializeComponent();
-        }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            txtBlockWelcome.Text = Session.NombreUsuario;
-        }
+        }        
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -58,67 +54,8 @@ namespace sisgesoriadao
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            switch (operacion)
-            {
-                //INSERT
-                case 1:
-                    if (string.IsNullOrEmpty(txtCodigoLote.Text) != true)
-                    {
-                        lote = new Lote(Session.IdUsuario, txtCodigoLote.Text.Trim());
-                        implProducto = new ProductoImpl();
-                        try
-                        {
-                            int n = implProducto.InsertBatch(lote);
-                            if (n > 0)
-                            {
-                                labelSuccess(lblInfo);
-                                lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
-                                Select();
-                                DisabledButtons();
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
-                    }
-                    break;
-                //UPDATE
-                case 2:
-                    if (string.IsNullOrEmpty(txtCodigoLote.Text) != true)
-                    {
-                        lote.IdUsuario = Session.IdUsuario;
-                        lote.CodigoLote = txtCodigoLote.Text.Trim();                        
-                        implProducto = new ProductoImpl();
-                        try
-                        {
-                            int n = implProducto.UpdateBatch(lote);
-                            if (n > 0)
-                            {
-                                labelSuccess(lblInfo);
-                                lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
-                                Select();
-                                DisabledButtons();
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
+            OperacionCRUD();
+        }        
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             DisabledButtons();
@@ -134,6 +71,10 @@ namespace sisgesoriadao
                 SelectLike();
             }
         }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtBlockWelcome.Text = Session.NombreUsuario;
+        }
         private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
         {
             Select();
@@ -143,36 +84,6 @@ namespace sisgesoriadao
             dtpFechaFin.SelectedDate = DateTime.Today;
             dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
         }
-        private void Select()
-        {
-            try
-            {
-                implProducto = new ProductoImpl();
-                dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implProducto.SelectBatch().DefaultView;
-                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implProducto.SelectBatch().Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        private void SelectLike()
-        {
-            try
-            {
-                dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implProducto.SelectLikeBatch(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
-                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeBatch(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
         private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)
@@ -219,6 +130,106 @@ namespace sisgesoriadao
                 }
             }
         }
+        private void txtCodigoLote_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                OperacionCRUD();
+            }
+        }
+        void OperacionCRUD()
+        {
+            switch (operacion)
+            {
+                //INSERT
+                case 1:
+                    if (string.IsNullOrEmpty(txtCodigoLote.Text) != true)
+                    {
+                        lote = new Lote(Session.IdUsuario, txtCodigoLote.Text.Trim());
+                        implProducto = new ProductoImpl();
+                        try
+                        {
+                            int n = implProducto.InsertBatch(lote);
+                            if (n > 0)
+                            {
+                                labelSuccess(lblInfo);
+                                lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
+                                Select();
+                                DisabledButtons();
+                                lote = null;
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
+                    }
+                    break;
+                //UPDATE
+                case 2:
+                    if (string.IsNullOrEmpty(txtCodigoLote.Text) != true)
+                    {
+                        lote.IdUsuario = Session.IdUsuario;
+                        lote.CodigoLote = txtCodigoLote.Text.Trim();
+                        implProducto = new ProductoImpl();
+                        try
+                        {
+                            int n = implProducto.UpdateBatch(lote);
+                            if (n > 0)
+                            {
+                                labelSuccess(lblInfo);
+                                lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
+                                Select();
+                                DisabledButtons();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        private void Select()
+        {
+            try
+            {
+                implProducto = new ProductoImpl();
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implProducto.SelectBatch().DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implProducto.SelectBatch().Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void SelectLike()
+        {
+            try
+            {
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implProducto.SelectLikeBatch(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeBatch(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }        
         void EnabledButtons()
         {
             btnInsert.IsEnabled = false;

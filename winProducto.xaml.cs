@@ -30,71 +30,11 @@ namespace sisgesoriadao
         //Implementaciones para obtener ID's y Nombres para los Combobox
         SucursalImpl implSucursal;
         CategoriaImpl implCategoria;
+        CondicionImpl implCondicion;
         public winProducto()
         {
             InitializeComponent();
-        }
-        private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
-        {
-            Select();
-        }
-        private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
-        {
-            dtpFechaFin.SelectedDate = DateTime.Today;
-            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
-            dtpFechaFin_Vendidos.SelectedDate = DateTime.Today;
-            dtpFechaInicio_Vendidos.SelectedDate = new DateTime(2023, 01, 01);
-        }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            txtBlockWelcome.Text = Session.NombreUsuario;
-            cbxGetCategoriaFromDatabase();
-            cbxSelectSucursalFromDatabase();
-        }
-        private void Select()
-        {
-            try
-            {
-                implProducto = new ProductoImpl();
-                dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implProducto.Select().DefaultView;
-                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implProducto.Select().Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        private void SelectLike()
-        {
-            try
-            {
-                dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implProducto.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
-                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        private void SelectSold()
-        {
-            try
-            {
-                implProducto = new ProductoImpl();
-                dgvDatos_Vendidos.ItemsSource = null;
-                dgvDatos_Vendidos.ItemsSource = implProducto.SelectSoldProducts().DefaultView;
-                dgvDatos_Vendidos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows_Vendidos.Content = "NÚMERO DE REGISTROS: " + implProducto.SelectSoldProducts().Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
+        }        
         private void btnInsert_Click(object sender, RoutedEventArgs e)
         {
             winProducto_Insert winProducto_Insert = new winProducto_Insert();
@@ -154,34 +94,36 @@ namespace sisgesoriadao
             {
                 //UPDATE
                 case 2:
-                    producto.IdSucursal = byte.Parse((cbxSucursal.SelectedItem as ComboboxItem).Valor.ToString());
-                    producto.IdCategoria = byte.Parse((cbxCategoria.SelectedItem as ComboboxItem).Valor.ToString());
-                    //
-                    producto.IdSublote = 1;
-                    //
-                    producto.IdUsuario = Session.IdUsuario;
-                    producto.NombreProducto = txtNombreProducto.Text.Trim();
-                    producto.Identificador = txtIdentificador.Text.Trim();
-                    producto.CostoUSD = double.Parse(txtCostoUSD.Text.Trim());
-                    producto.CostoBOB = double.Parse(txtCostoBOB.Text.Trim());
-                    producto.PrecioVentaUSD = double.Parse(txtPrecioUSD.Text.Trim());
-                    producto.PrecioVentaBOB = double.Parse(txtPrecioBOB.Text.Trim());
-                    implProducto = new ProductoImpl();
-                    try
+                    if (MessageBox.Show("Está realmente segur@ de modificar el registro seleccionado?", "Confirmar Modificación", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
-                        int n = implProducto.Update(producto);
-                        if (n > 0)
+                        producto.IdSucursal = byte.Parse((cbxSucursal.SelectedItem as ComboboxItem).Valor.ToString());
+                        producto.IdCategoria = byte.Parse((cbxCategoria.SelectedItem as ComboboxItem).Valor.ToString());
+                        producto.IdCondicion = byte.Parse((cbxCondicion.SelectedItem as ComboboxItem).Valor.ToString());
+                        producto.IdUsuario = Session.IdUsuario;
+                        producto.NombreProducto = txtNombreProducto.Text.Trim();
+                        producto.Identificador = txtIdentificador.Text.Trim();
+                        producto.CostoUSD = double.Parse(txtCostoUSD.Text.Trim());
+                        producto.CostoBOB = double.Parse(txtCostoBOB.Text.Trim());
+                        producto.PrecioVentaUSD = double.Parse(txtPrecioUSD.Text.Trim());
+                        producto.PrecioVentaBOB = double.Parse(txtPrecioBOB.Text.Trim());
+                        producto.Observaciones = txtObservaciones.Text.Trim();
+                        implProducto = new ProductoImpl();
+                        try
                         {
-                            labelSuccess(lblInfo);
-                            lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
-                            Select();
-                            DisabledButtons();
+                            int n = implProducto.Update(producto);
+                            if (n > 0)
+                            {
+                                labelSuccess(lblInfo);
+                                lblInfo.Content = "REGISTRO MODIFICADO CON ÉXITO.";
+                                Select();
+                                DisabledButtons();
+                            }
                         }
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
-                    }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                        }
+                    }                    
                     break;
                 default:
                     break;
@@ -208,43 +150,48 @@ namespace sisgesoriadao
         {
             this.Close();
         }
-        void EnabledButtons()
+        private void btnSearch_Vendidos_Click(object sender, RoutedEventArgs e)
         {
-            btnInsert.IsEnabled = false;
-            btnUpdate.IsEnabled = false;
-            btnDelete.IsEnabled = false;
-
-            btnSave.IsEnabled = true;
-            btnCancel.IsEnabled = true;
-
-            txtNombreProducto.IsEnabled = true;
-            txtNombreProducto.Focus();
-            txtIdentificador.IsEnabled = true;
-            txtCostoUSD.IsEnabled = true;
-            txtCostoBOB.IsEnabled = true;
-            txtPrecioUSD.IsEnabled = true;
-            txtPrecioBOB.IsEnabled = true;
-
-            cbxSucursal.IsEnabled = true;
-            cbxCategoria.IsEnabled = true;
+            if (txtBuscar_Vendidos.Text == null || txtBuscar_Vendidos.Text == "")
+            {
+                SelectSold();
+            }
+            else
+            {
+                try
+                {
+                    dgvDatos_Vendidos.ItemsSource = null;
+                    dgvDatos_Vendidos.ItemsSource = implProducto.SelectLikeSoldProducts(txtBuscar_Vendidos.Text.Trim(), dtpFechaInicio_Vendidos.SelectedDate.Value.Date, dtpFechaFin_Vendidos.SelectedDate.Value.Date).DefaultView;
+                    dgvDatos_Vendidos.Columns[0].Visibility = Visibility.Collapsed;
+                    lblDataGridRows_Vendidos.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeSoldProducts(txtBuscar_Vendidos.Text.Trim(), dtpFechaInicio_Vendidos.SelectedDate.Value.Date, dtpFechaFin_Vendidos.SelectedDate.Value.Date).Rows.Count;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
-        void DisabledButtons()
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            btnInsert.IsEnabled = true;
-            btnUpdate.IsEnabled = true;
-            btnDelete.IsEnabled = true;
-
-            btnSave.IsEnabled = false;
-            btnCancel.IsEnabled = false;
-
-            txtNombreProducto.IsEnabled = false;
-            txtCostoUSD.IsEnabled = false;
-            txtCostoBOB.IsEnabled = false;
-            txtPrecioUSD.IsEnabled = false;
-            txtPrecioBOB.IsEnabled = false;
-
-            cbxSucursal.IsEnabled = false;
-            cbxCategoria.IsEnabled = false;
+            txtBlockWelcome.Text = Session.NombreUsuario;
+            cbxGetCategoriaFromDatabase();
+            cbxSelectSucursalFromDatabase();
+            cbxGetCondicionFromDatabase();
+        }
+        private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
+        {
+            Select();
+        }
+        private void dgvDatos_Vendidos_Loaded(object sender, RoutedEventArgs e)
+        {
+            SelectSold();
+        }
+        private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
+        {
+            dtpFechaFin.SelectedDate = DateTime.Today;
+            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
+            dtpFechaFin_Vendidos.SelectedDate = DateTime.Today;
+            dtpFechaInicio_Vendidos.SelectedDate = new DateTime(2023, 01, 01);
         }
         private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -260,7 +207,11 @@ namespace sisgesoriadao
                     {
                         txtNombreProducto.Text = producto.NombreProducto.Trim();
                         txtIdentificador.Text = producto.Identificador.Trim();
-
+                        txtCostoUSD.Text = producto.CostoUSD.ToString();
+                        txtCostoBOB.Text = producto.CostoBOB.ToString();
+                        txtPrecioUSD.Text = producto.PrecioVentaUSD.ToString();
+                        txtPrecioBOB.Text = producto.PrecioVentaBOB.ToString();
+                        txtObservaciones.Text = producto.Observaciones.ToString();
                         for (int i = 0; i < cbxSucursal.Items.Count; i++)
                         {
                             cbxSucursal.SelectedIndex = i;
@@ -277,16 +228,14 @@ namespace sisgesoriadao
                                 break;
                             }
                         }
-                        /*
-                        if (producto.Moneda == "BS.")
+                        for (int i = 0; i < cbxCondicion.Items.Count; i++)
                         {
-                            cbxMoneda.SelectedIndex = 0;
+                            cbxCondicion.SelectedIndex = i;
+                            if ((cbxCondicion.SelectedItem as ComboboxItem).Valor == producto.IdCondicion)
+                            {
+                                break;
+                            }
                         }
-                        else
-                        {
-                            cbxMoneda.SelectedIndex = 1;
-                        }
-                        */
                         labelSuccess(lblInfo);
                         lblInfo.Content = "PRODUCTO SELECCIONADO.";
                     }
@@ -310,7 +259,207 @@ namespace sisgesoriadao
                 {
                     SelectLike();
                 }
-            }            
+            }
+        }
+        private void txtCostoUSD_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtCostoUSD.Text) != true)
+            {
+                double costoBOB = Math.Round(double.Parse(txtCostoUSD.Text) * Session.Ajuste_Cambio_Dolar, 2);
+                txtCostoBOB.Text = costoBOB.ToString();
+            }
+        }
+        private void txtCostoBOB_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtCostoBOB.Text) != true)
+            {
+                double costoUSD = Math.Round(double.Parse(txtCostoBOB.Text) / Session.Ajuste_Cambio_Dolar, 2);
+                txtCostoUSD.Text = costoUSD.ToString();
+            }
+        }
+        private void txtPrecioUSD_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtPrecioUSD.Text) != true)
+            {
+                double precioBOB = Math.Round(double.Parse(txtPrecioUSD.Text) * Session.Ajuste_Cambio_Dolar, 2);
+                txtPrecioBOB.Text = precioBOB.ToString();
+            }
+        }
+        private void txtPrecioBOB_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtPrecioBOB.Text) != true)
+            {
+                double precioUSD = Math.Round(double.Parse(txtPrecioBOB.Text) / Session.Ajuste_Cambio_Dolar, 2);
+                txtPrecioUSD.Text = precioUSD.ToString();
+            }
+        }
+        private void TextBoxUppercase(object sender, KeyEventArgs e)
+        {
+            TextBox currentContainer = ((TextBox)sender);
+            int caretPosition = currentContainer.SelectionStart;
+
+            currentContainer.Text = currentContainer.Text.ToUpper();
+            currentContainer.SelectionStart = caretPosition++;
+        }
+        private void Select()
+        {
+            try
+            {
+                implProducto = new ProductoImpl();
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implProducto.Select().DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implProducto.Select().Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void SelectLike()
+        {
+            try
+            {
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implProducto.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void SelectSold()
+        {
+            try
+            {
+                implProducto = new ProductoImpl();
+                dgvDatos_Vendidos.ItemsSource = null;
+                dgvDatos_Vendidos.ItemsSource = implProducto.SelectSoldProducts().DefaultView;
+                dgvDatos_Vendidos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows_Vendidos.Content = "NÚMERO DE REGISTROS: " + implProducto.SelectSoldProducts().Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        void cbxSelectSucursalFromDatabase()
+        {
+            try
+            {
+                List<ComboboxItem> listcomboboxSucursal = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implSucursal = new SucursalImpl();
+                dataTable = implSucursal.SelectForComboBox();
+                listcomboboxSucursal = (from DataRow dr in dataTable.Rows
+                                        select new ComboboxItem()
+                                        {
+                                            Valor = Convert.ToByte(dr["idSucursal"]),
+                                            Texto = dr["nombreSucursal"].ToString()
+                                        }).ToList();
+                foreach (var item in listcomboboxSucursal)
+                {
+                    cbxSucursal.Items.Add(item);
+                }
+                cbxSucursal.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        void cbxGetCategoriaFromDatabase()
+        {
+            try
+            {
+                List<ComboboxItem> listcomboboxCategoria = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implCategoria = new CategoriaImpl();
+                dataTable = implCategoria.SelectForComboBox();
+                listcomboboxCategoria = (from DataRow dr in dataTable.Rows
+                                         select new ComboboxItem()
+                                         {
+                                             Valor = Convert.ToByte(dr["idCategoria"]),
+                                             Texto = dr["nombreCategoria"].ToString()
+                                         }).ToList();
+                foreach (var item in listcomboboxCategoria)
+                {
+                    cbxCategoria.Items.Add(item);
+                }
+                cbxCategoria.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        void cbxGetCondicionFromDatabase()
+        {
+            try
+            {
+                List<ComboboxItem> listcomboboxCondicion = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implCondicion = new CondicionImpl();
+                dataTable = implCondicion.SelectForComboBox();
+                listcomboboxCondicion = (from DataRow dr in dataTable.Rows
+                                         select new ComboboxItem()
+                                         {
+                                             Valor = Convert.ToByte(dr["idCondicion"]),
+                                             Texto = dr["nombreCondicion"].ToString()
+                                         }).ToList();
+                foreach (var item in listcomboboxCondicion)
+                {
+                    cbxCondicion.Items.Add(item);
+                }
+                cbxCondicion.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        void EnabledButtons()
+        {
+            btnInsert.IsEnabled = false;
+            btnUpdate.IsEnabled = false;
+            btnDelete.IsEnabled = false;
+
+            btnSave.IsEnabled = true;
+            btnCancel.IsEnabled = true;
+
+            txtNombreProducto.IsEnabled = true;
+            txtNombreProducto.Focus();
+            txtIdentificador.IsEnabled = true;
+            txtCostoUSD.IsEnabled = true;
+            txtCostoBOB.IsEnabled = true;
+            txtPrecioUSD.IsEnabled = true;
+            txtPrecioBOB.IsEnabled = true;
+            txtObservaciones.IsEnabled = true;
+
+            cbxCategoria.IsEnabled = true;
+            cbxCondicion.IsEnabled = true;
+        }
+        void DisabledButtons()
+        {
+            btnInsert.IsEnabled = true;
+            btnUpdate.IsEnabled = true;
+            btnDelete.IsEnabled = true;
+
+            btnSave.IsEnabled = false;
+            btnCancel.IsEnabled = false;
+
+            txtNombreProducto.IsEnabled = false;
+            txtIdentificador.IsEnabled = false;
+            txtCostoUSD.IsEnabled = false;
+            txtCostoBOB.IsEnabled = false;
+            txtPrecioUSD.IsEnabled = false;
+            txtPrecioBOB.IsEnabled = false;
+            txtObservaciones.IsEnabled = false;
+
+            cbxCategoria.IsEnabled = false;
+            cbxCondicion.IsEnabled = false;
         }
         private void txtPrecio_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -323,14 +472,6 @@ namespace sisgesoriadao
             return !_regex.IsMatch(text);
         }
         //------------------------------------------------------><---------------------------------------------
-        private void TextBoxUppercase(object sender, KeyEventArgs e)
-        {
-            TextBox currentContainer = ((TextBox)sender);
-            int caretPosition = currentContainer.SelectionStart;
-
-            currentContainer.Text = currentContainer.Text.ToUpper();
-            currentContainer.SelectionStart = caretPosition++;
-        }
         public void labelClear(Label label)
         {
             label.Foreground = new SolidColorBrush(Colors.Transparent);
@@ -370,83 +511,6 @@ namespace sisgesoriadao
             {
 
             }
-        }
-        void cbxSelectSucursalFromDatabase()
-        {
-            try
-            {
-                List<ComboboxItem> listcomboboxSucursal = new List<ComboboxItem>();
-                DataTable dataTable = new DataTable();
-                implSucursal = new SucursalImpl();
-                dataTable = implSucursal.SelectForComboBox();
-                listcomboboxSucursal = (from DataRow dr in dataTable.Rows
-                                        select new ComboboxItem()
-                                        {
-                                            Valor = Convert.ToByte(dr["idSucursal"]),
-                                            Texto = dr["nombreSucursal"].ToString()
-                                        }).ToList();
-                foreach (var item in listcomboboxSucursal)
-                {
-                    cbxSucursal.Items.Add(item);
-                }
-                cbxSucursal.SelectedIndex = 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        void cbxGetCategoriaFromDatabase()
-        {
-            try
-            {
-                List<ComboboxItem> listcomboboxCategoria = new List<ComboboxItem>();
-                DataTable dataTable = new DataTable();
-                implCategoria = new CategoriaImpl();
-                dataTable = implCategoria.SelectForComboBox();
-                listcomboboxCategoria = (from DataRow dr in dataTable.Rows
-                                     select new ComboboxItem()
-                                     {
-                                         Valor = Convert.ToByte(dr["idCategoria"]),
-                                         Texto = dr["nombreCategoria"].ToString()
-                                     }).ToList();
-                foreach (var item in listcomboboxCategoria)
-                {
-                    cbxCategoria.Items.Add(item);
-                }
-                cbxCategoria.SelectedIndex = 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void dgvDatos_Vendidos_Loaded(object sender, RoutedEventArgs e)
-        {
-            SelectSold();
-        }
-
-        private void btnSearch_Vendidos_Click(object sender, RoutedEventArgs e)
-        {
-            if (txtBuscar_Vendidos.Text == null || txtBuscar_Vendidos.Text == "")
-            {
-                SelectSold();
-            }
-            else
-            {
-                try
-                {
-                    dgvDatos_Vendidos.ItemsSource = null;
-                    dgvDatos_Vendidos.ItemsSource = implProducto.SelectLikeSoldProducts(txtBuscar_Vendidos.Text.Trim(), dtpFechaInicio_Vendidos.SelectedDate.Value.Date, dtpFechaFin_Vendidos.SelectedDate.Value.Date).DefaultView;
-                    dgvDatos_Vendidos.Columns[0].Visibility = Visibility.Collapsed;
-                    lblDataGridRows_Vendidos.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeSoldProducts(txtBuscar_Vendidos.Text.Trim(), dtpFechaInicio_Vendidos.SelectedDate.Value.Date, dtpFechaFin_Vendidos.SelectedDate.Value.Date).Rows.Count;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
-        }
+        }        
     }
 }

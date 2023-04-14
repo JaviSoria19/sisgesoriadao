@@ -25,11 +25,7 @@ namespace sisgesoriadao
         public winProducto_Historial()
         {
             InitializeComponent();
-        }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            txtBlockWelcome.Text = Session.NombreUsuario;
-        }
+        }        
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -39,6 +35,28 @@ namespace sisgesoriadao
             if (string.IsNullOrEmpty(txtBuscar.Text)!=true)
             {
                 Select();
+            }
+            else
+            {
+                MessageBox.Show("Por favor rellene el campo de búsqueda. (*)");
+            }
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtBlockWelcome.Text = Session.NombreUsuario;
+        }
+        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtBuscar.Text) != true)
+            {
+                if (e.Key == Key.Enter)
+                {
+                    Select();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Por favor rellene el campo de búsqueda. (*)");
             }
         }
         private void Select()
@@ -62,17 +80,6 @@ namespace sisgesoriadao
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (string.IsNullOrEmpty(txtBuscar.Text)!=true)
-            {
-                if (e.Key == Key.Enter)
-                {
-                    Select();
-                }
             }
         }
     }

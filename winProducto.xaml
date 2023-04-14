@@ -31,8 +31,10 @@
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="SUCURSAL:"/>
                 <ComboBox x:Name="cbxSucursal" IsEnabled="False"/>
-                <Label Content="CATEGORIA:"/>
+                <Label Content="CATEGORIA:" Margin="15,0,0,0"/>
                 <ComboBox x:Name="cbxCategoria" IsEnabled="False"/>
+                <Label Content="CONDICION:" Margin="15,0,0,0"/>
+                <ComboBox x:Name="cbxCondicion" IsEnabled="False"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="NOMBRE:"/>
@@ -40,13 +42,13 @@
                 <Label Content="S/N o IMEI:"/>
                 <TextBox x:Name="txtIdentificador" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="30" IsEnabled="False"/>
                 <Label Content="C. $:"/>
-                <TextBox x:Name="txtCostoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput"/>
+                <TextBox x:Name="txtCostoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtCostoUSD_KeyUp"/>
                 <Label Content="C. BS:"/>
-                <TextBox x:Name="txtCostoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput"/>
+                <TextBox x:Name="txtCostoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtCostoBOB_KeyUp"/>
                 <Label Content="P. $:"/>
-                <TextBox x:Name="txtPrecioUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput"/>
+                <TextBox x:Name="txtPrecioUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPrecioUSD_KeyUp"/>
                 <Label Content="P. BS:"/>
-                <TextBox x:Name="txtPrecioBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput"/>
+                <TextBox x:Name="txtPrecioBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPrecioBOB_KeyUp"/>
             </StackPanel>
             
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">

@@ -34,12 +34,13 @@ namespace sisgesoriadao.Implementation
                     command.Parameters.Clear();
                     //REGISTRO DEL LOTE.
                     command.CommandText = @"INSERT INTO producto 
-                                (idSucursal,idCategoria,idSublote,idUsuario,codigoSublote,nombreProducto,identificador,costoUSD,costoBOB,precioVentaUSD,precioVentaBOB,observaciones) 
+                                (idSucursal,idCategoria,idSublote,idCondicion,idUsuario,codigoSublote,nombreProducto,identificador,costoUSD,costoBOB,precioVentaUSD,precioVentaBOB,observaciones) 
                                 VALUES 
-                                (@idSucursal,@idCategoria,@idSublote,@idUsuario,@codigoSublote,@nombreProducto,@identificador,@costoUSD,@costoBOB,@precioVentaUSD,@precioVentaBOB,@observaciones)";
+                                (@idSucursal,@idCategoria,@idSublote,@idCondicion,@idUsuario,@codigoSublote,@nombreProducto,@identificador,@costoUSD,@costoBOB,@precioVentaUSD,@precioVentaBOB,@observaciones)";
                     command.Parameters.AddWithValue("@idSucursal", producto.IdSucursal);
                     command.Parameters.AddWithValue("@idCategoria", producto.IdCategoria);
                     command.Parameters.AddWithValue("@idSublote", producto.IdSublote);
+                    command.Parameters.AddWithValue("@idCondicion", producto.IdCondicion);
                     command.Parameters.AddWithValue("@idUsuario", producto.IdUsuario);
                     command.Parameters.AddWithValue("@codigoSublote", producto.CodigoSublote);
                     command.Parameters.AddWithValue("@nombreProducto", producto.NombreProducto);
@@ -83,13 +84,14 @@ namespace sisgesoriadao.Implementation
         public int Insert(Producto p)
         {
             string query = @"INSERT INTO producto 
-                                (idSucursal,idCategoria,idSublote,idUsuario,codigoSublote,nombreProducto,identificador,costoUSD,costoBOB,precioVentaUSD,precioVentaBOB,observaciones) 
+                                (idSucursal,idCategoria,idSublote,idCondicion,idUsuario,codigoSublote,nombreProducto,identificador,costoUSD,costoBOB,precioVentaUSD,precioVentaBOB,observaciones) 
                                 VALUES 
-                                (@idSucursal,@idCategoria,@idSublote,@idUsuario,@codigoSublote,@nombreProducto,@identificador,@costoUSD,@costoBOB,@precioVentaUSD,@precioVentaBOB,@observaciones)";
+                                (@idSucursal,@idCategoria,@idSublote,@idCondicion,@idUsuario,@codigoSublote,@nombreProducto,@identificador,@costoUSD,@costoBOB,@precioVentaUSD,@precioVentaBOB,@observaciones)";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idSucursal", p.IdSucursal);
             command.Parameters.AddWithValue("@idCategoria", p.IdCategoria);
             command.Parameters.AddWithValue("@idSublote", p.IdSublote);
+            command.Parameters.AddWithValue("@idCondicion", p.IdCondicion);
             command.Parameters.AddWithValue("@idUsuario", p.IdUsuario);
 
             command.Parameters.AddWithValue("@codigoSublote", p.CodigoSublote);
@@ -113,16 +115,17 @@ namespace sisgesoriadao.Implementation
         public int Update(Producto p)
         {
             string query = @"UPDATE producto SET 
-                idSucursal=@idSucursal, idCategoria=@idCategoria, idSublote=@idSublote, idUsuario=@idUsuario,
+                idSucursal=@idSucursal, idCategoria=@idCategoria, idSublote=@idSublote, idCondicion=@idCondicion, idUsuario=@idUsuario,
                 codigoSublote=@codigoSublote,nombreProducto=@nombreProducto, identificador=@identificador,
                 costoUSD=@costoUSD, costoBOB=@costoBOB, precioVentaUSD=@precioVentaUSD, precioVentaBOB=@precioVentaBOB, observaciones=@observaciones,
                 fechaActualizacion = CURRENT_TIMESTAMP WHERE idProducto = @idProducto";
             MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idProducto", p.IdProducto);
             command.Parameters.AddWithValue("@idSucursal", p.IdSucursal);
             command.Parameters.AddWithValue("@idCategoria", p.IdCategoria);
             command.Parameters.AddWithValue("@idSublote", p.IdSublote);
+            command.Parameters.AddWithValue("@idCondicion", p.IdCondicion);
             command.Parameters.AddWithValue("@idUsuario", p.IdUsuario);
-
             command.Parameters.AddWithValue("@codigoSublote", p.CodigoSublote);
             command.Parameters.AddWithValue("@nombreProducto", p.NombreProducto);
             command.Parameters.AddWithValue("@identificador", p.Identificador);
@@ -160,7 +163,7 @@ namespace sisgesoriadao.Implementation
         public Producto Get(int Id)
         {
             Producto p = null;
-            string query = @"SELECT idProducto, idSucursal, idCategoria, idSublote, idUsuario,
+            string query = @"SELECT idProducto, idSucursal, idCategoria, idSublote, idCondicion, idUsuario,
                                 codigoSublote, nombreProducto, identificador,
                                 costoUSD, costoBOB, precioVentaUSD, precioVentaBOB, observaciones,
                                 estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM producto
@@ -176,20 +179,21 @@ namespace sisgesoriadao.Implementation
                         byte.Parse(dt.Rows[0][1].ToString()),               /*idSucursal*/
                         byte.Parse(dt.Rows[0][2].ToString()),               /*idCategoria*/
                         int.Parse(dt.Rows[0][3].ToString()),                /*idSublote*/
-                        byte.Parse(dt.Rows[0][4].ToString()),               /*idUsuario*/
-                        dt.Rows[0][5].ToString(),                           /*codigoSublote*/
-                        dt.Rows[0][6].ToString(),                           /*nombreProducto*/
-                        dt.Rows[0][7].ToString(),                           /*identificador*/
-                        double.Parse(dt.Rows[0][8].ToString()),             /*costoUSD*/
-                        double.Parse(dt.Rows[0][9].ToString()),             /*costoBOB*/
-                        double.Parse(dt.Rows[0][10].ToString()),            /*precioVentaUSD*/
-                        double.Parse(dt.Rows[0][11].ToString()),            /*precioVentaBOB*/
-                        dt.Rows[0][12].ToString(),                          /*observaciones*/
+                        byte.Parse(dt.Rows[0][4].ToString()),               /*idCondicion*/
+                        byte.Parse(dt.Rows[0][5].ToString()),               /*idUsuario*/
+                        dt.Rows[0][6].ToString(),                           /*codigoSublote*/
+                        dt.Rows[0][7].ToString(),                           /*nombreProducto*/
+                        dt.Rows[0][8].ToString(),                           /*identificador*/
+                        double.Parse(dt.Rows[0][9].ToString()),             /*costoUSD*/
+                        double.Parse(dt.Rows[0][10].ToString()),            /*costoBOB*/
+                        double.Parse(dt.Rows[0][11].ToString()),            /*precioVentaUSD*/
+                        double.Parse(dt.Rows[0][12].ToString()),            /*precioVentaBOB*/
+                        dt.Rows[0][13].ToString(),                          /*observaciones*/
 
                         /*estado, f. registro & f. actualización.*/
-                        byte.Parse(dt.Rows[0][13].ToString()), 
-                        DateTime.Parse(dt.Rows[0][14].ToString()),
-                        dt.Rows[0][15].ToString());
+                        byte.Parse(dt.Rows[0][14].ToString()), 
+                        DateTime.Parse(dt.Rows[0][15].ToString()),
+                        dt.Rows[0][16].ToString());
                 }
             }
             catch (Exception ex)
@@ -202,7 +206,7 @@ namespace sisgesoriadao.Implementation
         public Producto GetByIdentifierOrCode(string CadenaBusqueda)
         {
             Producto p = null;
-            string query = @"SELECT idProducto, idSucursal, idCategoria, idSublote, idUsuario,
+            string query = @"SELECT idProducto, idSucursal, idCategoria, idSublote, idCondicion, idUsuario,
                                 codigoSublote, nombreProducto, identificador,
                                 costoUSD, costoBOB, precioVentaUSD, precioVentaBOB, observaciones,
                                 estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM producto
@@ -218,20 +222,21 @@ namespace sisgesoriadao.Implementation
                         byte.Parse(dt.Rows[0][1].ToString()),               /*idSucursal*/
                         byte.Parse(dt.Rows[0][2].ToString()),               /*idCategoria*/
                         int.Parse(dt.Rows[0][3].ToString()),                /*idSublote*/
-                        byte.Parse(dt.Rows[0][4].ToString()),               /*idUsuario*/
-                        dt.Rows[0][5].ToString(),                           /*codigoSublote*/
-                        dt.Rows[0][6].ToString(),                           /*nombreProducto*/
-                        dt.Rows[0][7].ToString(),                           /*identificador*/
-                        double.Parse(dt.Rows[0][8].ToString()),             /*costoUSD*/
-                        double.Parse(dt.Rows[0][9].ToString()),             /*costoBOB*/
-                        double.Parse(dt.Rows[0][10].ToString()),            /*precioVentaUSD*/
-                        double.Parse(dt.Rows[0][11].ToString()),            /*precioVentaBOB*/
-                        dt.Rows[0][12].ToString(),                          /*observaciones*/
+                        byte.Parse(dt.Rows[0][4].ToString()),                /*idCondicion*/
+                        byte.Parse(dt.Rows[0][5].ToString()),               /*idUsuario*/
+                        dt.Rows[0][6].ToString(),                           /*codigoSublote*/
+                        dt.Rows[0][7].ToString(),                           /*nombreProducto*/
+                        dt.Rows[0][8].ToString(),                           /*identificador*/
+                        double.Parse(dt.Rows[0][9].ToString()),             /*costoUSD*/
+                        double.Parse(dt.Rows[0][10].ToString()),             /*costoBOB*/
+                        double.Parse(dt.Rows[0][11].ToString()),            /*precioVentaUSD*/
+                        double.Parse(dt.Rows[0][12].ToString()),            /*precioVentaBOB*/
+                        dt.Rows[0][13].ToString(),                          /*observaciones*/
 
                         /*estado, f. registro & f. actualización.*/
-                        byte.Parse(dt.Rows[0][13].ToString()), 
-                        DateTime.Parse(dt.Rows[0][14].ToString()),
-                        dt.Rows[0][15].ToString());
+                        byte.Parse(dt.Rows[0][14].ToString()), 
+                        DateTime.Parse(dt.Rows[0][15].ToString()),
+                        dt.Rows[0][16].ToString());
                 }
             }
             catch (Exception ex)
@@ -243,10 +248,11 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM producto AS P
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM producto AS P
                                 INNER JOIN sucursal AS S ON P.idSucursal = S.idSucursal
                                 INNER JOIN categoria AS C ON P.idCategoria = C.idCategoria
-                                WHERE P.estado = 1 ORDER BY 2 ASC, 5 ASC, 4 ASC";
+                                INNER JOIN condicion AS CC ON P.idCondicion = CC.idCondicion
+                                WHERE P.estado = 1 ORDER BY 2 ASC, 6 ASC, 5 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -260,12 +266,13 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM producto AS P
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM producto AS P
                                 INNER JOIN sucursal AS S ON P.idSucursal = S.idSucursal
                                 INNER JOIN categoria AS C ON P.idCategoria = C.idCategoria
-                                WHERE (S.nombreSucursal LIKE @search OR C.nombreCategoria LIKE @search OR P.nombreProducto LIKE @search OR P.identificador LIKE @search)
+                                INNER JOIN condicion AS CC ON P.idCondicion = CC.idCondicion
+                                WHERE (S.nombreSucursal LIKE @search OR C.nombreCategoria LIKE @search OR P.nombreProducto LIKE @search OR P.identificador LIKE @search OR CC.nombreCondicion LIKE @search OR P.codigoSublote LIKE @search)
                                 AND P.estado = 1 AND P.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
-                                ORDER BY 2 ASC, 5 ASC, 4 ASC";
+                                ORDER BY 2 ASC, 6 ASC, 5 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@search", "%" + CadenaBusqueda + "%");
             command.Parameters.AddWithValue("@FechaInicio", FechaInicio.ToString("yyyy-MM-dd"));
@@ -281,9 +288,10 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectSoldProducts()
         {
-            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C. USD', P.costoBOB AS 'C. Bs.', P.precioVentaUSD AS 'P. USD', P.precioVentaBOB AS 'P. BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM producto AS P
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM producto AS P
                                 INNER JOIN sucursal AS S ON P.idSucursal = S.idSucursal
                                 INNER JOIN categoria AS C ON P.idCategoria = C.idCategoria
+                                INNER JOIN condicion AS CC ON P.idCondicion = CC.idCondicion
                                 WHERE P.estado = 2 ORDER BY 2 ASC, 5 ASC, 4 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             try
@@ -298,10 +306,11 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLikeSoldProducts(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C. USD', P.costoBOB AS 'C. Bs.', P.precioVentaUSD AS 'P. USD', P.precioVentaBOB AS 'P. BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM producto AS P
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM producto AS P
                                 INNER JOIN sucursal AS S ON P.idSucursal = S.idSucursal
                                 INNER JOIN categoria AS C ON P.idCategoria = C.idCategoria
-                                WHERE (S.nombreSucursal LIKE @search OR C.nombreCategoria LIKE @search OR P.nombreProducto LIKE @search OR P.identificador LIKE @search)
+                                INNER JOIN condicion AS CC ON P.idCondicion = CC.idCondicion
+                                WHERE (S.nombreSucursal LIKE @search OR C.nombreCategoria LIKE @search OR P.nombreProducto LIKE @search OR P.identificador LIKE @search OR CC.nombreCondicion LIKE @search OR P.codigoSublote LIKE @search)
                                 AND P.estado = 2 AND P.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                                 ORDER BY 2 ASC, 5 ASC, 4 ASC";
             MySqlCommand command = CreateBasicCommand(query);
