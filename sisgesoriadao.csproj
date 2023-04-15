@@ -142,6 +142,9 @@
     <Compile Include="winProducto_Transferencia.xaml.cs">
       <DependentUpon>winProducto_Transferencia.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winProducto_Transferencia_Recibir.xaml.cs">
+      <DependentUpon>winProducto_Transferencia_Recibir.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winRecoverPassword.xaml.cs">
       <DependentUpon>winRecoverPassword.xaml</DependentUpon>
     </Compile>
@@ -219,6 +222,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winProducto_Transferencia.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winProducto_Transferencia_Recibir.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

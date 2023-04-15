@@ -27,5 +27,7 @@ namespace sisgesoriadao.Interfaces
         //FIN LOTES
         string InsertTransaction(List<Producto> ListaProductos, int idLote);
         string UpdateBranchMovementTransaction(List<Producto> ListaProductos, byte idSucursalDestino, string nombreSucursalDestino);
+        DataTable SelectPendingProducts();
+        int UpdatePendingProduct(int IdProducto);
     }
 }

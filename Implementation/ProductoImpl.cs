@@ -374,9 +374,9 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectProductHistory(string CadenaBusqueda)
         {
-            string query = @"SELECT P.codigoSublote AS Codigo, P.identificador AS 'IMEI o SN', H.detalle AS Detalle, H.fechaRegistro AS 'Fecha de Registro' FROM historial AS H
+            string query = @"SELECT P.codigoSublote AS Codigo, P.nombreProducto, P.identificador AS 'IMEI o SN', H.detalle AS Detalle, H.fechaRegistro AS 'Fecha de Registro' FROM historial AS H
                             INNER JOIN producto AS P ON H.idProducto = P.idProducto 
-                            WHERE (P.identificador LIKE @search OR P.codigoSublote LIKE @search) ORDER BY 4 DESC, 1 ASC";
+                            WHERE (P.identificador LIKE @search OR P.codigoSublote LIKE @search) ORDER BY 5 DESC, 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@search", CadenaBusqueda);
             try
@@ -568,6 +568,44 @@ namespace sisgesoriadao.Implementation
             finally
             {
                 connection.Close();
+            }
+        }
+
+        public DataTable SelectPendingProducts()
+        {
+            string query = @"SELECT P.idProducto AS ID, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones FROM producto AS P
+                                INNER JOIN categoria AS C ON P.idCategoria = C.idCategoria
+                                INNER JOIN condicion AS CC ON P.idCondicion = CC.idCondicion
+                                WHERE P.estado = 3 AND idSucursal = @idSucursal ORDER BY 2 ASC, 4 ASC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idSucursal", Session.Sucursal_IdSucursal);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public int UpdatePendingProduct(int IdProducto)
+        {
+            string query = @"UPDATE producto SET estado = 1 WHERE idProducto = @idProducto;
+                            INSERT INTO historial (idProducto, detalle) VALUES
+                            (@idProductoTwice,@detalle)";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idProducto", IdProducto);
+            command.Parameters.AddWithValue("@idProductoTwice", IdProducto);
+            command.Parameters.AddWithValue("@detalle", "TRANSFERENCIA RECIBIDA POR EL USUARIO: " + Session.NombreUsuario);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
         }
     }

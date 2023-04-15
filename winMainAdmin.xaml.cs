@@ -104,7 +104,8 @@ namespace sisgesoriadao
 
         private void btnReceiveProducts_Click(object sender, RoutedEventArgs e)
         {
-
+            winProducto_Transferencia_Recibir winProducto_Transferencia_Recibir = new winProducto_Transferencia_Recibir();
+            winProducto_Transferencia_Recibir.Show();
         }
         private void btnReports_Click(object sender, RoutedEventArgs e)
         {

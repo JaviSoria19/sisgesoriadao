@@ -15,7 +15,6 @@ using System.Windows.Shapes;
 using System.Data;//ADO.NET
 using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
-using MySql.Data.MySqlClient;
 namespace sisgesoriadao
 {
     /// <summary>
