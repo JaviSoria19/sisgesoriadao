@@ -28,7 +28,11 @@
                 <TextBlock Text="TRANSFERIR PRODUCTOS" Margin="5,0,20,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
-            <StackPanel Orientation="Vertical" Margin="10"/>
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Margin="0,0,0,5" TextWrapping="Wrap">
+                    <Bold>ATENCION:</Bold> Estimad@ usuari@, para trasladar productos hacia una sucursal seleccione el destino e ingrese el código del producto.
+                </TextBlock>
+            </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="SUCURSAL DESTINO:"/>

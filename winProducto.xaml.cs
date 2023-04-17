@@ -204,6 +204,7 @@ namespace sisgesoriadao
                     producto = implProducto.Get(id);
                     if (producto != null)
                     {
+                        txtCodigoSublote.Text = producto.CodigoSublote.Trim();
                         txtNombreProducto.Text = producto.NombreProducto.Trim();
                         txtIdentificador.Text = producto.Identificador.Trim();
                         txtCostoUSD.Text = producto.CostoUSD.ToString();
@@ -510,6 +511,27 @@ namespace sisgesoriadao
             {
 
             }
-        }        
+        }
+
+        private void btnPrintQR_Click(object sender, RoutedEventArgs e)
+        {            
+            if (producto != null)
+            {
+                labelClear(lblInfo);
+                if (MessageBox.Show("Está seguro de imprimir la etiqueta con el código de producto: " + producto.CodigoSublote + "?", "Imprimir etiqueta", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    var label = DYMO.Label.Framework.Label.Open("LabelWriterCodigoQRProducto.label");
+                    label.SetObjectText("lblCodigoSublote", producto.CodigoSublote);
+                    label.SetObjectText("lblCodigoQR", producto.CodigoSublote);
+                    label.Print("DYMO LabelWriter 450");
+                }
+            }
+            else
+            {
+                labelWarning(lblInfo);
+                lblInfo.Content = "¡PARA IMPRIMIR LA ETIQUETA CON EL CÓDIGO DE PRODUCTO DEBE SELECCIONAR UN REGISTRO!";
+            }
+        }
+
     }
 }

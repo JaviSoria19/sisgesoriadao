@@ -28,6 +28,12 @@
                 <TextBlock Text="CLIENTES" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Margin="0,0,0,5" TextWrapping="Wrap">
+                    <Bold>ATENCION:</Bold> Por practicidad se recomienda registrar a los clientes en el momento de realizar la venta, los clientes registrados estarán disponibles para su selección en posteriores ventas.
+                </TextBlock>
+            </StackPanel>
+
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="NOMBRE COMPLETO:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>

@@ -28,6 +28,12 @@
                 <TextBlock Text="HISTORIAL DE PRODUCTO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Margin="0,0,0,5" TextWrapping="Wrap">
+                    <Bold>ATENCION:</Bold> Estimad@ usuari@, en esta ventana podrá verificar todos los movimiento de sus productos mediante el ingreso del Código de producto, IMEI o SN Registrado.
+                </TextBlock>
+            </StackPanel>
+            
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="Buscar:" VerticalAlignment="Center"/>
                 <TextBox x:Name="txtBuscar" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="215" MaxLength="30" Height="22" materialDesign:HintAssist.HelperText="Código, IMEI o S/N." KeyDown="txtBuscar_KeyDown"/>

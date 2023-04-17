@@ -37,6 +37,8 @@
                 <ComboBox x:Name="cbxCondicion" IsEnabled="False"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <Label Content="CÓDIGO:"/>
+                <TextBox x:Name="txtCodigoSublote" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="55" MaxLength="50" IsEnabled="False"/>
                 <Label Content="NOMBRE:"/>
                 <TextBox x:Name="txtNombreProducto" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" KeyUp="TextBoxUppercase" MaxLength="50" IsEnabled="False"/>
                 <Label Content="S/N o IMEI:"/>
@@ -45,9 +47,9 @@
                 <TextBox x:Name="txtCostoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtCostoUSD_KeyUp"/>
                 <Label Content="C. BS:"/>
                 <TextBox x:Name="txtCostoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtCostoBOB_KeyUp"/>
-                <Label Content="P. $:"/>
+                <Label Content="P.V. $:"/>
                 <TextBox x:Name="txtPrecioUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPrecioUSD_KeyUp"/>
-                <Label Content="P. BS:"/>
+                <Label Content="P.V. BS:"/>
                 <TextBox x:Name="txtPrecioBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPrecioBOB_KeyUp"/>
             </StackPanel>
             
@@ -57,6 +59,9 @@
             </StackPanel>
             
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <Button x:Name="btnPrintQR" ToolTip="IMPRIMIR CÓDIGO DE PRODUCTO" Margin="0,0,5,0" Click="btnPrintQR_Click">
+                    <materialDesign:PackIcon Kind="Qrcode"/>
+                </Button>
                 <Button x:Name="btnInsert" Content="AÑADIR NUEVO LOTE" Margin="0,0,5,0" Click="btnInsert_Click"/>
                 <Button x:Name="btnUpdate" Content="MODIFICAR LOTE" Margin="5" Click="btnUpdate_Click"/>
                 <Button x:Name="btnDelete" Content="ELIMINAR PRODUCTO" Margin="5" Click="btnDelete_Click"/>

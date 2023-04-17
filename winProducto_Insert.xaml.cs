@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using System.Data;//ADO.NET
 using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
+using DYMO.Label.Framework;
+using Label = DYMO.Label.Framework.Label;
 
 namespace sisgesoriadao
 {
@@ -58,6 +60,7 @@ namespace sisgesoriadao
                     string mensaje = implProducto.InsertTransaction(listaproductos, (cbxLote.SelectedItem as ComboboxItem).Valor);
                     if (mensaje == "LOTE REGISTRADO EXITOSAMENTE.")
                     {
+                        PrintCodigoSublote(listaproductos);
                         MessageBox.Show(mensaje + "\n IMPRIMIENDO LAS ETIQUETAS...");
                         //insertar código para imprimir etiquetas DYMO
                         this.Close();
@@ -457,6 +460,16 @@ namespace sisgesoriadao
             {
 
             }
+        }
+        public void PrintCodigoSublote(List<Producto> ListaProductos)
+        {
+            var label = Label.Open("LabelWriterCodigoQRProducto.label");
+            foreach (var item in ListaProductos)
+            {
+                label.SetObjectText("lblCodigoSublote", item.CodigoSublote);
+                label.SetObjectText("lblCodigoQR", item.CodigoSublote);
+                label.Print("DYMO LabelWriter 450");
+            }            
         }
     }
 }

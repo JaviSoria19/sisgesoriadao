@@ -28,7 +28,11 @@
                 <TextBlock Text="RECIBIR PRODUCTOS" Margin="5,0,20,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
-            <StackPanel Orientation="Vertical" Margin="10"/>
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Margin="0,0,0,5" TextWrapping="Wrap">
+                    <Bold>ATENCION:</Bold> Estimad@ usuari@, en caso de haber recibido productos de otra sucursal éstos se mostrarán en la tabla de abajo, por favor confirme los productos para su disponibilidad al momento de realizar una venta.
+                </TextBlock>
+            </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="CÓDIGO DE PRODUCTO:"/>

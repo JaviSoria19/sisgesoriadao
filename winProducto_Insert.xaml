@@ -42,6 +42,8 @@
                     <Bold>3)</Bold> Ingrese el S/N o IMEI de su producto y (en caso de no tener un lector de código de barras y/o QR) presione la tecla <Bold>ENTER</Bold> o haga clic en el botón <Bold>AÑADIR</Bold>.
                     <LineBreak/>
                     <Bold>4)</Bold> Presione <Bold>GUARDAR</Bold> para registrar los productos e imprimir las etiquetas que contienen el código correspondiente.
+                    <LineBreak/>
+                    <Bold>IMPORTANTE: Las etiquetas que contienen los códigos de producto no se imprimirán si no está conectada e instalada la Etiquetadora DYMO LabelWriter 450.</Bold>
                 </TextBlock>
             </StackPanel>
 
@@ -71,10 +73,10 @@
                 <Label Content="C. BS:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtCostoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtCostoBOB_KeyUp"/>
-                <Label Content="P. $:"/>
+                <Label Content="P.V. $:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtPrecioUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPrecioUSD_KeyUp"/>
-                <Label Content="P. BS:"/>
+                <Label Content="P.V. BS:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtPrecioBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPrecioBOB_KeyUp"/>
             </StackPanel>

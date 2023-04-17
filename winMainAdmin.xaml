@@ -120,18 +120,18 @@
                         <materialDesign:PackIcon Kind="ListStatus" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
                     <TextBlock Text="ESTADOS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>                
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnBatches" Width="100" Height="100" Click="btnBatches_Click">
+                        <materialDesign:PackIcon Kind="LayersTriple" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="LOTES" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnReports" Width="100" Height="100" Click="btnReports_Click">
                         <materialDesign:PackIcon Kind="ChartBar" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
                     <TextBlock Text="ESTADÍSTICAS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
-                </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
-                    <Button x:Name="btnBatches" Width="100" Height="100" Click="btnBatches_Click">
-                        <materialDesign:PackIcon Kind="LayersTriple" Width="80" Height="80" HorizontalAlignment="Center"/>
-                    </Button>
-                    <TextBlock Text="LOTES" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">

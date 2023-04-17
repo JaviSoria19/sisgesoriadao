@@ -28,6 +28,12 @@
                 <TextBlock Text="LOTES" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Margin="0,0,0,5" TextWrapping="Wrap">
+                    <Bold>ATENCION:</Bold> Estimad@ usuari@, el código de lote será el prefijo que aparecerá en las etiquetas de todos los códigos de producto que correspondan al lote, modificar el nombre del lote no afectará a los productos agregados anteriormente a su modificación.
+                </TextBlock>
+            </StackPanel>
+            
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="CÓDIGO DE LOTE:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>

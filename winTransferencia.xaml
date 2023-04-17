@@ -28,6 +28,12 @@
                 <TextBlock Text="HISTORIAL DE TRANSFERENCIAS" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Margin="0,0,0,5" TextWrapping="Wrap">
+                    <Bold>ATENCION:</Bold> Estimad@ usuari@, en esta ventana se encuentran todos los movimientos de productos realizados entre sucursales, seleccione un movimiento para ver el detalle de la transferencia.
+                </TextBlock>
+            </StackPanel>
+            
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
                 <Label x:Name="lblInfo" Content="" Foreground="Blue" Background="Transparent" Margin="0,0,0,10" HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
