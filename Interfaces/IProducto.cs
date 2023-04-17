@@ -29,5 +29,7 @@ namespace sisgesoriadao.Interfaces
         string UpdateBranchMovementTransaction(List<Producto> ListaProductos, byte idSucursalDestino, string nombreSucursalDestino);
         DataTable SelectPendingProducts();
         int UpdatePendingProduct(int IdProducto);
+        DataTable SelectMovementsHistory();
+        DataTable SelectMovementsHistory_Details(int IdTransferencia);
     }
 }

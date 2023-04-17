@@ -374,7 +374,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectProductHistory(string CadenaBusqueda)
         {
-            string query = @"SELECT P.codigoSublote AS Codigo, P.nombreProducto, P.identificador AS 'IMEI o SN', H.detalle AS Detalle, H.fechaRegistro AS 'Fecha de Registro' FROM historial AS H
+            string query = @"SELECT P.codigoSublote AS Codigo, P.nombreProducto AS 'Producto', P.identificador AS 'IMEI o SN', H.detalle AS Detalle, H.fechaRegistro AS 'Fecha de Registro' FROM historial AS H
                             INNER JOIN producto AS P ON H.idProducto = P.idProducto 
                             WHERE (P.identificador LIKE @search OR P.codigoSublote LIKE @search) ORDER BY 5 DESC, 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -529,8 +529,20 @@ namespace sisgesoriadao.Implementation
             command.Transaction = myTrans;
             try
             {
+                //INSERCION DE NUEVA TRANSFERENCIA.
+                command.CommandText = @"INSERT INTO transferencia (sucursalOrigen,sucursalDestino)
+                                    VALUES (@sucursalOrigen,@sucursalDestino)";
+                command.Parameters.AddWithValue("@sucursalOrigen", Session.Sucursal_IdSucursal);
+                command.Parameters.AddWithValue("@sucursalDestino", IdSucursalDestino);
+                command.ExecuteNonQuery();
+
                 foreach (var producto in ListaProductos)
                 {
+                    //INSERCIÓN DE DETALLE DE LA TRANSFERENCIA.
+                    command.CommandText = @"INSERT INTO detalle_transferencia (idTransferencia,idProducto)
+                                            VALUES((SELECT MAX(idTransferencia) FROM transferencia),@idProductoTransferido);";
+                    command.Parameters.AddWithValue("@idProductoTransferido", producto.IdProducto);
+                    command.ExecuteNonQuery();
                     //ACTUALIZACION DE LA SUCURSAL Y EL ESTADO.
                     command.CommandText = @"UPDATE producto SET idSucursal=@idSucursal, estado = 3 WHERE idProducto = @idProducto";
                     command.Parameters.AddWithValue("@idSucursal", IdSucursalDestino);
@@ -542,6 +554,7 @@ namespace sisgesoriadao.Implementation
                     command.Parameters.AddWithValue("@idProductoTwo", producto.IdProducto);
                     command.Parameters.AddWithValue("@detalle", "PRODUCTO TRANSFERIDO A LA SUCURSAL: " + SucursalDestino + ", POR EL USUARIO: " + Session.NombreUsuario);
                     command.ExecuteNonQuery();
+                    
                     //LIMPIEZA DE PARÁMETROS YA UTILIZADOS EN EL CICLO ANTERIOR PARA PROSEGUIR, CASO CONTRARIO LANZA ERROR.
                     command.Parameters.Clear();
                 }
@@ -606,6 +619,45 @@ namespace sisgesoriadao.Implementation
             {
 
                 throw ex;
+            }
+        }
+
+        public DataTable SelectMovementsHistory()
+        {
+            string query = @"SELECT T.idTransferencia AS ID, S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino', COUNT(DT.idProducto) AS 'Productos transferidos', T.fechaRegistro AS 'Fecha de Registro' FROM transferencia AS T
+                        INNER JOIN Sucursal S1 ON S1.idSucursal = T.sucursalOrigen
+                        INNER JOIN Sucursal S2 ON S2.idSucursal = T.sucursalDestino
+                        INNER JOIN Detalle_transferencia AS DT ON DT.idTransferencia = T.idTransferencia
+                        GROUP BY T.idTransferencia
+                        ORDER BY 1 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public DataTable SelectMovementsHistory_Details(int IdTransferencia)
+        {
+            string query = @"SELECT DT.idTransferencia, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'IMEI o SN' FROM detalle_transferencia AS DT
+                            INNER JOIN Producto P ON P.idProducto = DT.idProducto
+                            WHERE DT.idTransferencia = @idTransferencia
+                            ORDER BY 2 ASC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idTransferencia", IdTransferencia);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }

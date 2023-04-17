@@ -151,6 +151,9 @@
     <Compile Include="winSucursal.xaml.cs">
       <DependentUpon>winSucursal.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winTransferencia.xaml.cs">
+      <DependentUpon>winTransferencia.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winUsuario.xaml.cs">
       <DependentUpon>winUsuario.xaml</DependentUpon>
     </Compile>
@@ -234,6 +237,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winSucursal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winTransferencia.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

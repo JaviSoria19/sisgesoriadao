@@ -79,7 +79,13 @@
                     <TextBlock Text="RECIBIR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                     <TextBlock Text="PRODUCTOS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
-                
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnMovementProductHistory" Width="100" Height="100" Click="btnMovementProductHistory_Click">
+                        <materialDesign:PackIcon Kind="ArrowDecision" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="HISTORIAL DE" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="TRANSFERENCIAS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
             </StackPanel>
 
             <TextBlock Text="GESTIONAR INFORMACIÓN" Margin="0,15,0,0" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold"/>
