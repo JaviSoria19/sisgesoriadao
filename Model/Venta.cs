@@ -14,7 +14,8 @@ namespace sisgesoriadao.Model
         public byte IdSucursal { get; set; }
         public double TotalUSD { get; set; }
         public double TotalBOB { get; set; }
-        public double Saldo { get; set; }
+        public double SaldoUSD { get; set; }
+        public double SaldoBOB { get; set; }
         public string Observaciones { get; set; }
         
         public Venta()
@@ -35,7 +36,7 @@ namespace sisgesoriadao.Model
         /// <param name="estado"></param>
         /// <param name="fechaRegistro"></param>
         /// <param name="fechaActualizacion"></param>
-        public Venta(int idVenta, int idCliente, byte idUsuario, byte idSucursal, double totalUSD, double totalBOB, double saldo, string observaciones, byte estado, DateTime fechaRegistro, string fechaActualizacion)
+        public Venta(int idVenta, int idCliente, byte idUsuario, byte idSucursal, double totalUSD, double totalBOB, double saldoUSD, double saldoBOB, string observaciones, byte estado, DateTime fechaRegistro, string fechaActualizacion)
             : base(estado, fechaRegistro, fechaActualizacion)
         {
             IdVenta = idVenta;
@@ -44,7 +45,8 @@ namespace sisgesoriadao.Model
             IdSucursal = idSucursal;
             TotalUSD = totalUSD;
             TotalBOB = totalBOB;
-            Saldo = saldo;
+            SaldoUSD = saldoUSD;
+            SaldoBOB = saldoBOB;
             Observaciones = observaciones;
         }
         /// <summary>
@@ -57,14 +59,15 @@ namespace sisgesoriadao.Model
         /// <param name="totalBOB"></param>
         /// <param name="saldo"></param>
         /// <param name="observaciones"></param>
-        public Venta(int idCliente, byte idUsuario, byte idSucursal, double totalUSD, double totalBOB, double saldo, string observaciones)
+        public Venta(int idCliente, byte idUsuario, byte idSucursal, double totalUSD, double totalBOB, double saldoUSD, double saldoBOB, string observaciones)
         {
             IdCliente = idCliente;
             IdUsuario = idUsuario;
             IdSucursal = idSucursal;
             TotalUSD = totalUSD;
             TotalBOB = totalBOB;
-            Saldo = saldo;
+            SaldoUSD = saldoUSD;
+            SaldoBOB = saldoBOB;
             Observaciones = observaciones;
         }
         /// <summary>

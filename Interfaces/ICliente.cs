@@ -12,5 +12,6 @@ namespace sisgesoriadao.Interfaces
     {
         Cliente Get(int Id);
         Cliente GetByCIorCelular(string CadenaBusqueda);
+        DataTable SelectCustomerNamesForComboBox();
     }
 }

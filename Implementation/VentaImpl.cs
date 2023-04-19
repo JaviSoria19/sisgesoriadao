@@ -26,13 +26,14 @@ namespace sisgesoriadao.Implementation
             {
                 //REGISTRO DE LA VENTA.
                 command.CommandText = @"INSERT INTO venta (idCliente,idUsuario,idSucursal,totalUSD,totalBOB,saldo,observaciones) 
-                            VALUES(@idCliente,@idUsuario,@idSucursal,@totalUSD,@totalBOB,@saldo,@observaciones)";
+                            VALUES(@idCliente,@idUsuario,@idSucursal,@totalUSD,@totalBOB,@saldoUSD,@saldoBOB,@observaciones)";
                 command.Parameters.AddWithValue("@idCliente", venta.IdCliente);
                 command.Parameters.AddWithValue("@idUsuario", venta.IdUsuario);
                 command.Parameters.AddWithValue("@idSucursal", venta.IdSucursal);
                 command.Parameters.AddWithValue("@totalUSD", venta.TotalUSD);
                 command.Parameters.AddWithValue("@totalBOB", venta.TotalBOB);
-                command.Parameters.AddWithValue("@saldo", venta.Saldo);
+                command.Parameters.AddWithValue("@saldoUSD", venta.SaldoUSD);
+                command.Parameters.AddWithValue("@saldoBOB", venta.SaldoBOB);
                 command.Parameters.AddWithValue("@observaciones", venta.Observaciones);
                 command.ExecuteNonQuery();
 

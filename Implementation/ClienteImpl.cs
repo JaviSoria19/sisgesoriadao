@@ -157,5 +157,20 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public DataTable SelectCustomerNamesForComboBox()
+        {
+            string query = @"SELECT idCliente, nombre FROM cliente";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

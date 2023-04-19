@@ -102,6 +102,7 @@
     <Compile Include="Model\Cliente.cs" />
     <Compile Include="Model\Condicion.cs" />
     <Compile Include="Model\Lote.cs" />
+    <Compile Include="Model\MetodoPago.cs" />
     <Compile Include="Model\Producto.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Sucursal.cs" />
