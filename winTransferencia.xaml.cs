@@ -14,6 +14,13 @@ using System.Windows.Shapes;
 using System.Data;//ADO.NET
 using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
+
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.xml;
+using System.IO;
+using iTextSharp.tool.xml;
+
 namespace sisgesoriadao
 {
     /// <summary>
@@ -22,6 +29,8 @@ namespace sisgesoriadao
     public partial class winTransferencia : Window
     {
         ProductoImpl implProducto;
+        int idTransferencia = 0;
+        int pdf_contador = 1;
         public winTransferencia()
         {
             InitializeComponent();
@@ -68,8 +77,12 @@ namespace sisgesoriadao
                 try
                 {
                     DataRowView d = (DataRowView)dgvDatos.SelectedItem;
-                    int id = int.Parse(d.Row.ItemArray[0].ToString());
-                    SelectDetails(id);
+                    idTransferencia = int.Parse(d.Row.ItemArray[0].ToString());
+                    SelectDetails(idTransferencia);
+                    if (idTransferencia != 0)
+                    {
+                        btnPrintPDF.IsEnabled = true;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -117,7 +130,46 @@ namespace sisgesoriadao
 
         private void btnPrintPDF_Click(object sender, RoutedEventArgs e)
         {
+            Microsoft.Win32.SaveFileDialog guardar = new Microsoft.Win32.SaveFileDialog();
+            guardar.FileName = "Transferencia_" + DateTime.Now.ToString("yyyy_MM_dd__HH_mm") + ".pdf";
+            guardar.Filter = "PDF(*.pdf)|*.pdf";
 
+            string paginahtml_texto = Properties.Resources.PlantillaReporteTransferencia.ToString();
+            paginahtml_texto = paginahtml_texto.Replace("@NOMBRESUCURSAL",Session.Sucursal_NombreSucursal);
+            paginahtml_texto = paginahtml_texto.Replace("@FECHA", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
+            paginahtml_texto = paginahtml_texto.Replace("@USUARIO", Session.NombreUsuario);
+            string filas = string.Empty;
+            foreach (DataRowView item in dgvDetalle.Items)
+            {
+                filas += "<tr>";
+                filas += "<td>" + pdf_contador + "</td>";
+                filas += "<td>" + item[1].ToString() + "</td>";
+                filas += "<td>" + item[2].ToString() + "</td>";
+                filas += "<td>" + item[3].ToString() + "</td>";
+                filas += "<td>" + item[4].ToString() + "</td>";
+                filas += "<td>" + item[5].ToString() + "</td>";
+                filas += "</tr>";
+                pdf_contador++;
+            }
+            paginahtml_texto = paginahtml_texto.Replace("@FILAS", filas);
+
+
+            if (guardar.ShowDialog() == true)
+            {
+                using (FileStream stream = new FileStream(guardar.FileName,FileMode.Create))
+                {
+                    Document pdfDoc = new Document(PageSize.A4, 25, 25, 25, 25);
+                    PdfWriter writer = PdfWriter.GetInstance(pdfDoc,stream);
+                    pdfDoc.Open();
+                    pdfDoc.Add(new Phrase(""));
+                    using (StringReader sr = new StringReader(paginahtml_texto))
+                    {
+                        XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                    }
+                    pdfDoc.Close();
+                    stream.Close();
+                }
+            }
         }
     }
 }

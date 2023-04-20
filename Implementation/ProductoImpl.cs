@@ -644,8 +644,11 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectMovementsHistory_Details(int IdTransferencia)
         {
-            string query = @"SELECT DT.idTransferencia, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'IMEI o SN' FROM detalle_transferencia AS DT
+            string query = @"SELECT DT.idTransferencia, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'IMEI o SN', S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino' FROM detalle_transferencia AS DT
                             INNER JOIN Producto P ON P.idProducto = DT.idProducto
+                            INNER JOIN Transferencia T ON T.idTransferencia = DT.idTransferencia
+                            INNER JOIN Sucursal S1 ON S1.idSucursal = T.sucursalOrigen
+							INNER JOIN Sucursal S2 ON S2.idSucursal = T.sucursalDestino
                             WHERE DT.idTransferencia = @idTransferencia
                             ORDER BY 2 ASC";
             MySqlCommand command = CreateBasicCommand(query);

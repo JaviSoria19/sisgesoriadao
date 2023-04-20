@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>TITULO</title>
+	<style>
+        *{
+            font-size: 7pt;
+        }
+        table.border {
+            border-collapse: collapse;
+        }
+            table.border th {
+                padding: 3px;
+                border: 1px solid black;
+            }
+
+            table.border td {
+                padding: 3px;
+                border-left: 1px solid black;
+                border-right: 1px solid black;
+                border-bottom: 1px solid black;
+            }
+    </style>
+</head>
+<body>
+	<table style="width:100%">
+        <tr>
+            <td style="width:100%" align="center" valign="top">
+                <table>
+                    <tr><td align="center"><h4 style="margin:0px">@NOMBRESUCURSAL</h4></td></tr>
+                    <tr><td align="center">Transferencia de Productos.</td></tr>
+                    <tr><td align="center">@FECHA</td></tr>
+                    <tr><td align="center">Usuario: @USUARIO</td></tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr><td colspan="3" height="20"></td></tr>
+
+        <tr>
+            <td colspan="3">
+                <table class="border" style="width:100%;">
+                    <thead>
+                        <tr style="background-color:#D8D8D8">
+                            <th>Nro.</th>
+                            <th>Codigo</th>
+                            <th>Producto</th>
+                            <th>IMEI o S/N</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--
+                        <tr>
+                            <td>1</td>
+                            <td>sdafsda</td>
+                            <td>2.4</td>
+                            <td>2.4</td>
+                            <td>2.4</td>
+                            <td>2.4</td>
+                        </tr>
+                    -->
+                        @FILAS
+                        <tr>
+                        	<td style="border: 0px !important"></td>
+                        	<td style="border: 0px !important"></td>
+                            <td style="border: 0px !important"></td>
+                            <td style="border: 0px !important"></td>
+                            <td style="border: 0px !important"></td>
+                            <td align="center" height="80" style="border: 0px;border-bottom: 1px solid black;"></td>
+                        </tr>
+                        <tr>
+                        	<td style="border: 0px !important"></td>
+                        	<td style="border: 0px !important"></td>
+                            <td style="border: 0px !important"></td>
+                            <td style="border: 0px !important"></td>
+                            <td style="border: 0px !important"></td>
+                            <td align="center" style="border: 0px;">Firma</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
