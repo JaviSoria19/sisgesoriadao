@@ -114,5 +114,10 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void btnPrintPDF_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

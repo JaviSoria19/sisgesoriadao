@@ -31,6 +31,7 @@
             <StackPanel Orientation="Vertical" Margin="10">
                 <TextBlock Margin="0,0,0,5" TextWrapping="Wrap">
                     <Bold>ATENCION:</Bold> Estimad@ usuari@, para trasladar productos hacia una sucursal seleccione el destino e ingrese el código del producto.
+                    <LineBreak/>Para remover un producto ingresado erróneamente, seleccionelo en la tabla que se muestra debajo.
                 </TextBlock>
             </StackPanel>
 

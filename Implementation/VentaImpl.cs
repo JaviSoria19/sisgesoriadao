@@ -128,5 +128,84 @@ namespace sisgesoriadao.Implementation
         {
             throw new NotImplementedException();
         }
+
+        public string GetTodaySales(DateTime FechaHoy)
+        {
+            string numeroVentasdelDia = null;
+            string query = @"SELECT COUNT(idVenta) FROM venta WHERE idSucursal = @SessionIdSucursal
+                                AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@FechaInicio", FechaHoy.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", FechaHoy.ToString("yyyy-MM-dd") + " 23:59:59");
+            command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    numeroVentasdelDia = dt.Rows[0][0].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return numeroVentasdelDia;
+        }
+
+        public (double, double) GetCashAmounts()
+        {
+            double CajaUSD = 0, CajaBOB = 0;
+            string query = @"SELECT IFNULL(SUM(MP.montoUSD),0), IFNULL(SUM(MP.montoBOB),0) FROM caja C
+                                INNER JOIN detalle_caja DC ON C.idCaja = DC.idCaja
+                                INNER JOIN venta V ON DC.idVenta = V.idVenta
+                                INNER JOIN metodo_pago MP ON V.idVenta = MP.idVenta
+                                WHERE C.idSucursal = @SessionIdSucursal AND C.idCaja = (SELECT MAX(idCaja) FROM caja WHERE idSucursal = @SessionIdSucursal)";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    CajaUSD = double.Parse(dt.Rows[0][0].ToString());
+                    CajaBOB = double.Parse(dt.Rows[0][1].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return (CajaUSD,CajaBOB);
+        }
+
+        public string GetTodayProducts(DateTime FechaHoy)
+        {
+            string numeroProductosdelDia = null;
+            string query = @"SELECT COUNT(DV.idProducto) FROM venta V
+                            INNER JOIN detalle_venta DV ON V.idVenta = DV.idVenta
+                            WHERE V.idSucursal = @SessionIdSucursal
+                            AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@FechaInicio", FechaHoy.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", FechaHoy.ToString("yyyy-MM-dd") + " 23:59:59");
+            command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    numeroProductosdelDia = dt.Rows[0][0].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return numeroProductosdelDia;
+        }
     }
 }

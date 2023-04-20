@@ -68,7 +68,7 @@
                 <Button x:Name="btnSave" Content="GUARDAR" Margin="5" IsEnabled="False" Click="btnSave_Click"/>
                 <Button x:Name="btnCancel" Content="CANCELAR" Margin="5" IsEnabled="False" Click="btnCancel_Click"/>
             </StackPanel>
-            
+
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
                 <Label x:Name="lblInfo" Content="" Foreground="Blue" Background="Transparent" Margin="0,0,0,10" HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
@@ -91,30 +91,6 @@
                   SelectionChanged="dgvDatos_SelectionChanged" MaxHeight="363" MaxWidth="1880"/>
                 </Border>
                 <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
-            </StackPanel>
-
-            <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
-                <TextBlock Text="PRODUCTOS VENDIDOS" FontWeight="Bold" FontSize="16" Margin="0,20,0,10" HorizontalAlignment="Center"/>
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                    <Label Content="Buscar:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtBuscar_Vendidos" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="20" Height="22"/>
-                    <Button x:Name="btnSearch_Vendidos" ToolTip="BUSCAR REGISTROS" Margin="0,0,20,0" Click="btnSearch_Vendidos_Click">
-                        <materialDesign:PackIcon Kind="Search"/>
-                    </Button>
-                    <Label Content="Desde:" VerticalAlignment="Center"/>
-                    <DatePicker x:Name="dtpFechaInicio_Vendidos" Margin="0,0,20,0"/>
-                    <Label Content="Hasta:" VerticalAlignment="Center"/>
-                    <DatePicker x:Name="dtpFechaFin_Vendidos"/>
-                </StackPanel>
-                <Border BorderBrush="Gray" BorderThickness="2">
-                    <DataGrid x:Name="dgvDatos_Vendidos"
-                  HorizontalAlignment="Left" VerticalAlignment="Top"
-                  Loaded="dgvDatos_Vendidos_Loaded" GridLinesVisibility="Horizontal"
-                  CanUserAddRows="False" IsReadOnly="True" 
-                  CanUserResizeRows="False" CanUserResizeColumns="False"
-                  MaxHeight="363" MaxWidth="1880"/>
-                </Border>
-                <Label x:Name="lblDataGridRows_Vendidos" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

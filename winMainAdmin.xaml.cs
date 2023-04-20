@@ -23,6 +23,7 @@ namespace sisgesoriadao
     /// </summary>
     public partial class winMainAdmin : Window
     {
+        VentaImpl implVenta;
         public winMainAdmin()
         {
             InitializeComponent();
@@ -120,6 +121,43 @@ namespace sisgesoriadao
         {
             txtBlockWelcome.Text = "Bienvenid@ a " + Session.Sucursal_NombreSucursal + " , " + Session.NombreUsuario;
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
+            LoadInfoFromDB();
+        }
+        void LoadInfoFromDB()
+        {
+            try
+            {
+                implVenta = new VentaImpl();
+                infoTotalSalesFromToday.Text = "VENTAS DE HOY: " + implVenta.GetTodaySales(DateTime.Today);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            try
+            {
+                implVenta = new VentaImpl();
+                infoTotalProductsFromToday.Text = "PRODUCTOS VENDIDOS DE HOY: " + implVenta.GetTodayProducts(DateTime.Today);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            try
+            {
+                implVenta = new VentaImpl();
+                var (mUSD, mBOB) = implVenta.GetCashAmounts();
+                infoCashAmount.Text = "EFECTIVO EN CAJA: " + mUSD.ToString() + " USD. | " + mBOB.ToString() + " BS.";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
+            LoadInfoFromDB();
         }
     }
 }

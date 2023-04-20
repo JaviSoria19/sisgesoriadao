@@ -50,7 +50,7 @@
                     <Button x:Name="btnSearchCustomer" ToolTip="BUSCAR CLIENTE" Click="btnSearchCustomer_Click" Margin="0,0,0,0">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>
-                    <Button x:Name="btnAddCustomer" ToolTip="BUSCAR CLIENTE" Click="btnAddCustomer_Click" Margin="10,0,0,0">
+                    <Button x:Name="btnAddCustomer" ToolTip="AÑADIR CLIENTE" Click="btnAddCustomer_Click" Margin="10,0,0,0">
                         <materialDesign:PackIcon Kind="AccountAdd"/>
                     </Button>
                     <Label x:Name="lblSearchCustomerInfo" Content="" Foreground="Black" Background="Transparent" Margin="20,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>

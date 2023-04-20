@@ -25,8 +25,11 @@
                 <TextBlock x:Name="txtBlockWelcome" Text="BIENVENIDO, USUARIO" Margin="5,0,40,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
                 <materialDesign:PackIcon Kind="Dollar" Width="25" Height="25" VerticalAlignment="Center" ToolTip="CAMBIO DEL DÓLAR"/>
                 <TextBlock x:Name="txtCambioDolar" Text="6,97" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
-                <Button x:Name="btnSettings" ToolTip="AJUSTES" HorizontalAlignment="Right" Margin="10,0,0,0" Click="btnSettings_Click">
+                <Button x:Name="btnSettings" ToolTip="AJUSTES" HorizontalAlignment="Right" Margin="10,0,0,0" Click="btnSettings_Click" Background="Gray" BorderBrush="Gray">
                     <materialDesign:PackIcon Kind="Settings"/>
+                </Button>
+                <Button x:Name="btnRefresh" ToolTip="REFRESCAR INFORMACIÓN" HorizontalAlignment="Right" Margin="10,0,0,0" Click="btnRefresh_Click" Background="LimeGreen" BorderBrush="LimeGreen">
+                    <materialDesign:PackIcon Kind="Sync"/>
                 </Button>
             </StackPanel>
             
@@ -138,14 +141,15 @@
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Margin="20">
                     <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="Orange" Foreground="White">
-                        <TextBlock FontSize="20" Text="VENTAS REALIZADAS DEL DÍA: 23" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
-                    </materialDesign:Card>
-                    <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="LimeGreen">
-                        <TextBlock FontSize="20" Text="TOTAL DE EFECTIVO: 14820 Bs." Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock x:Name="infoTotalSalesFromToday" FontSize="20" Text="VENTAS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
                     </materialDesign:Card>
                     <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="Gold" Foreground="White">
-                        <TextBlock FontSize="20" Text="VENDEDOR DESTACADO: JPEREZ" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock x:Name="infoTotalProductsFromToday" FontSize="20" Text="PRODUCTOS VENDIDOS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
                     </materialDesign:Card>
+                    <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="LimeGreen">
+                        <TextBlock x:Name="infoCashAmount" FontSize="20" Text="EFECTIVO EN CAJA: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
+                    </materialDesign:Card>
+                    
                 </StackPanel>
                 
             </StackPanel>

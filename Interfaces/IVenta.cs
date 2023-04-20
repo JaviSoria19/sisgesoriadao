@@ -11,5 +11,8 @@ namespace sisgesoriadao.Interfaces
     public interface IVenta:IDao<Venta>
     {
         string InsertTransaction(Venta venta,List<Producto> ListaProductos, List<double> ListaDescuentosPorcentaje, List<Categoria> ListaGarantias,List<MetodoPago> ListaMetodosPago, Cliente cliente);
+        string GetTodaySales(DateTime FechaHoy);
+        (double, double) GetCashAmounts();
+        string GetTodayProducts(DateTime FechaHoy);
     }
 }

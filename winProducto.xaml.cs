@@ -149,27 +149,6 @@ namespace sisgesoriadao
         {
             this.Close();
         }
-        private void btnSearch_Vendidos_Click(object sender, RoutedEventArgs e)
-        {
-            if (txtBuscar_Vendidos.Text == null || txtBuscar_Vendidos.Text == "")
-            {
-                SelectSold();
-            }
-            else
-            {
-                try
-                {
-                    dgvDatos_Vendidos.ItemsSource = null;
-                    dgvDatos_Vendidos.ItemsSource = implProducto.SelectLikeSoldProducts(txtBuscar_Vendidos.Text.Trim(), dtpFechaInicio_Vendidos.SelectedDate.Value.Date, dtpFechaFin_Vendidos.SelectedDate.Value.Date).DefaultView;
-                    dgvDatos_Vendidos.Columns[0].Visibility = Visibility.Collapsed;
-                    lblDataGridRows_Vendidos.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeSoldProducts(txtBuscar_Vendidos.Text.Trim(), dtpFechaInicio_Vendidos.SelectedDate.Value.Date, dtpFechaFin_Vendidos.SelectedDate.Value.Date).Rows.Count;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
-        }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
@@ -181,16 +160,10 @@ namespace sisgesoriadao
         {
             Select();
         }
-        private void dgvDatos_Vendidos_Loaded(object sender, RoutedEventArgs e)
-        {
-            SelectSold();
-        }
         private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
         {
             dtpFechaFin.SelectedDate = DateTime.Today;
             dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
-            dtpFechaFin_Vendidos.SelectedDate = DateTime.Today;
-            dtpFechaInicio_Vendidos.SelectedDate = new DateTime(2023, 01, 01);
         }
         private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -324,21 +297,6 @@ namespace sisgesoriadao
                 dgvDatos.ItemsSource = implProducto.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        private void SelectSold()
-        {
-            try
-            {
-                implProducto = new ProductoImpl();
-                dgvDatos_Vendidos.ItemsSource = null;
-                dgvDatos_Vendidos.ItemsSource = implProducto.SelectSoldProducts().DefaultView;
-                dgvDatos_Vendidos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows_Vendidos.Content = "NÚMERO DE REGISTROS: " + implProducto.SelectSoldProducts().Rows.Count;
             }
             catch (Exception ex)
             {
@@ -512,7 +470,6 @@ namespace sisgesoriadao
 
             }
         }
-
         private void btnPrintQR_Click(object sender, RoutedEventArgs e)
         {            
             if (producto != null)
