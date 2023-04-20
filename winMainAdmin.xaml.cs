@@ -51,11 +51,6 @@ namespace sisgesoriadao
             winUsuario winUsuario = new winUsuario();
             winUsuario.Show();
         }
-        private void btnSales_Click(object sender, RoutedEventArgs e)
-        {
-            winVenta_Insert winVenta_Insert = new winVenta_Insert();
-            winVenta_Insert.Show();
-        }
         private void btnCustomers_Click(object sender, RoutedEventArgs e)
         {
             winCliente winCliente = new winCliente();
@@ -112,6 +107,11 @@ namespace sisgesoriadao
             winTransferencia winTransferencia = new winTransferencia();
             winTransferencia.Show();
         }
+        private void btnSaleAdd_Click(object sender, RoutedEventArgs e)
+        {
+            winVenta_Insert winVenta_Insert = new winVenta_Insert();
+            winVenta_Insert.Show();
+        }
         private void btnReports_Click(object sender, RoutedEventArgs e)
         {
 
@@ -121,6 +121,5 @@ namespace sisgesoriadao
             txtBlockWelcome.Text = "Bienvenid@ a " + Session.Sucursal_NombreSucursal + " , " + Session.NombreUsuario;
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
         }
-        
     }
 }

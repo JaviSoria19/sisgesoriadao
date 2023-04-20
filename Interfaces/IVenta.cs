@@ -10,6 +10,6 @@ namespace sisgesoriadao.Interfaces
 {
     public interface IVenta:IDao<Venta>
     {
-        string InsertTransaction(List<Producto> ListaProductos, Venta venta);
+        string InsertTransaction(Venta venta,List<Producto> ListaProductos, List<double> ListaDescuentosPorcentaje, List<Categoria> ListaGarantias,List<MetodoPago> ListaMetodosPago, Cliente cliente);
     }
 }

@@ -34,10 +34,11 @@
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
-                    <Button x:Name="btnSales" Width="100" Height="100" Click="btnSales_Click">
-                        <materialDesign:PackIcon Kind="Cart" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    <Button x:Name="btnSaleAdd" Width="100" Height="100" Click="btnSaleAdd_Click">
+                        <materialDesign:PackIcon Kind="CartAdd" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
-                    <Label Content="VENTAS" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="REGISTRAR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="VENTA" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnCustomers" Width="100" Height="100" Click="btnCustomers_Click">
