@@ -683,6 +683,10 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
         public DataTable SelectProductIDandNamesForAutoCompleteBox()
         {
             string query = @"SELECT idProducto, nombreProducto FROM PRODUCTO WHERE estado = 1 GROUP BY 2";

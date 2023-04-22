@@ -135,9 +135,12 @@
     <Compile Include="winCondicion.xaml.cs">
       <DependentUpon>winCondicion.xaml</DependentUpon>
     </Compile>
+<<<<<<< HEAD
     <Compile Include="winCotizacion.xaml.cs">
       <DependentUpon>winCotizacion.xaml</DependentUpon>
     </Compile>
+=======
+>>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
     <Compile Include="winCotizacion_Insert.xaml.cs">
       <DependentUpon>winCotizacion_Insert.xaml</DependentUpon>
     </Compile>
@@ -206,10 +209,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+<<<<<<< HEAD
     <Page Include="winCotizacion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+=======
+>>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
     <Page Include="winCotizacion_Insert.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
