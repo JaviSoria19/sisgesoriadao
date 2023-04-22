@@ -663,5 +663,20 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public DataTable SelectProductIDandNamesForAutoCompleteBox()
+        {
+            string query = @"SELECT idProducto, nombreProducto FROM PRODUCTO WHERE estado = 1 GROUP BY 2";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

@@ -92,6 +92,16 @@
                 </StackPanel>
             </StackPanel>
 
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnQuotationAdd" Width="100" Height="100" Click="btnQuotationAdd_Click">
+                        <materialDesign:PackIcon Kind="NoteEditOutline" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="REALIZAR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="COTIZACIÓN" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+            </StackPanel>
+
             <TextBlock Text="GESTIONAR INFORMACIÓN" Margin="0,15,0,0" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold"/>
             
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

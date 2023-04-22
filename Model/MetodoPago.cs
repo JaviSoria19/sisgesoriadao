@@ -8,6 +8,7 @@ namespace sisgesoriadao.Model
 {
     public class MetodoPago
     {
+        public int IdMetodoPago { get; set; }
         public int IdVenta { get; set; }
         public double MontoUSD { get; set; }
         public double MontoBOB { get; set; }
@@ -16,6 +17,15 @@ namespace sisgesoriadao.Model
         public MetodoPago()
         {
 
+        }
+        public MetodoPago(int idMetodoPago, int idVenta, double montoUSD, double montoBOB, byte tipo, DateTime fechaRegistro)
+        {
+            IdMetodoPago = idMetodoPago;
+            IdVenta = idVenta;
+            MontoUSD = montoUSD;
+            MontoBOB = montoBOB;
+            Tipo = tipo;
+            FechaRegistro = fechaRegistro;
         }
         public MetodoPago(int idVenta, double montoUSD, double montoBOB, byte tipo, DateTime fechaRegistro)
         {
@@ -38,9 +48,9 @@ namespace sisgesoriadao.Model
             Tipo = tipo;
             FechaRegistro = fechaRegistro;
         }
-        public MetodoPago(int idVenta)
+        public MetodoPago(int idMetodoPago)
         {
-            IdVenta = idVenta;
+            IdMetodoPago = idMetodoPago;
         }
     }
 }

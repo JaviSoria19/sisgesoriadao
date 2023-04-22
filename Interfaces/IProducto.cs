@@ -17,6 +17,7 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectSoldProducts();
         DataTable SelectLikeSoldProducts(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin);
         DataTable SelectProductNamesForComboBox();
+        DataTable SelectProductIDandNamesForAutoCompleteBox();
         //LOTES
         int InsertBatch(Lote l);
         int UpdateBatch(Lote l);
