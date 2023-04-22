@@ -47,6 +47,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <Label Content="PRODUCTO:"/>
                 <TextBox x:Name="txtNombreProducto" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="50" IsEnabled="False"/>
                 <Label Content="Precio $:" VerticalAlignment="Center"/>
@@ -62,6 +63,8 @@
                 <Label Content="Precio BS:" VerticalAlignment="Center"/>
                 <TextBox x:Name="txtCotizacionBOB" TextWrapping="Wrap" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" VerticalAlignment="Center" KeyUp="txtCotizacionBOB_KeyUp" KeyDown="txtCotizacionBOB_KeyDown"/>
 =======
+=======
+>>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
                 <Label Content="NOMBRE:"/>
                 <TextBox x:Name="txtNombreProducto" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="50" IsEnabled="False"/>
                 <Label Content="Precio $:" VerticalAlignment="Center"/>
@@ -70,6 +73,9 @@
                 <TextBox x:Name="txtCotizacionBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" VerticalAlignment="Center" KeyUp="txtCotizacionBOB_KeyUp" KeyDown="txtCotizacionBOB_KeyDown"/>
                 <Label Content="Ocultar Precio $.:" VerticalAlignment="Center"/>
                 <ToggleButton x:Name="tglOcultarUSD" Style="{StaticResource MaterialDesignSwitchToggleButton}" ToolTip="Default ToggleButton Style" IsEnabled="False"/>
+<<<<<<< HEAD
+>>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
+=======
 >>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,20,0,20" HorizontalAlignment="Center">

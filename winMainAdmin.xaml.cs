@@ -119,11 +119,14 @@ namespace sisgesoriadao
             winCotizacion_Insert.Show();
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         private void btnQuotations_Click(object sender, RoutedEventArgs e)
         {
             winCotizacion winCotizacion = new winCotizacion();
             winCotizacion.Show();
         }
+=======
+>>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
 =======
 >>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
         private void btnRefresh_Click(object sender, RoutedEventArgs e)

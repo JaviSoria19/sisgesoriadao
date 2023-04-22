@@ -13,7 +13,10 @@ namespace sisgesoriadao.Interfaces
         string InsertTransaction(List<Producto> ListaProductos);
         Cotizacion Get(int id);
 <<<<<<< HEAD
+<<<<<<< HEAD
         DataTable SelectDetails(int idCotizacion);
+=======
+>>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
 =======
 >>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
     }

@@ -123,9 +123,6 @@
     <Compile Include="winAjuste.xaml.cs">
       <DependentUpon>winAjuste.xaml</DependentUpon>
     </Compile>
-    <Compile Include="winCaja.xaml.cs">
-      <DependentUpon>winCaja.xaml</DependentUpon>
-    </Compile>
     <Compile Include="winCategoria.xaml.cs">
       <DependentUpon>winCategoria.xaml</DependentUpon>
     </Compile>

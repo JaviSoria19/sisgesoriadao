@@ -101,6 +101,7 @@
                     <TextBlock Text="COTIZACIÓN" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnQuotations" Width="100" Height="100" Click="btnQuotations_Click">
                         <materialDesign:PackIcon Kind="NoteMultipleOutline" Width="80" Height="80" HorizontalAlignment="Center"/>
@@ -108,6 +109,8 @@
                     <TextBlock Text="VER" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                     <TextBlock Text="COTIZACIONES" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
+=======
+>>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
 =======
 >>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
             </StackPanel>

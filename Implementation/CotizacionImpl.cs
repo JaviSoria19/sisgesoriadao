@@ -72,6 +72,7 @@ namespace sisgesoriadao.Implementation
         public Cotizacion Get(int id)
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
             Cotizacion c = null;
             string query = @"SELECT idCotizacion, idUsuario, idSucursal, fechaRegistro FROM cotizacion 
                             WHERE idCotizacion=@idCotizacion";
@@ -99,6 +100,9 @@ namespace sisgesoriadao.Implementation
 =======
             throw new NotImplementedException();
 >>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
+=======
+            throw new NotImplementedException();
+>>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
         }
         public int Insert(Cotizacion c)
         {
@@ -106,6 +110,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
+<<<<<<< HEAD
 <<<<<<< HEAD
             string query = @"SELECT C.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, COUNT(DC.idCotizacion) AS 'Productos cotizados',C.fechaRegistro AS 'Fecha de Registro' FROM cotizacion C
                             INNER JOIN usuario U ON C.idUsuario = U.idUsuario
@@ -167,11 +172,16 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
 =======
+=======
+>>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
             throw new NotImplementedException();
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime fechaInicio, DateTime fechaFin)
         {
             throw new NotImplementedException();
+<<<<<<< HEAD
+>>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
+=======
 >>>>>>> 186ced3ae7a536bb98b1c5c744b781d7fd732b66
         }
         public int Update(Cotizacion c)
