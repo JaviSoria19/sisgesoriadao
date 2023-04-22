@@ -333,9 +333,6 @@
     <None Include="Resources\PlantillaReporteCotizacion.html" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Picsart_23-04-22_14-11-13-634.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
