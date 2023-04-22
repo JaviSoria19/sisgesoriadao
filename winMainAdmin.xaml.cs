@@ -113,6 +113,21 @@ namespace sisgesoriadao
             winVenta_Insert winVenta_Insert = new winVenta_Insert();
             winVenta_Insert.Show();
         }
+        private void btnQuotationAdd_Click(object sender, RoutedEventArgs e)
+        {
+            winCotizacion_Insert winCotizacion_Insert = new winCotizacion_Insert();
+            winCotizacion_Insert.Show();
+        }
+        private void btnQuotations_Click(object sender, RoutedEventArgs e)
+        {
+            winCotizacion winCotizacion = new winCotizacion();
+            winCotizacion.Show();
+        }
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
+            LoadInfoFromDB();
+        }
         private void btnReports_Click(object sender, RoutedEventArgs e)
         {
 
@@ -153,11 +168,6 @@ namespace sisgesoriadao
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-        private void btnRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
-            LoadInfoFromDB();
         }
     }
 }

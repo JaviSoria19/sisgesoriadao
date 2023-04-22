@@ -58,7 +58,14 @@ namespace sisgesoriadao
         {
             if (e.Key == Key.Enter)
             {
-                SelectLike();
+                if (string.IsNullOrEmpty(txtBuscar.Text))
+                {
+                    Select();
+                }
+                else
+                {
+                    SelectLike();
+                }
             }
         }
         private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
@@ -110,7 +117,17 @@ namespace sisgesoriadao
         {
             if (string.IsNullOrEmpty(txtBuscar.Text)!=true)
             {
-
+                try
+                {
+                    dgvDatos.ItemsSource = null;
+                    dgvDatos.ItemsSource = implProducto.SelectLikeMovementsHistory(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
+                    dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                    lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeMovementsHistory(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
         private void SelectDetails(int idTransferencia)

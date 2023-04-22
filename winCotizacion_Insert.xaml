@@ -1,0 +1,71 @@
+﻿<Window x:Class="sisgesoriadao.winCotizacion_Insert"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
+     Background="{DynamicResource MaterialDesignPaper}"
+     FontFamily="{DynamicResource MaterialDesignFont}"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:sisgesoriadao"
+        xmlns:controls="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
+        mc:Ignorable="d"
+        Title="Sistema de Ventas - Realizar nueva cotización" Height="720" Width="1280"
+        WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Button x:Name="btnReturn" ToolTip="VOLVER A INICIO" Margin="0,0,20,0" Click="btnReturn_Click">
+                    <materialDesign:PackIcon Kind="ArrowLeftBold"/>
+                </Button>
+                <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="NoteEditOutline" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="REALIZAR NUEVA COTIZACIÓN" Margin="5,0,20,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="Dollar" Width="25" Height="25" VerticalAlignment="Center" ToolTip="CAMBIO DEL DÓLAR"/>
+                <TextBlock x:Name="txtCambioDolar" Text="6,97" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Margin="0,0,0,5" TextWrapping="Wrap">
+                    <Bold>IMPORTANTE: Solo se podrá realizar cotizaciones de productos existentes en sistema.</Bold>
+                    <LineBreak/>Presione la tecla <Bold>ENTER</Bold> para elegir el producto respectivamente.
+                    <LineBreak/>Después, puede presionar la tecla <Bold>ENTER</Bold> en los campos de precios para agregar el producto a la lista.
+                    <LineBreak/>Nota: Para eliminar un producto ingresado erróneamente, seleccionelo en la tabla.
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
+                <Label Content="PRODUCTO:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <controls:AutoCompleteBox x:Name="acbtxtNombreProducto" Margin="0,0,20,0" MinWidth="120" IsEnabled="True" FilterMode="Contains" KeyDown="acbtxtNombreProducto_KeyDown"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <Label Content="PRODUCTO:"/>
+                <TextBox x:Name="txtNombreProducto" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="50" IsEnabled="False"/>
+                <Label Content="Precio $:" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtPrecioUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" VerticalAlignment="Center"/>
+                <Label Content="Precio BS:" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtPrecioBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <Label Content="Ocultar Precio $.:" VerticalAlignment="Center"/>
+                <ToggleButton x:Name="tglOcultarUSD" Style="{StaticResource MaterialDesignSwitchToggleButton}" ToolTip="Default ToggleButton Style" IsEnabled="False" Margin="0,0,20,0"/>
+                <Label Content="Precio $:" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtCotizacionUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" VerticalAlignment="Center" KeyUp="txtCotizacionUSD_KeyUp" KeyDown="txtCotizacionUSD_KeyDown"/>
+                <Label Content="Precio BS:" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtCotizacionBOB" TextWrapping="Wrap" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" VerticalAlignment="Center" KeyUp="txtCotizacionBOB_KeyUp" KeyDown="txtCotizacionBOB_KeyDown"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,20" HorizontalAlignment="Center">
+                <Button x:Name="btnAdd" Content="AÑADIR PRODUCTO" Click="btnAdd_Click" IsEnabled="False"/>
+            </StackPanel>
+            <DataGrid x:Name="dgvProductos" CanUserAddRows="False" CanUserDeleteRows="False" HorizontalAlignment="Center" IsReadOnly="True" SelectionChanged="dgvProductos_SelectionChanged" Loaded="dgvProductos_Loaded"/>
+            <Button x:Name="btnSave" Content="GUARDAR E IMPRIMIR" Margin="0,30,0,0" Click="btnSave_Click" Width="180"/>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

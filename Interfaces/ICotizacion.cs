@@ -8,9 +8,10 @@ using System.Data;
 
 namespace sisgesoriadao.Interfaces
 {
-    public interface ICondicion : IDao<Condicion>
+    public interface ICotizacion : IDao<Cotizacion>
     {
-        Condicion Get(byte Id);
-        DataTable SelectForComboBox();
+        string InsertTransaction(List<Producto> ListaProductos);
+        Cotizacion Get(int id);
+        DataTable SelectDetails(int idCotizacion);
     }
 }

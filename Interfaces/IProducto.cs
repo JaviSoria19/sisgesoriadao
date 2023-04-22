@@ -17,6 +17,7 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectSoldProducts();
         DataTable SelectLikeSoldProducts(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin);
         DataTable SelectProductNamesForComboBox();
+        DataTable SelectProductIDandNamesForAutoCompleteBox();
         //LOTES
         int InsertBatch(Lote l);
         int UpdateBatch(Lote l);
@@ -30,6 +31,7 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectPendingProducts();
         int UpdatePendingProduct(int IdProducto);
         DataTable SelectMovementsHistory();
+        DataTable SelectLikeMovementsHistory(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin);
         DataTable SelectMovementsHistory_Details(int IdTransferencia);
     }
 }

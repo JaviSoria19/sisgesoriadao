@@ -61,13 +61,21 @@ namespace sisgesoriadao.Properties {
         }
         
         /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap logo {
+            get {
+                object obj = ResourceManager.GetObject("logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a &lt;!DOCTYPE html&gt;
-        ///&lt;html&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
         ///&lt;head&gt;
-        ///	&lt;meta charset=&quot;utf-8&quot;&gt;
-        ///	&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
-        ///	&lt;title&gt;TITULO&lt;/title&gt;
-        ///	&lt;style&gt;
+        ///    &lt;title&gt;Title of the document&lt;/title&gt;
+        ///    &lt;style&gt;
         ///        table.border {
         ///            border-collapse: collapse;
         ///        }
@@ -84,7 +92,37 @@ namespace sisgesoriadao.Properties {
         ///    &lt;/style&gt;
         ///&lt;/head&gt;
         ///&lt;body&gt;
-        ///	 [resto de la cadena truncado]&quot;;.
+        ///    &lt;table style=&quot;width:100%&quot;&gt;
+        ///        [resto de la cadena truncado]&quot;;.
+        /// </summary>
+        internal static string PlantillaReporteCotizacion {
+            get {
+                return ResourceManager.GetString("PlantillaReporteCotizacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a &lt;!DOCTYPE html&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///&lt;head&gt;
+        ///	&lt;title&gt;TITULO&lt;/title&gt;
+        ///	&lt;style&gt;
+        ///        *{
+        ///            font-size: 7pt;
+        ///        }
+        ///        table.border {
+        ///            border-collapse: collapse;
+        ///        }
+        ///            table.border th {
+        ///                padding: 3px;
+        ///                border: 1px solid black;
+        ///            }
+        ///
+        ///            table.border td {
+        ///                padding: 3px;
+        ///                border-left: 1px solid black;
+        ///                border-right: 1px solid black;
+        ///    [resto de la cadena truncado]&quot;;.
         /// </summary>
         internal static string PlantillaReporteTransferencia {
             get {

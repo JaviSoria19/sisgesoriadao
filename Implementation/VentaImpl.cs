@@ -67,22 +67,20 @@ namespace sisgesoriadao.Implementation
                     {
                         //REGISTRO DEL DETALLE DE VENTA.
                         command.CommandText = @"INSERT INTO metodo_pago (idVenta,montoUSD,montoBOB,tipo)
-                            VALUES((SELECT MAX(idVenta) FROM venta),@montoUSD,@montoBOB,@tipo)";
+                            VALUES((SELECT MAX(idVenta) FROM venta WHERE idSucursal = @Session_idSucursal),@montoUSD,@montoBOB,@tipo)";
+                        command.Parameters.AddWithValue("@Session_idSucursal", Session.Sucursal_IdSucursal);
                         command.Parameters.AddWithValue("@montoUSD", item.MontoUSD);
                         command.Parameters.AddWithValue("@montoBOB", item.MontoBOB);
                         command.Parameters.AddWithValue("@tipo", item.Tipo);
                         command.ExecuteNonQuery();
-
+                        //REGISTRO DEL DETALLE DE CAJA.
+                        command.CommandText = @"INSERT INTO detalle_caja (idCaja,idMetodoPago)
+                            VALUES((SELECT MAX(idCaja) FROM caja WHERE idSucursal = @Twice_Session_idSucursal),LAST_INSERT_ID())";
+                        command.Parameters.AddWithValue("@Twice_Session_idSucursal", Session.Sucursal_IdSucursal);
+                        command.ExecuteNonQuery();
                         command.Parameters.Clear();
                     }
                 }
-                command.CommandText = @"INSERT INTO detalle_caja (idVenta,idCaja)
-                            VALUES((SELECT MAX(idVenta) FROM venta),(SELECT idCaja FROM caja WHERE idSucursal = @Session_idSucursal))";
-                command.Parameters.AddWithValue("@Session_idSucursal", Session.Sucursal_IdSucursal);
-                command.ExecuteNonQuery();
-                //command.CommandText = "Insert into mytable (id, desc) VALUES (101, 'Description')";
-                //command.ExecuteNonQuery();
-
                 myTrans.Commit();
                 return "VENTA_EXITOSA";
             }
@@ -159,8 +157,7 @@ namespace sisgesoriadao.Implementation
             double CajaUSD = 0, CajaBOB = 0;
             string query = @"SELECT IFNULL(SUM(MP.montoUSD),0), IFNULL(SUM(MP.montoBOB),0) FROM caja C
                                 INNER JOIN detalle_caja DC ON C.idCaja = DC.idCaja
-                                INNER JOIN venta V ON DC.idVenta = V.idVenta
-                                INNER JOIN metodo_pago MP ON V.idVenta = MP.idVenta
+                                INNER JOIN metodo_pago MP ON DC.idMetodoPago = MP.idMetodoPago
                                 WHERE C.idSucursal = @SessionIdSucursal AND C.idCaja = (SELECT MAX(idCaja) FROM caja WHERE idSucursal = @SessionIdSucursal)";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
