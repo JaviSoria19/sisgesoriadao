@@ -204,5 +204,26 @@ namespace sisgesoriadao.Implementation
             }
             return numeroProductosdelDia;
         }
+
+        public DataTable SelectSalesWithPendingBalanceFromBranch()
+        {
+            string query = @"SELECT V.idVenta, U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT('- ',P.nombreProducto SEPARATOR ' '),')') AS Detalle, saldoUSD AS 'Saldo $us', saldoBOB AS 'Saldo Bs' FROM venta V
+                            INNER JOIN usuario U ON V.idUsuario = U.idUsuario
+                            INNER JOIN detalle_venta DV ON V.idVenta = DV.idVenta
+                            INNER JOIN producto P ON DV.idProducto = P.idProducto
+                            WHERE V.saldoUSD > 1 AND V.idSucursal = @SessionIdSucursal
+                            GROUP BY V.idVenta ORDER BY 1 ASC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

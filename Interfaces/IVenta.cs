@@ -14,5 +14,6 @@ namespace sisgesoriadao.Interfaces
         string GetTodaySales(DateTime FechaHoy);
         (double, double) GetCashAmounts();
         string GetTodayProducts(DateTime FechaHoy);
+        DataTable SelectSalesWithPendingBalanceFromBranch();
     }
 }

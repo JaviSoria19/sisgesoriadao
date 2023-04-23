@@ -123,6 +123,11 @@ namespace sisgesoriadao
             winCotizacion winCotizacion = new winCotizacion();
             winCotizacion.Show();
         }
+        private void btnCashPending_Click(object sender, RoutedEventArgs e)
+        {
+            winCaja winCaja = new winCaja();
+            winCaja.Show();
+        }
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
