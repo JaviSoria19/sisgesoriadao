@@ -147,13 +147,17 @@ namespace sisgesoriadao
 
         private void btnPrintPDF_Click(object sender, RoutedEventArgs e)
         {
+            DataRowView d = (DataRowView)dgvDetalle.Items[0];
+            DateTime fechaRegistro = DateTime.Parse(d.Row.ItemArray[6].ToString());
+
             Microsoft.Win32.SaveFileDialog guardar = new Microsoft.Win32.SaveFileDialog();
-            guardar.FileName = "Transferencia_" + DateTime.Now.ToString("yyyy_MM_dd__HH_mm") + ".pdf";
+            guardar.FileName = "Transferencia_" + fechaRegistro.ToString("yyyy_MM_dd__HH_mm") + ".pdf";
             guardar.Filter = "PDF(*.pdf)|*.pdf";
 
             string paginahtml_texto = Properties.Resources.PlantillaReporteTransferencia.ToString();
             paginahtml_texto = paginahtml_texto.Replace("@NOMBRESUCURSAL",Session.Sucursal_NombreSucursal);
-            paginahtml_texto = paginahtml_texto.Replace("@FECHA", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
+            paginahtml_texto = paginahtml_texto.Replace("@FECHAREGISTRO", fechaRegistro.ToString("dd/MM/yyyy HH:mm"));
+            paginahtml_texto = paginahtml_texto.Replace("@FECHAIMPRESION", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
             paginahtml_texto = paginahtml_texto.Replace("@USUARIO", Session.NombreUsuario);
             string filas = string.Empty;
             foreach (DataRowView item in dgvDetalle.Items)

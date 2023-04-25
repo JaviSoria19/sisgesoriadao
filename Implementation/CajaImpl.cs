@@ -52,7 +52,26 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            throw new NotImplementedException();
+            string query = @"SELECT C.idCaja AS ID, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Responsable, IFNULL(U2.nombreUsuario,'-') AS 'Recepcionado por', IF(C.Estado=1,'Pendiente',IF(C.Estado=2,'Cerrado','Recepcionado')) AS Estado, C.fechaActualizacion AS 'Fecha de Cierre o Recepcion', SUM(MP.montoUSD) AS 'Ingresos USD', SUM(MP.montoBOB) AS 'Ingresos Bs' FROM caja C
+                            INNER JOIN sucursal S ON C.idSucursal = S.idSucursal
+                            INNER JOIN usuario U ON C.idUsuario = U.idUsuario
+                            LEFT JOIN usuario U2 ON C.idUsuarioReceptor = U2.idUsuario
+                            INNER JOIN detalle_caja DC ON C.idCaja = DC.idCaja
+                            INNER JOIN metodo_pago MP ON DC.idMetodoPago = MP.idMetodoPago
+                            WHERE C.estado = 2
+                            GROUP BY 1
+                            ORDER BY 1 DESC
+                            LIMIT 100";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idSucursal", Session.Sucursal_IdSucursal);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime fechaInicio, DateTime fechaFin)
         {
@@ -101,7 +120,7 @@ namespace sisgesoriadao.Implementation
             try
             {
                 //INSERCION DE NUEVA TRANSFERENCIA.
-                command.CommandText = @"UPDATE caja SET estado = 2, idUsuario = @idUsuario WHERE idCaja = @idCaja";
+                command.CommandText = @"UPDATE caja SET estado = 2, idUsuario = @idUsuario, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCaja = @idCaja";
                 command.Parameters.AddWithValue("@idUsuario", Session.IdUsuario);
                 command.Parameters.AddWithValue("@idCaja", c.IdCaja);
                 command.ExecuteNonQuery();

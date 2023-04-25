@@ -4,7 +4,7 @@
     <title>Title of the document</title>
     <style>
         table.border {
-            border-collapse: collapse;
+            border-spacing: 0;
         }
 
             table.border th {
@@ -27,7 +27,6 @@
                     <tr><td align="center"><h4 style="margin:0px">@NOMBRESUCURSAL</h4></td></tr>
                     <tr><td align="center">Direccion: @DIRECCION</td></tr>
                     <tr><td align="center">Telefono: @TELEFONO</td></tr>
-                    <tr><td align="center">Fecha de Cotizacion: @FECHAREGISTRO</td></tr>
                     <tr><td align="center">Fecha de Impresion: @FECHASISTEMA</td></tr>
                 </table>
             </td>
@@ -35,17 +34,37 @@
                 <table class="border" style="width:100%">
                     <tr><td align="center" style="background-color:#D8D8D8"><h4 style="margin:0px">COTIZACION</h4></td></tr>
                     <tr><td align="center">Nro.: @IDCOTIZACION</td></tr>
+                    <tr><td align="center">Fecha: @FECHAREGISTRO</td></tr>
                 </table>
             </td>
         </tr>
 
-        <tr><td colspan="3" height="20"></td></tr>
+        <tr><td colspan="3" height="30"></td></tr>
+
+        <tr><td colspan="3" height="20">
+            <table class="border" style="width:100%; font-size: 12px;">
+            <tr>
+                <td align="left" style="border: 0px;border-top: 1px solid black; border-left: 1px solid black;"><b>Nombre:</b> @COTIZACION_NOMBRECLIENTE</td>
+                <td align="left" style="border: 0px;border-top: 1px solid black; border-right: 1px solid black;"><b>Empresa:</b> @COTIZACION_NOMBREEMPRESA</td>
+            </tr>
+            <tr>
+                <td align="left" style="border: 0px; border-left: 1px solid black;"><b>NIT:</b> @COTIZACION_NIT</td>
+                <td align="left" style="border: 0px; border-right: 1px solid black;"><b>Direccion:</b> @COTIZACION_DIRECCION</td>
+            </tr>
+            <tr>
+                <td align="left" style="border: 0px; border-left: 1px solid black; border-bottom: 1px solid black;"><b>Correo:</b> @COTIZACION_CORREO</td>
+                <td align="left" style="border: 0px; border-right: 1px solid black; border-bottom: 1px solid black;"><b>Telefono:</b> @COTIZACION_TELEFONO</td>
+            </tr>
+        </table>
+        </td></tr>
 
         <tr><td colspan="3" height="30"></td></tr>
+        
+        
 
         <tr>
             <td colspan="3">
-                <table class="border" style="width:100%;">
+                <table class="border" style="width:100%;  font-size: 11px;">
                     <thead>
                         <tr style="background-color:#D8D8D8">
                             <th style="width:10%">Cant.</th>
@@ -66,9 +85,9 @@
                         @FILAS
                         <tr>
                             <td style="border: 0px !important"></td>
-                            <td style="border: 0px !important"></td>
-                            <td align="right">Total:</td>
-                            <td>@TOTAL</td>
+                            <td align="left"><b>Fecha de Entrega: @COTIZACION_FECHAENTREGA</b></td>
+                            <td align="right"><b>Total:</b></td>
+                            <td><b>@TOTAL</b></td>
                         </tr>
                     </tbody>
                 </table>

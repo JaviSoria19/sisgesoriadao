@@ -41,7 +41,35 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
-                <Label Content="PRODUCTO:"/>
+                <Label Content="CLIENTE:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtNombreCliente" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="60" IsEnabled="True"/>
+                <Label Content="EMPRESA:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtNombreEmpresa" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="60" IsEnabled="True"/>
+                <Label Content="NIT:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtNit" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="20" IsEnabled="True"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
+                <Label Content="DIRECCION:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtDireccion" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="100" IsEnabled="True"/>
+                <Label Content="CORREO:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtCorreo" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="40" IsEnabled="True"/>
+                <Label Content="TELEFONO:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtTelefono" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="True"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
+                <Label Content="Tiempo de Entrega:" VerticalAlignment="Center"/>
+                <DatePicker x:Name="dtpFechaEntrega" Margin="0,0,20,0" Loaded="dtpFechaEntrega_Loaded"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
+                <Label Content="BÚSQUEDA DE PRODUCTO:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <controls:AutoCompleteBox x:Name="acbtxtNombreProducto" Margin="0,0,20,0" MinWidth="120" IsEnabled="True" FilterMode="Contains" KeyDown="acbtxtNombreProducto_KeyDown"/>
             </StackPanel>

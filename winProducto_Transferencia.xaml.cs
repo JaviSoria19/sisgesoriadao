@@ -14,6 +14,12 @@ using System.Windows.Shapes;
 using System.Data;//ADO.NET
 using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
+
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.xml;
+using System.IO;
+using iTextSharp.tool.xml;
 namespace sisgesoriadao
 {
     /// <summary>
@@ -26,6 +32,7 @@ namespace sisgesoriadao
         List<Producto> listaProductos = new List<Producto>();
         SucursalImpl implSucursal;
         int contador = 1;
+        int pdf_contador = 1;
         public winProducto_Transferencia()
         {
             InitializeComponent();
@@ -45,7 +52,20 @@ namespace sisgesoriadao
                     if (mensaje == "PRODUCTOS TRANSFERIDOS EXITOSAMENTE.")
                     {
                         MessageBox.Show(mensaje);
-                        //insertar código para imprimir PDF
+                        try
+                        {
+                            int idTransferencia = implProducto.GetLastMovementFromBranch();
+                            if (idTransferencia != 0)
+                            {
+                                DataTable dt = new DataTable();
+                                dt = implProducto.SelectMovementsHistory_Details(idTransferencia);
+                                pdf(dt);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
                         this.Close();
                     }
                     else
@@ -294,6 +314,50 @@ namespace sisgesoriadao
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+        void pdf(DataTable dataTable)
+        {
+            Microsoft.Win32.SaveFileDialog guardar = new Microsoft.Win32.SaveFileDialog();
+            guardar.FileName = "Transferencia_" + DateTime.Now.ToString("yyyy_MM_dd__HH_mm") + ".pdf";
+            guardar.Filter = "PDF(*.pdf)|*.pdf";
+
+            string paginahtml_texto = Properties.Resources.PlantillaReporteTransferencia.ToString();
+            paginahtml_texto = paginahtml_texto.Replace("@NOMBRESUCURSAL", Session.Sucursal_NombreSucursal);
+            paginahtml_texto = paginahtml_texto.Replace("@FECHAREGISTRO", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
+            paginahtml_texto = paginahtml_texto.Replace("@FECHAIMPRESION", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
+            paginahtml_texto = paginahtml_texto.Replace("@USUARIO", Session.NombreUsuario);
+            string filas = string.Empty;
+            foreach (DataRow item in dataTable.Rows)
+            {
+                filas += "<tr>";
+                filas += "<td>" + pdf_contador + "</td>";
+                filas += "<td>" + item[1].ToString() + "</td>";
+                filas += "<td>" + item[2].ToString() + "</td>";
+                filas += "<td>" + item[3].ToString() + "</td>";
+                filas += "<td>" + item[4].ToString() + "</td>";
+                filas += "<td>" + item[5].ToString() + "</td>";
+                filas += "</tr>";
+                pdf_contador++;
+            }
+            paginahtml_texto = paginahtml_texto.Replace("@FILAS", filas);
+
+
+            if (guardar.ShowDialog() == true)
+            {
+                using (FileStream stream = new FileStream(guardar.FileName, FileMode.Create))
+                {
+                    Document pdfDoc = new Document(PageSize.A4, 25, 25, 25, 25);
+                    PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+                    pdfDoc.Open();
+                    pdfDoc.Add(new Phrase(""));
+                    using (StringReader sr = new StringReader(paginahtml_texto))
+                    {
+                        XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                    }
+                    pdfDoc.Close();
+                    stream.Close();
+                }
             }
         }
         public class ComboboxItem

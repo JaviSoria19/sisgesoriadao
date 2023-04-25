@@ -70,6 +70,13 @@
                     <TextBlock Text="VER CAJA" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                     <TextBlock Text="ACTUAL" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnCashHistory" Width="100" Height="100" Click="btnCashHistory_Click">
+                        <materialDesign:PackIcon Kind="ClipboardTextHistoryOutline" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="REGISTRO" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="DE CAJAS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

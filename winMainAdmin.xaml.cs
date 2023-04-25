@@ -128,6 +128,11 @@ namespace sisgesoriadao
             winCaja winCaja = new winCaja();
             winCaja.Show();
         }
+        private void btnCashHistory_Click(object sender, RoutedEventArgs e)
+        {
+            winCaja_Registros winCaja_Registros = new winCaja_Registros();
+            winCaja_Registros.Show();
+        }
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();

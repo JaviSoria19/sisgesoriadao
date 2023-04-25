@@ -129,6 +129,9 @@
     <Compile Include="winCaja.xaml.cs">
       <DependentUpon>winCaja.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winCaja_Registros.xaml.cs">
+      <DependentUpon>winCaja_Registros.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winCategoria.xaml.cs">
       <DependentUpon>winCategoria.xaml</DependentUpon>
     </Compile>
@@ -194,6 +197,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winCaja.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winCaja_Registros.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

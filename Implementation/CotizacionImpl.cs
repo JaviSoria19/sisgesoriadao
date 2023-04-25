@@ -11,7 +11,7 @@ namespace sisgesoriadao.Implementation
 {
     public class CotizacionImpl : DataBase, ICotizacion
     {
-        public string InsertTransaction(List<Producto> ListaProductos)
+        public string InsertTransaction(List<Producto> ListaProductos, Cotizacion cotizacion)
         {
             MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
             connection.Open();
@@ -25,9 +25,17 @@ namespace sisgesoriadao.Implementation
             try
             {
                 //AÑADIENDO NUEVA COTIZACION.
-                command.CommandText = @"INSERT INTO cotizacion (idUsuario,idSucursal) VALUES (@idUsuario,@idSucursal);";
+                command.CommandText = @"INSERT INTO cotizacion (idUsuario,idSucursal,nombreCliente,nombreEmpresa,nit,direccion,correo,telefono,tiempoEntrega)
+                                        VALUES (@idUsuario,@idSucursal,@nombreCliente,@nombreEmpresa,@nit,@direccion,@correo,@telefono,@tiempoEntrega)";
                 command.Parameters.AddWithValue("@idUsuario", Session.IdUsuario);
                 command.Parameters.AddWithValue("@idSucursal", Session.Sucursal_IdSucursal);
+                command.Parameters.AddWithValue("@nombreCliente", cotizacion.NombreCliente);
+                command.Parameters.AddWithValue("@nombreEmpresa", cotizacion.NombreEmpresa);
+                command.Parameters.AddWithValue("@nit", cotizacion.Nit);
+                command.Parameters.AddWithValue("@direccion", cotizacion.Direccion);
+                command.Parameters.AddWithValue("@correo", cotizacion.Correo);
+                command.Parameters.AddWithValue("@telefono", cotizacion.Telefono);
+                command.Parameters.AddWithValue("@tiempoEntrega", cotizacion.TiempoEntrega);
                 command.ExecuteNonQuery();
                 foreach (var producto in ListaProductos)
                 {
@@ -72,7 +80,7 @@ namespace sisgesoriadao.Implementation
         public Cotizacion Get(int id)
         {
             Cotizacion c = null;
-            string query = @"SELECT idCotizacion, idUsuario, idSucursal, fechaRegistro FROM cotizacion 
+            string query = @"SELECT idCotizacion, idUsuario, idSucursal, nombreCliente, nombreEmpresa, nit, direccion, correo, telefono, tiempoEntrega, fechaRegistro FROM cotizacion 
                             WHERE idCotizacion=@idCotizacion";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCotizacion", id);
@@ -82,11 +90,18 @@ namespace sisgesoriadao.Implementation
                 if (dt.Rows.Count > 0)
                 {
                     c = new Cotizacion(
-                        int.Parse(dt.Rows[0][0].ToString()),     /*idCotizacion*/
-                        byte.Parse(dt.Rows[0][1].ToString()),                   /*idUsuario*/
-                        byte.Parse(dt.Rows[0][2].ToString()),                   /*idSucursal*/
-                        //FechaRegistro.
-                        DateTime.Parse(dt.Rows[0][3].ToString()));
+                        int.Parse(dt.Rows[0][0].ToString()),            /*idCotizacion*/
+                        byte.Parse(dt.Rows[0][1].ToString()),           /*idUsuario*/
+                        byte.Parse(dt.Rows[0][2].ToString()),           /*idSucursal*/
+                        dt.Rows[0][3].ToString(),           /*nombreCliente*/
+                        dt.Rows[0][4].ToString(),           /*nombreEmpresa*/
+                        dt.Rows[0][5].ToString(),           /*nit*/
+                        dt.Rows[0][6].ToString(),           /*direccion*/
+                        dt.Rows[0][7].ToString(),           /*correo*/
+                        dt.Rows[0][8].ToString(),           /*telefono*/
+                        //tiempoEntrega,fechaRegistro
+                        DateTime.Parse(dt.Rows[0][9].ToString()),
+                        DateTime.Parse(dt.Rows[0][10].ToString()));
                 }
             }
             catch (Exception ex)
@@ -102,7 +117,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            string query = @"SELECT C.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, COUNT(DC.idCotizacion) AS 'Productos cotizados',C.fechaRegistro AS 'Fecha de Registro' FROM cotizacion C
+            string query = @"SELECT C.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCliente AS Cliente, C.nombreEmpresa AS Empresa, C.nit AS NIT, C.direccion AS Direccion, C.correo AS Correo, C.telefono AS Telefono, COUNT(DC.idCotizacion) AS 'Productos cotizados',C.fechaRegistro AS 'Fecha de Registro', C.tiempoEntrega AS 'Fecha de Entrega' FROM cotizacion C
                             INNER JOIN usuario U ON C.idUsuario = U.idUsuario
                             INNER JOIN sucursal S ON C.idSucursal = S.idSucursal
                             INNER JOIN detalle_cotizacion DC ON C.idCotizacion = DC.idCotizacion
@@ -121,11 +136,11 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime fechaInicio, DateTime fechaFin)
         {
-            string query = @"SELECT C.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, COUNT(DC.idCotizacion) AS 'Productos cotizados',C.fechaRegistro AS 'Fecha de Registro' FROM cotizacion C
+            string query = @"SELECT C.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCliente AS Cliente, C.nombreEmpresa AS Empresa, C.nit AS NIT, C.direccion AS Direccion, C.correo AS Correo, C.telefono AS Telefono, COUNT(DC.idCotizacion) AS 'Productos cotizados',C.fechaRegistro AS 'Fecha de Registro', C.tiempoEntrega AS 'Fecha de Entrega' FROM cotizacion C
                             INNER JOIN usuario U ON C.idUsuario = U.idUsuario
                             INNER JOIN sucursal S ON C.idSucursal = S.idSucursal
                             INNER JOIN detalle_cotizacion DC ON C.idCotizacion = DC.idCotizacion
-                            WHERE (U.nombreUsuario LIKE @search OR S.nombreSucursal LIKE @search OR C.idCotizacion LIKE @search)
+                            WHERE (U.nombreUsuario LIKE @search OR S.nombreSucursal LIKE @search OR C.idCotizacion LIKE @search OR C.nombreCliente LIKE @search OR C.nombreEmpresa LIKE @search OR C.nit LIKE @search OR C.telefono LIKE @search)
                             AND C.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY C.idCotizacion
                             ORDER BY 1 DESC";
@@ -165,6 +180,41 @@ namespace sisgesoriadao.Implementation
         public int Update(Cotizacion c)
         {
             throw new NotImplementedException();
+        }
+
+        public Cotizacion GetLastFromBranch()
+        {
+            Cotizacion c = null;
+            string query = @"SELECT idCotizacion, idUsuario, idSucursal, nombreCliente, nombreEmpresa, nit, direccion, correo, telefono, tiempoEntrega, fechaRegistro FROM cotizacion 
+                            WHERE idSucursal = @idSucursal AND idCotizacion = (SELECT MAX(idCotizacion) FROM cotizacion WHERE idSucursal = @idSucursal) LIMIT 1";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idSucursal", Session.Sucursal_IdSucursal);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    c = new Cotizacion(
+                        int.Parse(dt.Rows[0][0].ToString()),            /*idCotizacion*/
+                        byte.Parse(dt.Rows[0][1].ToString()),           /*idUsuario*/
+                        byte.Parse(dt.Rows[0][2].ToString()),           /*idSucursal*/
+                        dt.Rows[0][3].ToString(),           /*nombreCliente*/
+                        dt.Rows[0][4].ToString(),           /*nombreEmpresa*/
+                        dt.Rows[0][5].ToString(),           /*nit*/
+                        dt.Rows[0][6].ToString(),           /*direccion*/
+                        dt.Rows[0][7].ToString(),           /*correo*/
+                        dt.Rows[0][8].ToString(),           /*telefono*/
+                        //tiempoEntrega,fechaRegistro
+                        DateTime.Parse(dt.Rows[0][9].ToString()),
+                        DateTime.Parse(dt.Rows[0][10].ToString()));
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return c;
         }
     }
 }

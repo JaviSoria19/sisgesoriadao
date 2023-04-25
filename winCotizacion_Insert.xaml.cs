@@ -16,6 +16,11 @@ using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
 using System.Text.RegularExpressions;
 
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.xml;
+using System.IO;
+using iTextSharp.tool.xml;
 namespace sisgesoriadao
 {
     /// <summary>
@@ -27,6 +32,7 @@ namespace sisgesoriadao
         Producto producto;
         List<Producto> listaProductos = new List<Producto>();
         CotizacionImpl implCotizacion;
+        Cotizacion cotizacion;
         public winCotizacion_Insert()
         {
             InitializeComponent();
@@ -45,27 +51,58 @@ namespace sisgesoriadao
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (listaProductos.Count > 0)
+            if (string.IsNullOrEmpty(txtNombreCliente.Text)!=true && string.IsNullOrEmpty(txtNombreEmpresa.Text) != true && string.IsNullOrEmpty(txtNit.Text) != true &&
+                string.IsNullOrEmpty(txtDireccion.Text) != true && string.IsNullOrEmpty(txtCorreo.Text) != true && string.IsNullOrEmpty(txtTelefono.Text) != true)
             {
-                if (MessageBox.Show("¿Está seguro de haber ingresado todos los datos correctamente? \n Cantidad de productos ingresados en la cotización: " + listaProductos.Count + ". \n Presione SI para continuar.", "Confirmar cotización", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                cotizacion = new Cotizacion(Session.IdUsuario,
+                    Session.Sucursal_IdSucursal,
+                    txtNombreCliente.Text.Trim(),
+                    txtNombreEmpresa.Text.Trim(),
+                    txtNit.Text.Trim(),
+                    txtDireccion.Text.Trim(),
+                    txtCorreo.Text.Trim(),
+                    txtTelefono.Text.Trim(),
+                    dtpFechaEntrega.SelectedDate.Value
+                    );
+                if (listaProductos.Count > 0)
                 {
-                    implCotizacion = new CotizacionImpl();
-                    string mensaje = implCotizacion.InsertTransaction(listaProductos);
-                    if (mensaje == "COTIZACION REGISTRADA EXITOSAMENTE.")
+                    if (MessageBox.Show("¿Está seguro de haber ingresado todos los datos correctamente? \n Cantidad de productos ingresados en la cotización: " + listaProductos.Count + ". \n Presione SI para continuar.", "Confirmar cotización", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
-                        MessageBox.Show(mensaje);
-                        //insertar código para imprimir PDF
-                        this.Close();
+                        implCotizacion = new CotizacionImpl();
+                        string mensaje = implCotizacion.InsertTransaction(listaProductos,cotizacion);
+                        if (mensaje == "COTIZACION REGISTRADA EXITOSAMENTE.")
+                        {
+                            MessageBox.Show(mensaje);
+                            cotizacion = implCotizacion.GetLastFromBranch();
+                            if (cotizacion != null)
+                            {
+                                try
+                                {
+                                    DataTable dt = new DataTable();
+                                    dt = implCotizacion.SelectDetails(cotizacion.IdCotizacion);
+                                    pdf(dt,cotizacion);
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show(ex.Message);
+                                }
+                            }
+                            this.Close();
+                        }
+                        else
+                        {
+                            MessageBox.Show(mensaje);
+                        }
                     }
-                    else
-                    {
-                        MessageBox.Show(mensaje);
-                    }
+                }
+                else
+                {
+                    MessageBox.Show("¡Debe ingresar como mínimo 1 producto a la cotización!");
                 }
             }
             else
             {
-                MessageBox.Show("¡Debe ingresar como mínimo 1 producto al lote!");
+                MessageBox.Show("¡Debe rellenar todos los datos obligatorios (*)!");
             }
         }
         private void txtPrecio_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -166,6 +203,10 @@ namespace sisgesoriadao
                 addToDataGrid_andList(producto);
             }
         }
+        private void dtpFechaEntrega_Loaded(object sender, RoutedEventArgs e)
+        {
+            dtpFechaEntrega.SelectedDate = DateTime.Today;
+        }
         void acbxGetProductosFromDatabase()
         {
             try
@@ -232,6 +273,68 @@ namespace sisgesoriadao
                         dgvProductos.Items.RemoveAt(posicion);
                         listaProductos.RemoveAt(posicion);
                     }
+                }
+            }
+        }
+        void pdf(DataTable dataTable, Cotizacion cotizacion)
+        {
+            Microsoft.Win32.SaveFileDialog guardar = new Microsoft.Win32.SaveFileDialog();
+            guardar.FileName = "Cotizacion_" + cotizacion.FechaRegistro.ToString("yyyy_MM_dd__HH_mm") + ".pdf";
+            guardar.Filter = "PDF(*.pdf)|*.pdf";
+
+
+            string idCotizaciontextual = String.Format("{0:D5}", cotizacion.IdCotizacion);
+
+            string paginahtml_texto = Properties.Resources.PlantillaReporteCotizacion.ToString();
+            paginahtml_texto = paginahtml_texto.Replace("@NOMBRESUCURSAL", Session.Sucursal_NombreSucursal);
+            paginahtml_texto = paginahtml_texto.Replace("@DIRECCION", Session.Sucursal_Direccion);
+            paginahtml_texto = paginahtml_texto.Replace("@TELEFONO", Session.Sucursal_Telefono);
+            paginahtml_texto = paginahtml_texto.Replace("@FECHAREGISTRO", cotizacion.FechaRegistro.ToString("dd/MM/yyyy HH:mm"));
+            paginahtml_texto = paginahtml_texto.Replace("@FECHASISTEMA", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
+            paginahtml_texto = paginahtml_texto.Replace("@IDCOTIZACION", idCotizaciontextual);
+            paginahtml_texto = paginahtml_texto.Replace("@COTIZACION_NOMBRECLIENTE", cotizacion.NombreCliente);
+            paginahtml_texto = paginahtml_texto.Replace("@COTIZACION_NOMBREEMPRESA", cotizacion.NombreEmpresa);
+            paginahtml_texto = paginahtml_texto.Replace("@COTIZACION_NIT", cotizacion.Nit);
+            paginahtml_texto = paginahtml_texto.Replace("@COTIZACION_DIRECCION", cotizacion.Direccion);
+            paginahtml_texto = paginahtml_texto.Replace("@COTIZACION_CORREO", cotizacion.Correo);
+            paginahtml_texto = paginahtml_texto.Replace("@COTIZACION_TELEFONO", cotizacion.Telefono);
+            paginahtml_texto = paginahtml_texto.Replace("@COTIZACION_FECHAENTREGA", cotizacion.TiempoEntrega.ToString("dd/MM/yyyy"));
+            string filas = string.Empty;
+            double total = 0;
+            foreach (DataRow item in dataTable.Rows)
+            {
+                filas += "<tr>";
+                filas += "<td> </td>";
+                filas += "<td>" + item[2].ToString() + "</td>";
+                filas += "<td>" + item[3].ToString() + "</td>";
+                filas += "<td>" + item[4].ToString() + "</td>";
+                filas += "</tr>";
+                total += double.Parse(item[4].ToString());
+            }
+            paginahtml_texto = paginahtml_texto.Replace("@FILAS", filas);
+            paginahtml_texto = paginahtml_texto.Replace("@TOTAL", "Bs. " + total.ToString());
+
+
+            if (guardar.ShowDialog() == true)
+            {
+                using (FileStream stream = new FileStream(guardar.FileName, FileMode.Create))
+                {
+                    Document pdfDoc = new Document(PageSize.A4, 25, 25, 25, 25);
+                    PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+                    pdfDoc.Open();
+                    pdfDoc.Add(new Phrase(""));
+
+                    iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(Properties.Resources.logo, System.Drawing.Imaging.ImageFormat.Png);
+                    img.ScaleToFit(90, 90);
+                    img.Alignment = iTextSharp.text.Image.UNDERLYING;
+                    img.SetAbsolutePosition(pdfDoc.LeftMargin, pdfDoc.Top - 90);
+                    pdfDoc.Add(img);
+                    using (StringReader sr = new StringReader(paginahtml_texto))
+                    {
+                        XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                    }
+                    pdfDoc.Close();
+                    stream.Close();
                 }
             }
         }

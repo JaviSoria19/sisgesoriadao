@@ -664,7 +664,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectMovementsHistory_Details(int IdTransferencia)
         {
-            string query = @"SELECT DT.idTransferencia, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'IMEI o SN', S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino' FROM detalle_transferencia AS DT
+            string query = @"SELECT DT.idTransferencia, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'IMEI o SN', S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino', T.fechaRegistro FROM detalle_transferencia AS DT
                             INNER JOIN Producto P ON P.idProducto = DT.idProducto
                             INNER JOIN Transferencia T ON T.idTransferencia = DT.idTransferencia
                             INNER JOIN Sucursal S1 ON S1.idSucursal = T.sucursalOrigen
@@ -696,6 +696,28 @@ namespace sisgesoriadao.Implementation
 
                 throw;
             }
+        }
+
+        public int GetLastMovementFromBranch()
+        {
+            int idTransferencia = 0;
+            string query = @"SELECT MAX(idTransferencia) FROM transferencia WHERE sucursalOrigen = @sucursalOrigen";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@sucursalOrigen", Session.Sucursal_IdSucursal);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    idTransferencia = int.Parse(dt.Rows[0][0].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return idTransferencia;
         }
     }
 }

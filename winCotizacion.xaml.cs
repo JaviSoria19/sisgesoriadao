@@ -67,6 +67,13 @@ namespace sisgesoriadao
             paginahtml_texto = paginahtml_texto.Replace("@FECHAREGISTRO", cotizacion.FechaRegistro.ToString("dd/MM/yyyy HH:mm"));
             paginahtml_texto = paginahtml_texto.Replace("@FECHASISTEMA", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
             paginahtml_texto = paginahtml_texto.Replace("@IDCOTIZACION", idCotizaciontextual);
+            paginahtml_texto = paginahtml_texto.Replace("@COTIZACION_NOMBRECLIENTE", cotizacion.NombreCliente);
+            paginahtml_texto = paginahtml_texto.Replace("@COTIZACION_NOMBREEMPRESA", cotizacion.NombreEmpresa);
+            paginahtml_texto = paginahtml_texto.Replace("@COTIZACION_NIT", cotizacion.Nit);
+            paginahtml_texto = paginahtml_texto.Replace("@COTIZACION_DIRECCION", cotizacion.Direccion);
+            paginahtml_texto = paginahtml_texto.Replace("@COTIZACION_CORREO", cotizacion.Correo);
+            paginahtml_texto = paginahtml_texto.Replace("@COTIZACION_TELEFONO", cotizacion.Telefono);
+            paginahtml_texto = paginahtml_texto.Replace("@COTIZACION_FECHAENTREGA", cotizacion.TiempoEntrega.ToString("dd/MM/yyyy"));
             string filas = string.Empty;
             double total = 0;
             foreach (DataRowView item in dgvDetalle.Items)
