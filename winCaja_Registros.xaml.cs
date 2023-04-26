@@ -22,6 +22,7 @@ namespace sisgesoriadao
     public partial class winCaja_Registros : Window
     {
         CajaImpl implCaja;
+        Caja caja;
         public winCaja_Registros()
         {
             InitializeComponent();
@@ -48,6 +49,42 @@ namespace sisgesoriadao
                 dgvDatos.ItemsSource = implCaja.Select().DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implCaja.Select().Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)
+            {
+                try
+                {
+                    DataRowView d = (DataRowView)dgvDatos.SelectedItem;
+                    int id = int.Parse(d.Row.ItemArray[0].ToString());
+                    caja = implCaja.Get(id);
+                    if (caja != null)
+                    {
+                        SelectDetalles(caja);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    throw;
+                }
+            }
+        }
+        void SelectDetalles(Caja caja)
+        {
+            try
+            {
+                dgvDetalles.ItemsSource = null;
+                dgvDetalles.ItemsSource = implCaja.SelectDetails(caja).DefaultView;
+                //dgvDetalles.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRowsDetalles.Content = "NÚMERO DE REGISTROS: " + implCaja.SelectDetails(caja).Rows.Count;
             }
             catch (Exception ex)
             {

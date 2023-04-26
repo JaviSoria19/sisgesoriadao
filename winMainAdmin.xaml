@@ -54,7 +54,8 @@
                     <Button x:Name="btnProducts" Width="100" Height="100" Click="btnProducts_Click">
                         <materialDesign:PackIcon Kind="PackageVariantClosed" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
-                    <TextBlock Text="VER PRODUCTOS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="REPORTE" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="VALORADO" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnHistoryProducts" Width="100" Height="100" Click="btnHistoryProducts_Click">

@@ -31,6 +31,7 @@ namespace sisgesoriadao
         ProductoImpl implProducto;
         int idTransferencia = 0;
         int pdf_contador = 1;
+        SucursalImpl implSucursal;
         public winTransferencia()
         {
             InitializeComponent();
@@ -41,32 +42,12 @@ namespace sisgesoriadao
         }
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtBuscar.Text))
-            {
-                Select();
-            }
-            else
-            {
-                SelectLike();
-            }
+            SelectLike();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
-        }        
-        private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                if (string.IsNullOrEmpty(txtBuscar.Text))
-                {
-                    Select();
-                }
-                else
-                {
-                    SelectLike();
-                }
-            }
+            cbxSelectSucursalFromDatabase();
         }
         private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
         {
@@ -115,19 +96,16 @@ namespace sisgesoriadao
         }
         private void SelectLike()
         {
-            if (string.IsNullOrEmpty(txtBuscar.Text)!=true)
+            try
             {
-                try
-                {
-                    dgvDatos.ItemsSource = null;
-                    dgvDatos.ItemsSource = implProducto.SelectLikeMovementsHistory(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
-                    dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                    lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeMovementsHistory(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implProducto.SelectLikeMovementsHistory(cbxSucursalOrigen.SelectedItem.ToString(), cbxSucursalDestino.SelectedItem.ToString(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeMovementsHistory(cbxSucursalOrigen.SelectedItem.ToString(), cbxSucursalDestino.SelectedItem.ToString(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
         private void SelectDetails(int idTransferencia)
@@ -144,7 +122,14 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
-
+        private void btnReset_Click(object sender, RoutedEventArgs e)
+        {
+            Select();
+            cbxSucursalOrigen.SelectedIndex = 0;
+            cbxSucursalDestino.SelectedIndex = 0;
+            dtpFechaFin.SelectedDate = DateTime.Today;
+            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
+        }
         private void btnPrintPDF_Click(object sender, RoutedEventArgs e)
         {
             DataRowView d = (DataRowView)dgvDetalle.Items[0];
@@ -177,19 +162,72 @@ namespace sisgesoriadao
 
             if (guardar.ShowDialog() == true)
             {
-                using (FileStream stream = new FileStream(guardar.FileName,FileMode.Create))
+                try
                 {
-                    Document pdfDoc = new Document(PageSize.A4, 25, 25, 25, 25);
-                    PdfWriter writer = PdfWriter.GetInstance(pdfDoc,stream);
-                    pdfDoc.Open();
-                    pdfDoc.Add(new Phrase(""));
-                    using (StringReader sr = new StringReader(paginahtml_texto))
+                    using (FileStream stream = new FileStream(guardar.FileName, FileMode.Create))
                     {
-                        XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                        Document pdfDoc = new Document(PageSize.A4, 25, 25, 25, 25);
+                        PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+                        pdfDoc.Open();
+                        pdfDoc.Add(new Phrase(""));
+                        using (StringReader sr = new StringReader(paginahtml_texto))
+                        {
+                            XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                        }
+                        pdfDoc.Close();
+                        stream.Close();
                     }
-                    pdfDoc.Close();
-                    stream.Close();
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+        void cbxSelectSucursalFromDatabase()
+        {
+            try
+            {
+                List<ComboboxItem> listcomboboxSucursal = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implSucursal = new SucursalImpl();
+                dataTable = implSucursal.SelectForComboBox();
+                listcomboboxSucursal = (from DataRow dr in dataTable.Rows
+                                        select new ComboboxItem()
+                                        {
+                                            Valor = Convert.ToByte(dr["idSucursal"]),
+                                            Texto = dr["nombreSucursal"].ToString()
+                                        }).ToList();
+                foreach (var item in listcomboboxSucursal)
+                {
+                    cbxSucursalOrigen.Items.Add(item);
+                    cbxSucursalDestino.Items.Add(item);
+                }
+                cbxSucursalOrigen.SelectedIndex = 0;
+                cbxSucursalDestino.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        public class ComboboxItem
+        {
+            public string Texto { get; set; }
+            public byte Valor { get; set; }
+
+            public override string ToString()
+            {
+                return Texto;
+            }
+            public ComboboxItem(string texto, byte valor)
+            {
+                Texto = texto;
+                Valor = valor;
+            }
+            public ComboboxItem()
+            {
+
             }
         }
     }

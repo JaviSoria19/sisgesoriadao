@@ -10,9 +10,10 @@ namespace sisgesoriadao.Interfaces
 {
     public interface ICaja : IDao<Caja>
     {
-        Caja Get(byte Id);
+        Caja Get(int Id);
         Caja GetByBranch();
         DataTable SelectPendingCashFromBranch();
         string UpdateClosePendingCashTransaction(Caja c);
+        DataTable SelectDetails(Caja c);
     }
 }

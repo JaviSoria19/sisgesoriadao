@@ -37,15 +37,20 @@
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
                 <Label x:Name="lblInfo" Content="" Foreground="Blue" Background="Transparent" Margin="0,0,0,10" HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                    <Label Content="Buscar:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtBuscar" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="20" Height="22" materialDesign:HintAssist.HelperText="Sucursal" KeyDown="txtBuscar_KeyDown"/>
-                    <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0">
-                        <materialDesign:PackIcon Kind="Search"/>
-                    </Button>
+                    <Label Content="SUCURSAL ORIGEN:"/>
+                    <ComboBox x:Name="cbxSucursalOrigen" IsEnabled="True" Margin="0,0,20,0"/>
+                    <Label Content="SUCURSAL DESTINO:"/>
+                    <ComboBox x:Name="cbxSucursalDestino" IsEnabled="True" Margin="0,0,20,0"/>
                     <Label Content="Desde:" VerticalAlignment="Center"/>
                     <DatePicker x:Name="dtpFechaInicio" Margin="0,0,20,0"/>
                     <Label Content="Hasta:" VerticalAlignment="Center"/>
-                    <DatePicker x:Name="dtpFechaFin" Loaded="dtpFechaFin_Loaded" />
+                    <DatePicker x:Name="dtpFechaFin" Loaded="dtpFechaFin_Loaded"  Margin="0,0,20,0"/>
+                    <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0">
+                        <materialDesign:PackIcon Kind="Search"/>
+                    </Button>
+                    <Button x:Name="btnReset" ToolTip="REINICIAR FILTROS Y BUSQUEDA" Click="btnReset_Click">
+                        <materialDesign:PackIcon Kind="Restart"/>
+                    </Button>
                 </StackPanel>
                 <Border BorderBrush="Gray" BorderThickness="2">
                     <DataGrid x:Name="dgvDatos"

@@ -31,7 +31,7 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectPendingProducts();
         int UpdatePendingProduct(int IdProducto);
         DataTable SelectMovementsHistory();
-        DataTable SelectLikeMovementsHistory(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin);
+        DataTable SelectLikeMovementsHistory(string SucursalOrigen, string SucursalDestino, DateTime FechaInicio, DateTime FechaFin);
         DataTable SelectMovementsHistory_Details(int IdTransferencia);
         int GetLastMovementFromBranch();
     }

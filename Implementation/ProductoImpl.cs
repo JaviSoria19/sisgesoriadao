@@ -627,7 +627,8 @@ namespace sisgesoriadao.Implementation
                         INNER JOIN Sucursal S2 ON S2.idSucursal = T.sucursalDestino
                         INNER JOIN Detalle_transferencia AS DT ON DT.idTransferencia = T.idTransferencia
                         GROUP BY T.idTransferencia
-                        ORDER BY 1 DESC";
+                        ORDER BY 1 DESC
+                        LIMIT 200";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -639,18 +640,19 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
-        public DataTable SelectLikeMovementsHistory(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
+        public DataTable SelectLikeMovementsHistory(string SucursalOrigen, string SucursalDestino, DateTime FechaInicio, DateTime FechaFin)
         {
             string query = @"SELECT T.idTransferencia AS ID, S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino', COUNT(DT.idProducto) AS 'Productos transferidos', T.fechaRegistro AS 'Fecha de Registro' FROM transferencia AS T
                         INNER JOIN Sucursal S1 ON S1.idSucursal = T.sucursalOrigen
                         INNER JOIN Sucursal S2 ON S2.idSucursal = T.sucursalDestino
                         INNER JOIN Detalle_transferencia AS DT ON DT.idTransferencia = T.idTransferencia
-                        WHERE (S1.nombreSucursal LIKE @search OR S2.nombreSucursal LIKE @search)
+                        WHERE S1.nombreSucursal LIKE @origen AND S2.nombreSucursal LIKE @destino
                         AND T.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                         GROUP BY T.idTransferencia
                         ORDER BY 1 DESC";
             MySqlCommand command = CreateBasicCommand(query);
-            command.Parameters.AddWithValue("@search", "%" + CadenaBusqueda + "%");
+            command.Parameters.AddWithValue("@origen", SucursalOrigen);
+            command.Parameters.AddWithValue("@destino", SucursalDestino);
             command.Parameters.AddWithValue("@FechaInicio", FechaInicio.ToString("yyyy-MM-dd"));
             command.Parameters.AddWithValue("@FechaFin", FechaFin.ToString("yyyy-MM-dd") + " 23:59:59");
             try

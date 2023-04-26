@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace sisgesoriadao.Model
 {
-    public class Caja
+    public class Caja : BaseClass
     {
         public int IdCaja { get; set; }
         public byte IdSucursal { get; set; }
         public byte IdUsuario { get; set; }
-        public byte Estado { get; set; }
-        public DateTime FechaRegistro { get; set; }
+        public byte IdUsuarioReceptor { get; set; }
         public Caja()
         {
 
@@ -23,19 +22,17 @@ namespace sisgesoriadao.Model
         /// <param name="idCaja"></param>
         /// <param name="idSucursal"></param>
         /// <param name="idUsuario"></param>
+        /// <param name="idUsuarioReceptor"></param>
         /// <param name="estado"></param>
         /// <param name="fechaRegistro"></param>
-        public Caja(int idCaja, byte idSucursal, byte idUsuario, byte estado, DateTime fechaRegistro)
+        /// <param name="fechaActualizacion"></param>
+        public Caja(int idCaja, byte idSucursal, byte idUsuario, byte idUsuarioReceptor, byte estado, DateTime fechaRegistro, string fechaActualizacion)
+            : base(estado, fechaRegistro, fechaActualizacion)
         {
             IdCaja = idCaja;
             IdSucursal = idSucursal;
             IdUsuario = idUsuario;
-            Estado = estado;
-            FechaRegistro = fechaRegistro;
-        }
-        public Caja(int idCaja)
-        {
-            IdCaja = idCaja;
+            IdUsuarioReceptor = idUsuarioReceptor;
         }
     }
 }

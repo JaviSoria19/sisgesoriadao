@@ -15,15 +15,40 @@ namespace sisgesoriadao.Implementation
         {
             throw new NotImplementedException();
         }
-        public Caja Get(byte Id)
+        public Caja Get(int Id)
         {
-            throw new NotImplementedException();
+            Caja c = null;
+            string query = @"SELECT idCaja, idSucursal, idUsuario, IFNULL(idUsuarioReceptor,'0'), estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM caja WHERE idCaja = @idCaja";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idCaja", Id);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    c = new Caja(int.Parse(dt.Rows[0][0].ToString()),   /*idCaja*/
+                        byte.Parse(dt.Rows[0][1].ToString()),           /*idSucursal*/
+                        byte.Parse(dt.Rows[0][2].ToString()),           /*idUsuario*/
+                        byte.Parse(dt.Rows[0][3].ToString()),           /*idUsuarioReceptor*/
+                        //estado, fechaRegistro y fechaActualizacion
+                        byte.Parse(dt.Rows[0][4].ToString()),
+                        DateTime.Parse(dt.Rows[0][5].ToString()),
+                        dt.Rows[0][6].ToString()
+                        );
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return c;
         }
 
         public Caja GetByBranch()
         {
             Caja c = null;
-            string query = @"SELECT MAX(idCaja), idSucursal, idUsuario, estado, fechaRegistro FROM caja WHERE idSucursal = @idSucursal AND estado = 1";
+            string query = @"SELECT MAX(idCaja), idSucursal, idUsuario, IFNULL(idUsuarioReceptor,'0'), estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM caja WHERE idSucursal = @idSucursal AND estado = 1";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idSucursal", Session.Sucursal_IdSucursal);
             try
@@ -34,8 +59,12 @@ namespace sisgesoriadao.Implementation
                     c = new Caja(int.Parse(dt.Rows[0][0].ToString()),   /*idCaja*/
                         byte.Parse(dt.Rows[0][1].ToString()),           /*idSucursal*/
                         byte.Parse(dt.Rows[0][2].ToString()),           /*idUsuario*/
-                        byte.Parse(dt.Rows[0][3].ToString()),           /*estado*/
-                        DateTime.Parse(dt.Rows[0][4].ToString()));      /*fechaRegistro*/
+                        byte.Parse(dt.Rows[0][3].ToString()),           /*idUsuarioReceptor*/
+                        //estado, fechaRegistro y fechaActualizacion
+                        byte.Parse(dt.Rows[0][4].ToString()),
+                        DateTime.Parse(dt.Rows[0][5].ToString()),
+                        dt.Rows[0][6].ToString()
+                        );
                 }
             }
             catch (Exception ex)
@@ -73,13 +102,38 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public DataTable SelectDetails(Caja caja)
+        {
+            string query = @"SELECT U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT(DISTINCT'- ',P.nombreProducto,' ',P.codigoSublote SEPARATOR ' \n'),')') AS Detalle, IF(MP.tipo = 1,'Efectivo',IF(MP.tipo = 2,'Transferencia','Tarjeta')) AS Tipo, IFNULL(MP.montoUSD,0) AS '$us', IFNULL(MP.montoBOB,0) AS 'Bs', V.fechaRegistro AS 'Fecha de Registro' FROM caja C
+                            INNER JOIN detalle_caja DC ON C.idCaja = DC.idCaja
+                            INNER JOIN metodo_pago MP ON DC.idMetodoPago = MP.idMetodoPago
+                            INNER JOIN venta V ON MP.idVenta = V.idVenta
+                            INNER JOIN detalle_venta DV ON V.idVenta = DV.idVenta
+                            INNER JOIN usuario U ON V.idUsuario = U.idUsuario
+                            INNER JOIN producto P ON DV.idProducto = P.idProducto
+                            WHERE C.idCaja = @idCaja
+                            GROUP BY V.idVenta, MP.tipo, MP.idMetodoPago
+                            ORDER BY 6 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idCaja", caja.IdCaja);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public DataTable SelectLike(string CadenaBusqueda, DateTime fechaInicio, DateTime fechaFin)
         {
             throw new NotImplementedException();
         }
         public DataTable SelectPendingCashFromBranch()
         {
-            string query = @"SELECT U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT('- ',P.nombreProducto SEPARATOR ' '),')') AS Detalle, IF(MP.tipo = 1,'Efectivo',IF(MP.tipo = 2,'Transferencia','Tarjeta')) AS Tipo, IFNULL(MP.montoUSD,0) AS '$us', IFNULL(MP.montoBOB,0) AS 'Bs', V.fechaRegistro AS 'Fecha de Registro' FROM caja C
+            string query = @"SELECT U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT(DISTINCT'- ',P.nombreProducto,' ',P.codigoSublote SEPARATOR ' \n'),')') AS Detalle, IF(MP.tipo = 1,'Efectivo',IF(MP.tipo = 2,'Transferencia','Tarjeta')) AS Tipo, IFNULL(MP.montoUSD,0) AS '$us', IFNULL(MP.montoBOB,0) AS 'Bs', V.fechaRegistro AS 'Fecha de Registro' FROM caja C
                             INNER JOIN detalle_caja DC ON C.idCaja = DC.idCaja
                             INNER JOIN metodo_pago MP ON DC.idMetodoPago = MP.idMetodoPago
                             INNER JOIN venta V ON MP.idVenta = V.idVenta
@@ -87,7 +141,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN usuario U ON V.idUsuario = U.idUsuario
                             INNER JOIN producto P ON DV.idProducto = P.idProducto
                             WHERE C.idSucursal = @idSucursal AND C.idCaja = (SELECT MAX(idCaja) FROM caja WHERE idSucursal = @idSucursal)
-                            GROUP BY V.idVenta, MP.tipo
+                            GROUP BY V.idVenta, MP.tipo, MP.idMetodoPago
                             ORDER BY 6 DESC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idSucursal", Session.Sucursal_IdSucursal);
