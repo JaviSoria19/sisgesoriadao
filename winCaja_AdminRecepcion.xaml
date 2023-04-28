@@ -1,4 +1,4 @@
-﻿<Window x:Class="sisgesoriadao.winCaja_Registros"
+﻿<Window x:Class="sisgesoriadao.winCaja_AdminRecepcion"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
      TextElement.FontWeight="Regular"
@@ -13,7 +13,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
-        Title="Sistema de Ventas - Registro de Cajas" Height="720" Width="1280"
+        Title="Sistema de Ventas - (ADMIN) Confirmar recepción de cierre de Cajas" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
     <ScrollViewer>
         <StackPanel Orientation="Vertical">
@@ -24,24 +24,10 @@
                 <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
                 <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
-                <materialDesign:PackIcon Kind="ClipboardTextHistoryOutline" Width="25" Height="25" VerticalAlignment="Center"/>
-                <TextBlock Text="REGISTRO DE CAJAS" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="ClipboardCheckMultiple" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="CONFIRMAR CIERRE DE CAJAS" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
-                <Label Content="Desde:" VerticalAlignment="Center"/>
-                <DatePicker x:Name="dtpFechaInicio" Margin="0,0,20,0"/>
-                <Label Content="Hasta:" VerticalAlignment="Center"/>
-                <DatePicker x:Name="dtpFechaFin" Loaded="dtpFechaFin_Loaded" Margin="0,0,20,0"/>
-                <Label Content="TIPO:" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                <ComboBox x:Name="cbxTipoCaja" IsEnabled="True" Margin="0,0,20,0"/>
-                <Label Content="USUARIO:" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                <ComboBox x:Name="cbxUsuario" IsEnabled="True" Margin="0,0,20,0"/>
-                <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0">
-                    <materialDesign:PackIcon Kind="Search"/>
-                </Button>
-            </StackPanel>
-            
             <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">
                 <Border BorderBrush="Gray" BorderThickness="2">
                     <DataGrid x:Name="dgvDatos"
@@ -65,7 +51,7 @@
             </StackPanel>
 
             <StackPanel HorizontalAlignment="Center">
-                <Button x:Name="btnPrintPDF" Content="GENERAR PDF" Click="btnPrintPDF_Click" Margin="20" IsEnabled="False"/>
+                <Button x:Name="btnConfirm" Content="CONFIRMAR CIERRE DE CAJA" Click="btnConfirm_Click" Margin="20" IsEnabled="False"/>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

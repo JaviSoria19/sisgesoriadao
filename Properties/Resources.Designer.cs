@@ -74,10 +74,10 @@ namespace sisgesoriadao.Properties {
         ///   Busca una cadena traducida similar a &lt;!DOCTYPE html&gt;
         ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
         ///&lt;head&gt;
-        ///    &lt;title&gt;Title of the document&lt;/title&gt;
+        ///    &lt;title&gt;Reporte Caja&lt;/title&gt;
         ///    &lt;style&gt;
         ///        table.border {
-        ///            border-collapse: collapse;
+        ///            border-spacing: 0;
         ///        }
         ///
         ///            table.border th {
@@ -93,7 +93,72 @@ namespace sisgesoriadao.Properties {
         ///&lt;/head&gt;
         ///&lt;body&gt;
         ///    &lt;table style=&quot;width:100%&quot;&gt;
-        ///        [resto de la cadena truncado]&quot;;.
+        ///        &lt;tr&gt;
+        ///           [resto de la cadena truncado]&quot;;.
+        /// </summary>
+        internal static string PlantillaReporteCaja {
+            get {
+                return ResourceManager.GetString("PlantillaReporteCaja", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a &lt;!DOCTYPE html&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///&lt;head&gt;
+        ///    &lt;title&gt;Reporte Caja Activa&lt;/title&gt;
+        ///    &lt;style&gt;
+        ///        table.border {
+        ///            border-spacing: 0;
+        ///        }
+        ///
+        ///            table.border th {
+        ///                padding: 5px;
+        ///                border: 1px solid black;
+        ///            }
+        ///
+        ///            table.border td {
+        ///                padding: 5px;
+        ///                border: 1px solid black;
+        ///            }
+        ///    &lt;/style&gt;
+        ///&lt;/head&gt;
+        ///&lt;body&gt;
+        ///    &lt;table style=&quot;width:100%&quot;&gt;
+        ///        &lt;tr&gt;
+        ///    [resto de la cadena truncado]&quot;;.
+        /// </summary>
+        internal static string PlantillaReporteCajaActiva {
+            get {
+                return ResourceManager.GetString("PlantillaReporteCajaActiva", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a &lt;!DOCTYPE html&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///&lt;head&gt;
+        ///    &lt;title&gt;Title of the document&lt;/title&gt;
+        ///    &lt;style&gt;
+        ///        table.border {
+        ///            border-spacing: 0;
+        ///        }
+        ///
+        ///            table.border th {
+        ///                padding: 5px;
+        ///                border: 1px solid black;
+        ///            }
+        ///
+        ///            table.border td {
+        ///                padding: 5px;
+        ///                border: 1px solid black;
+        ///            }
+        ///    &lt;/style&gt;
+        ///&lt;/head&gt;
+        ///&lt;body&gt;
+        ///    &lt;table style=&quot;width:100%&quot;&gt;
+        ///        &lt;tr&gt;
+        ///  [resto de la cadena truncado]&quot;;.
         /// </summary>
         internal static string PlantillaReporteCotizacion {
             get {

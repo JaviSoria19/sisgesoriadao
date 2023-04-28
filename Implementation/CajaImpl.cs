@@ -81,7 +81,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            string query = @"SELECT C.idCaja AS ID, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Responsable, IFNULL(U2.nombreUsuario,'-') AS 'Recepcionado por', IF(C.Estado=1,'Pendiente',IF(C.Estado=2,'Cerrado','Recepcionado')) AS Estado, C.fechaActualizacion AS 'Fecha de Cierre o Recepcion', SUM(MP.montoUSD) AS 'Ingresos USD', SUM(MP.montoBOB) AS 'Ingresos Bs' FROM caja C
+            string query = @"SELECT C.idCaja AS ID, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Responsable, IFNULL(U2.nombreUsuario,'-') AS 'Recepcionado por', IF(C.Estado=1,'Pendiente',IF(C.Estado=2,'Cerrado','Recepcionado')) AS Estado, C.fechaActualizacion AS 'Fecha de Cierre o Recepcion', SUM(MP.montoUSD) AS 'Ingresos USD', SUM(MP.montoBOB) AS 'Ingresos Bs', C.fechaRegistro AS 'Fecha de Apertura' FROM caja C
                             INNER JOIN sucursal S ON C.idSucursal = S.idSucursal
                             INNER JOIN usuario U ON C.idUsuario = U.idUsuario
                             LEFT JOIN usuario U2 ON C.idUsuarioReceptor = U2.idUsuario
@@ -131,6 +131,33 @@ namespace sisgesoriadao.Implementation
         {
             throw new NotImplementedException();
         }
+
+        public DataTable SelectLikeByCashTypeAndUsers(string tipoCajas, string idUsuarios, DateTime fechaInicio, DateTime fechaFin)
+        {
+            string query = @"SELECT C.idCaja AS ID, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Responsable, IFNULL(U2.nombreUsuario,'-') AS 'Recepcionado por', IF(C.Estado=1,'Pendiente',IF(C.Estado=2,'Cerrado','Recepcionado')) AS Estado, C.fechaActualizacion AS 'Fecha de Cierre o Recepcion', SUM(MP.montoUSD) AS 'Ingresos USD', SUM(MP.montoBOB) AS 'Ingresos Bs', C.fechaRegistro AS 'Fecha de Apertura' FROM caja C
+                            INNER JOIN sucursal S ON C.idSucursal = S.idSucursal
+                            INNER JOIN usuario U ON C.idUsuario = U.idUsuario
+                            LEFT JOIN usuario U2 ON C.idUsuarioReceptor = U2.idUsuario
+                            INNER JOIN detalle_caja DC ON C.idCaja = DC.idCaja
+                            INNER JOIN metodo_pago MP ON DC.idMetodoPago = MP.idMetodoPago
+                            WHERE C.estado IN (" + tipoCajas + ") AND C.idUsuario IN (" + idUsuarios + @")
+                            AND C.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
+                            GROUP BY 1
+                            ORDER BY 1 DESC
+                            LIMIT 100";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@FechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", fechaFin.ToString("yyyy-MM-dd") + " 23:59:59");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public DataTable SelectPendingCashFromBranch()
         {
             string query = @"SELECT U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT(DISTINCT'- ',P.nombreProducto,' ',P.codigoSublote SEPARATOR ' \n'),')') AS Detalle, IF(MP.tipo = 1,'Efectivo',IF(MP.tipo = 2,'Transferencia','Tarjeta')) AS Tipo, IFNULL(MP.montoUSD,0) AS '$us', IFNULL(MP.montoBOB,0) AS 'Bs', V.fechaRegistro AS 'Fecha de Registro' FROM caja C
@@ -157,7 +184,20 @@ namespace sisgesoriadao.Implementation
         }
         public int Update(Caja c)
         {
-            throw new NotImplementedException();
+            string query = @"UPDATE caja SET 
+                idUsuarioReceptor = @idUsuarioReceptor, estado = 3, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCaja = @idCaja";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idUsuarioReceptor", Session.IdUsuario);
+            command.Parameters.AddWithValue("@idCaja", c.IdCaja);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public string UpdateClosePendingCashTransaction(Caja c)

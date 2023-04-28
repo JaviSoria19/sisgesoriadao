@@ -133,6 +133,11 @@ namespace sisgesoriadao
             winCaja_Registros winCaja_Registros = new winCaja_Registros();
             winCaja_Registros.Show();
         }
+        private void btnCashAdminConfirm_Click(object sender, RoutedEventArgs e)
+        {
+            winCaja_AdminRecepcion winCaja_AdminRecepcion = new winCaja_AdminRecepcion();
+            winCaja_AdminRecepcion.Show();
+        }
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();

@@ -15,5 +15,6 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectPendingCashFromBranch();
         string UpdateClosePendingCashTransaction(Caja c);
         DataTable SelectDetails(Caja c);
+        DataTable SelectLikeByCashTypeAndUsers(string tipoCajas, string idUsuarios, DateTime fechaInicio, DateTime fechaFin);
     }
 }

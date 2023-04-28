@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Reporte Caja Activa</title>
+    <style>
+        table.border {
+            border-spacing: 0;
+        }
+
+            table.border th {
+                padding: 5px;
+                border: 1px solid black;
+            }
+
+            table.border td {
+                padding: 5px;
+                border: 1px solid black;
+            }
+    </style>
+</head>
+<body>
+    <table style="width:100%">
+        <tr>
+            <td style="width:100%" align="center" valign="top">
+                <table>
+                    <tr><td align="center"><h4 style="margin:0px">REPORTE DE CAJA</h4></td></tr>
+                    <tr><td align="left"><b>Usuario:</b> @USUARIO</td></tr>
+                    <tr><td align="left"><b>Sucursal:</b> @SUCURSAL</td></tr>
+                    <tr><td align="left"><b>Fecha de Apertura:</b> @FECHAAPERTURA</td></tr>
+                    <tr><td align="left"><b>Fecha de Cierre:</b> @FECHACIERRE</td></tr>
+                    <tr><td align="left"><b>Fecha de Impresion:</b> @FECHASISTEMA</td></tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr><td colspan="3" height="30"></td></tr>
+
+
+
+        <tr>
+            <td colspan="3">
+                <table class="border" style="width:100%;  font-size: 10px;">
+                    <thead>
+                        <tr><th colspan="6" style="font-size: 12px; text-align:center;">INGRESOS POR VENTAS
+                        </th></tr>
+                        <tr style="background-color:#D8D8D8">
+                            <th style="width:auto;">Usuario</th>
+                            <th style="width:auto;">Fecha</th>
+                            <th style="width:58%;">Detalle</th>
+                            <th>Tipo</th>
+                            <th style="width:auto;">$us.</th>
+                            <th style="width:auto;">Bs.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--
+                        <tr>
+                            <td>ADMIN</td>
+                            <td>26/4/2023</td>
+                            <td>Venta: 6 (- SAMSUNG S23 ULTRA 12/256 BLANCO PL1-1-19 
+- XIAOMI NOTE 10 PRO NEGRO PL1-2-3 
+- XIAOMI NOTE 10 PRO NEGRO PL1-2-4)</td>
+                            <td>Efectivo</td>
+                            <td>2.4</td>
+                            <td>2.4</td>
+                        </tr>
+                        -->
+                        @FILAS
+                        <tr>
+                            <td style="border: 0px !important"></td>
+                            <td style="border: 0px !important"></td>
+                            <td style="border: 0px !important"></td>
+                            <td align="right"><b>Total:</b></td>
+                            <td><b>@TOTALUSD</b></td>
+                            <td><b>@TOTALBOB</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+
+        <tr><td colspan="3" height="30"></td></tr>
+
+        <tr>
+            <td colspan="3">
+                <table class="border" style="width:50%;  font-size: 10px;" align="center">
+                    <thead>
+                        <tr><th colspan="3" style="font-size: 12px; text-align:center;">METODOS DE PAGO
+                        </th></tr>
+                        <tr style="background-color:#D8D8D8">
+                            <th>Tipo</th>
+                            <th style="width:auto;">$us.</th>
+                            <th style="width:auto;">Bs.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td align="center"><b>Efectivo</b></td>
+                            <td><b>@EFECTIVO_TOTALUSD</b></td>
+                            <td><b>@EFECTIVO_TOTALBOB</b></td>
+                        </tr>
+                        <tr>
+                            <td align="center"><b>Transferencia</b></td>
+                            <td><b>@TRANSFERENCIA_TOTALUSD</b></td>
+                            <td><b>@TRANSFERENCIA_TOTALBOB</b></td>
+                        </tr>
+                        <tr>
+                            <td align="center"><b>Tarjeta</b></td>
+                            <td><b>@TARJETA_TOTALUSD</b></td>
+                            <td><b>@TARJETA_TOTALBOB</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+
+        <tr><td colspan="3" height="30"></td></tr>
+
+        <tr>
+            <td colspan="3">
+                <table class="border" style="width:90%;  font-size: 10px;" align="center">
+                    <thead>
+                        <tr><th colspan="4" style="font-size: 12px; text-align:center;">VENTAS CON SALDO PENDIENTE
+                        </th></tr>
+                        <tr style="background-color:#D8D8D8">
+                            <th style="width:auto;">Usuario</th>
+                            <th>Detalle</th>
+                            <th style="width:auto;">Saldo $us.</th>
+                            <th style="width:auto;">Saldo Bs.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @VENTASPENDIENTES
+                        <!--
+                        <tr>
+                            <td>@USUARIO_TWO</td>
+                            <td>@DETALLE_TWO</td>
+                            <td>@SALDOUSD</td>
+                            <td>@SALDOBOB</td>
+                        </tr>-->
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+
+        <tr><td colspan="3" height="70"></td></tr>
+
+        <tr>
+            <td colspan="3">
+                <table style="width:60%;  font-size: 12px;" align="center">
+                    <tbody>
+                        <tr>
+                            <th align="center" style="width:40%; border-top: 1px solid black;">@USUARIO</th>
+                            <th style="width:30%;"> </th>
+                            <th align="center" style="width:40%; border-top: 1px solid black;">Recepcionado</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+
+    </table>
+</body>
+</html>
