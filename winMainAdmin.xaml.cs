@@ -16,6 +16,8 @@ using MySql.Data.MySqlClient;//MySql.Data
 
 using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
+using MaterialDesignThemes.Wpf;
+
 namespace sisgesoriadao
 {
     /// <summary>
@@ -148,10 +150,6 @@ namespace sisgesoriadao
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
             LoadInfoFromDB();
         }
-        private void btnReports_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = "Bienvenid@ a " + Session.Sucursal_NombreSucursal + " , " + Session.NombreUsuario;
@@ -188,6 +186,24 @@ namespace sisgesoriadao
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+        private readonly PaletteHelper _paletteHelper = new PaletteHelper();
+
+        private void tglDarkMode_Click(object sender, RoutedEventArgs e)
+        {
+            bool isDark = false;
+            if (tglDarkMode.IsChecked == true)
+            {
+                isDark = true;
+            }
+            else
+            {
+                isDark = false;
+            }
+            ITheme theme = _paletteHelper.GetTheme();
+            IBaseTheme baseTheme = isDark ? new MaterialDesignDarkTheme() : (IBaseTheme)new MaterialDesignLightTheme();
+            theme.SetBaseTheme(baseTheme);
+            _paletteHelper.SetTheme(theme);
         }
     }
 }

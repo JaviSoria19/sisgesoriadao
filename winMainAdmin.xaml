@@ -31,6 +31,8 @@
                 <Button x:Name="btnRefresh" ToolTip="REFRESCAR INFORMACIÓN" HorizontalAlignment="Right" Margin="10,0,0,0" Click="btnRefresh_Click" Background="LimeGreen" BorderBrush="LimeGreen">
                     <materialDesign:PackIcon Kind="Sync"/>
                 </Button>
+                <materialDesign:PackIcon Kind="ThemeLightDark" Width="25" Height="25" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                <ToggleButton x:Name="tglDarkMode" Style="{StaticResource MaterialDesignSwitchToggleButton}" IsEnabled="True" ToolTip="MODO OSCURO" Margin="10,0,0,0" Click="tglDarkMode_Click"/>
             </StackPanel>
             
             <TextBlock Text="GESTIONAR VENTAS Y PRODUCTOS" Margin="10,0,0,0" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold"/>
@@ -177,12 +179,6 @@
                     </Button>
                     <TextBlock Text="INVENTARIO" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                     <TextBlock Text="DE PRODUCTOS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
-                </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
-                    <Button x:Name="btnReports" Width="100" Height="100" Click="btnReports_Click">
-                        <materialDesign:PackIcon Kind="ChartBar" Width="80" Height="80" HorizontalAlignment="Center"/>
-                    </Button>
-                    <TextBlock Text="ESTADÍSTICAS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">

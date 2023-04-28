@@ -193,7 +193,31 @@ namespace sisgesoriadao
                 SelectLike();
             }
         }
-
+        private void tglDisableButtons_Click(object sender, RoutedEventArgs e)
+        {
+            enableOrDisableButtons();
+        }
+        void enableOrDisableButtons()
+        {
+            if (tglDisableButtons.IsChecked == true)
+            {
+                txtBuscar.IsEnabled = false;
+                cbxSucursal.IsEnabled = false;
+                cbxCondicion.IsEnabled = false;
+                cbxCategoria.IsEnabled = false;
+                cbxDisponibilidad.IsEnabled = false;
+                btnSearch.IsEnabled = false;
+            }
+            else
+            {
+                txtBuscar.IsEnabled = true;
+                cbxSucursal.IsEnabled = true;
+                cbxCondicion.IsEnabled = true;
+                cbxCategoria.IsEnabled = true;
+                cbxDisponibilidad.IsEnabled = true;
+                btnSearch.IsEnabled = true;
+            }
+        }
         void SelectLike()
         {
             try
@@ -234,31 +258,6 @@ namespace sisgesoriadao
             public ComboboxItem()
             {
 
-            }
-        }
-        private void tglDisableButtons_Click(object sender, RoutedEventArgs e)
-        {
-            enableOrDisableButtons();
-        }
-        void enableOrDisableButtons()
-        {
-            if (tglDisableButtons.IsChecked == true)
-            {
-                txtBuscar.IsEnabled = false;
-                cbxSucursal.IsEnabled = false;
-                cbxCondicion.IsEnabled = false;
-                cbxCategoria.IsEnabled = false;
-                cbxDisponibilidad.IsEnabled = false;
-                btnSearch.IsEnabled = false;
-            }
-            else
-            {
-                txtBuscar.IsEnabled = true;
-                cbxSucursal.IsEnabled = true;
-                cbxCondicion.IsEnabled = true;
-                cbxCategoria.IsEnabled = true;
-                cbxDisponibilidad.IsEnabled = true;
-                btnSearch.IsEnabled = true;
             }
         }
         private void txtCodigoProducto_KeyDown(object sender, KeyEventArgs e)
