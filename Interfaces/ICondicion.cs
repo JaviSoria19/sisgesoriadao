@@ -12,5 +12,6 @@ namespace sisgesoriadao.Interfaces
     {
         Condicion Get(byte Id);
         DataTable SelectForComboBox();
+        string SelectGroupConcatIDForComboBox();
     }
 }

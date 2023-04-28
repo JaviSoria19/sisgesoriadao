@@ -138,6 +138,11 @@ namespace sisgesoriadao
             winCaja_AdminRecepcion winCaja_AdminRecepcion = new winCaja_AdminRecepcion();
             winCaja_AdminRecepcion.Show();
         }
+        private void btnProducts_Inventory_Click(object sender, RoutedEventArgs e)
+        {
+            winProducto_Inventario winProducto_Inventario = new winProducto_Inventario();
+            winProducto_Inventario.Show();
+        }
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();

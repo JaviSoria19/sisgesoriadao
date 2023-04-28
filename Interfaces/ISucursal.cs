@@ -13,5 +13,6 @@ namespace sisgesoriadao.Interfaces
         Sucursal Get(byte Id);
         DataTable SelectForComboBox();
         void GetBranchForSession(byte IdSucursal);
+        string SelectGroupConcatIDForComboBox();
     }
 }

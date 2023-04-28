@@ -721,5 +721,29 @@ namespace sisgesoriadao.Implementation
             }
             return idTransferencia;
         }
+
+        public DataTable SelectLikeInventoryFilter(string cadenaBusqueda, string idSucursales, string idCondiciones, string idCategorias, string estados)
+        {
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.observaciones AS Observaciones, IF(P.estado=0,'Eliminado',IF(P.estado=1,'Disponible','Vendido')) AS Disponibilidad, P.precioVentaUSD AS 'Precio USD' FROM producto AS P
+                                INNER JOIN sucursal AS S ON P.idSucursal = S.idSucursal
+                                INNER JOIN categoria AS C ON P.idCategoria = C.idCategoria
+                                INNER JOIN condicion AS CC ON P.idCondicion = CC.idCondicion
+                                WHERE P.idSucursal IN (" + idSucursales + @")
+                                AND P.idCondicion IN (" + idCondiciones + @")
+                                AND P.idCategoria IN (" + idCategorias + @")
+                                AND P.estado IN (" + estados + @")
+                                AND (P.nombreProducto LIKE @search OR P.codigoSublote LIKE @search)
+                                ORDER BY 2 ASC, 6 ASC, 5 ASC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@search", "%" + cadenaBusqueda + "%");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

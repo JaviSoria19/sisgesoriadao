@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Reporte Inventario</title>
+    <style>
+            table.border {
+                border-collapse: collapse;
+        }
+
+            table.border th {
+                padding: 5px;
+                border: 1px solid black;
+            }
+
+            table.border td {
+                padding: 5px;
+                border: 1px solid black;
+            }
+    </style>
+</head>
+<body>
+    <table style="width:100%">
+        <tr>
+            <td style="width:100%" align="center" valign="top">
+                <table>
+                    <tr><td align="center" colspan="2"><h4 style="margin:0px">REPORTE DE INVENTARIO</h4></td></tr>
+                    <tr>
+                        <td align="left"><b>Usuario:</b> @USUARIO</td>
+                        <td align="left"><b>Fecha de Impresion:</b> @FECHASISTEMA</td>
+                    </tr>
+                    <tr>
+                        <td align="left"><b>Sucursal:</b> @SUCURSAL</td>
+                        <td align="left"><b>Disponibilidad:</b> @DISPONIBILIDAD</td>
+                    </tr>
+                    <tr>
+                        <td align="left"><b>Condicion:</b> @CONDICION</td>
+                        <td align="left"><b>Categoria:</b> @CATEGORIA</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr><td colspan="3" height="30"></td></tr>
+
+
+
+        <tr>
+            <td colspan="3">
+                <table class="border" style="width:100%;  font-size: 10px;">
+                    <thead>
+                        <tr><th colspan="8" style="font-size: 12px; text-align:center;">INVENTARIO DE PRODUCTOS
+                        </th></tr>
+                        <tr style="background-color:#D8D8D8">
+                            <th style="width:auto;">Nro.</th>
+                            <th style="width:auto;">Codigo</th>
+                            <th style="width:auto;">Producto</th>
+                            <th style="width:auto;">Sucursal</th>
+                            <th style="width:auto;">Categoria</th>
+                            <th style="width:auto;">Estado</th>
+                            <th style="width:auto;">P/V. $us.</th>
+                            <th style="width:auto;">Detalle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--
+                        <tr>
+                            <td>ADMIN</td>
+                            <td>26/4/2023</td>
+                            <td>Venta: 6 (- SAMSUNG S23 ULTRA 12/256 BLANCO PL1-1-19 
+- XIAOMI NOTE 10 PRO NEGRO PL1-2-3 
+- XIAOMI NOTE 10 PRO NEGRO PL1-2-4)</td>
+                            <td>Efectivo</td>
+                            <td>2.4</td>
+                            <td>2.4</td>
+                        </tr>
+                        -->
+                        @FILAS
+                        <tr>
+                            <td style="border: 0px !important"></td>
+                            <td style="border: 0px !important"></td>
+                            <td style="border: 0px !important"></td>
+                            <td style="border: 0px !important"></td>
+                            <td style="border: 0px !important"></td>
+                            <td style="border: 0px !important"></td>
+                            <td align="right"><b>Total:</b></td>
+                            <td><b>@TOTALUSD</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+
+    </table>
+</body>
+</html>

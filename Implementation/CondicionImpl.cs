@@ -141,5 +141,26 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public string SelectGroupConcatIDForComboBox()
+        {
+            string groupConcatIDs = null;
+            string query = @"SELECT group_concat(idCondicion) AS idCondiciones FROM condicion WHERE estado = 1";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    groupConcatIDs = dt.Rows[0][0].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return groupConcatIDs;
+        }
     }
 }
