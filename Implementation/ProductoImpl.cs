@@ -252,8 +252,10 @@ namespace sisgesoriadao.Implementation
                                 INNER JOIN sucursal AS S ON P.idSucursal = S.idSucursal
                                 INNER JOIN categoria AS C ON P.idCategoria = C.idCategoria
                                 INNER JOIN condicion AS CC ON P.idCondicion = CC.idCondicion
-                                WHERE P.estado = 1 ORDER BY 2 ASC, 6 ASC, 5 ASC";
+                                WHERE P.estado = 1 AND P.idSucursal = @SessionSucursal
+                                ORDER BY 2 ASC, 6 ASC, 5 ASC";
             MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@SessionSucursal", Session.Sucursal_IdSucursal);
             try
             {
                 return ExecuteDataTableCommand(command);
@@ -274,6 +276,29 @@ namespace sisgesoriadao.Implementation
                                 AND P.estado = 1 AND P.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                                 ORDER BY 2 ASC, 6 ASC, 5 ASC";
             MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@search", "%" + CadenaBusqueda + "%");
+            command.Parameters.AddWithValue("@FechaInicio", FechaInicio.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", FechaFin.ToString("yyyy-MM-dd") + " 23:59:59");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public DataTable SelectLikeReporteValorado(byte idSucursal, string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
+        {
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM producto AS P
+                                INNER JOIN sucursal AS S ON P.idSucursal = S.idSucursal
+                                INNER JOIN categoria AS C ON P.idCategoria = C.idCategoria
+                                INNER JOIN condicion AS CC ON P.idCondicion = CC.idCondicion
+                                WHERE (C.nombreCategoria LIKE @search OR P.nombreProducto LIKE @search OR P.identificador LIKE @search OR CC.nombreCondicion LIKE @search OR P.codigoSublote LIKE @search)
+                                AND P.idSucursal = @idSucursal AND P.estado = 1 AND P.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
+                                ORDER BY 2 ASC, 6 ASC, 5 ASC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idSucursal", idSucursal);
             command.Parameters.AddWithValue("@search", "%" + CadenaBusqueda + "%");
             command.Parameters.AddWithValue("@FechaInicio", FechaInicio.ToString("yyyy-MM-dd"));
             command.Parameters.AddWithValue("@FechaFin", FechaFin.ToString("yyyy-MM-dd") + " 23:59:59");

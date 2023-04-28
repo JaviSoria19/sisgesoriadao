@@ -25,7 +25,7 @@ namespace sisgesoriadao
         ProductoImpl implProducto;
         Producto producto;
         byte operacion;
-
+        double productosCostoTotalUSD = 0, productosCostoTotalBOB = 0;
         //Implementaciones para obtener ID's y Nombres para los Combobox
         SucursalImpl implSucursal;
         CategoriaImpl implCategoria;
@@ -95,7 +95,6 @@ namespace sisgesoriadao
                 case 2:
                     if (MessageBox.Show("Está realmente segur@ de modificar el registro seleccionado?", "Confirmar Modificación", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
-                        producto.IdSucursal = byte.Parse((cbxSucursal.SelectedItem as ComboboxItem).Valor.ToString());
                         producto.IdCategoria = byte.Parse((cbxCategoria.SelectedItem as ComboboxItem).Valor.ToString());
                         producto.IdCondicion = byte.Parse((cbxCondicion.SelectedItem as ComboboxItem).Valor.ToString());
                         producto.IdUsuario = Session.IdUsuario;
@@ -132,14 +131,7 @@ namespace sisgesoriadao
         }
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            if (txtBuscar.Text == null || txtBuscar.Text == "")
-            {
-                Select();
-            }
-            else
-            {
-                SelectLike();
-            }
+            SelectLike();
         }
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
@@ -153,8 +145,8 @@ namespace sisgesoriadao
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
             cbxGetCategoriaFromDatabase();
-            cbxSelectSucursalFromDatabase();
             cbxGetCondicionFromDatabase();
+            cbxGetSucursalFromDatabase();
         }
         private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
         {
@@ -185,14 +177,6 @@ namespace sisgesoriadao
                         txtPrecioUSD.Text = producto.PrecioVentaUSD.ToString();
                         txtPrecioBOB.Text = producto.PrecioVentaBOB.ToString();
                         txtObservaciones.Text = producto.Observaciones.ToString();
-                        for (int i = 0; i < cbxSucursal.Items.Count; i++)
-                        {
-                            cbxSucursal.SelectedIndex = i;
-                            if ((cbxSucursal.SelectedItem as ComboboxItem).Valor == producto.IdSucursal)
-                            {
-                                break;
-                            }
-                        }
                         for (int i = 0; i < cbxCategoria.Items.Count; i++)
                         {
                             cbxCategoria.SelectedIndex = i;
@@ -224,14 +208,7 @@ namespace sisgesoriadao
         {
             if (e.Key == Key.Enter)
             {
-                if (string.IsNullOrEmpty(txtBuscar.Text))
-                {
-                    Select();
-                }
-                else
-                {
-                    SelectLike();
-                }
+                SelectLike();
             }
         }
         private void txtCostoUSD_KeyUp(object sender, KeyEventArgs e)
@@ -278,11 +255,23 @@ namespace sisgesoriadao
         {
             try
             {
+                productosCostoTotalUSD = 0;
+                productosCostoTotalBOB = 0;
                 implProducto = new ProductoImpl();
                 dgvDatos.ItemsSource = null;
                 dgvDatos.ItemsSource = implProducto.Select().DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implProducto.Select().Rows.Count;
+                if (dgvDatos.Items.Count > 0)
+                {
+                    foreach (DataRowView item in dgvDatos.Items)
+                    {
+                        productosCostoTotalUSD += double.Parse(item[7].ToString());
+                        productosCostoTotalBOB += double.Parse(item[8].ToString());
+                    }
+                }
+                txtTotalProductosCostoUSD.Text = "Total Costo $us.: " + productosCostoTotalUSD.ToString();
+                txtTotalProductosCostoBOB.Text = "Total Costo Bs.: " + productosCostoTotalBOB.ToString();
             }
             catch (Exception ex)
             {
@@ -293,35 +282,22 @@ namespace sisgesoriadao
         {
             try
             {
+                productosCostoTotalUSD = 0;
+                productosCostoTotalBOB = 0;
                 dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implProducto.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
+                dgvDatos.ItemsSource = implProducto.SelectLikeReporteValorado((cbxSucursal.SelectedItem as ComboboxItem).Valor,txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLike(txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        void cbxSelectSucursalFromDatabase()
-        {
-            try
-            {
-                List<ComboboxItem> listcomboboxSucursal = new List<ComboboxItem>();
-                DataTable dataTable = new DataTable();
-                implSucursal = new SucursalImpl();
-                dataTable = implSucursal.SelectForComboBox();
-                listcomboboxSucursal = (from DataRow dr in dataTable.Rows
-                                        select new ComboboxItem()
-                                        {
-                                            Valor = Convert.ToByte(dr["idSucursal"]),
-                                            Texto = dr["nombreSucursal"].ToString()
-                                        }).ToList();
-                foreach (var item in listcomboboxSucursal)
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeReporteValorado((cbxSucursal.SelectedItem as ComboboxItem).Valor,txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+                if (dgvDatos.Items.Count > 0)
                 {
-                    cbxSucursal.Items.Add(item);
+                    foreach (DataRowView item in dgvDatos.Items)
+                    {
+                        productosCostoTotalUSD += double.Parse(item[7].ToString());
+                        productosCostoTotalBOB += double.Parse(item[8].ToString());
+                    }
                 }
-                cbxSucursal.SelectedIndex = 0;
+                txtTotalProductosCostoUSD.Text = "Total Costo $us.: " + productosCostoTotalUSD.ToString();
+                txtTotalProductosCostoBOB.Text = "Total Costo Bs.: " + productosCostoTotalBOB.ToString();
             }
             catch (Exception ex)
             {
@@ -372,6 +348,31 @@ namespace sisgesoriadao
                     cbxCondicion.Items.Add(item);
                 }
                 cbxCondicion.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        void cbxGetSucursalFromDatabase()
+        {
+            try
+            {
+                List<ComboboxItem> listcomboboxSucursal = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implSucursal = new SucursalImpl();
+                dataTable = implSucursal.SelectForComboBox();
+                listcomboboxSucursal = (from DataRow dr in dataTable.Rows
+                                         select new ComboboxItem()
+                                         {
+                                             Valor = Convert.ToByte(dr["idSucursal"]),
+                                             Texto = dr["nombreSucursal"].ToString()
+                                         }).ToList();
+                foreach (var item in listcomboboxSucursal)
+                {
+                    cbxSucursal.Items.Add(item);
+                }
+                cbxSucursal.SelectedIndex = 0;
             }
             catch (Exception ex)
             {

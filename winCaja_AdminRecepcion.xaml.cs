@@ -23,6 +23,7 @@ namespace sisgesoriadao
     {
         CajaImpl implCaja;
         Caja caja;
+        double cajastotalUSD = 0, cajastotalBOB = 0;
         public winCaja_AdminRecepcion()
         {
             InitializeComponent();
@@ -89,6 +90,21 @@ namespace sisgesoriadao
                 dgvDatos.ItemsSource = implCaja.Select().DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implCaja.Select().Rows.Count;
+                if (dgvDatos.Items.Count > 0)
+                {
+                    foreach (DataRowView item in dgvDatos.Items)
+                    {
+                        cajastotalUSD += double.Parse(item[6].ToString());
+                        cajastotalBOB += double.Parse(item[7].ToString());
+                    }
+                }
+                else
+                {
+                    cajastotalUSD = 0;
+                    cajastotalBOB = 0;
+                }
+                txtCajasTotalUSD.Text = "Total $us.: " + cajastotalUSD.ToString();
+                txtCajasTotalBOB.Text = "Total Bs.: " + cajastotalBOB.ToString();
             }
             catch (Exception ex)
             {

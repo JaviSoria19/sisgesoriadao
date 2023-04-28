@@ -33,6 +33,7 @@ namespace sisgesoriadao
         Usuario usuario;
         SucursalImpl implSucursal;
         Sucursal sucursal;
+        double cajastotalUSD = 0, cajastotalBOB = 0;
         public winCaja_Registros()
         {
             InitializeComponent();
@@ -107,6 +108,16 @@ namespace sisgesoriadao
                 dgvDatos.ItemsSource = implCaja.Select().DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implCaja.Select().Rows.Count;
+                if (dgvDatos.Items.Count > 0)
+                {
+                    foreach (DataRowView item in dgvDatos.Items)
+                    {
+                        cajastotalUSD += double.Parse(item[6].ToString());
+                        cajastotalBOB += double.Parse(item[7].ToString());
+                    }
+                }
+                txtCajasTotalUSD.Text = "Total $us.: " + cajastotalUSD.ToString();
+                txtCajasTotalBOB.Text = "Total Bs.: " + cajastotalBOB.ToString();
             }
             catch (Exception ex)
             {
@@ -333,6 +344,18 @@ namespace sisgesoriadao
                 dgvDatos.ItemsSource = implCaja.SelectLikeByCashTypeAndUsers(tipoCajas, idUsuarios, dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implCaja.SelectLikeByCashTypeAndUsers(tipoCajas, idUsuarios, dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+                cajastotalUSD = 0;
+                cajastotalBOB = 0;
+                if (dgvDatos.Items.Count > 0)
+                {
+                    foreach (DataRowView item in dgvDatos.Items)
+                    {
+                        cajastotalUSD += double.Parse(item[6].ToString());
+                        cajastotalBOB += double.Parse(item[7].ToString());
+                    }
+                }
+                txtCajasTotalUSD.Text = "Total $us.: " + cajastotalUSD.ToString();
+                txtCajasTotalBOB.Text = "Total Bs.: " + cajastotalBOB.ToString();
             }
             catch (Exception ex)
             {

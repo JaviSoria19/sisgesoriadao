@@ -136,18 +136,18 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="5">
                                 <Label Content="Total: "/>
-                                <TextBox x:Name="txtVentaTotalVentaUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False"/>
-                                <TextBox x:Name="txtVentaTotalVentaBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False"/>
+                                <TextBox x:Name="txtVentaTotalVentaUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
+                                <TextBox x:Name="txtVentaTotalVentaBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="5">
                                 <Label Content="Pago: "/>
-                                <TextBox x:Name="txtVentaTotalPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False"/>
-                                <TextBox x:Name="txtVentaTotalPagoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False"/>
+                                <TextBox x:Name="txtVentaTotalPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
+                                <TextBox x:Name="txtVentaTotalPagoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="5">
                                 <Label Content="Saldo: "/>
-                                <TextBox x:Name="txtVentaTotalSaldoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False"/>
-                                <TextBox x:Name="txtVentaTotalSaldoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False"/>
+                                <TextBox x:Name="txtVentaTotalSaldoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
+                                <TextBox x:Name="txtVentaTotalSaldoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
