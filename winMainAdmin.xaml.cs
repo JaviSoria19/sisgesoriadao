@@ -145,6 +145,11 @@ namespace sisgesoriadao
             winProducto_Inventario winProducto_Inventario = new winProducto_Inventario();
             winProducto_Inventario.Show();
         }
+        private void btnSaleHistory_Click(object sender, RoutedEventArgs e)
+        {
+            winVenta winVenta = new winVenta();
+            winVenta.Show();
+        }
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();

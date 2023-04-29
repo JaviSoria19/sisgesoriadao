@@ -15,5 +15,6 @@ namespace sisgesoriadao.Interfaces
         (double, double) GetCashAmounts();
         string GetTodayProducts(DateTime FechaHoy);
         DataTable SelectSalesWithPendingBalanceFromBranch();
+        DataTable SelectLikeReporteUtilidades(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios);
     }
 }

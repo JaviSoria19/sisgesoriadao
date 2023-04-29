@@ -46,6 +46,13 @@
                     <TextBlock Text="VENTA" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnSaleHistory" Width="100" Height="100" Click="btnSaleHistory_Click">
+                        <materialDesign:PackIcon Kind="CartOutline" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="HISTORIAL" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="DE VENTAS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnAddProducts" Width="100" Height="100" Click="btnAddProducts_Click">
                         <materialDesign:PackIcon Kind="PackageVariantAdd" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>

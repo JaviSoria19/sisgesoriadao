@@ -13,5 +13,6 @@ namespace sisgesoriadao.Interfaces
         Usuario Get(byte Id);
         Usuario Login(string nombreUsuario, string contrasenha);
         DataTable SelectForComboBox();
+        string SelectGroupConcatIDForComboBox();
     }
 }

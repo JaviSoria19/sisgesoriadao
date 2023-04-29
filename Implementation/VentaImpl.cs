@@ -225,5 +225,32 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public DataTable SelectLikeReporteUtilidades(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios)
+        {
+            string query = @"SELECT V.idVenta AS 'ID', V.fechaRegistro AS Fecha, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, 
+                            V.idVenta AS 'Nro Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
+                            C.nombreCategoria AS Categoria, P.costoUSD AS 'P Costo', DV.precioUSD AS 'P Venta', (DV.precioUSD - P.costoUSD) AS Utilidad FROM venta V
+                            INNER JOIN sucursal S ON S.idSucursal = V.idSucursal
+                            INNER JOIN usuario U ON U.idUsuario = V.idUsuario
+                            INNER JOIN detalle_venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN categoria C ON C.idCategoria = P.idCategoria
+                            WHERE V.estado = 1 AND V.saldoUSD < 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
+                            AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
+                            GROUP BY P.idProducto
+                            ORDER BY 1 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@FechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", fechaFin.ToString("yyyy-MM-dd") + " 23:59:59");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
