@@ -14,6 +14,12 @@ using System.Windows.Shapes;
 using System.Data;//ADO.NET
 using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
+
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.xml;
+using System.IO;
+using iTextSharp.tool.xml;
 namespace sisgesoriadao
 {
     /// <summary>
@@ -26,6 +32,7 @@ namespace sisgesoriadao
         SucursalImpl implSucursal;
         CategoriaImpl implCategoria;
         CondicionImpl implCondicion;
+        string cadenaFiltroSucursal = string.Empty, cadenaFiltroCondicion = string.Empty, cadenaFiltroCategoria = string.Empty, cadenaFiltroDisponibilidad = string.Empty;
         public winInventarioDigital()
         {
             InitializeComponent();
@@ -227,6 +234,10 @@ namespace sisgesoriadao
                 dgvDatos.ItemsSource = implProducto.SelectLikeInventoryFilter(txtBuscar.Text, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCondicion.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxDisponibilidad.SelectedItem as ComboboxItem).Valor).DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeInventoryFilter(txtBuscar.Text, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCondicion.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxDisponibilidad.SelectedItem as ComboboxItem).Valor).Rows.Count;
+                cadenaFiltroSucursal = (cbxSucursal.SelectedItem as ComboboxItem).Texto;
+                cadenaFiltroCondicion = (cbxCondicion.SelectedItem as ComboboxItem).Texto;
+                cadenaFiltroCategoria = (cbxCategoria.SelectedItem as ComboboxItem).Texto;
+                cadenaFiltroDisponibilidad = (cbxDisponibilidad.SelectedItem as ComboboxItem).Texto;
                 if (dgvDatos.Items.Count > 0)
                 {
                     txtCodigoProducto.IsEnabled = true;
@@ -234,6 +245,7 @@ namespace sisgesoriadao
                     dgvDatosVerificados.ItemsSource = null;
                     tglDisableButtons.IsChecked = true;
                     enableOrDisableButtons();
+                    btnPrintPDF.IsEnabled = true;
                 }
             }
             catch (Exception ex)
@@ -350,6 +362,91 @@ namespace sisgesoriadao
             dgvDatosVerificados.Columns.Add(columna9);
             dgvDatosVerificados.Columns.Add(columna10);
             dgvDatosVerificados.Columns[0].Visibility = Visibility.Collapsed;
+        }
+
+        private void btnPrintPDF_Click(object sender, RoutedEventArgs e)
+        {
+            generarPDF();
+        }
+        void generarPDF()
+        {
+            Microsoft.Win32.SaveFileDialog guardar = new Microsoft.Win32.SaveFileDialog();
+            guardar.FileName = "InventarioDigital_" + cadenaFiltroSucursal + "_" + DateTime.Now.ToString("yyyy_MM_dd__HH_mm") + ".pdf";
+            guardar.Filter = "PDF(*.pdf)|*.pdf";
+
+            string paginahtml_texto = Properties.Resources.PlantillaReporteInventarioDigital.ToString();
+            paginahtml_texto = paginahtml_texto.Replace("@USUARIO", Session.NombreUsuario);
+            paginahtml_texto = paginahtml_texto.Replace("@FECHASISTEMA", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
+            paginahtml_texto = paginahtml_texto.Replace("@SUCURSAL", cadenaFiltroSucursal);
+            paginahtml_texto = paginahtml_texto.Replace("@DISPONIBILIDAD", cadenaFiltroDisponibilidad);
+            paginahtml_texto = paginahtml_texto.Replace("@CONDICION", cadenaFiltroCondicion);
+            paginahtml_texto = paginahtml_texto.Replace("@CATEGORIA", cadenaFiltroCategoria);
+            int pdf_contador = 1;
+            double columnastotalUSD = 0;
+            string filas = string.Empty;
+            foreach (DataRowView item in dgvDatos.Items)
+            {
+                filas += "<tr>";
+                filas += "<td>" + pdf_contador + "</td>";//nro
+                filas += "<td>" + item[4].ToString() + "</td>";//codigo
+                filas += "<td>" + item[5].ToString() + "</td>";//producto
+                filas += "<td>" + item[1].ToString() + "</td>";//sucursal
+                filas += "<td>" + item[2].ToString() + "</td>";//categoria
+                filas += "<td>" + item[3].ToString() + "</td>";//condicion
+                filas += "<td>" + item[9].ToString() + "</td>";//precioventa usd
+                filas += "<td>" + item[6].ToString() + "</td>";//detalle
+                filas += "</tr>";
+                pdf_contador++;
+                columnastotalUSD += double.Parse(item[9].ToString());
+            }
+            paginahtml_texto = paginahtml_texto.Replace("@TOTALUSD_UNO", "$us. " + columnastotalUSD.ToString());
+            paginahtml_texto = paginahtml_texto.Replace("@FILAS_UNO", filas);
+
+            int pdf_contador_two = 1;
+            double columnastotalUSD_two = 0;
+            string filas_two = string.Empty;
+            foreach (DataRowView item in dgvDatosVerificados.Items)
+            {
+                filas_two += "<tr>";
+                filas_two += "<td>" + pdf_contador_two + "</td>";//nro
+                filas_two += "<td>" + item[4].ToString() + "</td>";//codigo
+                filas_two += "<td>" + item[5].ToString() + "</td>";//producto
+                filas_two += "<td>" + item[1].ToString() + "</td>";//sucursal
+                filas_two += "<td>" + item[2].ToString() + "</td>";//categoria
+                filas_two += "<td>" + item[3].ToString() + "</td>";//condicion
+                filas_two += "<td>" + item[9].ToString() + "</td>";//precioventa usd
+                filas_two += "<td>" + item[6].ToString() + "</td>";//detalle
+                filas_two += "</tr>";
+                pdf_contador_two++;
+                columnastotalUSD_two += double.Parse(item[9].ToString());
+            }
+            paginahtml_texto = paginahtml_texto.Replace("@TOTALUSD_DOS", "$us. " + columnastotalUSD_two.ToString());
+            paginahtml_texto = paginahtml_texto.Replace("@FILAS_DOS", filas_two);
+
+
+            if (guardar.ShowDialog() == true)
+            {
+                try
+                {
+                    using (FileStream stream = new FileStream(guardar.FileName, FileMode.Create))
+                    {
+                        Document pdfDoc = new Document(PageSize.A4, 25, 25, 25, 25);
+                        PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+                        pdfDoc.Open();
+                        pdfDoc.Add(new Phrase(""));
+                        using (StringReader sr = new StringReader(paginahtml_texto))
+                        {
+                            XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                        }
+                        pdfDoc.Close();
+                        stream.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
     }
 }
