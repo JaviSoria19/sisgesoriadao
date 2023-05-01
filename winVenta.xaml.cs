@@ -14,6 +14,12 @@ using System.Windows.Shapes;
 using System.Data;//ADO.NET
 using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
+
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.xml;
+using System.IO;
+using iTextSharp.tool.xml;
 namespace sisgesoriadao
 {
     /// <summary>
@@ -25,18 +31,11 @@ namespace sisgesoriadao
         SucursalImpl implSucursal;
         CategoriaImpl implCategoria;
         UsuarioImpl implUsuario;
-        double totalCosto = 0, totalVenta = 0, totalUtilidad = 0;
+        double totalUSD = 0, totalBOB = 0;
+        string cadenaFiltroSucursal = string.Empty, cadenaFiltroCategoria = string.Empty, cadenaFiltroUsuario = string.Empty, cadenaFechaInicio = string.Empty, cadenaFechaFin = string.Empty;
         public winVenta()
         {
             InitializeComponent();
-        }
-        private void btnReturn_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-        private void btnSearch_Click(object sender, RoutedEventArgs e)
-        {
-            SelectLike();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -48,32 +47,50 @@ namespace sisgesoriadao
             cbxGetGroupConcatUsuarios();
             cbxGetUsuarioFromDatabase();
         }
+        private void btnReturn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            SelectLike();
+        }
         private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
         {
             dtpFechaFin.SelectedDate = DateTime.Today;
             dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
         }
-        private void SelectLike()
+        void SelectLike()
         {
             try
             {
                 implVenta = new VentaImpl();
                 dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implVenta.SelectLikeReporteUtilidades(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor).DefaultView;
-                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implVenta.SelectLikeReporteUtilidades(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor).Rows.Count;
-                totalCosto = 0;
-                totalVenta = 0;
-                totalUtilidad = 0;
+                dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasGlobales(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor).DefaultView;
+                //dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implVenta.SelectLikeReporteVentasGlobales(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor).Rows.Count;
+                totalUSD = 0;
+                totalBOB = 0;
                 foreach (DataRowView item in dgvDatos.Items)
                 {
-                    totalCosto += double.Parse(item[9].ToString());
-                    totalVenta += double.Parse(item[10].ToString());
-                    totalUtilidad += double.Parse(item[11].ToString());
+                    totalUSD += double.Parse(item[8].ToString());
+                    totalBOB += double.Parse(item[9].ToString());
                 }
-                txtTotalCosto.Text = "Total P. Costo: $us. " + totalCosto.ToString();
-                txtTotalVenta.Text = "Total P. Venta: $us. " + totalVenta.ToString();
-                txtTotalUtilidad.Text = "Total Utilidad: $us. " + totalUtilidad.ToString();
+                txtTotalUSD.Text = "Total $us.: " + totalUSD.ToString();
+                txtTotalBOB.Text = "Total Bs.: " + totalBOB.ToString();
+                if (dgvDatos.Items.Count > 0)
+                {
+                    btnPrintPDF.IsEnabled = true;
+                }
+                else
+                {
+                    btnPrintPDF.IsEnabled = false;
+                }
+                cadenaFiltroSucursal = (cbxSucursal.SelectedItem as ComboboxItem).Texto;
+                cadenaFiltroCategoria = (cbxCategoria.SelectedItem as ComboboxItem).Texto;
+                cadenaFiltroUsuario = (cbxUsuario.SelectedItem as ComboboxItem).Texto;
+                cadenaFechaInicio = dtpFechaInicio.SelectedDate.Value.ToString("dd/MM/yyyy");
+                cadenaFechaFin = dtpFechaFin.SelectedDate.Value.ToString("dd/MM/yyyy");
             }
             catch (Exception ex)
             {
@@ -187,11 +204,11 @@ namespace sisgesoriadao
                 implUsuario = new UsuarioImpl();
                 dataTable = implUsuario.SelectForComboBox();
                 listcomboboxUsuario = (from DataRow dr in dataTable.Rows
-                                         select new ComboboxItem()
-                                         {
-                                             Valor = dr["idUsuario"].ToString(),
-                                             Texto = dr["nombreUsuario"].ToString()
-                                         }).ToList();
+                                       select new ComboboxItem()
+                                       {
+                                           Valor = dr["idUsuario"].ToString(),
+                                           Texto = dr["nombreUsuario"].ToString()
+                                       }).ToList();
                 foreach (var item in listcomboboxUsuario)
                 {
                     cbxUsuario.Items.Add(item);
@@ -220,6 +237,81 @@ namespace sisgesoriadao
             public ComboboxItem()
             {
 
+            }
+        }
+        private void btnPrintPDF_Click(object sender, RoutedEventArgs e)
+        {
+            imprimirPDF();
+        }
+        private void imprimirPDF()
+        {
+            Microsoft.Win32.SaveFileDialog guardar = new Microsoft.Win32.SaveFileDialog();
+            guardar.FileName = "Ventas_" + DateTime.Now.ToString("yyyy_MM_dd__HH_mm") + ".pdf";
+            guardar.Filter = "PDF(*.pdf)|*.pdf";
+
+            string paginahtml_texto = Properties.Resources.PlantillaReporteVenta.ToString();
+            paginahtml_texto = paginahtml_texto.Replace("@USUARIO", Session.NombreUsuario);
+            paginahtml_texto = paginahtml_texto.Replace("@FECHASISTEMA", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
+            paginahtml_texto = paginahtml_texto.Replace("@FECHAINICIO", cadenaFechaInicio);
+            paginahtml_texto = paginahtml_texto.Replace("@FECHAFIN", cadenaFechaFin);
+            paginahtml_texto = paginahtml_texto.Replace("@FILTROSUCURSAL", cadenaFiltroSucursal);
+            paginahtml_texto = paginahtml_texto.Replace("@FILTROCATEGORIA", cadenaFiltroCategoria);
+            paginahtml_texto = paginahtml_texto.Replace("@FILTROUSUARIOS", cadenaFiltroUsuario);
+            int pdf_contador = 1;
+            double columnastotalUSD = 0, columnastotalBOB = 0;
+            string filas = string.Empty;
+            foreach (DataRowView item in dgvDatos.Items)
+            {
+                filas += "<tr>";
+                filas += "<td>" + pdf_contador + "</td>";//nro
+                filas += "<td>" + item[0].ToString() + "</td>";//fecha
+                filas += "<td>" + item[1].ToString() + "</td>";//sucursal
+                filas += "<td>" + item[2].ToString() + "</td>";//usuario
+                filas += "<td>" + item[3].ToString() + "</td>";//nro venta
+                filas += "<td>" + item[4].ToString() + "</td>";//codigo producto
+                filas += "<td>" + item[5].ToString() + "</td>";//nombre producto
+                filas += "<td>" + item[7].ToString() + "</td>";//categoria
+                filas += "<td>" + item[8].ToString() + "</td>";//precio USD
+                filas += "<td>" + item[9].ToString() + "</td>";//precio BOB
+                filas += "</tr>";
+                pdf_contador++;
+                columnastotalUSD += double.Parse(item[8].ToString());
+                columnastotalBOB += double.Parse(item[9].ToString());
+            }
+            paginahtml_texto = paginahtml_texto.Replace("@TOTALUSD", "$us. " + columnastotalUSD.ToString());
+            paginahtml_texto = paginahtml_texto.Replace("@TOTALBOB", "Bs. " + columnastotalBOB.ToString());
+            paginahtml_texto = paginahtml_texto.Replace("@FILAS", filas);
+
+
+            if (guardar.ShowDialog() == true)
+            {
+                try
+                {
+                    using (FileStream stream = new FileStream(guardar.FileName, FileMode.Create))
+                    {
+                        Document pdfDoc = new Document(PageSize.A4, 25, 25, 25, 25);
+                        PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+                        pdfDoc.Open();
+                        pdfDoc.Add(new Phrase(""));
+
+                        iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(Properties.Resources.logo, System.Drawing.Imaging.ImageFormat.Png);
+                        img.ScaleToFit(90, 90);
+                        img.Alignment = iTextSharp.text.Image.UNDERLYING;
+                        img.SetAbsolutePosition(pdfDoc.LeftMargin + 10, pdfDoc.Top - 100);
+                        pdfDoc.Add(img);
+
+                        using (StringReader sr = new StringReader(paginahtml_texto))
+                        {
+                            XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                        }
+                        pdfDoc.Close();
+                        stream.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
     }

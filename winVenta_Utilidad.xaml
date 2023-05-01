@@ -1,4 +1,4 @@
-﻿<Window x:Class="sisgesoriadao.winVenta"
+﻿<Window x:Class="sisgesoriadao.winVenta_Utilidad"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
      TextElement.FontWeight="Regular"
@@ -13,7 +13,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
-        Title="Sistema de Ventas - Historial de Ventas" Height="720" Width="1280"
+        Title="Sistema de Ventas - Reporte de Utilidades" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
     <ScrollViewer>
         <StackPanel Orientation="Vertical">
@@ -24,10 +24,16 @@
                 <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
                 <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
-                <materialDesign:PackIcon Kind="CartOutline" Width="25" Height="25" VerticalAlignment="Center"/>
-                <TextBlock Text="HISTORIAL DE VENTAS GLOBAL" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="Cash" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="REPORTE DE UTILIDADES" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Margin="0,0,0,5" TextWrapping="Wrap">
+                    <Bold>ATENCION:</Bold> Estimad@ usuari@, en esta ventana solamente saldrán los productos de aquellas ventas que han sido completamente canceladas.
+                </TextBlock>
+            </StackPanel>
+            
             <StackPanel Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
                 <Label Content="Desde:" VerticalAlignment="Center"/>
                 <DatePicker x:Name="dtpFechaInicio" Margin="0,0,20,0"/>
@@ -39,15 +45,15 @@
                 <ComboBox x:Name="cbxCategoria" IsEnabled="True" Margin="0,0,20,0"/>
                 <Label Content="USUARIO:" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 <ComboBox x:Name="cbxUsuario" IsEnabled="True" Margin="0,0,20,0"/>
-                <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click">
+                <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0">
                     <materialDesign:PackIcon Kind="Search"/>
                 </Button>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                <TextBlock x:Name="txtTotalUSD" Text="Total $us.: 0" Margin="0,0,50,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
-                <TextBlock x:Name="txtTotalBOB" Text="Total Bs.: 0" Margin="0,0,50,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
-                <Button x:Name="btnPrintPDF" Content="GENERAR PDF" Click="btnPrintPDF_Click" IsEnabled="False"/>
+                <TextBlock x:Name="txtTotalCosto" Text="Total P. Costo: 0" Margin="0,0,50,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock x:Name="txtTotalVenta" Text="Total P. Venta: 0" Margin="0,0,50,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock x:Name="txtTotalUtilidad" Text="Total Utilidad: 0" Margin="0,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">

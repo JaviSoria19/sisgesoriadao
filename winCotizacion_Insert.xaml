@@ -83,7 +83,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="Ocultar Precio $.:" VerticalAlignment="Center"/>
-                <ToggleButton x:Name="tglOcultarUSD" Style="{StaticResource MaterialDesignSwitchToggleButton}" ToolTip="Default ToggleButton Style" IsEnabled="False" Margin="0,0,20,0"/>
+                <ToggleButton x:Name="tglOcultarUSD" Style="{StaticResource MaterialDesignSwitchToggleButton}" ToolTip="Ocultar precio en dólar para el cliente." IsEnabled="False" Margin="0,0,20,0"/>
                 <Label Content="Precio $:" VerticalAlignment="Center"/>
                 <TextBox x:Name="txtCotizacionUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" VerticalAlignment="Center" KeyUp="txtCotizacionUSD_KeyUp" KeyDown="txtCotizacionUSD_KeyDown"/>
                 <Label Content="Precio BS:" VerticalAlignment="Center"/>

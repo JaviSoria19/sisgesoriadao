@@ -49,8 +49,15 @@
                     <Button x:Name="btnSaleHistory" Width="100" Height="100" Click="btnSaleHistory_Click">
                         <materialDesign:PackIcon Kind="CartOutline" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
-                    <TextBlock Text="HISTORIAL" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
-                    <TextBlock Text="DE VENTAS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="HISTORIAL DE" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="VENTAS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnSaleProfit" Width="100" Height="100" Click="btnSaleProfit_Click">
+                        <materialDesign:PackIcon Kind="Cash" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="REPORTE DE" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="UTILIDADES" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnAddProducts" Width="100" Height="100" Click="btnAddProducts_Click">
@@ -190,10 +197,10 @@
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Margin="20">
-                    <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="Orange" Foreground="White">
+                    <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="Orange">
                         <TextBlock x:Name="infoTotalSalesFromToday" FontSize="20" Text="VENTAS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
                     </materialDesign:Card>
-                    <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="Gold" Foreground="White">
+                    <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="Gold">
                         <TextBlock x:Name="infoTotalProductsFromToday" FontSize="20" Text="PRODUCTOS VENDIDOS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
                     </materialDesign:Card>
                     <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="LimeGreen">

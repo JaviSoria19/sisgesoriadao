@@ -255,5 +255,33 @@ namespace sisgesoriadao.Properties {
                 return ResourceManager.GetString("PlantillaReporteTransferencia", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a &lt;!DOCTYPE html&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///&lt;head&gt;
+        ///    &lt;title&gt;Reporte Inventario&lt;/title&gt;
+        ///    &lt;style&gt;
+        ///            table.border {
+        ///                border-collapse: collapse;
+        ///        }
+        ///
+        ///            table.border th {
+        ///                padding: 5px;
+        ///                border: 1px solid black;
+        ///            }
+        ///
+        ///            table.border td {
+        ///                padding: 5px;
+        ///                border: 1px solid black;
+        ///            }
+        ///            #cuadrado{
+        ///                border-collapse: collapse [resto de la cadena truncado]&quot;;.
+        /// </summary>
+        internal static string PlantillaReporteVenta {
+            get {
+                return ResourceManager.GetString("PlantillaReporteVenta", resourceCulture);
+            }
+        }
     }
 }

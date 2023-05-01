@@ -150,6 +150,11 @@ namespace sisgesoriadao
             winVenta winVenta = new winVenta();
             winVenta.Show();
         }
+        private void btnSaleProfit_Click(object sender, RoutedEventArgs e)
+        {
+            winVenta_Utilidad winVenta_Utilidad = new winVenta_Utilidad();
+            winVenta_Utilidad.Show();
+        }
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
@@ -196,17 +201,12 @@ namespace sisgesoriadao
 
         private void tglDarkMode_Click(object sender, RoutedEventArgs e)
         {
-            bool isDark = false;
-            if (tglDarkMode.IsChecked == true)
-            {
-                isDark = true;
-            }
-            else
-            {
-                isDark = false;
-            }
+            darkMode(tglDarkMode.IsChecked.Value);
+        }
+        private void darkMode(bool vof)
+        {
             ITheme theme = _paletteHelper.GetTheme();
-            IBaseTheme baseTheme = isDark ? new MaterialDesignDarkTheme() : (IBaseTheme)new MaterialDesignLightTheme();
+            IBaseTheme baseTheme = vof ? new MaterialDesignDarkTheme() : (IBaseTheme)new MaterialDesignLightTheme();
             theme.SetBaseTheme(baseTheme);
             _paletteHelper.SetTheme(theme);
         }
