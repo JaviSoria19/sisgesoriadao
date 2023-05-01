@@ -155,6 +155,11 @@ namespace sisgesoriadao
             winVenta_Utilidad winVenta_Utilidad = new winVenta_Utilidad();
             winVenta_Utilidad.Show();
         }
+        private void btnLocalSales_Click(object sender, RoutedEventArgs e)
+        {
+            winVenta_HistorialLocal winVenta_HistorialLocal = new winVenta_HistorialLocal();
+            winVenta_HistorialLocal.Show();
+        }
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();

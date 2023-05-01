@@ -57,8 +57,8 @@ namespace sisgesoriadao
         }
         private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
         {
-            dtpFechaFin.SelectedDate = DateTime.Today;
-            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
+            dtpFechaFin.SelectedDate = DateTime.Now;
+            dtpFechaInicio.SelectedDate = DateTime.Now;
         }
         void SelectLike()
         {

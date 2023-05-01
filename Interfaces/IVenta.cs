@@ -17,5 +17,7 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectSalesWithPendingBalanceFromBranch();
         DataTable SelectLikeReporteUtilidades(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios);
         DataTable SelectLikeReporteVentasGlobales(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios);
+        DataTable SelectLikeReporteVentasLocales(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI);
+        DataTable SelectLikeReporteVentasLocalesByID(int idVenta);
     }
 }

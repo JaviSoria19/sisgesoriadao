@@ -279,5 +279,58 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public DataTable SelectLikeReporteVentasLocales(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI)
+        {
+            string query = @"SELECT V.idVenta AS 'ID', V.fechaRegistro AS Fecha, CL.nombre AS Cliente, V.idVenta AS 'Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM venta V
+                            INNER JOIN cliente CL ON CL.idCliente = V.idCliente
+                            INNER JOIN detalle_venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN categoria C ON C.idCategoria = P.idCategoria
+                            WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto OR CL.nombre LIKE @clienteoci OR CL.numeroCI LIKE @clienteoci)
+                            AND V.estado = 1 AND V.idSucursal = @SessionSucursal
+                            AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
+                            GROUP BY P.idProducto
+                            ORDER BY 1 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@SessionSucursal", Session.Sucursal_IdSucursal);
+            command.Parameters.AddWithValue("@productocodigoproducto", "%" + productoOCodigo + "%");
+            command.Parameters.AddWithValue("@clienteoci", "%" + clienteoCI + "%");
+            command.Parameters.AddWithValue("@FechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", fechaFin.ToString("yyyy-MM-dd") + " 23:59:59");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public DataTable SelectLikeReporteVentasLocalesByID(int idVenta)
+        {
+            string query = @"SELECT V.idVenta AS 'ID', V.fechaRegistro AS Fecha, CL.nombre AS Cliente, V.idVenta AS 'Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM venta V
+                            INNER JOIN cliente CL ON CL.idCliente = V.idCliente
+                            INNER JOIN detalle_venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN categoria C ON C.idCategoria = P.idCategoria
+                            WHERE V.estado = 1 AND V.idSucursal = @SessionSucursal AND V.idVenta = @idVenta
+                            GROUP BY P.idProducto
+                            ORDER BY 1 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@SessionSucursal", Session.Sucursal_IdSucursal);
+            command.Parameters.AddWithValue("@idVenta", idVenta);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
