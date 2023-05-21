@@ -15,7 +15,7 @@
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
         mc:Ignorable="d"
         Title="Sistema de Ventas - Registrar Venta" Height="720" Width="1280"
-        WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
+        WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded" Closing="Window_Closing">
     <ScrollViewer>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="10">
@@ -47,11 +47,14 @@
                     <controls:AutoCompleteBox x:Name="acbtxtNameCustomer" Margin="5,0,20,0" MinWidth="120" IsEnabled="True" FilterMode="Contains" KeyDown="acbtxtNameCustomer_KeyDown" />
                     <Label Content="CARNET o CELULAR: " VerticalAlignment="Center"/>
                     <TextBox x:Name="txtSearchCustomer" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="True" Height="22" KeyDown="txtSearchCustomer_KeyDown"/>
-                    <Button x:Name="btnSearchCustomer" ToolTip="BUSCAR CLIENTE" Click="btnSearchCustomer_Click" Margin="0,0,0,0">
+                    <Button x:Name="btnSearchCustomer" ToolTip="BUSCAR CLIENTE" Click="btnSearchCustomer_Click" Margin="0,0,0,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>
-                    <Button x:Name="btnAddCustomer" ToolTip="AÑADIR CLIENTE" Click="btnAddCustomer_Click" Margin="10,0,0,0">
+                    <Button x:Name="btnAddCustomer" ToolTip="AÑADIR CLIENTE" Click="btnAddCustomer_Click" Margin="10,0,0,0" Background="LimeGreen" BorderBrush="LimeGreen">
                         <materialDesign:PackIcon Kind="AccountAdd"/>
+                    </Button>
+                    <Button x:Name="btnEditCustomer" ToolTip="MODIFICAR CLIENTE" Click="btnEditCustomer_Click" Margin="10,0,0,0" IsEnabled="False" Background="Orange" BorderBrush="Orange">
+                        <materialDesign:PackIcon Kind="AccountEdit"/>
                     </Button>
                     <Label x:Name="lblSearchCustomerInfo" Content="" Foreground="Black" Background="Transparent" Margin="20,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>
                 </StackPanel>
@@ -72,7 +75,7 @@
                     <TextBox x:Name="txtRegister_NumeroCI" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="False"/>
                 </StackPanel>
                 <StackPanel x:Name="stackpanelCustomerButtons" Orientation="Horizontal" Margin="15,25,0,25" Visibility="Collapsed">
-                    <Button x:Name="btnSaveNewCustomer" Content="REGISTRAR CLIENTE" IsEnabled="False" Click="btnSaveNewCustomer_Click"/>
+                    <Button x:Name="btnSaveNewCustomer" Content="GUARDAR" IsEnabled="False" Click="btnSaveNewCustomer_Click"/>
                     <Button x:Name="btnCancelNewCustomer" Content="CANCELAR" Margin="10,0,0,0" IsEnabled="False" Click="btnCancelNewCustomer_Click"/>
                 </StackPanel>
                 <TextBlock Text="DETALLE PRODUCTO(S)" FontWeight="Bold" FontSize="20"/>
@@ -82,7 +85,7 @@
                 <StackPanel Orientation="Horizontal" Margin="15">
                     <Label Content="CÓDIGO DE PRODUCTO: " VerticalAlignment="Center"/>
                     <TextBox x:Name="txtSearchProduct" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="30" IsEnabled="True" Height="22" KeyDown="txtSearchProduct_KeyDown"/>
-                    <Button x:Name="btnSearchProduct" ToolTip="BUSCAR PRODUCTO" Click="btnSearchProduct_Click" Margin="0,0,0,0" IsEnabled="True">
+                    <Button x:Name="btnSearchProduct" ToolTip="BUSCAR PRODUCTO" Click="btnSearchProduct_Click" Margin="0,0,0,0" IsEnabled="True" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>
                     <StackPanel Orientation="Vertical" Margin="15,0,0,0">
@@ -104,7 +107,7 @@
                     <Label Content="GARANTIA:" VerticalAlignment="Center"/>
                     <TextBox x:Name="txtGarantia" TextWrapping="Wrap" Margin="0,0,0,0" MinWidth="50" MaxLength="2" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" VerticalAlignment="Center"/>
                     <Label Content="MESES." Margin="0,0,20,0" VerticalAlignment="Center"/>
-                    <Button x:Name="btnAddProduct" ToolTip="AÑADIR PRODUCTO" Click="btnAddProduct_Click" Margin="0,0,0,0" IsEnabled="False">
+                    <Button x:Name="btnAddProduct" ToolTip="AÑADIR PRODUCTO" Click="btnAddProduct_Click" Margin="0,0,0,0" IsEnabled="False" Background="LimeGreen" BorderBrush="LimeGreen">
                         <materialDesign:PackIcon Kind="CartAdd"/>
                     </Button>
                 </StackPanel>
@@ -122,7 +125,7 @@
                         <TextBox x:Name="txtPagoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPagoBOB_KeyUp"/>
                         <Label Content="Tipo:"/>
                         <ComboBox x:Name="cbxPaymentMethod" IsEnabled="True" Margin="0,0,20,0"/>
-                        <Button x:Name="btnAddPaymentMethod" ToolTip="AÑADIR MÉTODO DE PAGO" Click="btnAddPaymentMethod_Click" Margin="0,0,0,0" IsEnabled="True">
+                        <Button x:Name="btnAddPaymentMethod" ToolTip="AÑADIR MÉTODO DE PAGO" Click="btnAddPaymentMethod_Click" Margin="0,0,0,0" IsEnabled="True" Background="LimeGreen" BorderBrush="LimeGreen">
                             <materialDesign:PackIcon Kind="CreditCardAdd"/>
                         </Button>
                     </StackPanel>
@@ -154,7 +157,7 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,30,0,0">
-                    <Button x:Name="btnSaveAndPDF" Content="REGISTRAR Y PDF" ToolTip="REGISTRAR VENTA Y GENERAR PDF" Click="btnSaveAndPDF_Click" IsEnabled="True" VerticalAlignment="Center" Background="LimeGreen"/>
+                    <Button x:Name="btnSaveAndPDF" Content="REGISTRAR Y PDF" ToolTip="REGISTRAR VENTA Y GENERAR PDF" Click="btnSaveAndPDF_Click" IsEnabled="True" VerticalAlignment="Center"  Background="LimeGreen" BorderBrush="LimeGreen"/>
                     <Label Content="OBSERVACIONES: " VerticalAlignment="Center" Margin="20,0,0,0"/>
                     <TextBox x:Name="txtObservacionVenta" TextWrapping="Wrap" MinWidth="120" MaxLength="99" IsEnabled="True" Height="22" VerticalAlignment="Center"/>
                 </StackPanel>

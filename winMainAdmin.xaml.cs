@@ -29,6 +29,7 @@ namespace sisgesoriadao
         public winMainAdmin()
         {
             InitializeComponent();
+            WindowState = WindowState.Maximized;
         }
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {

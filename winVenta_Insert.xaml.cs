@@ -42,6 +42,7 @@ namespace sisgesoriadao
         List<Categoria> listaGarantias = new List<Categoria>();
         VentaImpl implVenta;
         Venta venta;
+        byte operacion = 0;
         public winVenta_Insert()
         {
             InitializeComponent();
@@ -61,45 +62,99 @@ namespace sisgesoriadao
             stackpanelCustomerForm.Visibility = Visibility.Visible;
             stackpanelCustomerButtons.Visibility = Visibility.Visible;
             EnableCustomerButtons();
+            operacion = 1;
+        }
+        private void btnEditCustomer_Click(object sender, RoutedEventArgs e)
+        {
+            stackpanelCustomerFound.Visibility = Visibility.Collapsed;
+            stackpanelCustomerForm.Visibility = Visibility.Visible;
+            stackpanelCustomerButtons.Visibility = Visibility.Visible;
+            txtRegister_Nombre.Text = cliente.Nombre.Trim();
+            txtRegister_NumeroCelular.Text = cliente.NumeroCelular.Trim();
+            txtRegister_NumeroCI.Text = cliente.NumeroCI.Trim();
+            operacion = 2;
+
+            btnAddCustomer.IsEnabled = false;
+            btnEditCustomer.IsEnabled = false;
+            EnableCustomerButtons();
         }
         private void btnSaveNewCustomer_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(txtRegister_Nombre.Text) == false && string.IsNullOrEmpty(txtRegister_NumeroCelular.Text) == false && string.IsNullOrEmpty(txtRegister_NumeroCI.Text) == false)
             {
-                cliente = new Cliente(txtRegister_Nombre.Text.Trim(), txtRegister_NumeroCelular.Text.Trim(), txtRegister_NumeroCI.Text.Trim());
-                implCliente = new ClienteImpl();
-                try
+                switch (operacion)
                 {
-                    int n = implCliente.Insert(cliente);
-                    if (n > 0)
-                    {
-                        stackpanelCustomerFound.Visibility = Visibility.Visible;
-                        stackpanelCustomerForm.Visibility = Visibility.Collapsed;
-                        stackpanelCustomerButtons.Visibility = Visibility.Collapsed;
+                    //insert
+                    case 1:
+                        cliente = new Cliente(txtRegister_Nombre.Text.Trim(), txtRegister_NumeroCelular.Text.Trim(), txtRegister_NumeroCI.Text.Trim());
+                        implCliente = new ClienteImpl();
                         try
                         {
-                            implCliente = new ClienteImpl();
-                            cliente = implCliente.GetByCIorCelular(txtRegister_NumeroCI.Text.Trim());
-                            if (cliente != null)
+                            int n = implCliente.Insert(cliente);
+                            if (n > 0)
+                            {
+                                stackpanelCustomerFound.Visibility = Visibility.Visible;
+                                stackpanelCustomerForm.Visibility = Visibility.Collapsed;
+                                stackpanelCustomerButtons.Visibility = Visibility.Collapsed;
+                                try
+                                {
+                                    implCliente = new ClienteImpl();
+                                    cliente = implCliente.GetByCIorCelular(txtRegister_NumeroCI.Text.Trim());
+                                    if (cliente != null)
+                                    {
+                                        lblCustomerNombre.Content = "Nombre: " + cliente.Nombre.Trim();
+                                        lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
+                                        lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
+                                        DisableCustomerButtons();
+                                        acbxGetClientesFromDatabase();
+                                        btnEditCustomer.IsEnabled = true;
+                                    }
+                                }
+                                catch (Exception)
+                                {
+
+                                    throw;
+                                }
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                        }
+                        break;
+                        //UPDATE
+                    case 2:
+                        cliente.Nombre = txtRegister_Nombre.Text.Trim();
+                        cliente.NumeroCelular = txtRegister_NumeroCelular.Text.Trim();
+                        cliente.NumeroCI = txtRegister_NumeroCI.Text.Trim();
+                        implCliente = new ClienteImpl();
+                        try
+                        {
+                            int n = implCliente.Update(cliente);
+                            if (n > 0)
                             {
                                 lblCustomerNombre.Content = "Nombre: " + cliente.Nombre.Trim();
                                 lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
                                 lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
                                 DisableCustomerButtons();
                                 acbxGetClientesFromDatabase();
+                                stackpanelCustomerFound.Visibility = Visibility.Visible;
+                                stackpanelCustomerForm.Visibility = Visibility.Collapsed;
+                                stackpanelCustomerButtons.Visibility = Visibility.Collapsed;
                             }
                         }
                         catch (Exception)
                         {
-
-                            throw;
+                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
                         }
-                    }
+                        break;
+                    default:
+                        break;
                 }
-                catch (Exception)
-                {
-                    MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
-                }
+            }
+            else
+            {
+                MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
             }
         }
         private void btnCancelNewCustomer_Click(object sender, RoutedEventArgs e)
@@ -108,6 +163,11 @@ namespace sisgesoriadao
             stackpanelCustomerForm.Visibility = Visibility.Collapsed;
             stackpanelCustomerButtons.Visibility = Visibility.Collapsed;
             DisableCustomerButtons();
+            if (operacion == 2)
+            {
+                btnAddCustomer.IsEnabled = true;
+                btnEditCustomer.IsEnabled = true;
+            }
         }
         private void btnSearchProduct_Click(object sender, RoutedEventArgs e)
         {
@@ -690,6 +750,11 @@ namespace sisgesoriadao
                             lblCustomerNombre.Content = "Nombre: " + cliente.Nombre.Trim();
                             lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
                             lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
+                            btnEditCustomer.IsEnabled = true;
+                        }
+                        else
+                        {
+                            btnEditCustomer.IsEnabled = false;
                         }
                     }
                     catch (Exception)
@@ -882,6 +947,10 @@ namespace sisgesoriadao
                     }
                 }
             }
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //agregar método para cancelar el cierre
         }
     }
 }
