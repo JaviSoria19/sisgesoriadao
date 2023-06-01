@@ -392,7 +392,9 @@
     <None Include="Resources\PlantillaReporteCotizacion.html" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\logo.png" />
+    <Content Include="Resources\logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\PlantillaReporteCaja.html" />

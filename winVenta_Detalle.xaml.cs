@@ -35,5 +35,27 @@ namespace sisgesoriadao
         {
             Close();
         }
+
+        private void btnPrint_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                btnPrint.IsEnabled = false;
+                PrintDialog printDialog = new PrintDialog();
+                if (printDialog.ShowDialog() == true)
+                {
+                    printDialog.PrintVisual(ZonaImpresionGrid,"RECIBO");
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                btnPrint.IsEnabled = true;
+            }
+        }
     }
 }

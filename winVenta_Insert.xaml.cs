@@ -43,6 +43,7 @@ namespace sisgesoriadao
         VentaImpl implVenta;
         Venta venta;
         byte operacion = 0;
+        bool ventaRegistrada = false;
         public winVenta_Insert()
         {
             InitializeComponent();
@@ -440,6 +441,7 @@ namespace sisgesoriadao
                                     if (mensaje == "VENTA_EXITOSA")
                                     {
                                         MessageBox.Show("VENTA CON SALDO MAYOR A CERO REGISTRADA EXITOSAMENTE.");
+                                        imprimirVenta();
                                         //PDF
                                     }
                                     else
@@ -463,6 +465,7 @@ namespace sisgesoriadao
                                 if (mensaje == "VENTA_EXITOSA")
                                 {
                                     MessageBox.Show("VENTA REGISTRADA EXITOSAMENTE.");
+                                    imprimirVenta();
                                     //PDF
                                 }
                                 else
@@ -488,6 +491,7 @@ namespace sisgesoriadao
                                 if (mensaje == "VENTA_EXITOSA")
                                 {
                                     MessageBox.Show("VENTA CON SALDO PENDIENTE REGISTRADA EXITOSAMENTE.");
+                                    imprimirVenta();
                                     //PDF
                                 }
                                 else
@@ -950,7 +954,25 @@ namespace sisgesoriadao
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //agregar método para cancelar el cierre
+            if (listaProductos.Count > 0 && ventaRegistrada == false)
+            {
+                MessageBoxResult result =
+                  MessageBox.Show(
+                    "ATENCIÓN: Se ha agregado uno o más productos a la lista para realizar la venta, ¿Está seguro de cerrar la ventana sin haber registrado la venta?",
+                    "Venta pendiente",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+                if (result == MessageBoxResult.No)
+                {
+                    // If user doesn't want to close, cancel closure
+                    e.Cancel = true;
+                }
+            }
+        }
+        void imprimirVenta()
+        {
+            ventaRegistrada = true;
+            //ventana
         }
     }
 }

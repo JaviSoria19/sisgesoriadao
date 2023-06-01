@@ -118,5 +118,21 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                DataRowView d = (DataRowView)dgvDatos.SelectedItem;
+                Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[0].ToString());
+                winVenta_Detalle winVenta_Detalle = new winVenta_Detalle();
+                winVenta_Detalle.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                throw;
+            }
+        }
     }
 }

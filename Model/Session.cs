@@ -25,5 +25,6 @@ namespace sisgesoriadao.Model
         //Atributos requeridos para regular el tipo de cambio y el límite de descuento de productos debajo del costo establecido.
         public static double Ajuste_Cambio_Dolar { get; set; }
         public static byte Ajuste_Limite_Descuento { get; set; }
+        public static int IdVentaDetalle { get; set; } = 0;
     }
 }
