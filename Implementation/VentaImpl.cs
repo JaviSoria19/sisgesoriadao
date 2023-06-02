@@ -332,5 +332,47 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public DataTable SelectSaleDetails1()
+        {
+            string query = @"SELECT V.idVenta AS ID, 
+                S.nombreSucursal AS Sucursal, S.direccion AS Direccion, S.telefono AS Telefono, S.correo AS Correo,
+                CL.nombre AS Cliente, CL.numeroCelular AS Celular, CL.numeroCI AS CI,
+                U.nombreUsuario AS Usuario, E.numeroCelular AS 'Celular Usuario',
+                CONCAT(P.codigoSublote,' ',P.nombreProducto) AS Producto, P.identificador AS Detalle, DV.garantia AS Garantia, DV.cantidad AS Cantidad, P.precioVentaBOB AS Precio, DV.descuento AS 'Descuento Porcentaje', (P.precioVentaBOB - DV.precioBOB) AS 'Descuento Bs', DV.precioBOB AS 'Total Producto',
+                V.totalBOB AS Total, V.saldoBOB AS Saldo, V.observaciones AS Observaciones, DATE_FORMAT(V.fechaRegistro,'%d/%m/%Y') AS Fecha FROM venta V
+                INNER JOIN cliente CL ON CL.idCliente = V.idCliente
+                INNER JOIN usuario U ON U.idUsuario = V.idUsuario
+                INNER JOIN empleado E ON E.idEmpleado = U.idEmpleado
+                INNER JOIN sucursal S ON S.idSucursal = V.idSucursal
+                INNER JOIN detalle_venta DV ON DV.idVenta = V.idVenta
+                INNER JOIN producto P ON P.idProducto = DV.idProducto
+                WHERE V.idVenta = @idVenta";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idVenta", Session.IdVentaDetalle);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public DataTable SelectSaleDetails2()
+        {
+            string query = @"SELECT montoBOB AS 'Monto Bs', DATE_FORMAT(fechaRegistro,'%d/%m/%Y') AS Fecha FROM metodo_pago
+                WHERE idVenta = @idVenta";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idVenta", Session.IdVentaDetalle);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

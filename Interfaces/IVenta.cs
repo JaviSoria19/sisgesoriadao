@@ -19,5 +19,7 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectLikeReporteVentasGlobales(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios);
         DataTable SelectLikeReporteVentasLocales(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI);
         DataTable SelectLikeReporteVentasLocalesByID(int idVenta);
+        DataTable SelectSaleDetails1();
+        DataTable SelectSaleDetails2();
     }
 }
