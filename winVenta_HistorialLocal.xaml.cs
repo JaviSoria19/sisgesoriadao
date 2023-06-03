@@ -125,8 +125,10 @@ namespace sisgesoriadao
             {
                 DataRowView d = (DataRowView)dgvDatos.SelectedItem;
                 Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[0].ToString());
+                /*IMPLEMENTAR METODO PARA ABRIR UNA VENTANA DE ACCIONES
                 winVenta_Detalle winVenta_Detalle = new winVenta_Detalle();
                 winVenta_Detalle.Show();
+                */
             }
             catch (Exception ex)
             {

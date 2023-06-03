@@ -42,11 +42,39 @@ namespace sisgesoriadao
         {
             try
             {
+                btnPrintPDF.IsEnabled = false;
                 btnPrint.IsEnabled = false;
-                PrintDialog printDialog = new PrintDialog();
-                if (printDialog.ShowDialog() == true)
+                System.Windows.FrameworkElement fe = ZonaImpresionGrid as System.Windows.FrameworkElement;
+                if (fe == null)
+                    return;
+
+                PrintDialog pd = new PrintDialog();
+                if (pd.ShowDialog() == true)
                 {
-                    printDialog.PrintVisual(ZonaImpresionGrid,"RECIBO");
+                    //store original scale
+                    Transform originalScale = fe.LayoutTransform;
+                    //get selected printer capabilities
+                    System.Printing.PrintCapabilities capabilities = pd.PrintQueue.GetPrintCapabilities(pd.PrintTicket);
+
+                    //get scale of the print wrt to screen of WPF visual
+                    double scale = Math.Min(capabilities.PageImageableArea.ExtentWidth / fe.ActualWidth, capabilities.PageImageableArea.ExtentHeight /
+                                   fe.ActualHeight);
+
+                    //Transform the Visual to scale
+                    fe.LayoutTransform = new ScaleTransform(scale, scale);
+
+                    //get the size of the printer page
+                    System.Windows.Size sz = new System.Windows.Size(capabilities.PageImageableArea.ExtentWidth, capabilities.PageImageableArea.ExtentHeight);
+
+                    //update the layout of the visual to the printer page size.
+                    fe.Measure(sz);
+                    fe.Arrange(new System.Windows.Rect(new System.Windows.Point(capabilities.PageImageableArea.OriginWidth, capabilities.PageImageableArea.OriginHeight), sz));
+
+                    //now print the visual to printer to fit on the one page.
+                    pd.PrintVisual(ZonaImpresionGrid, "My Print");
+
+                    //apply the original transform.
+                    fe.LayoutTransform = originalScale;
                 }
             }
             catch (Exception)
@@ -56,6 +84,30 @@ namespace sisgesoriadao
             }
             finally
             {
+                btnPrintPDF.IsEnabled = true;
+                btnPrint.IsEnabled = true;
+            }
+        }
+        private void btnPrintPDF_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                btnPrintPDF.IsEnabled = false;
+                btnPrint.IsEnabled = false;
+                PrintDialog printDialog = new PrintDialog();
+                if (printDialog.ShowDialog() == true)
+                {
+                    printDialog.PrintVisual(ZonaImpresionGrid, "RECIBO");
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                btnPrintPDF.IsEnabled = true;
                 btnPrint.IsEnabled = true;
             }
         }
