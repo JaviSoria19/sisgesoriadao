@@ -19,9 +19,9 @@ using System.Text.RegularExpressions;
 namespace sisgesoriadao
 {
     /// <summary>
-    /// Lógica de interacción para winVenta_Insert.xaml
+    /// Lógica de interacción para winVenta_Update.xaml
     /// </summary>
-    public partial class winVenta_Insert : Window
+    public partial class winVenta_Update : Window
     {
         ClienteImpl implCliente;
         Cliente cliente;
@@ -44,10 +44,9 @@ namespace sisgesoriadao
         Venta venta;
         byte operacion = 0;
         bool ventaRegistrada = false;
-        public winVenta_Insert()
+        public winVenta_Update()
         {
             InitializeComponent();
-            WindowState = WindowState.Maximized;
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
@@ -123,7 +122,7 @@ namespace sisgesoriadao
                             MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
                         }
                         break;
-                        //UPDATE
+                    //UPDATE
                     case 2:
                         cliente.Nombre = txtRegister_Nombre.Text.Trim();
                         cliente.NumeroCelular = txtRegister_NumeroCelular.Text.Trim();
@@ -249,7 +248,7 @@ namespace sisgesoriadao
             txtRegister_NumeroCI.IsEnabled = false;
             btnSaveNewCustomer.IsEnabled = false;
             btnCancelNewCustomer.IsEnabled = false;
-        }        
+        }
         void SearchProductByCode()
         {
             if (string.IsNullOrEmpty(txtSearchProduct.Text) == false)
@@ -336,7 +335,7 @@ namespace sisgesoriadao
                     throw;
                 }
             }
-        }        
+        }
         void AddProductAndWarrantyToListAndDataGrid(Producto producto, Categoria categoria)
         {
             //Validación para comprobar que los campos de asignación de precio no estén vacios.
@@ -381,9 +380,9 @@ namespace sisgesoriadao
                         listaDescuentosPorcentaje.Add(varListaDescuentoPorcentaje);
                         //Asignamos variables auxiliares para establecer el descuento obtenido en USD y BOB.
                         producto_precioTotalUSD = producto.PrecioVentaUSD;
-                        producto_descuentoUSD = Math.Round(producto_precioVentaUSD - producto_precioTotalUSD,2);
+                        producto_descuentoUSD = Math.Round(producto_precioVentaUSD - producto_precioTotalUSD, 2);
                         producto_precioTotalBOB = producto.PrecioVentaBOB;
-                        producto_descuentoBOB = Math.Round(producto_precioVentaBOB - producto_precioTotalBOB,2);
+                        producto_descuentoBOB = Math.Round(producto_precioVentaBOB - producto_precioTotalBOB, 2);
 
                         //Insertamos una nueva fila en el DataGridView de productos.
                         dgvProductos.Items.Add(new DataGridRowDetalle
@@ -406,9 +405,9 @@ namespace sisgesoriadao
                         venta_TotalBOB += producto.PrecioVentaBOB;
                         txtVentaTotalVentaBOB.Text = venta_TotalBOB.ToString();
 
-                        venta_saldoUSD = Math.Round(venta_TotalUSD - venta_pagoTotalUSD,2);
+                        venta_saldoUSD = Math.Round(venta_TotalUSD - venta_pagoTotalUSD, 2);
                         txtVentaTotalSaldoUSD.Text = venta_saldoUSD.ToString();
-                        venta_saldoBOB = Math.Round(venta_TotalBOB - venta_pagoTotalBOB,2);
+                        venta_saldoBOB = Math.Round(venta_TotalBOB - venta_pagoTotalBOB, 2);
                         txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
                     }
                     else
@@ -423,11 +422,11 @@ namespace sisgesoriadao
         }
         private void btnSaveAndPDF_Click(object sender, RoutedEventArgs e)
         {
-            if (cliente!=null)
+            if (cliente != null)
             {
-                if (listaProductos.Count>0)
+                if (listaProductos.Count > 0)
                 {
-                    if (listaMetodoPagos.Count>0)
+                    if (listaMetodoPagos.Count > 0)
                     {
                         if (venta_saldoBOB > 1 || venta_saldoUSD > 1)
                         {
@@ -471,7 +470,7 @@ namespace sisgesoriadao
                                 else
                                 {
                                     MessageBox.Show(mensaje);
-                                }                                
+                                }
                             }
                             catch (Exception ex)
                             {
@@ -584,7 +583,7 @@ namespace sisgesoriadao
             dgvProductos.Columns.Add(columna9);
             dgvProductos.Columns.Add(columna10);
             dgvProductos.Columns.Add(columna11);
-        }        
+        }
         private void txtPrecio_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !IsTextAllowed(e.Text);
@@ -668,11 +667,11 @@ namespace sisgesoriadao
                 implCliente = new ClienteImpl();
                 dataTable = implCliente.SelectCustomerNamesForComboBox();
                 listcomboboxCliente = (from DataRow dr in dataTable.Rows
-                                              select new ComboboxItem()
-                                              {
-                                                  Valor = Convert.ToInt32(dr["idCliente"]),
-                                                  Texto = dr["nombre"].ToString()
-                                              }).ToList();
+                                       select new ComboboxItem()
+                                       {
+                                           Valor = Convert.ToInt32(dr["idCliente"]),
+                                           Texto = dr["nombre"].ToString()
+                                       }).ToList();
                 acbtxtNameCustomer.ItemsSource = listcomboboxCliente;
             }
             catch (Exception ex)
@@ -716,7 +715,7 @@ namespace sisgesoriadao
                         throw;
                     }
                 }
-            }            
+            }
         }
         private void txtSearchProduct_KeyDown(object sender, KeyEventArgs e)
         {
@@ -759,7 +758,7 @@ namespace sisgesoriadao
                 venta_pagoTotalBOB += double.Parse(txtPagoBOB.Text);
                 txtVentaTotalPagoBOB.Text = venta_pagoTotalBOB.ToString();
 
-                venta_saldoUSD = Math.Round(venta_TotalUSD - venta_pagoTotalUSD,2);
+                venta_saldoUSD = Math.Round(venta_TotalUSD - venta_pagoTotalUSD, 2);
                 txtVentaTotalSaldoUSD.Text = venta_saldoUSD.ToString();
                 venta_saldoBOB = Math.Round(venta_TotalBOB - venta_pagoTotalBOB, 2);
                 txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
@@ -888,9 +887,9 @@ namespace sisgesoriadao
                         venta_TotalBOB -= listaProductos[posicion].PrecioVentaBOB;
                         txtVentaTotalVentaBOB.Text = venta_TotalBOB.ToString();
 
-                        venta_saldoUSD = Math.Round(venta_TotalUSD - venta_pagoTotalUSD,2);
+                        venta_saldoUSD = Math.Round(venta_TotalUSD - venta_pagoTotalUSD, 2);
                         txtVentaTotalSaldoUSD.Text = venta_saldoUSD.ToString();
-                        venta_saldoBOB = Math.Round(venta_TotalBOB - venta_pagoTotalBOB,2);
+                        venta_saldoBOB = Math.Round(venta_TotalBOB - venta_pagoTotalBOB, 2);
                         txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
 
                         dgvProductos.Items.RemoveAt(posicion);

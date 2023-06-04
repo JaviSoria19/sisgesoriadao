@@ -21,5 +21,6 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectLikeReporteVentasLocalesByID(int idVenta);
         DataTable SelectSaleDetails1();
         DataTable SelectSaleDetails2();
+        int GetIDAfterInsert();
     }
 }

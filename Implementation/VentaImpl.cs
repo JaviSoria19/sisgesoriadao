@@ -374,5 +374,27 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public int GetIDAfterInsert()
+        {
+            int idVenta = 0;
+            string query = @"SELECT MAX(idVenta) FROM venta WHERE idSucursal = @sucursalOrigen";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@sucursalOrigen", Session.Sucursal_IdSucursal);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    idVenta = int.Parse(dt.Rows[0][0].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return idVenta;
+        }
     }
 }

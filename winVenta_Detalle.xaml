@@ -147,7 +147,7 @@
                             
                             <TextBlock Text="¡GRACIAS POR SU PREFERENCIA!" FontSize="15" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,8"/>
                         </StackPanel>
-                        <TextBlock Text="IMPORTANTE: Por favor tenga en cuenta que si el equipo sufre daños por caída, aplastamiento, daño por agua o mala actualización de software, quedará fuera de garantía. También es importante destacar que cualquier modificación no autorizada en el dispositivo o uso inadecuado del mismo también invalidará la garantía. Por favor, lea detenidamente las instrucciones de uso y conservación del equipo para asegurar su correcto funcionamiento y durabilidad." FontSize="15" TextWrapping="Wrap" FontWeight="DemiBold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="IMPORTANTE: Por favor tenga en cuenta que si el equipo sufre daños por caída, aplastamiento, daño por agua o mala actualización de software, quedará fuera de garantía. También es importante destacar que cualquier modificación no autorizada en el dispositivo o uso inadecuado del mismo también invalidará la garantía. Por favor, lea detenidamente las instrucciones de uso y conservación del equipo para asegurar su correcto funcionamiento y durabilidad." FontSize="15" TextWrapping="Wrap" FontWeight="DemiBold" HorizontalAlignment="Center" Foreground="DarkRed"/>
                     </StackPanel>
                 </Grid>
             </Grid>
