@@ -121,17 +121,20 @@ namespace sisgesoriadao
 
         private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            try
+            if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)
             {
-                DataRowView d = (DataRowView)dgvDatos.SelectedItem;
-                Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[0].ToString());
-                winVenta_Update winVenta_Update = new winVenta_Update();
-                winVenta_Update.Show();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                throw;
+                try
+                {
+                    DataRowView d = (DataRowView)dgvDatos.SelectedItem;
+                    Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[0].ToString());
+                    winVenta_Update winVenta_Update = new winVenta_Update();
+                    winVenta_Update.Show();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    throw;
+                }
             }
         }
     }
