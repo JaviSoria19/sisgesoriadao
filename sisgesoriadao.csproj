@@ -206,6 +206,9 @@
     <Compile Include="winVenta_Detalle.xaml.cs">
       <DependentUpon>winVenta_Detalle.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winVenta_Eliminados.xaml.cs">
+      <DependentUpon>winVenta_Eliminados.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winVenta_HistorialLocal.xaml.cs">
       <DependentUpon>winVenta_HistorialLocal.xaml</DependentUpon>
     </Compile>
@@ -339,6 +342,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winVenta_Detalle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winVenta_Eliminados.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -193,6 +193,28 @@ namespace sisgesoriadao
             txtIDVenta.Text = "Nro.: " + idVenta.ToString("D5");
             getSale_Customer();
             getSale_Products();
+            getSale_Info();
+        }
+        private void getSale_Info()
+        {
+            try
+            {
+                implVenta = new VentaImpl();
+                byte estado = implVenta.GetEstado(idVenta);
+                if (estado == 0)
+                {
+                    btnDeleteSale.IsEnabled = false;
+                }
+                else
+                {
+                    btnDeleteSale.IsEnabled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                throw;
+            }
         }
         private void getSale_Customer()
         {
@@ -561,6 +583,26 @@ namespace sisgesoriadao
             {
                 MessageBox.Show(ex.Message);
                 throw;
+            }
+        }
+
+        private void btnDeleteSale_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("ATENCIÓN: ¿ESTÁ SEGUR@ DE ELIMINAR LA VENTA?\nSi es que si, justifiquelo debajo de esta ventana en el cuadro de OBSERVACIONES, esta acción hará que todos los productos involucrados retornen al SISTEMA.", "ELIMINAR VENTA", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                if (txtObservacionVenta.Text != "-")
+                {
+                    string deletetransaction = implVenta.DeleteSaleTransaction(idVenta, txtObservacionVenta.Text);
+                    if (deletetransaction == "DELETEVENTA_EXITOSO")
+                    {
+                        MessageBox.Show("LA VENTA HA SIDO ELIMINADA CON ÉXITO, LOS PRODUCTOS HAN RETORNADO A SISTEMA.");
+                        getSale_Info();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("LA OBSERVACIÓN PARA LA ELIMINACIÓN DE LA VENTA NO PUEDE QUEDAR VACÍA!");
+                }
             }
         }
     }

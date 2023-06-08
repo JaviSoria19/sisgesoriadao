@@ -19,13 +19,13 @@ using System.Text.RegularExpressions;
 namespace sisgesoriadao
 {
     /// <summary>
-    /// Lógica de interacción para winVenta_HistorialLocal.xaml
+    /// Lógica de interacción para winVenta_Eliminados.xaml
     /// </summary>
-    public partial class winVenta_HistorialLocal : Window
+    public partial class winVenta_Eliminados : Window
     {
         VentaImpl implVenta;
         string cadenaAuxiliar = string.Empty;
-        public winVenta_HistorialLocal()
+        public winVenta_Eliminados()
         {
             InitializeComponent();
         }
@@ -35,15 +35,7 @@ namespace sisgesoriadao
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
-            Close();
-        }
-        private void btnSearch_Click(object sender, RoutedEventArgs e)
-        {
-            SelectLike();
-        }
-        private void btnSearchByID_Click(object sender, RoutedEventArgs e)
-        {
-            SelectLikeByID();
+            this.Close();
         }
         private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
         {
@@ -56,6 +48,10 @@ namespace sisgesoriadao
             {
                 SelectLike();
             }
+        }
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            SelectLike();
         }
         private void txtBuscar_IDVenta_KeyDown(object sender, KeyEventArgs e)
         {
@@ -75,6 +71,25 @@ namespace sisgesoriadao
             return !_regex.IsMatch(text);
         }
         //------------------------------------------------------><---------------------------------------------
+        private void btnSearchByID_Click(object sender, RoutedEventArgs e)
+        {
+            SelectLikeByID();
+        }
+        private void SelectLikeByID()
+        {
+            try
+            {
+                implVenta = new VentaImpl();
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasLocalesByIDDELETED(int.Parse(txtBuscar_IDVenta.Text.Trim())).DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + dgvDatos.Items.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
         private void SelectLike()
         {
             try
@@ -84,32 +99,17 @@ namespace sisgesoriadao
                 if (string.IsNullOrEmpty(txtBuscar_Producto_o_Codigo.Text.Trim()) == false && string.IsNullOrEmpty(txtBuscar_Cliente_o_CI.Text.Trim()) == true)
                 {
                     cadenaAuxiliar = txtBuscar_Producto_o_Codigo.Text.Trim();
-                    dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasLocales(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, txtBuscar_Producto_o_Codigo.Text.Trim(), cadenaAuxiliar).DefaultView;
+                    dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasLocalesDELETED(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, txtBuscar_Producto_o_Codigo.Text.Trim(), cadenaAuxiliar).DefaultView;
                 }
                 else if (string.IsNullOrEmpty(txtBuscar_Producto_o_Codigo.Text.Trim()) == true && string.IsNullOrEmpty(txtBuscar_Cliente_o_CI.Text.Trim()) == false)
                 {
                     cadenaAuxiliar = txtBuscar_Cliente_o_CI.Text.Trim();
-                    dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasLocales(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, cadenaAuxiliar, txtBuscar_Cliente_o_CI.Text.Trim()).DefaultView;
+                    dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasLocalesDELETED(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, cadenaAuxiliar, txtBuscar_Cliente_o_CI.Text.Trim()).DefaultView;
                 }
                 else
                 {
-                    dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasLocales(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, txtBuscar_Producto_o_Codigo.Text.Trim(), txtBuscar_Cliente_o_CI.Text.Trim()).DefaultView;
+                    dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasLocalesDELETED(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, txtBuscar_Producto_o_Codigo.Text.Trim(), txtBuscar_Cliente_o_CI.Text.Trim()).DefaultView;
                 }
-                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + dgvDatos.Items.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        private void SelectLikeByID()
-        {
-            try
-            {
-                implVenta = new VentaImpl();
-                dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasLocalesByID(int.Parse(txtBuscar_IDVenta.Text.Trim())).DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + dgvDatos.Items.Count;
             }
@@ -135,11 +135,6 @@ namespace sisgesoriadao
                     throw;
                 }
             }
-        }
-        private void btnDeletedSales_Click(object sender, RoutedEventArgs e)
-        {
-            winVenta_Eliminados winVenta_Eliminados = new winVenta_Eliminados();
-            winVenta_Eliminados.Show();
         }
     }
 }

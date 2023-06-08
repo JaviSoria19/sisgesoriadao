@@ -531,5 +531,128 @@ namespace sisgesoriadao.Implementation
                 connection.Close();
             }
         }
+
+        public byte GetEstado(int IdVenta)
+        {
+            byte estado = 0;
+            string query = @"SELECT estado FROM venta WHERE idVenta = @idVenta";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idVenta", IdVenta);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    estado = byte.Parse(dt.Rows[0][0].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return estado;
+        }
+        public string DeleteSaleTransaction(int IdVenta, string Observacion)
+        {
+            MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
+            connection.Open();
+            MySqlCommand command = connection.CreateCommand();
+            MySqlTransaction myTrans;
+            myTrans = connection.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            command.Connection = connection;
+            command.Transaction = myTrans;
+            try
+            {
+                //ELIMINANDO EL MP DE LA CAJA.
+                command.CommandText = @"UPDATE producto P
+                                        INNER JOIN detalle_venta DV ON DV.idProducto = P.idProducto
+                                        SET P.estado = 1 WHERE DV.idVenta = @idVenta";
+                command.Parameters.AddWithValue("@idVenta", IdVenta);
+                command.ExecuteNonQuery();
+                //ELIMINACION DEL METODO DE PAGO.
+                command.CommandText = @"UPDATE venta SET observaciones = @observaciones, estado = 0 WHERE idVenta = @idVentaTwice";
+                command.Parameters.AddWithValue("@observaciones", Observacion);
+                command.Parameters.AddWithValue("@idVentaTwice", IdVenta);
+                command.ExecuteNonQuery();
+
+                myTrans.Commit();
+                return "DELETEVENTA_EXITOSO";
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (MySqlException ex)
+                {
+                    if (myTrans.Connection != null)
+                    {
+                        return "Una excepción del tipo " + ex.GetType() + " se encontró mientras se estaba intentando revertir la transacción.";
+                    }
+                }
+                return e.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public DataTable SelectLikeReporteVentasLocalesDELETED(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI)
+        {
+            string query = @"SELECT V.idVenta AS 'ID', V.fechaRegistro AS Fecha, CL.nombre AS Cliente, V.idVenta AS 'Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM venta V
+                            INNER JOIN cliente CL ON CL.idCliente = V.idCliente
+                            INNER JOIN detalle_venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN categoria C ON C.idCategoria = P.idCategoria
+                            WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto OR CL.nombre LIKE @clienteoci OR CL.numeroCI LIKE @clienteoci)
+                            AND V.estado = 0 AND V.idSucursal = @SessionSucursal
+                            AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
+                            GROUP BY P.idProducto
+                            ORDER BY 1 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@SessionSucursal", Session.Sucursal_IdSucursal);
+            command.Parameters.AddWithValue("@productocodigoproducto", "%" + productoOCodigo + "%");
+            command.Parameters.AddWithValue("@clienteoci", "%" + clienteoCI + "%");
+            command.Parameters.AddWithValue("@FechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", fechaFin.ToString("yyyy-MM-dd") + " 23:59:59");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public DataTable SelectLikeReporteVentasLocalesByIDDELETED(int idVenta)
+        {
+            string query = @"SELECT V.idVenta AS 'ID', V.fechaRegistro AS Fecha, CL.nombre AS Cliente, V.idVenta AS 'Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM venta V
+                            INNER JOIN cliente CL ON CL.idCliente = V.idCliente
+                            INNER JOIN detalle_venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN categoria C ON C.idCategoria = P.idCategoria
+                            WHERE V.estado = 0 AND V.idSucursal = @SessionSucursal AND V.idVenta = @idVenta
+                            GROUP BY P.idProducto
+                            ORDER BY 1 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@SessionSucursal", Session.Sucursal_IdSucursal);
+            command.Parameters.AddWithValue("@idVenta", idVenta);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

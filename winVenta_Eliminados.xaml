@@ -1,4 +1,4 @@
-﻿<Window x:Class="sisgesoriadao.winVenta_HistorialLocal"
+﻿<Window x:Class="sisgesoriadao.winVenta_Eliminados"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
      TextElement.FontWeight="Regular"
@@ -13,7 +13,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
-        Title="Sistema de Ventas - Ventas Locales" Height="720" Width="1280"
+        Title="Sistema de Ventas - Ventas Eliminadas" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
     <ScrollViewer>
         <StackPanel Orientation="Vertical">
@@ -25,7 +25,7 @@
                 <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
                 <materialDesign:PackIcon Kind="CartOutline" Width="25" Height="25" VerticalAlignment="Center"/>
-                <TextBlock Text="HISTORIAL DE VENTAS LOCAL" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="HISTORIAL DE VENTAS ELIMINADAS" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
@@ -48,13 +48,12 @@
                 <Button x:Name="btnSearchByID" ToolTip="BUSCAR POR VENTA" Click="btnSearchByID_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                     <materialDesign:PackIcon Kind="Search"/>
                 </Button>
-                <Button x:Name="btnDeletedSales" Content="VENTAS ELIMINADAS" Margin="10,0" ToolTip="ELIMINAR VENTA" Click="btnDeletedSales_Click" IsEnabled="True" VerticalAlignment="Center" Background="SteelBlue" BorderBrush="SteelBlue"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <TextBlock Text="SELECCIONE UN REGISTRO PARA VER EL DETALLE:" FontSize="19" FontWeight="Bold"/>
             </StackPanel>
-            
+
             <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">
                 <Border BorderBrush="Gray" BorderThickness="2">
                     <DataGrid x:Name="dgvDatos"
@@ -64,7 +63,7 @@
                 </Border>
                 <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
             </StackPanel>
-            
+
         </StackPanel>
     </ScrollViewer>
 </Window>

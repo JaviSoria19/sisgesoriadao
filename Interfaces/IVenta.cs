@@ -19,11 +19,15 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectLikeReporteVentasGlobales(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios);
         DataTable SelectLikeReporteVentasLocales(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI);
         DataTable SelectLikeReporteVentasLocalesByID(int idVenta);
+        DataTable SelectLikeReporteVentasLocalesDELETED(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI);
+        DataTable SelectLikeReporteVentasLocalesByIDDELETED(int idVenta);
         DataTable SelectSaleDetails1();
         DataTable SelectSaleDetails2();
         int GetIDAfterInsert();
         DataTable SelectPaymentMethodsFromSale(int IdVenta);
         string InsertPaymentMethodTransaction(int IdVenta, double PagoUSD, double PagoBOB, byte MetodoPago);
         string DeletePaymentMethodTransaction(int IdVenta, int IdMetodoPago, double MontoUSD, double MontoBOB);
+        byte GetEstado(int IdVenta);
+        string DeleteSaleTransaction(int IdVenta, string Observacion);
     }
 }
