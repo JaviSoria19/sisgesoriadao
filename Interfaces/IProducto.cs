@@ -36,5 +36,6 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectLikeMovementsHistory(string SucursalOrigen, string SucursalDestino, DateTime FechaInicio, DateTime FechaFin);
         DataTable SelectMovementsHistory_Details(int IdTransferencia);
         int GetLastMovementFromBranch();
+        DataTable SelectProductsFromSale(int IdVenta);
     }
 }

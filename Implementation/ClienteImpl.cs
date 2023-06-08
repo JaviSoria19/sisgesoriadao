@@ -172,5 +172,54 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public Cliente GetFromSale(int idVenta)
+        {
+            Cliente c = null;
+            string query = @"SELECT C.idCliente, C.nombre, C.numeroCelular, C.numeroCI , C.estado, C.fechaRegistro, IFNULL(C.fechaActualizacion,'-') FROM cliente C
+                             INNER JOIN venta V ON V.idCliente = C.idCliente
+                             WHERE V.idVenta = @idVenta";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idVenta", Session.IdVentaDetalle);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    c = new Cliente(byte.Parse(dt.Rows[0][0].ToString()),   /*idCliente*/
+                        dt.Rows[0][1].ToString(),                           /*nombre*/
+                        dt.Rows[0][2].ToString(),                           /*numeroCelular*/
+                        dt.Rows[0][3].ToString(),                           /*numeroCI*/
+
+                        /*Estado, Fecha de Registro, Fecha de Actualización.*/
+                        byte.Parse(dt.Rows[0][4].ToString()),
+                        DateTime.Parse(dt.Rows[0][5].ToString()),
+                        dt.Rows[0][6].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return c;
+        }
+
+        public int UpdateSaleCustomer(Cliente c, int idVenta)
+        {
+            string query = @"UPDATE venta SET idCliente = @idCliente, fechaActualizacion = CURRENT_TIMESTAMP WHERE idVenta = @idVenta";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idCliente", c.IdCliente);
+            command.Parameters.AddWithValue("@idVenta", idVenta);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
     }
 }

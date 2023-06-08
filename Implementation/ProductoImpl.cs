@@ -770,5 +770,24 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public DataTable SelectProductsFromSale(int IdVenta)
+        {
+            string query = @"SELECT P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Detalle, DV.cantidad AS Cantidad,
+                            P.precioVentaUSD AS 'Precio USD', P.precioVentaBOB AS 'Precio Bs', DV.precioUSD AS 'Total USD', DV. precioBOB AS 'Total Bs', DV.descuento AS Descuento FROM detalle_venta DV 
+                            INNER JOIN producto P ON P.idProducto = DV.idProducto
+                            WHERE DV.idVenta = @idVenta";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idVenta", IdVenta);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

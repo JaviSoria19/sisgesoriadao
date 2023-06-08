@@ -15,7 +15,7 @@
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
         mc:Ignorable="d"
         Title="Sistema de Ventas - Editar Venta" Height="720" Width="1280"
-        WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded" Closing="Window_Closing">
+        WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
     <ScrollViewer>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="10">
@@ -32,9 +32,15 @@
                 <TextBlock Text="EDITAR VENTA" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
                 <materialDesign:PackIcon Kind="Dollar" Width="25" Height="25" VerticalAlignment="Center" ToolTip="CAMBIO DEL DÓLAR"/>
-                <TextBlock x:Name="txtCambioDolar" Text="6,97" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock x:Name="txtCambioDolar" Text="0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock x:Name="txtIDVenta" Text="Nro.: 0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
+            
             <StackPanel Orientation="Vertical" Margin="10">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,30">
+                    <Button x:Name="btnSaveAndPDF" Content="IMPRIMIR" ToolTip="IMPRIMIR DETALLE DE VENTA" Click="btnSaveAndPDF_Click" IsEnabled="True" VerticalAlignment="Center"  Background="LimeGreen" BorderBrush="LimeGreen"/>
+                </StackPanel>
                 <TextBlock Text="DETALLE CLIENTE" FontWeight="Bold" FontSize="20"/>
                 <TextBlock Margin="10" TextWrapping="Wrap">
                     <Bold>CONSEJO:</Bold> Estimad@ usuari@, en el campo NOMBRE presione la tecla <Bold>ENTER</Bold> para seleccionar al cliente si éste ya se encuentra registrado en el sistema.
@@ -53,7 +59,7 @@
                     <Button x:Name="btnAddCustomer" ToolTip="AÑADIR CLIENTE" Click="btnAddCustomer_Click" Margin="10,0,0,0" Background="LimeGreen" BorderBrush="LimeGreen">
                         <materialDesign:PackIcon Kind="AccountAdd"/>
                     </Button>
-                    <Button x:Name="btnEditCustomer" ToolTip="MODIFICAR CLIENTE" Click="btnEditCustomer_Click" Margin="10,0,0,0" IsEnabled="False" Background="Orange" BorderBrush="Orange">
+                    <Button x:Name="btnEditCustomer" ToolTip="MODIFICAR CLIENTE" Click="btnEditCustomer_Click" Margin="10,0,0,0" IsEnabled="True" Background="Orange" BorderBrush="Orange">
                         <materialDesign:PackIcon Kind="AccountEdit"/>
                     </Button>
                     <Label x:Name="lblSearchCustomerInfo" Content="" Foreground="Black" Background="Transparent" Margin="20,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>
@@ -79,40 +85,8 @@
                     <Button x:Name="btnCancelNewCustomer" Content="CANCELAR" Margin="10,0,0,0" IsEnabled="False" Click="btnCancelNewCustomer_Click"/>
                 </StackPanel>
                 <TextBlock Text="DETALLE PRODUCTO(S)" FontWeight="Bold" FontSize="20"/>
-                <TextBlock Margin="10" TextWrapping="Wrap">
-                    <Bold>CONSEJO:</Bold> Estimad@ usuari@, para quitar un producto seleccionelo en la tabla.
-                </TextBlock>
-                <StackPanel Orientation="Horizontal" Margin="15">
-                    <Label Content="CÓDIGO DE PRODUCTO: " VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtSearchProduct" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="30" IsEnabled="True" Height="22" KeyDown="txtSearchProduct_KeyDown"/>
-                    <Button x:Name="btnSearchProduct" ToolTip="BUSCAR PRODUCTO" Click="btnSearchProduct_Click" Margin="0,0,0,0" IsEnabled="True" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
-                        <materialDesign:PackIcon Kind="Search"/>
-                    </Button>
-                    <StackPanel Orientation="Vertical" Margin="15,0,0,0">
-                        <Label x:Name="lblSearchProductInfo" Content="" Foreground="Black" Background="Transparent" Margin="20,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>
-                        <Label x:Name="lblProductFound" Content="DESCRIPCION: -" FontWeight="Bold" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="15,15,0,15">
-                    <Label Content="P.V. $:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtPrecioVentaUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" VerticalAlignment="Center"/>
-                    <Label Content="P.V. BS:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtPrecioVentaBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" VerticalAlignment="Center"/>
-                    <Label Content="Desc. %:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtDescuentoPorcentaje" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="5" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtDescuentoPorcentaje_KeyUp" VerticalAlignment="Center"/>
-                    <Label Content="Total $:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtTotalUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPrecioUSD_KeyUp" VerticalAlignment="Center"/>
-                    <Label Content="Total BS:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtTotalBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPrecioBOB_KeyUp" VerticalAlignment="Center"/>
-                    <Label Content="GARANTIA:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtGarantia" TextWrapping="Wrap" Margin="0,0,0,0" MinWidth="50" MaxLength="2" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" VerticalAlignment="Center"/>
-                    <Label Content="MESES." Margin="0,0,20,0" VerticalAlignment="Center"/>
-                    <Button x:Name="btnAddProduct" ToolTip="AÑADIR PRODUCTO" Click="btnAddProduct_Click" Margin="0,0,0,0" IsEnabled="False" Background="LimeGreen" BorderBrush="LimeGreen">
-                        <materialDesign:PackIcon Kind="CartAdd"/>
-                    </Button>
-                </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                    <DataGrid x:Name="dgvProductos" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True" Loaded="dgvProductos_Loaded" SelectionChanged="dgvProductos_SelectionChanged" HorizontalAlignment="Left" Margin="15"/>
+                    <DataGrid x:Name="dgvProductos" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True" Loaded="dgvProductos_Loaded" HorizontalAlignment="Left" Margin="15"/>
 
                     <TextBlock Text="MÉTODO(S) DE PAGO" FontWeight="Bold" FontSize="20"/>
                     <TextBlock Margin="10" TextWrapping="Wrap">
@@ -157,7 +131,6 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,30,0,0">
-                    <Button x:Name="btnSaveAndPDF" Content="REGISTRAR Y PDF" ToolTip="REGISTRAR VENTA Y GENERAR PDF" Click="btnSaveAndPDF_Click" IsEnabled="True" VerticalAlignment="Center"  Background="LimeGreen" BorderBrush="LimeGreen"/>
                     <Label Content="OBSERVACIONES: " VerticalAlignment="Center" Margin="20,0,0,0"/>
                     <TextBox x:Name="txtObservacionVenta" TextWrapping="Wrap" MinWidth="120" MaxLength="99" IsEnabled="True" Height="22" VerticalAlignment="Center"/>
                 </StackPanel>

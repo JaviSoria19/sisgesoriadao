@@ -340,7 +340,9 @@ namespace sisgesoriadao.Implementation
                 CL.nombre AS Cliente, CL.numeroCelular AS Celular, CL.numeroCI AS CI,
                 U.nombreUsuario AS Usuario, E.numeroCelular AS 'Celular Usuario',
                 CONCAT(P.codigoSublote,' ',P.nombreProducto) AS Producto, P.identificador AS Detalle, DV.garantia AS Garantia, DV.cantidad AS Cantidad, P.precioVentaBOB AS Precio, DV.descuento AS 'Descuento Porcentaje', (P.precioVentaBOB - DV.precioBOB) AS 'Descuento Bs', DV.precioBOB AS 'Total Producto',
-                V.totalBOB AS Total, V.saldoBOB AS Saldo, V.observaciones AS Observaciones, DATE_FORMAT(V.fechaRegistro,'%d/%m/%Y') AS Fecha FROM venta V
+                V.totalBOB AS Total, V.saldoBOB AS Saldo, V.observaciones AS Observaciones, DATE_FORMAT(V.fechaRegistro,'%d/%m/%Y') AS Fecha,
+                V.totalUSD AS Total2, V.saldoUSD AS Saldo2
+                FROM venta V
                 INNER JOIN cliente CL ON CL.idCliente = V.idCliente
                 INNER JOIN usuario U ON U.idUsuario = V.idUsuario
                 INNER JOIN empleado E ON E.idEmpleado = U.idEmpleado
@@ -395,6 +397,139 @@ namespace sisgesoriadao.Implementation
                 throw ex;
             }
             return idVenta;
+        }
+
+        public DataTable SelectPaymentMethodsFromSale(int IdVenta)
+        {
+            string query = @"SELECT idMetodoPago AS ID, montoUSD AS 'Monto USD', montoBOB AS 'Monto Bs', IF(Tipo = 1, 'EFECTIVO',IF(Tipo = 2, 'TRANSFERENCIA BANCARIA', 'TARJETA')) AS 'Metodo Pago', DATE_FORMAT(fechaRegistro,'%d/%m/%Y') AS Fecha FROM metodo_pago
+                            WHERE idVenta = @idVenta";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idVenta", IdVenta);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public string InsertPaymentMethodTransaction(int IdVenta, double PagoUSD, double PagoBOB, byte MetodoPago)
+        {
+            MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
+            connection.Open();
+            MySqlCommand command = connection.CreateCommand();
+            MySqlTransaction myTrans;
+            myTrans = connection.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            command.Connection = connection;
+            command.Transaction = myTrans;
+            try
+            {
+                //REGISTRO DEL METODO DE PAGO.
+                command.CommandText = @"INSERT INTO metodo_pago (idVenta,montoUSD,montoBOB,tipo)
+                            VALUES(@idVenta,@montoUSD,@montoBOB,@tipo)";
+                command.Parameters.AddWithValue("@idVenta",IdVenta);
+                command.Parameters.AddWithValue("@montoUSD", PagoUSD);
+                command.Parameters.AddWithValue("@montoBOB", PagoBOB);
+                command.Parameters.AddWithValue("@tipo", MetodoPago);
+                command.ExecuteNonQuery();
+
+                //UPDATE DEL SALDO DE LA VENTA.
+                command.Parameters.Clear();
+                command.CommandText = @"UPDATE venta SET saldoUSD = saldoUSD - @montoUSD, saldoBOB = saldoBOB - @montoBOB
+                                        WHERE idVenta = @idVenta";
+                command.Parameters.AddWithValue("@montoUSD", PagoUSD);
+                command.Parameters.AddWithValue("@montoBOB", PagoBOB);
+                command.Parameters.AddWithValue("@idVenta", IdVenta);
+                command.ExecuteNonQuery();
+
+                //REGISTRO DEL MP EN LA CAJA.
+                command.Parameters.Clear();
+                command.CommandText = @"INSERT INTO detalle_caja (idCaja,idMetodoPago)
+                            VALUES((SELECT MAX(idCaja) FROM caja WHERE idSucursal = @Twice_Session_idSucursal),LAST_INSERT_ID())";
+                command.Parameters.AddWithValue("@Twice_Session_idSucursal", Session.Sucursal_IdSucursal);
+                command.ExecuteNonQuery();
+
+                myTrans.Commit();
+                return "INSERTMETODOPAGO_EXITOSO";
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (MySqlException ex)
+                {
+                    if (myTrans.Connection != null)
+                    {
+                        return "Una excepción del tipo " + ex.GetType() + " se encontró mientras se estaba intentando revertir la transacción.";
+                    }
+                }
+                return e.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public string DeletePaymentMethodTransaction(int IdVenta, int IdMetodoPago, double MontoUSD, double MontoBOB)
+        {
+            MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
+            connection.Open();
+            MySqlCommand command = connection.CreateCommand();
+            MySqlTransaction myTrans;
+            myTrans = connection.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            command.Connection = connection;
+            command.Transaction = myTrans;
+            try
+            {
+
+                //ELIMINANDO EL MP DE LA CAJA.
+                command.CommandText = @"DELETE FROM detalle_caja WHERE idMetodoPago = @idMetodoPago";
+                command.Parameters.AddWithValue("@idMetodoPago", IdMetodoPago);
+                command.ExecuteNonQuery();
+                //ELIMINACION DEL METODO DE PAGO.
+                command.CommandText = @"DELETE FROM metodo_pago WHERE idMetodoPago = @idMetodoPago_twice";
+                command.Parameters.AddWithValue("@idMetodoPago_twice", IdMetodoPago);
+                command.ExecuteNonQuery();
+                //UPDATE DEL SALDO DE LA VENTA.
+                command.CommandText = @"UPDATE venta SET saldoUSD = saldoUSD + @montoUSD, saldoBOB = saldoBOB + @montoBOB
+                                        WHERE idVenta = @idVenta";
+                command.Parameters.AddWithValue("@montoUSD", MontoUSD);
+                command.Parameters.AddWithValue("@montoBOB", MontoBOB);
+                command.Parameters.AddWithValue("@idVenta", IdVenta);
+                command.ExecuteNonQuery();
+
+                myTrans.Commit();
+                return "DELETEMETODOPAGO_EXITOSO";
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (MySqlException ex)
+                {
+                    if (myTrans.Connection != null)
+                    {
+                        return "Una excepción del tipo " + ex.GetType() + " se encontró mientras se estaba intentando revertir la transacción.";
+                    }
+                }
+                return e.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
         }
     }
 }

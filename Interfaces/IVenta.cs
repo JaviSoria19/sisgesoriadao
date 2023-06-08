@@ -22,5 +22,8 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectSaleDetails1();
         DataTable SelectSaleDetails2();
         int GetIDAfterInsert();
+        DataTable SelectPaymentMethodsFromSale(int IdVenta);
+        string InsertPaymentMethodTransaction(int IdVenta, double PagoUSD, double PagoBOB, byte MetodoPago);
+        string DeletePaymentMethodTransaction(int IdVenta, int IdMetodoPago, double MontoUSD, double MontoBOB);
     }
 }
