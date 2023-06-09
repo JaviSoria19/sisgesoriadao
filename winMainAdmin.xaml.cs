@@ -165,6 +165,7 @@ namespace sisgesoriadao
         {
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
             LoadInfoFromDB();
+            SelectDeudores();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -215,6 +216,44 @@ namespace sisgesoriadao
             IBaseTheme baseTheme = vof ? new MaterialDesignDarkTheme() : (IBaseTheme)new MaterialDesignLightTheme();
             theme.SetBaseTheme(baseTheme);
             _paletteHelper.SetTheme(theme);
+        }
+        private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
+        {
+            SelectDeudores();
+        }
+        private void SelectDeudores()
+        {
+            try
+            {
+                implVenta = new VentaImpl();
+                dgvDatos.ItemsSource = null;
+                dgvDatos.ItemsSource = implVenta.SelectSalesWithPendingBalanceByCustomers().DefaultView;
+                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implVenta.SelectSalesWithPendingBalanceByCustomers().Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)
+            {
+                try
+                {
+                    DataRowView d = (DataRowView)dgvDatos.SelectedItem;
+                    Session.IdCliente = int.Parse(d.Row.ItemArray[0].ToString());
+                    winVenta_DeudasClientes winVenta_DeudasClientes = new winVenta_DeudasClientes();
+                    winVenta_DeudasClientes.Show();
+                    dgvDatos.SelectedItem = null;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    throw;
+                }
+            }
         }
     }
 }

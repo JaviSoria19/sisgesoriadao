@@ -273,5 +273,25 @@ namespace sisgesoriadao
                 }
             }
         }
+
+        private void dgvVentasPendientes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgvVentasPendientes.SelectedItem != null && dgvVentasPendientes.Items.Count > 0)
+            {
+                try
+                {
+                    DataRowView d = (DataRowView)dgvVentasPendientes.SelectedItem;
+                    Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[0].ToString());
+                    winVenta_Update winVenta_Update = new winVenta_Update();
+                    winVenta_Update.Show();
+                    dgvVentasPendientes.SelectedItem = null;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    throw;
+                }
+            }
+        }
     }
 }

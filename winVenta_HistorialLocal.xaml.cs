@@ -128,6 +128,7 @@ namespace sisgesoriadao
                     Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[0].ToString());
                     winVenta_Update winVenta_Update = new winVenta_Update();
                     winVenta_Update.Show();
+                    dgvDatos.SelectedItem = null;
                 }
                 catch (Exception ex)
                 {

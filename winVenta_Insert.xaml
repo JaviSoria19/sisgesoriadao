@@ -157,7 +157,7 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,30,0,0">
-                    <Button x:Name="btnSaveAndPDF" Content="REGISTRAR Y PDF" ToolTip="REGISTRAR VENTA Y GENERAR PDF" Click="btnSaveAndPDF_Click" IsEnabled="True" VerticalAlignment="Center"  Background="LimeGreen" BorderBrush="LimeGreen"/>
+                    <Button x:Name="btnSaveAndPDF" Content="REGISTRAR Y PDF" ToolTip="REGISTRAR VENTA E IMPRIMIR" Click="btnSaveAndPDF_Click" IsEnabled="True" VerticalAlignment="Center"  Background="LimeGreen" BorderBrush="LimeGreen"/>
                     <Label Content="OBSERVACIONES: " VerticalAlignment="Center" Margin="20,0,0,0"/>
                     <TextBox x:Name="txtObservacionVenta" TextWrapping="Wrap" MinWidth="120" MaxLength="99" IsEnabled="True" Height="22" VerticalAlignment="Center"/>
                 </StackPanel>

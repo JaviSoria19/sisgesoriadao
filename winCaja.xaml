@@ -58,7 +58,7 @@
                 <Border BorderBrush="Gray" BorderThickness="2">
                     <DataGrid x:Name="dgvVentasPendientes"
                   HorizontalAlignment="Left" VerticalAlignment="Top"
-                  Loaded="dgvVentasPendientes_Loaded" GridLinesVisibility="Horizontal"
+                  Loaded="dgvVentasPendientes_Loaded" SelectionChanged="dgvVentasPendientes_SelectionChanged" GridLinesVisibility="Horizontal"
                   CanUserAddRows="False" IsReadOnly="True" 
                   CanUserResizeRows="False" CanUserResizeColumns="False" MaxHeight="363"/>
                 </Border>

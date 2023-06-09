@@ -130,7 +130,7 @@ namespace sisgesoriadao.Implementation
         public string GetTodaySales(DateTime FechaHoy)
         {
             string numeroVentasdelDia = null;
-            string query = @"SELECT COUNT(idVenta) FROM venta WHERE idSucursal = @SessionIdSucursal
+            string query = @"SELECT COUNT(idVenta) FROM venta WHERE idSucursal = @SessionIdSucursal AND estado = 1
                                 AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@FechaInicio", FechaHoy.ToString("yyyy-MM-dd"));
@@ -158,7 +158,8 @@ namespace sisgesoriadao.Implementation
             string query = @"SELECT IFNULL(SUM(MP.montoUSD),0), IFNULL(SUM(MP.montoBOB),0) FROM caja C
                                 INNER JOIN detalle_caja DC ON C.idCaja = DC.idCaja
                                 INNER JOIN metodo_pago MP ON DC.idMetodoPago = MP.idMetodoPago
-                                WHERE C.idSucursal = @SessionIdSucursal AND C.idCaja = (SELECT MAX(idCaja) FROM caja WHERE idSucursal = @SessionIdSucursal)";
+                                INNER JOIN venta V ON MP.idVenta = V.idVenta
+                                WHERE C.idSucursal = @SessionIdSucursal AND V.estado = 1 AND C.idCaja = (SELECT MAX(idCaja) FROM caja WHERE idSucursal = @SessionIdSucursal)";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
             try
@@ -183,7 +184,7 @@ namespace sisgesoriadao.Implementation
             string numeroProductosdelDia = null;
             string query = @"SELECT COUNT(DV.idProducto) FROM venta V
                             INNER JOIN detalle_venta DV ON V.idVenta = DV.idVenta
-                            WHERE V.idSucursal = @SessionIdSucursal
+                            WHERE V.idSucursal = @SessionIdSucursal AND V.estado = 1
                             AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@FechaInicio", FechaHoy.ToString("yyyy-MM-dd"));
@@ -211,7 +212,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN usuario U ON V.idUsuario = U.idUsuario
                             INNER JOIN detalle_venta DV ON V.idVenta = DV.idVenta
                             INNER JOIN producto P ON DV.idProducto = P.idProducto
-                            WHERE V.saldoUSD > 1 AND V.idSucursal = @SessionIdSucursal
+                            WHERE V.saldoUSD > 1 AND V.idSucursal = @SessionIdSucursal AND V.estado = 1
                             GROUP BY V.idVenta ORDER BY 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
@@ -613,7 +614,7 @@ namespace sisgesoriadao.Implementation
                             WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto OR CL.nombre LIKE @clienteoci OR CL.numeroCI LIKE @clienteoci)
                             AND V.estado = 0 AND V.idSucursal = @SessionSucursal
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
-                            GROUP BY P.idProducto
+                            GROUP BY V.idVenta, P.idProducto
                             ORDER BY 1 DESC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@SessionSucursal", Session.Sucursal_IdSucursal);
@@ -651,6 +652,47 @@ namespace sisgesoriadao.Implementation
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+
+        public DataTable SelectSalesWithPendingBalanceByCustomers()
+        {
+            string query = @"SELECT V.idCliente AS ID, C.nombre AS Nombre, C.numeroCelular AS Celular, SUM(V.saldoUSD) AS 'Saldo Total' FROM Venta V
+                                INNER JOIN Cliente C ON C.idCliente = V.idCliente
+                                WHERE V.saldoUSD > 10 AND V.estado = 1 AND V.idSucursal = @SessionIdSucursal
+                                GROUP BY V.idCliente";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public DataTable SelectAllSalesWithPendingBalanceByCustomers()
+        {
+            string query = @"SELECT V.idVenta, U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT('- ',P.nombreProducto SEPARATOR ' '),')') AS Detalle, saldoUSD AS 'Saldo $us', saldoBOB AS 'Saldo Bs' FROM venta V
+                            INNER JOIN usuario U ON V.idUsuario = U.idUsuario
+                            INNER JOIN detalle_venta DV ON V.idVenta = DV.idVenta
+                            INNER JOIN producto P ON DV.idProducto = P.idProducto
+                            WHERE V.saldoUSD > 1 AND V.idSucursal = @SessionIdSucursal AND V.estado = 1 AND V.idCliente = @SessionIdCliente
+                            GROUP BY V.idVenta ORDER BY 1 ASC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
+            command.Parameters.AddWithValue("@SessionIdCliente", Session.IdCliente);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
         }

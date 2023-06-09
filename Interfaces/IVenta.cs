@@ -29,5 +29,7 @@ namespace sisgesoriadao.Interfaces
         string DeletePaymentMethodTransaction(int IdVenta, int IdMetodoPago, double MontoUSD, double MontoBOB);
         byte GetEstado(int IdVenta);
         string DeleteSaleTransaction(int IdVenta, string Observacion);
+        DataTable SelectSalesWithPendingBalanceByCustomers();
+        DataTable SelectAllSalesWithPendingBalanceByCustomers();
     }
 }

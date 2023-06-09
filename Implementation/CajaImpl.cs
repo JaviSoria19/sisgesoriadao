@@ -87,7 +87,8 @@ namespace sisgesoriadao.Implementation
                             LEFT JOIN usuario U2 ON C.idUsuarioReceptor = U2.idUsuario
                             INNER JOIN detalle_caja DC ON C.idCaja = DC.idCaja
                             INNER JOIN metodo_pago MP ON DC.idMetodoPago = MP.idMetodoPago
-                            WHERE C.estado = 2
+                            INNER JOIN venta V ON V.idVenta = MP.idVenta
+                            WHERE C.estado = 2 AND V.estado = 1
                             GROUP BY 1
                             ORDER BY 1 DESC
                             LIMIT 100";

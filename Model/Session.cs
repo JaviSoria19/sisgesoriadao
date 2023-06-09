@@ -26,5 +26,6 @@ namespace sisgesoriadao.Model
         public static double Ajuste_Cambio_Dolar { get; set; }
         public static byte Ajuste_Limite_Descuento { get; set; }
         public static int IdVentaDetalle { get; set; } = 0;
+        public static int IdCliente { get; set; } = 0;
     }
 }
