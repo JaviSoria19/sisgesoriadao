@@ -61,7 +61,7 @@
                     <materialDesign:PackIcon Kind="Qrcode"/>
                 </Button>
                 <Button x:Name="btnInsert" Content="AÑADIR NUEVO LOTE" Margin="0,0,5,0" Click="btnInsert_Click"/>
-                <Button x:Name="btnUpdate" Content="MODIFICAR LOTE" Margin="5" Click="btnUpdate_Click"/>
+                <Button x:Name="btnUpdate" Content="MODIFICAR PRODUCTO" Margin="5" Click="btnUpdate_Click"/>
                 <Button x:Name="btnDelete" Content="ELIMINAR PRODUCTO" Margin="5" Click="btnDelete_Click"/>
                 <Button x:Name="btnSave" Content="GUARDAR" Margin="5" IsEnabled="False" Click="btnSave_Click"/>
                 <Button x:Name="btnCancel" Content="CANCELAR" Margin="5" IsEnabled="False" Click="btnCancel_Click"/>
