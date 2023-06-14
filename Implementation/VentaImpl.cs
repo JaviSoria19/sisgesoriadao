@@ -11,7 +11,7 @@ namespace sisgesoriadao.Implementation
 {
     public class VentaImpl : DataBase, IVenta
     {
-        public string InsertTransaction(Venta venta, List<Producto> ListaProductos, List<double> ListaDescuentosPorcentaje, List<Categoria> ListaGarantias, List<MetodoPago> ListaMetodosPago, Cliente cliente  )
+        public string InsertTransaction(Venta venta, List<Producto> ListaProductos, List<double> ListaDescuentosPorcentaje, List<byte> ListaGarantias, List<MetodoPago> ListaMetodosPago, Cliente cliente  )
         {
             MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
             connection.Open();
@@ -46,7 +46,7 @@ namespace sisgesoriadao.Implementation
                     command.Parameters.AddWithValue("@precioUSD", ListaProductos[i].PrecioVentaUSD);
                     command.Parameters.AddWithValue("@precioBOB", ListaProductos[i].PrecioVentaBOB);
                     command.Parameters.AddWithValue("@descuento", ListaDescuentosPorcentaje[i]);
-                    command.Parameters.AddWithValue("@garantia", ListaGarantias[i].Garantia);
+                    command.Parameters.AddWithValue("@garantia", ListaGarantias[i]);
                     command.ExecuteNonQuery();
 
                     command.CommandText = "UPDATE producto SET estado = 2, fechaActualizacion = CURRENT_TIMESTAMP WHERE idProducto = @idProductoTwice";

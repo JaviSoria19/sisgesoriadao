@@ -79,40 +79,43 @@
                     <Button x:Name="btnCancelNewCustomer" Content="CANCELAR" Margin="10,0,0,0" IsEnabled="False" Click="btnCancelNewCustomer_Click"/>
                 </StackPanel>
                 <TextBlock Text="DETALLE PRODUCTO(S)" FontWeight="Bold" FontSize="20"/>
-                <TextBlock Margin="10" TextWrapping="Wrap">
-                    <Bold>CONSEJO:</Bold> Estimad@ usuari@, para quitar un producto seleccionelo en la tabla.
-                </TextBlock>
                 <StackPanel Orientation="Horizontal" Margin="15">
                     <Label Content="CÓDIGO DE PRODUCTO: " VerticalAlignment="Center"/>
+                    <Label Content="* " Foreground="Red" FontWeight="Bold"/>
                     <TextBox x:Name="txtSearchProduct" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="30" IsEnabled="True" Height="22" KeyDown="txtSearchProduct_KeyDown"/>
                     <Button x:Name="btnSearchProduct" ToolTip="BUSCAR PRODUCTO" Click="btnSearchProduct_Click" Margin="0,0,0,0" IsEnabled="True" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>
                     <StackPanel Orientation="Vertical" Margin="15,0,0,0">
                         <Label x:Name="lblSearchProductInfo" Content="" Foreground="Black" Background="Transparent" Margin="20,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>
-                        <Label x:Name="lblProductFound" Content="DESCRIPCION: -" FontWeight="Bold" VerticalAlignment="Center"/>
-                    </StackPanel>                    
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="15,15,0,15">
-                    <Label Content="P.V. $:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtPrecioVentaUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" VerticalAlignment="Center"/>
-                    <Label Content="P.V. BS:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtPrecioVentaBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" VerticalAlignment="Center"/>
-                    <Label Content="Desc. %:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtDescuentoPorcentaje" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="5" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtDescuentoPorcentaje_KeyUp" VerticalAlignment="Center"/>
-                    <Label Content="Total $:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtTotalUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPrecioUSD_KeyUp" VerticalAlignment="Center"/>
-                    <Label Content="Total BS:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtTotalBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPrecioBOB_KeyUp" VerticalAlignment="Center"/>
-                    <Label Content="GARANTIA:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtGarantia" TextWrapping="Wrap" Margin="0,0,0,0" MinWidth="50" MaxLength="2" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" VerticalAlignment="Center"/>
-                    <Label Content="MESES." Margin="0,0,20,0" VerticalAlignment="Center"/>
-                    <Button x:Name="btnAddProduct" ToolTip="AÑADIR PRODUCTO" Click="btnAddProduct_Click" Margin="0,0,0,0" IsEnabled="False" Background="LimeGreen" BorderBrush="LimeGreen">
-                        <materialDesign:PackIcon Kind="CartAdd"/>
-                    </Button>
+                    </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                    <DataGrid x:Name="dgvProductos" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True" Loaded="dgvProductos_Loaded" SelectionChanged="dgvProductos_SelectionChanged" HorizontalAlignment="Left" Margin="15"/>
+                    <DataGrid x:Name="dgvProductos" AutoGenerateColumns="False" PreviewTextInput="txtPrecio_PreviewTextInput" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" Loaded="dgvProductos_Loaded" CellEditEnding="dgvProductos_CellEditEnding" HorizontalAlignment="Left" Margin="15">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding idProducto}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Codigo" Binding="{Binding codigoSublote}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Producto" Binding="{Binding nombreProducto}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Detalle" Binding="{Binding identificador}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Precio USD" Binding="{Binding precioUSD}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Precio Bs." Binding="{Binding precioBOB}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Desc. %" Binding="{Binding descuentoPorcentaje}"/>
+                            <DataGridTextColumn Header="Desc. $." Binding="{Binding descuentoUSD}"/>
+                            <DataGridTextColumn Header="Desc. Bs." Binding="{Binding descuentoBOB}"/>
+                            <DataGridTextColumn Header="Total $." Binding="{Binding totalproductoUSD}"/>
+                            <DataGridTextColumn Header="Total Bs." Binding="{Binding totalproductoBOB}"/>
+                            <DataGridTextColumn Header="Garantia" Binding="{Binding garantia}"/>
+                            
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Click="btndgvRemoverProducto">Remover</Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                        
+                    </DataGrid>
 
                     <TextBlock Text="MÉTODO(S) DE PAGO" FontWeight="Bold" FontSize="20"/>
                     <TextBlock Margin="10" TextWrapping="Wrap">

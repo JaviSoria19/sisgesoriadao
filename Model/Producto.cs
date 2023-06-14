@@ -102,5 +102,11 @@ namespace sisgesoriadao.Model
         {
             IdProducto = idProducto;
         }
+
+        public Producto(int idProducto, double precioVentaUSD, double precioVentaBOB) : this(idProducto)
+        {
+            PrecioVentaUSD = precioVentaUSD;
+            PrecioVentaBOB = precioVentaBOB;
+        }
     }
 }
