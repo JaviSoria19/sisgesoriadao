@@ -773,11 +773,6 @@ namespace sisgesoriadao
         {
             if (dgvProductos.SelectedItem != null && dgvProductos.Items.Count > 0)
             {
-                foreach (var item in listaHelper)
-                {
-                    MessageBox.Show(item.descuentoPorcentaje.ToString());
-                }
-                /*
                 if (MessageBox.Show("Está realmente segur@ de remover este producto de la venta?", "Remover producto", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     venta_TotalUSD -= listaHelper[dgvProductos.SelectedIndex].totalproductoUSD;
@@ -792,7 +787,6 @@ namespace sisgesoriadao
 
                     listaHelper.RemoveAt(dgvProductos.SelectedIndex);
                 }
-                */
             }
         }
         private void dgvProductos_Loaded(object sender, RoutedEventArgs e)
