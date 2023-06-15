@@ -98,6 +98,7 @@
     <Compile Include="Implementation\ClienteImpl.cs" />
     <Compile Include="Implementation\CondicionImpl.cs" />
     <Compile Include="Implementation\CotizacionImpl.cs" />
+    <Compile Include="Implementation\ProductoComunImpl.cs" />
     <Compile Include="Implementation\ProductoImpl.cs" />
     <Compile Include="Implementation\SucursalImpl.cs" />
     <Compile Include="Implementation\UsuarioImpl.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Interfaces\ICondicion.cs" />
     <Compile Include="Interfaces\ICotizacion.cs" />
     <Compile Include="Interfaces\IProducto.cs" />
+    <Compile Include="Interfaces\IProductoComun.cs" />
     <Compile Include="Interfaces\ISucursal.cs" />
     <Compile Include="Interfaces\IUsuario.cs" />
     <Compile Include="Interfaces\IVenta.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="Model\Lote.cs" />
     <Compile Include="Model\MetodoPago.cs" />
     <Compile Include="Model\Producto.cs" />
+    <Compile Include="Model\ProductoComun.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Sucursal.cs" />
     <Compile Include="Model\Usuario.cs" />
@@ -169,6 +172,9 @@
     </Compile>
     <Compile Include="winProducto.xaml.cs">
       <DependentUpon>winProducto.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="winProductoComun.xaml.cs">
+      <DependentUpon>winProductoComun.xaml</DependentUpon>
     </Compile>
     <Compile Include="winProducto_Historial.xaml.cs">
       <DependentUpon>winProducto_Historial.xaml</DependentUpon>
@@ -297,6 +303,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winProducto.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winProductoComun.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

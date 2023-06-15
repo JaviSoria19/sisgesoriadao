@@ -201,6 +201,12 @@
                     <TextBlock Text="INVENTARIO" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                     <TextBlock Text="DE PRODUCTOS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnCommonProduct" Width="100" Height="100" Click="btnCommonProduct_Click" Background="{DynamicResource MaterialDesignPaper}" Foreground="{DynamicResource MaterialDesignBody}" BorderBrush="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="PackageVariantClosed" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="P. COMUNES" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Margin="20">

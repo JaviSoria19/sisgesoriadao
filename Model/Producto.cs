@@ -102,7 +102,12 @@ namespace sisgesoriadao.Model
         {
             IdProducto = idProducto;
         }
-
+        /// <summary>
+        /// CONSTRUCTOR REQUERIDO PARA REALIZAR LA INSERCIÓN DE LA VENTA.
+        /// </summary>
+        /// <param name="idProducto"></param>
+        /// <param name="precioVentaUSD"></param>
+        /// <param name="precioVentaBOB"></param>
         public Producto(int idProducto, double precioVentaUSD, double precioVentaBOB) : this(idProducto)
         {
             PrecioVentaUSD = precioVentaUSD;
