@@ -54,5 +54,16 @@ namespace sisgesoriadao.Model
         {
             IdProductoComun = idProductoComun;
         }
+        /// <summary>
+        /// CONSTRUCTOR REQUERIDO PARA GENERAR UNA LISTA DE LA VENTA Y REALIZAR LA TRANSACCION.
+        /// </summary>
+        /// <param name="idProductoComun"></param>
+        /// <param name="nombreProductoComun"></param>
+        /// <param name="precioSugerido"></param>
+        public ProductoComun(int idProductoComun, string nombreProductoComun, double precioSugerido) : this(idProductoComun)
+        {
+            NombreProductoComun = nombreProductoComun;
+            PrecioSugerido = precioSugerido;
+        }
     }
 }

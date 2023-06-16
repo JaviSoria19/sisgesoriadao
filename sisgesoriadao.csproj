@@ -176,6 +176,12 @@
     <Compile Include="winProductoComun.xaml.cs">
       <DependentUpon>winProductoComun.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winProductoComun_Venta_Historial.xaml.cs">
+      <DependentUpon>winProductoComun_Venta_Historial.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="winProductoComun_Venta_Insert.xaml.cs">
+      <DependentUpon>winProductoComun_Venta_Insert.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winProducto_Historial.xaml.cs">
       <DependentUpon>winProducto_Historial.xaml</DependentUpon>
     </Compile>
@@ -307,6 +313,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winProductoComun.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winProductoComun_Venta_Historial.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winProductoComun_Venta_Insert.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

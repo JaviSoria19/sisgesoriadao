@@ -312,5 +312,16 @@ namespace sisgesoriadao
             return !_regex.IsMatch(text);
         }
         //------------------------------------------------------><---------------------------------------------
+        private void btnAddSale_Click(object sender, RoutedEventArgs e)
+        {
+            winProductoComun_Venta_Insert winProductoComun_Venta_Insert = new winProductoComun_Venta_Insert();
+            winProductoComun_Venta_Insert.Show();
+        }
+
+        private void btnViewReport_Click(object sender, RoutedEventArgs e)
+        {
+            winProductoComun_Venta_Historial winProductoComun_Venta_Historial = new winProductoComun_Venta_Historial();
+            winProductoComun_Venta_Historial.Show();
+        }
     }
 }

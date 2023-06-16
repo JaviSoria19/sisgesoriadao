@@ -135,5 +135,99 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public DataTable SelectForComboBox()
+        {
+            string query = @"SELECT idProductoComun, nombreProductoComun FROM producto_comun WHERE estado = 1";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public string InsertTransaction(List<ProductoComun> ListaProductosComunes, List<string> ListaDetalles, double Total)
+        {
+            MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
+            connection.Open();
+            MySqlCommand command = connection.CreateCommand();
+            MySqlTransaction myTrans;
+            myTrans = connection.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            command.Connection = connection;
+            command.Transaction = myTrans;
+            try
+            {
+                //REGISTRO DE LA VENTA.
+                command.CommandText = @"INSERT INTO venta_comun (idUsuario,idSucursal,totalBOB) 
+                            VALUES(@idUsuario,@idSucursal,@totalBOB)";
+                command.Parameters.AddWithValue("@idUsuario", Session.IdUsuario);
+                command.Parameters.AddWithValue("@idSucursal", Session.Sucursal_IdSucursal);
+                command.Parameters.AddWithValue("@totalBOB", Total);
+                command.ExecuteNonQuery();
+                //REGISTRO DE LOS PRODUCTOS, ACTUALIZACIÓN DEL ESTADO DE LOS PRODUCTOS E INSERCIÓN EN HISTORIAL.
+                for (int i = 0; i < ListaProductosComunes.Count; i++)
+                {
+                    command.CommandText = @"INSERT INTO venta_comun_detalle (idVentaComun,idProductoComun,precioBOB,detalle)
+                            VALUES((SELECT MAX(idVentaComun) FROM venta_comun),@idProductoComun,@precioBOB,@detalle)";
+                    command.Parameters.AddWithValue("@idProductoComun", ListaProductosComunes[i].IdProductoComun);
+                    command.Parameters.AddWithValue("@precioBOB", ListaProductosComunes[i].PrecioSugerido);
+                    command.Parameters.AddWithValue("@detalle", ListaDetalles[i]);
+                    command.ExecuteNonQuery();
+                    command.Parameters.Clear();
+                }
+                myTrans.Commit();
+                return "VENTA_EXITOSA";
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (MySqlException ex)
+                {
+                    if (myTrans.Connection != null)
+                    {
+                        return "Una excepción del tipo " + ex.GetType() + " se encontró mientras se estaba intentando revertir la transacción.";
+                    }
+                }
+                return e.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public DataTable SelectLikeCommonProductsSales(DateTime FechaInicio, DateTime FechaFin, string IdSucursales, string IdUsuarios)
+        {
+            string query = @"SELECT VC.idVentaComun AS ID, U.nombreUsuario AS Usuario, S.nombreSucursal AS Sucursal, CONCAT('Venta: ',VC.idVentaComun, ' ',GROUP_CONCAT('- ',PC.nombreProductoComun,' ', VCD.detalle, ' ',VCD.precioBOB SEPARATOR ' \n')) AS Detalle, VC.totalBOB AS 'Total Bs', VC.fechaRegistro AS 'Fecha' FROM venta_comun VC
+                            INNER JOIN usuario U ON U.idUsuario = VC.idUsuario
+                            INNER JOIN sucursal S ON S.idSucursal = VC.idSucursal
+                            INNER JOIN venta_comun_detalle VCD ON VCD.idVentaComun = VC.idVentaComun
+                            INNER JOIN producto_comun PC ON PC.idProductoComun = VCD.idProductoComun
+                            WHERE VC.estado = 1 AND VC.idSucursal IN (" + IdSucursales + ") AND VC.idUsuario IN (" + IdUsuarios + @")
+                            AND VC.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
+                            GROUP BY VC.idVentaComun
+                            ORDER BY 1 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@FechaInicio", FechaInicio.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", FechaFin.ToString("yyyy-MM-dd") + " 23:59:59");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

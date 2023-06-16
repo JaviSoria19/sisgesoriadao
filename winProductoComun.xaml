@@ -48,6 +48,11 @@
                 <Button x:Name="btnCancel" Content="CANCELAR" Margin="5" IsEnabled="False" Click="btnCancel_Click"/>
             </StackPanel>
 
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <Button x:Name="btnAddSale" Content="AÑADIR VENTA" Margin="0,0,5,0" Click="btnAddSale_Click" Background="LimeGreen" BorderBrush="LimeGreen"/>
+                <Button x:Name="btnViewReport" Content="REPORTE DE VENTAS" Margin="5" Click="btnViewReport_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue"/>
+            </StackPanel>
+            
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
                 <Label x:Name="lblInfo" Content="" Foreground="Blue" Background="Transparent" Margin="0,0,0,10" HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">

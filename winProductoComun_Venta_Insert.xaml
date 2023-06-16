@@ -1,0 +1,70 @@
+﻿<Window x:Class="sisgesoriadao.winProductoComun_Venta_Insert"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
+     Background="{DynamicResource MaterialDesignPaper}"
+     FontFamily="{DynamicResource MaterialDesignFont}"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:sisgesoriadao"
+        mc:Ignorable="d"
+        Title="Sistema de Ventas - Registrar Venta (Producto Común)" Height="720" Width="1280"
+        WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded" Closing="Window_Closing">
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Button x:Name="btnReturn" ToolTip="VOLVER A INICIO" Margin="0,0,20,0" Click="btnReturn_Click">
+                    <materialDesign:PackIcon Kind="ArrowLeftBold"/>
+                </Button>
+                <materialDesign:PackIcon Kind="Store" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtSucursal" Text="SUCURSAL" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="Cart" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="REGISTRAR VENTA (P.C.)" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <Label Content="PRODUCTO COMUN:" VerticalAlignment="Center"/>
+                <ComboBox x:Name="cbxProductoComun" IsEnabled="True" VerticalAlignment="Center"/>
+                <Button x:Name="btnAdd" ToolTip="AÑADIR PRODUCTO A LA LISTA" Margin="20,0,0,0" Click="btnAdd_Click" Height="40" Background="LimeGreen" BorderBrush="LimeGreen">
+                    <materialDesign:PackIcon Kind="PackageVariantAdd" Width="30" Height="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Button>
+            </StackPanel>
+            
+            <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
+                <DataGrid x:Name="dgvProductos" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" Loaded="dgvProductos_Loaded" CellEditEnding="dgvProductos_CellEditEnding" HorizontalAlignment="Center" Margin="15">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding idProductoComun}" IsReadOnly="True" Visibility="Collapsed"/>
+                        <DataGridTextColumn Header="Nombre" Binding="{Binding nombreProductoComun}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="P. Mínimo" Binding="{Binding precioMinimoBOB}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="P. Sugerido" Binding="{Binding precioSugeridoBOB}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="P. Venta" Binding="{Binding precioVentaBOB}"/>
+                        <DataGridTextColumn Header="Detalle" Binding="{Binding detalle}" Width="100"/>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Click="btndgvRemoverProducto">Remover</Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <Button x:Name="btnSave" Content="REGISTRAR VENTA P.C." ToolTip="REGISTRAR VENTA P.C." Click="btnSave_Click" IsEnabled="True" Background="LimeGreen" BorderBrush="LimeGreen"/>
+                    <TextBlock x:Name="txtTotalBOB" Text="TOTAL: 0 Bs." FontWeight="Bold" HorizontalAlignment="Right" Margin="10"/>
+                </StackPanel>
+                
+            </StackPanel>
+            
+        </StackPanel>
+    </ScrollViewer>
+</Window>
