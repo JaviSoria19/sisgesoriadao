@@ -1,0 +1,44 @@
+﻿<Window x:Class="sisgesoriadao.winEULA"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:sisgesoriadao"
+        mc:Ignorable="d"
+        Title="Sistema de Ventas - Acuerdo de Licencia de Usuario Final " Height="720" Width="1280"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <ScrollViewer>
+        <StackPanel Margin="80">
+            <TextBlock Text="ACUERDO DE LICENCIA DE USUARIO FINAL" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
+            <TextBlock TextWrapping="Wrap" FontSize="21">
+                Este Acuerdo de Licencia de Usuario Final (en adelante "EULA") es un acuerdo legal entre el usuario final (en adelante "Usted") y el Desarrollador independiente del Sistema de Gestión de Ventas para Puntos de Venta (en adelante "El Software").<LineBreak/><LineBreak/>
+
+Al descargar, instalar o utilizar El Software, Usted acepta los términos y condiciones establecidos en este EULA. Si Usted no está de acuerdo con estos términos, no descargue, instale ni utilice El Software.<LineBreak/><LineBreak/>
+
+1. Licencia<LineBreak/>
+El Software es propiedad exclusiva del Desarrollador independiente y se encuentra protegido por las leyes de propiedad intelectual. El Desarrollador independiente le otorga a Usted una licencia no exclusiva, intransferible y limitada para utilizar El Software de acuerdo con los términos y condiciones de este Acuerdo.<LineBreak/><LineBreak/>
+
+2. Restricciones<LineBreak/>
+Usted se compromete a no copiar, modificar, distribuir, vender ni transferir El Software a terceros sin autorización previa y por escrito del Desarrollador independiente. Usted se compromete a no descompilar, desensamblar ni realizar ingeniería inversa sobre El Software.<LineBreak/><LineBreak/>
+
+3. Propiedad Intelectual<LineBreak/>
+Usted reconoce que El Software es propiedad exclusiva del Desarrollador independiente y que todas las marcas, nombres comerciales, patentes y derechos de autor relacionados con El Software son propiedad exclusiva del Desarrollador independiente.<LineBreak/><LineBreak/>
+
+4. Garantías<LineBreak/>
+El Desarrollador independiente garantiza que El Software funcionará de acuerdo a las especificaciones establecidas en la documentación del producto. Sin embargo, el Desarrollador independiente no garantiza que El Software sea libre de errores o que funcione sin interrupciones.<LineBreak/><LineBreak/>
+
+5. Limitación de Responsabilidad<LineBreak/>
+El Desarrollador independiente no será responsable por ningún daño directo, indirecto, incidental, especial o consecuente que resulte del uso o la imposibilidad de uso de El Software.<LineBreak/><LineBreak/>
+
+6. Terminación<LineBreak/>
+Este EULA se mantendrá en efecto hasta que sea terminado por Usted o el Desarrollador independiente. Usted puede terminar este EULA en cualquier momento desinstalando El Software. El Desarrollador independiente puede terminar este EULA en cualquier momento si Usted incumple con alguno de los términos y condiciones establecidos en este EULA.<LineBreak/><LineBreak/>
+
+7. Ley Aplicable<LineBreak/>
+Este EULA será interpretado y regido de acuerdo a las leyes de Bolivia. Cualquier controversia que surja en relación con este EULA será sometida a la jurisdicción de los tribunales competentes de Cochabamba.<LineBreak/><LineBreak/>
+
+Al descargar, instalar o utilizar El Software, Usted reconoce haber leído este EULA y estar de acuerdo con todos sus términos y condiciones. Si tiene alguna duda sobre este EULA, por favor contáctese con el Desarrollador independiente antes de descargar, instalar o utilizar El Software.
+
+            </TextBlock>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

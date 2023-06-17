@@ -121,22 +121,29 @@ namespace sisgesoriadao
                 case 1:
                     if (string.IsNullOrEmpty(txtProductoComun.Text) != true && string.IsNullOrEmpty(txtPrecioMinimo.Text) != true && string.IsNullOrEmpty(txtPrecioSugerido.Text) != true)
                     {
-                        productoComun = new ProductoComun(txtProductoComun.Text.Trim(), double.Parse(txtPrecioMinimo.Text.Trim()), double.Parse(txtPrecioSugerido.Text.Trim()));
-                        implProductoComun = new ProductoComunImpl();
-                        try
+                        if (double.Parse(txtPrecioMinimo.Text.Trim()) <= double.Parse(txtPrecioSugerido.Text.Trim()))
                         {
-                            int n = implProductoComun.Insert(productoComun);
-                            if (n > 0)
+                            productoComun = new ProductoComun(txtProductoComun.Text.Trim(), double.Parse(txtPrecioMinimo.Text.Trim()), double.Parse(txtPrecioSugerido.Text.Trim()));
+                            implProductoComun = new ProductoComunImpl();
+                            try
                             {
-                                labelSuccess(lblInfo);
-                                lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
-                                Select();
-                                DisabledButtons();
+                                int n = implProductoComun.Insert(productoComun);
+                                if (n > 0)
+                                {
+                                    labelSuccess(lblInfo);
+                                    lblInfo.Content = "REGISTRO INSERTADO CON ÉXITO.";
+                                    Select();
+                                    DisabledButtons();
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
                             }
                         }
-                        catch (Exception)
+                        else
                         {
-                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                            MessageBox.Show("El precio de venta no puede ser inferior al precio mínimo!");
                         }
                     }
                     else

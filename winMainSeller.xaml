@@ -15,48 +15,137 @@
         mc:Ignorable="d"
         Title="Sistema de Ventas - Inicio (Vendedor)" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
-    <Grid>
+    <ScrollViewer>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="10" >
                 <Button x:Name="btnLogout" ToolTip="CERRAR SESIÓN" HorizontalAlignment="Right" Margin="0,0,20,0" Click="btnLogout_Click">
                     <materialDesign:PackIcon Kind="Logout"/>
                 </Button>
                 <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
-                <TextBlock x:Name="txtBlockWelcome" Text="BIENVENIDO, USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock x:Name="txtBlockWelcome" Text="BIENVENIDO, USUARIO" Margin="5,0,40,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="Dollar" Width="25" Height="25" VerticalAlignment="Center" ToolTip="CAMBIO DEL DÓLAR"/>
+                <TextBlock x:Name="txtCambioDolar" Text="6,97" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <Button x:Name="btnRefresh" ToolTip="REFRESCAR INFORMACIÓN" HorizontalAlignment="Right" Margin="10,0,0,0" Click="btnRefresh_Click" Background="LimeGreen" BorderBrush="LimeGreen">
+                    <materialDesign:PackIcon Kind="Sync"/>
+                </Button>
+                <materialDesign:PackIcon Kind="ThemeLightDark" Width="25" Height="25" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                <ToggleButton x:Name="tglDarkMode" Style="{StaticResource MaterialDesignSwitchToggleButton}" IsEnabled="True" ToolTip="MODO OSCURO" Margin="10,0,0,0" Click="tglDarkMode_Click"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
-                    <Button Width="100" Height="100">
-                        <materialDesign:PackIcon Kind="FaceAgent" Width="80" Height="80" HorizontalAlignment="Center"/>
+
+            <TextBlock Text="GESTIONAR VENTAS Y PRODUCTOS" Margin="10,0,0,0" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold"/>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnSaleAdd" Width="100" Height="100" Click="btnSaleAdd_Click" Background="LimeGreen" BorderBrush="LimeGreen" Foreground="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="CartAdd" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
-                    <Label Content="EMPLEADOS" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="REGISTRAR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="VENTA" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
-                    <Button Width="100" Height="100">
-                        <materialDesign:PackIcon Kind="Cart" Width="80" Height="80" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnLocalSales" Width="100" Height="100" Click="btnLocalSales_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="CartOutline" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
-                    <Label Content="VENTAS" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="H. VENTAS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="LOCALES" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
-                    <Button Width="100" Height="100">
-                        <materialDesign:PackIcon Kind="Users" Width="80" Height="80" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnCashPending" Width="100" Height="100" Click="btnCashPending_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="CashRegister" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>
-                    <Label Content="CLIENTES" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="VER CAJA" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="ACTUAL" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
-                    <Button Width="100" Height="100">
-                        <materialDesign:PackIcon Kind="Store" Width="80" Height="80" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnCashHistory" Width="100" Height="100" Click="btnCashHistory_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="ClipboardTextHistoryOutline" Width="75" Height="75" HorizontalAlignment="Center"/>
                     </Button>
-                    <Label Content="SUCURSALES" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="REGISTRO" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="DE CAJAS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
-                    <Button Width="100" Height="100">
-                        <materialDesign:PackIcon Kind="PackageVariantClosed" Width="80" Height="80" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnQuotationAdd" Width="100" Height="100" Click="btnQuotationAdd_Click" Background="LimeGreen" BorderBrush="LimeGreen" Foreground="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="NoteEditOutline" Width="75" Height="75" HorizontalAlignment="Center"/>
                     </Button>
-                    <Label Content="PRODUCTOS" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="REALIZAR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="COTIZACIÓN" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnQuotations" Width="100" Height="100" Click="btnQuotations_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="NoteMultipleOutline" Width="76" Height="76" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="VER" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="COTIZACIONES" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
             </StackPanel>
 
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnTransferProducts" Width="100" Height="100" Click="btnTransferProducts_Click" Background="Orange" BorderBrush="Orange" Foreground="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="BoxArrowUp" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="TRANSFERIR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="PRODUCTOS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnReceiveProducts" Width="100" Height="100" Click="btnReceiveProducts_Click" Background="Orange" BorderBrush="Orange" Foreground="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="BoxArrowDown" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="RECIBIR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="PRODUCTOS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnMovementProductHistory" Width="100" Height="100" Click="btnMovementProductHistory_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="ArrowDecision" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="HISTORIAL DE" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="TRANSFERENCIAS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnHistoryProducts" Width="100" Height="100" Click="btnHistoryProducts_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="History" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="HISTORIAL" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="DE PRODUCTO" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnProducts_Inventory" Width="100" Height="100" Click="btnProducts_Inventory_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="PackageVariantClosed" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="INVENTARIO" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="DE PRODUCTOS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnCommonSaleAdd" Width="100" Height="100" Click="btnCommonSaleAdd_Click" Background="LimeGreen" BorderBrush="LimeGreen" Foreground="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="CartAdd" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="REGISTRAR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="VENTA (P.C.)" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnCommonLocalSales" Width="100" Height="100" Click="btnCommonLocalSales_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="CartOutline" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="H. VENTAS" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="(P.C.)" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Margin="20">
+                    <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="Orange">
+                        <TextBlock x:Name="infoTotalSalesFromToday" FontSize="20" Text="VENTAS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
+                    </materialDesign:Card>
+                    <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="Gold">
+                        <TextBlock x:Name="infoTotalProductsFromToday" FontSize="20" Text="PRODUCTOS VENDIDOS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
+                    </materialDesign:Card>
+                    <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="LimeGreen">
+                        <TextBlock x:Name="infoCashAmount" FontSize="20" Text="EFECTIVO EN CAJA: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
+                    </materialDesign:Card>
+
+                </StackPanel>
+
+            </StackPanel>
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </Window>

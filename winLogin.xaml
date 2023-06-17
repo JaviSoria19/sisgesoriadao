@@ -13,7 +13,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
-        Title="Sistema de Ventas - Iniciar Sesión" Height="400" Width="600"
+        Title="Sistema de Ventas - Iniciar Sesión" Height="440" Width="600"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -38,6 +38,7 @@
                     <Button x:Name="btnExit" Content="SALIR" Width="150" Margin="5" Click="btnExit_Click"/>
                 </StackPanel>
                 <Button x:Name="btnForgotPassword" Content="¿Olvidó su contraseña?" Foreground="Red" Background="Transparent" Margin="5" Click="btnForgotPassword_Click"/>
+                <Button x:Name="btnEULA" Content="Acuerdo de Licencia de Usuario Final" Foreground="Red" Background="Transparent" Margin="5" Click="btnEULA_Click"/>
             </StackPanel>
             <materialDesign:Card Height="40" Margin="10">
                 <Label x:Name="lblInfo" Content="ESTADO: INGRESE SU USUARIO Y CONTRASEÑA PARA ACCEDER." VerticalAlignment="Center" FontWeight="Bold" Margin="5"/>

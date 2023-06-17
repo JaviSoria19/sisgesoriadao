@@ -32,6 +32,10 @@ namespace sisgesoriadao
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
+            if (Session.Rol != 1)
+            {
+                btnDeletedSales.IsEnabled = false;
+            }
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {

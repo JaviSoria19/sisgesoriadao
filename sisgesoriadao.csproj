@@ -155,6 +155,9 @@
     <Compile Include="winCotizacion_Insert.xaml.cs">
       <DependentUpon>winCotizacion_Insert.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winEULA.xaml.cs">
+      <DependentUpon>winEULA.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winInventarioDigital.xaml.cs">
       <DependentUpon>winInventarioDigital.xaml</DependentUpon>
     </Compile>
@@ -288,6 +291,10 @@
       <DependentUpon>winEmpleado.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="winEULA.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="winInventarioDigital.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -355,7 +355,8 @@ namespace sisgesoriadao
                     descuentoBOB = 0,
                     totalproductoUSD = producto.PrecioVentaUSD,
                     totalproductoBOB = producto.PrecioVentaBOB,
-                    garantia = categoria.Garantia
+                    garantia = categoria.Garantia,
+                    costoUSD = producto.CostoUSD
                 });
 
                 venta_TotalUSD += producto.PrecioVentaUSD;
@@ -709,6 +710,7 @@ namespace sisgesoriadao
             public double totalproductoUSD { get; set; }
             public double totalproductoBOB { get; set; }
             public byte garantia { get; set; }
+            public double costoUSD { get; set; }
         }
         public class MetodoPagoDataGridView
         {
@@ -837,7 +839,7 @@ namespace sisgesoriadao
         }
         private void ModificarFilaPorDescuentoPorcentaje(int i, TextBox n, DataGridRowDetalleHelper fila)
         {
-            double limite = Math.Round(fila.precioUSD / 100 * (100 - Session.Ajuste_Limite_Descuento),2); ;
+            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento),2);
             double pago = 0;
             pago = Math.Round(fila.precioUSD * (1 - double.Parse(n.Text.ToString()) / 100), 2);
             if (pago >= limite)
@@ -861,7 +863,7 @@ namespace sisgesoriadao
         }
         private void ModificarFilaPorDescuentoUSD(int i, TextBox n, DataGridRowDetalleHelper fila)
         {
-            double limite = Math.Round(fila.precioUSD / 100 * (100 - Session.Ajuste_Limite_Descuento),2); ;
+            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento),2); ;
             double pago = 0;
             pago = Math.Round(fila.precioUSD - double.Parse(n.Text.ToString()), 2);
             if (pago >= limite)
@@ -885,7 +887,7 @@ namespace sisgesoriadao
         }
         private void ModificarFilaPorDescuentoBOB(int i, TextBox n, DataGridRowDetalleHelper fila)
         {
-            double limite = Math.Round(fila.precioUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2); ;
+            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2); ;
             double pago = 0;
             pago = Math.Round(fila.precioUSD * (1 - Math.Round(double.Parse(n.Text.ToString()) / fila.precioBOB * 100, 2) / 100), 2);
             if (pago >= limite)
@@ -909,7 +911,7 @@ namespace sisgesoriadao
         }
         private void ModificarFilaPorTotalUSD(int i, TextBox n, DataGridRowDetalleHelper fila)
         {
-            double limite = Math.Round(fila.precioUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2); ;
+            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2); ;
             double pago = 0;
             pago = Math.Round(double.Parse(n.Text.ToString()), 2);
             if (pago >= limite)
@@ -932,7 +934,7 @@ namespace sisgesoriadao
         }
         private void ModificarFilaPorTotalBOB(int i, TextBox n, DataGridRowDetalleHelper fila)
         {
-            double limite = Math.Round(fila.precioUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2); ;
+            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2); ;
             double pago = 0;
             pago = Math.Round(fila.precioUSD * (1 - Math.Round(100 - double.Parse(n.Text.ToString()) / fila.precioBOB * 100, 2) / 100), 2);
             if (pago >= limite)

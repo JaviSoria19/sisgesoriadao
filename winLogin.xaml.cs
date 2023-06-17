@@ -134,5 +134,11 @@ namespace sisgesoriadao
 
             }
         }
+
+        private void btnEULA_Click(object sender, RoutedEventArgs e)
+        {
+            winEULA winEULA = new winEULA();
+            winEULA.Show();
+        }
     }
 }

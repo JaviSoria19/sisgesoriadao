@@ -107,7 +107,8 @@ namespace sisgesoriadao
             {
                 if (indexSeleccionado == 4)
                 {
-                    if (double.Parse(valorNuevo.Text.ToString()) >= filaSeleccionada.precioMinimoBOB)
+                    double limite = Math.Round(filaSeleccionada.precioMinimoBOB / 100 * (100 - Session.Ajuste_Limite_Descuento), 2);
+                    if (double.Parse(valorNuevo.Text.ToString()) >= limite)
                     {
                         venta_TotalBOB -= listaHelper[dgvProductos.SelectedIndex].precioVentaBOB;
                         try
@@ -125,7 +126,7 @@ namespace sisgesoriadao
                     else
                     {
                         MessageBox.Show("¡EL PRECIO DE VENTA NO PUEDE SER INFERIOR AL PRECIO SUGERIDO!\nPRODUCTO SELECCIONADO: " + filaSeleccionada.nombreProductoComun
-                            + "\nPRECIO MINIMO: " + filaSeleccionada.precioMinimoBOB);
+                            + "\nPRECIO MINIMO: " + filaSeleccionada.precioMinimoBOB + "\n LIMITE DE DESCUENTO POR DEBAJO DEL PRECIO MINIMO: " + limite);
                     }
                 }
                 else if (indexSeleccionado == 5)
@@ -228,7 +229,6 @@ namespace sisgesoriadao
 
             }
         }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (listaHelper.Count > 0 && ventaRegistrada == false)
