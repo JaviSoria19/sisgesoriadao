@@ -275,8 +275,11 @@ namespace sisgesoriadao.Properties {
         ///                padding: 5px;
         ///                border: 1px solid black;
         ///            }
-        ///            #cuadrado{
-        ///                border-collapse: collapse [resto de la cadena truncado]&quot;;.
+        ///    &lt;/style&gt;
+        ///&lt;/head&gt;
+        ///&lt;body&gt;
+        ///    &lt;table style=&quot;width:100%&quot;&gt;
+        ///   [resto de la cadena truncado]&quot;;.
         /// </summary>
         internal static string PlantillaReporteVenta {
             get {

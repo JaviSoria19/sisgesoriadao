@@ -14,7 +14,7 @@
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
         Title="Sistema de Ventas - Inicio (Vendedor)" Height="720" Width="1280"
-        WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
+        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <ScrollViewer>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="10" >

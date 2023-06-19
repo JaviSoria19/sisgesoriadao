@@ -17,7 +17,7 @@ using sisgesoriadao.Model;
 using sisgesoriadao.Implementation;
 using DYMO.Label.Framework;
 using Label = DYMO.Label.Framework.Label;
-
+using System.Collections.ObjectModel;
 namespace sisgesoriadao
 {
     /// <summary>
@@ -32,7 +32,9 @@ namespace sisgesoriadao
         int contador=1;
         string codigoSublote;
         int idSublote = 0;
-        
+
+        private ObservableCollection<DataGridRowDetalleHelper> listaHelper = new ObservableCollection<DataGridRowDetalleHelper>();
+        bool loteRegistrado = false;
         public winProducto_Insert()
         {
             InitializeComponent();
@@ -44,22 +46,30 @@ namespace sisgesoriadao
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
-            addToDataGrid_andList();
+            addToDataGrid();
         }
         private void btnRemove_Click(object sender, RoutedEventArgs e)
         {
-            removeFromDataGridandList();
+            removeFromDataGrid();
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (listaproductos.Count > 0)
+            if (listaHelper.Count > 0)
             {
+                listaproductos.Clear();
+                foreach (var item in listaHelper)
+                {
+                    listaproductos.Add(new Producto(item.IdSucursal,item.IdCategoria,item.IdSublote,item.IdCondicion,item.IdUsuario,
+                        item.CodigoSublote,item.NombreProducto,item.Identificador,item.CostoUSD,item.CostoBOB,item.PrecioVentaUSD,item.PrecioVentaBOB,item.Observaciones));
+                }
+
                 if (MessageBox.Show("¿Está seguro de haber ingresado todos los datos correctamente? \n Cantidad de productos ingresados al lote: " + listaproductos.Count + ". \n Presione SI para continuar.", "Confirmar lote", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     implProducto = new ProductoImpl();
                     string mensaje = implProducto.InsertTransaction(listaproductos, (cbxLote.SelectedItem as ComboboxItem).Valor);
                     if (mensaje == "LOTE REGISTRADO EXITOSAMENTE.")
                     {
+                        loteRegistrado = true;
                         PrintCodigoSublote(listaproductos);
                         MessageBox.Show(mensaje + "\n IMPRIMIENDO LAS ETIQUETAS...");
                         //insertar código para imprimir etiquetas DYMO
@@ -69,7 +79,7 @@ namespace sisgesoriadao
                     {
                         MessageBox.Show(mensaje);
                     }
-                }                
+                }
             }
             else
             {
@@ -88,93 +98,6 @@ namespace sisgesoriadao
             GetIDSubLoteFromDatabase();
             txtSucursal.Text = "Sucursal: " + Session.Sucursal_NombreSucursal;
             txtObservaciones.Text = "-";
-        }
-        private void dgvProductos_Loaded(object sender, RoutedEventArgs e)
-        {
-            DataGridTextColumn columna1 = new DataGridTextColumn
-            {
-                Header = "ID SUCURSAL",
-                Binding = new Binding("IdSucursal")
-            };
-            DataGridTextColumn columna2 = new DataGridTextColumn
-            {
-                Header = "ID CATEGORIA",
-                Binding = new Binding("IdCategoria")
-            };
-            DataGridTextColumn columna3 = new DataGridTextColumn
-            {
-                Header = "ID SUBLOTE",
-                Binding = new Binding("IdSublote")
-            };
-            DataGridTextColumn columna4 = new DataGridTextColumn
-            {
-                Header = "ID CONDICION",
-                Binding = new Binding("IdCondicion")
-            };
-            DataGridTextColumn columna5 = new DataGridTextColumn
-            {
-                Header = "ID USUARIO",
-                Binding = new Binding("IdUsuario")
-            };
-            DataGridTextColumn columna6 = new DataGridTextColumn
-            {
-                Header = "Codigo",
-                Binding = new Binding("CodigoSublote")
-            };
-            DataGridTextColumn columna7 = new DataGridTextColumn
-            {
-                Header = "Producto",
-                Binding = new Binding("NombreProducto")
-            };
-            DataGridTextColumn columna8 = new DataGridTextColumn
-            {
-                Header = "SN/IMEI",
-                Binding = new Binding("Identificador")
-            };
-            DataGridTextColumn columna9 = new DataGridTextColumn
-            {
-                Header = "C. $.",
-                Binding = new Binding("CostoUSD")
-            };
-            DataGridTextColumn columna10 = new DataGridTextColumn
-            {
-                Header = "C. Bs.",
-                Binding = new Binding("CostoBOB")
-            };
-            DataGridTextColumn columna11 = new DataGridTextColumn
-            {
-                Header = "P. $.",
-                Binding = new Binding("PrecioVentaUSD")
-            };
-            DataGridTextColumn columna12 = new DataGridTextColumn
-            {
-                Header = "P. Bs.",
-                Binding = new Binding("PrecioVentaBOB")
-            };
-            DataGridTextColumn columna13 = new DataGridTextColumn
-            {
-                Header = "Obs.",
-                Binding = new Binding("Observaciones")
-            };
-            dgvProductos.Columns.Add(columna1);
-            dgvProductos.Columns.Add(columna2);
-            dgvProductos.Columns.Add(columna3);
-            dgvProductos.Columns.Add(columna4);
-            dgvProductos.Columns.Add(columna5);
-            dgvProductos.Columns.Add(columna6);
-            dgvProductos.Columns.Add(columna7);
-            dgvProductos.Columns.Add(columna8);
-            dgvProductos.Columns.Add(columna9);
-            dgvProductos.Columns.Add(columna10);
-            dgvProductos.Columns.Add(columna11);
-            dgvProductos.Columns.Add(columna12);
-            dgvProductos.Columns.Add(columna13);
-
-            dgvProductos.Columns[0].Visibility = Visibility.Collapsed;
-            dgvProductos.Columns[1].Visibility = Visibility.Collapsed;
-            dgvProductos.Columns[2].Visibility = Visibility.Collapsed;
-            dgvProductos.Columns[3].Visibility = Visibility.Collapsed;
-            dgvProductos.Columns[4].Visibility = Visibility.Collapsed;
         }
         private void cbxLote_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -220,7 +143,7 @@ namespace sisgesoriadao
         {
             if (e.Key == Key.Enter)
             {
-                addToDataGrid_andList();
+                addToDataGrid();
             }
         }
         private void txtPrecio_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -236,7 +159,7 @@ namespace sisgesoriadao
             currentContainer.SelectionStart = caretPosition++;
         }
 
-        void addToDataGrid_andList()
+        void addToDataGrid()
         {
             if (string.IsNullOrEmpty(acbtxtNombreProducto.Text) != true && string.IsNullOrEmpty(txtIdentificador.Text) != true &&
                 string.IsNullOrEmpty(txtCostoUSD.Text) != true && string.IsNullOrEmpty(txtCostoBOB.Text) != true &&
@@ -244,7 +167,7 @@ namespace sisgesoriadao
             {
                 if (double.Parse(txtPrecioUSD.Text) > double.Parse(txtCostoUSD.Text))
                 {
-                    dgvProductos.Items.Add(new Producto
+                    listaHelper.Add(new DataGridRowDetalleHelper
                     {
                         IdSucursal = Session.Sucursal_IdSucursal,
                         IdCategoria = byte.Parse((cbxCategoria.SelectedItem as ComboboxItem).Valor.ToString()),
@@ -260,22 +183,6 @@ namespace sisgesoriadao
                         PrecioVentaBOB = double.Parse(txtPrecioBOB.Text),
                         Observaciones = txtObservaciones.Text
                     });
-
-                    listaproductos.Add(new Producto(
-                        Session.Sucursal_IdSucursal,
-                        byte.Parse((cbxCategoria.SelectedItem as ComboboxItem).Valor.ToString()),
-                        idSublote,
-                        byte.Parse((cbxCondicion.SelectedItem as ComboboxItem).Valor.ToString()),
-                        Session.IdUsuario,
-                        txtCodigoSublote.Text,
-                        acbtxtNombreProducto.Text,
-                        txtIdentificador.Text,
-                        double.Parse(txtCostoUSD.Text),
-                        double.Parse(txtCostoBOB.Text),
-                        double.Parse(txtPrecioUSD.Text),
-                        double.Parse(txtPrecioBOB.Text),
-                        txtObservaciones.Text
-                        ));
 
                     contador++;
                     txtCodigoSublote.Text = codigoSublote + "-" + contador;
@@ -299,12 +206,11 @@ namespace sisgesoriadao
                 MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
             }
         }    
-        void removeFromDataGridandList()
+        void removeFromDataGrid()
         {
-            if (dgvProductos.Items.IsEmpty != true && listaproductos != null)
+            if (dgvProductos.Items.IsEmpty != true)
             {
-                dgvProductos.Items.RemoveAt(contador - 2);
-                listaproductos.RemoveAt(contador - 2);
+                listaHelper.RemoveAt(contador - 2);
                 contador--;
                 txtCodigoSublote.Text = codigoSublote + "-" + contador;
             }
@@ -469,7 +375,189 @@ namespace sisgesoriadao
                 label.SetObjectText("lblCodigoSublote", item.CodigoSublote);
                 label.SetObjectText("lblCodigoQR", item.CodigoSublote);
                 label.Print("DYMO LabelWriter 450");
-            }            
+            }
+        }
+        public class DataGridRowDetalleHelper
+        {
+            public byte IdSucursal { get; set; }
+            public byte IdCategoria { get; set; }
+            public int IdSublote { get; set; }
+            public byte IdCondicion { get; set; }
+            public byte IdUsuario { get; set; }
+            public string CodigoSublote { get; set; }
+            public string NombreProducto { get; set; }
+            public string Identificador { get; set; }
+            public double CostoUSD { get; set; }
+            public double CostoBOB { get; set; }
+            public double PrecioVentaUSD { get; set; }
+            public double PrecioVentaBOB { get; set; }
+            public string Observaciones { get; set; }
+        }
+
+        private void dgvProductos_Loaded(object sender, RoutedEventArgs e)
+        {
+            dgvProductos.ItemsSource = listaHelper;
+        }
+        private void dgvProductos_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            int indexSeleccionado = e.Column.DisplayIndex;
+            DataGridRowDetalleHelper filaSeleccionada = e.Row.Item as DataGridRowDetalleHelper;
+            TextBox valorNuevo = e.EditingElement as TextBox;  // Assumes columns are all TextBoxes
+
+            try
+            {
+                if (indexSeleccionado == 6)/*NOMBRE PRODUCTO*/
+                {
+                    if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
+                    {
+                        for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
+                        {
+                            listaHelper[i].NombreProducto = valorNuevo.Text.Trim().ToString();
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("EL NOMBRE DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
+                    }
+                }
+                else if (indexSeleccionado == 7)/*IDENTIFICADOR*/
+                {
+                    if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
+                    {
+                        listaHelper[dgvProductos.SelectedIndex].Identificador = valorNuevo.Text.Trim().ToString();
+                    }
+                    else
+                    {
+                        MessageBox.Show("EL IDENTIFICADOR DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
+                    }
+                    
+                }
+                else if (indexSeleccionado == 8)/*COSTO USD*/
+                {
+                    if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
+                    {
+                        foreach (var item in listaHelper)
+                        {
+                            item.CostoUSD = double.Parse(valorNuevo.Text.Trim());
+                            item.CostoBOB = Math.Round(item.CostoUSD * Session.Ajuste_Cambio_Dolar,2);
+                        }
+                        if (double.Parse(valorNuevo.Text.Trim()) > filaSeleccionada.PrecioVentaUSD)
+                        {
+                            foreach (var item in listaHelper)
+                            {
+                                item.PrecioVentaUSD = item.CostoUSD + 10;
+                                item.PrecioVentaBOB = Math.Round(item.CostoBOB + (Session.Ajuste_Cambio_Dolar * 10), 2);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("EL COSTO EN USD DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
+                    }
+                }
+                else if (indexSeleccionado == 9)/*COSTO BOB*/
+                {
+                    if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
+                    {
+                        foreach (var item in listaHelper)
+                        {
+                            item.CostoBOB = double.Parse(valorNuevo.Text.Trim());
+                            item.CostoUSD = Math.Round(item.CostoBOB / Session.Ajuste_Cambio_Dolar, 2);
+                        }
+                        if (double.Parse(valorNuevo.Text.Trim()) > filaSeleccionada.PrecioVentaBOB)
+                        {
+                            foreach (var item in listaHelper)
+                            {
+                                item.PrecioVentaBOB = item.CostoBOB + (Session.Ajuste_Cambio_Dolar * 10);
+                                item.PrecioVentaUSD = Math.Round(item.CostoUSD + 10, 2);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("EL COSTO EN USD DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
+                    }
+                }
+                else if (indexSeleccionado == 10)/*PRECIO USD*/
+                {
+                    if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
+                    {
+                        if (double.Parse(valorNuevo.Text.Trim()) > filaSeleccionada.CostoUSD)
+                        {
+                            foreach (var item in listaHelper)
+                            {
+                                item.PrecioVentaUSD = double.Parse(valorNuevo.Text.Trim());
+                                item.PrecioVentaBOB = Math.Round(item.PrecioVentaUSD * Session.Ajuste_Cambio_Dolar, 2);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("EL PRECIO EN $. NO PUEDE SER MENOR O IGUAL AL COSTO EN $. DEL PRODUCTO!");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("EL PRECIO EN USD DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
+                    }
+                }
+                else if (indexSeleccionado == 11)/*PRECIO BOB*/
+                {
+                    if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
+                    {
+                        if (double.Parse(valorNuevo.Text.Trim()) > filaSeleccionada.CostoBOB)
+                        {
+                            foreach (var item in listaHelper)
+                            {
+                                item.PrecioVentaBOB = double.Parse(valorNuevo.Text.Trim());
+                                item.PrecioVentaUSD = Math.Round(item.PrecioVentaBOB / Session.Ajuste_Cambio_Dolar, 2);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("EL PRECIO EN Bs. NO PUEDE SER MENOR O IGUAL AL COSTO EN Bs. DEL PRODUCTO!");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("EL PRECIO EN USD DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
+                    }
+                }
+                else if (indexSeleccionado == 12)/*OBSERVACIONES*/
+                {
+                    if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
+                    {
+                        listaHelper[dgvProductos.SelectedIndex].Observaciones = valorNuevo.Text.Trim().ToString();
+                    }
+                    else
+                    {
+                        MessageBox.Show("LA OBSERVACION DEL PRODUCTO NO PUEDE ESTAR VACÍA!");
+                    }
+                }
+                dgvProductos.ItemsSource = null;
+                dgvProductos.ItemsSource = listaHelper;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                throw;
+            }
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (listaHelper.Count > 0 && loteRegistrado == false)
+            {
+                MessageBoxResult result =
+                  MessageBox.Show(
+                    "ATENCIÓN: Se ha agregado uno o más productos al lote para registrar en el sistema, ¿Está seguro de cerrar la ventana sin haber registrado el lote?",
+                    "Lote pendiente",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+                if (result == MessageBoxResult.No)
+                {
+                    // If user doesn't want to close, cancel closure
+                    e.Cancel = true;
+                }
+            }
         }
     }
 }

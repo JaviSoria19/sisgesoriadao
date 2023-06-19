@@ -15,7 +15,7 @@
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
         mc:Ignorable="d"
         Title="Sistema de Ventas - Añadir nuevo lote" Height="720" Width="1280"
-        WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
+        WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded" Closing="Window_Closing">
     <ScrollViewer>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="10">
@@ -95,7 +95,23 @@
                         <materialDesign:PackIcon Kind="PackageVariantRemove" Width="30" Height="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Button>
                 </StackPanel>
-                <DataGrid x:Name="dgvProductos" CanUserAddRows="False" CanUserDeleteRows="False" Loaded="dgvProductos_Loaded" HorizontalAlignment="Center" IsReadOnly="True"/>
+                <DataGrid x:Name="dgvProductos" Loaded="dgvProductos_Loaded" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CellEditEnding="dgvProductos_CellEditEnding" HorizontalAlignment="Center">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID SUCURSAL" Binding="{Binding IdSucursal}" IsReadOnly="True" Visibility="Collapsed"/>
+                        <DataGridTextColumn Header="ID CATEGORIA" Binding="{Binding IdCategoria}" IsReadOnly="True" Visibility="Collapsed"/>
+                        <DataGridTextColumn Header="ID SUBLOTE" Binding="{Binding IdSublote}" IsReadOnly="True" Visibility="Collapsed"/>
+                        <DataGridTextColumn Header="ID CONDICION" Binding="{Binding IdCondicion}" IsReadOnly="True" Visibility="Collapsed"/>
+                        <DataGridTextColumn Header="ID USUARIO" Binding="{Binding IdUsuario}" IsReadOnly="True" Visibility="Collapsed"/>
+                        <DataGridTextColumn Header="Codigo" Binding="{Binding CodigoSublote}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Producto" Binding="{Binding NombreProducto}"/>
+                        <DataGridTextColumn Header="SN/IMEI" Binding="{Binding Identificador}"/>
+                        <DataGridTextColumn Header="C. $." Binding="{Binding CostoUSD}"/>
+                        <DataGridTextColumn Header="C. Bs." Binding="{Binding CostoBOB}"/>
+                        <DataGridTextColumn Header="P. $." Binding="{Binding PrecioVentaUSD}"/>
+                        <DataGridTextColumn Header="P. Bs." Binding="{Binding PrecioVentaBOB}"/>
+                        <DataGridTextColumn Header="Obs." Binding="{Binding Observaciones}" MaxWidth="100"/>
+                    </DataGrid.Columns>
+                </DataGrid>
                 <Button x:Name="btnSave" Content="GUARDAR" Margin="0,30,0,0" Click="btnSave_Click" Width="100"/>
             </StackPanel>
         </StackPanel>

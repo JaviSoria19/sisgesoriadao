@@ -91,7 +91,7 @@
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                    <DataGrid x:Name="dgvProductos" AutoGenerateColumns="False" PreviewTextInput="txtPrecio_PreviewTextInput" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" Loaded="dgvProductos_Loaded" CellEditEnding="dgvProductos_CellEditEnding" HorizontalAlignment="Left" Margin="15">
+                    <DataGrid x:Name="dgvProductos" AutoGenerateColumns="False" PreviewTextInput="txtPrecio_PreviewTextInput" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" Loaded="dgvProductos_Loaded" CellEditEnding="dgvProductos_CellEditEnding" HorizontalAlignment="Left" Margin="15">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding idProducto}" IsReadOnly="True" Visibility="Collapsed"/>
                             <DataGridTextColumn Header="Codigo" Binding="{Binding codigoSublote}" IsReadOnly="True"/>

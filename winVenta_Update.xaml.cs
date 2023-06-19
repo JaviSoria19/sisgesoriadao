@@ -194,6 +194,25 @@ namespace sisgesoriadao
             getSale_Customer();
             getSale_Products();
             getSale_Info();
+
+            if (Session.Rol != 1)
+            {
+                acbtxtNameCustomer.IsEnabled = false;
+                txtSearchCustomer.IsEnabled = false;
+                btnSearchCustomer.IsEnabled = false;
+                btnAddCustomer.IsEnabled = false;
+                btnEditCustomer.IsEnabled = false;
+
+                dgvProductos.IsEnabled = false;
+
+                txtPagoUSD.IsEnabled = false;
+                txtPagoBOB.IsEnabled = false;
+                cbxPaymentMethod.IsEnabled = false;
+                btnAddPaymentMethod.IsEnabled = false;
+                dgvMetodosPago.IsEnabled = false;
+
+                txtObservacionVenta.IsEnabled = false;
+            }
         }
         private void getSale_Info()
         {
@@ -201,13 +220,16 @@ namespace sisgesoriadao
             {
                 implVenta = new VentaImpl();
                 byte estado = implVenta.GetEstado(idVenta);
-                if (estado == 0)
+                if (estado == 0 )
                 {
                     btnDeleteSale.IsEnabled = false;
                 }
                 else
                 {
-                    btnDeleteSale.IsEnabled = true;
+                    if (Session.Rol == 1)
+                    {
+                        btnDeleteSale.IsEnabled = true;
+                    }
                 }
             }
             catch (Exception ex)
