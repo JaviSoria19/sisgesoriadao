@@ -13,7 +13,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
-        Title="Sistema de Ventas - Categorias" Height="720" Width="1280"
+        Title="Sistema de Ventas - Estados" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
     <Grid>
         <StackPanel Orientation="Vertical">

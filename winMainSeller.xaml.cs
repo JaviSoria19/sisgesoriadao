@@ -34,6 +34,7 @@ namespace sisgesoriadao
         {
             txtBlockWelcome.Text = "Bienvenid@ a " + Session.Sucursal_NombreSucursal + " , " + Session.NombreUsuario;
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
+            txtVersionApp.Text = Session.VersionApp;
             LoadInfoFromDB();
         }
         private void btnLogout_Click(object sender, RoutedEventArgs e)

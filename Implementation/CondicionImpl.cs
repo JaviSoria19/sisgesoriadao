@@ -94,7 +94,7 @@ namespace sisgesoriadao.Implementation
         public DataTable Select()
         {
             string query = @"SELECT C.idCondicion AS ID, C.nombreCondicion AS Condicion,C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM Condicion AS C
-                                INNER JOIN usuario AS U ON C.idUsuario = U.idUsuario
+                                INNER JOIN Usuario AS U ON C.idUsuario = U.idUsuario
                                 WHERE C.estado = 1 ORDER BY 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             try
@@ -110,7 +110,7 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
             string query = @"SELECT C.idCondicion AS ID, C.nombreCondicion AS Condicion,C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM Condicion AS C
-                                INNER JOIN usuario AS U ON C.idUsuario = U.idUsuario
+                                INNER JOIN Usuario AS U ON C.idUsuario = U.idUsuario
                                 WHERE (C.nombreCondicion LIKE @search) 
                                 AND C.estado = 1 AND C.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                                 ORDER BY 1 ASC";

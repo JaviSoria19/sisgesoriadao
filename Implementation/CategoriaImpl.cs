@@ -98,7 +98,7 @@ namespace sisgesoriadao.Implementation
         public DataTable Select()
         {
             string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.garantia AS Garantia,C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM Categoria AS C
-                                INNER JOIN usuario AS U ON C.idUsuario = U.idUsuario
+                                INNER JOIN Usuario AS U ON C.idUsuario = U.idUsuario
                                 WHERE C.estado = 1 ORDER BY 3 DESC, 2 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             try

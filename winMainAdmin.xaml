@@ -32,7 +32,9 @@
                     <materialDesign:PackIcon Kind="Sync"/>
                 </Button>
                 <materialDesign:PackIcon Kind="ThemeLightDark" Width="25" Height="25" VerticalAlignment="Center" Margin="20,0,0,0"/>
-                <ToggleButton x:Name="tglDarkMode" Style="{StaticResource MaterialDesignSwitchToggleButton}" IsEnabled="True" ToolTip="MODO OSCURO" Margin="10,0,0,0" Click="tglDarkMode_Click"/>
+                <ToggleButton x:Name="tglDarkMode" Style="{StaticResource MaterialDesignSwitchToggleButton}" IsEnabled="True" ToolTip="MODO OSCURO" Margin="10,0,10,0" Click="tglDarkMode_Click"/>
+                <materialDesign:PackIcon Kind="MicrosoftWindows" Width="25" Height="25" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                <TextBlock x:Name="txtVersionApp" Text="1.0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
             
             <TextBlock Text="GESTIONAR VENTAS Y PRODUCTOS" Margin="10,0,0,0" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold"/>
