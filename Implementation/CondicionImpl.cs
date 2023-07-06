@@ -13,7 +13,7 @@ namespace sisgesoriadao.Implementation
     {
         public int Insert(Condicion c)
         {
-            string query = @"INSERT INTO condicion (idUsuario,nombreCondicion) 
+            string query = @"INSERT INTO Condicion (idUsuario,nombreCondicion) 
                             VALUES (@idUsuario,@nombreCondicion)";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idUsuario", c.IdUsuario);
@@ -30,7 +30,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Update(Condicion c)
         {
-            string query = @"UPDATE condicion SET 
+            string query = @"UPDATE Condicion SET 
                 idUsuario=@idUsuario, nombreCondicion=@nombreCondicion, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCondicion = @idCondicion";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCondicion", c.IdCondicion);
@@ -48,7 +48,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Delete(Condicion c)
         {
-            string query = @"UPDATE condicion SET estado = 0, idUsuario=@idUsuario, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCondicion = @idCondicion";
+            string query = @"UPDATE Condicion SET estado = 0, idUsuario=@idUsuario, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCondicion = @idCondicion";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCondicion", c.IdCondicion);
             command.Parameters.AddWithValue("@idUsuario", c.IdUsuario);
@@ -65,7 +65,7 @@ namespace sisgesoriadao.Implementation
         public Condicion Get(byte Id)
         {
             Condicion c = null;
-            string query = @"SELECT idCondicion, idUsuario, nombreCondicion, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM condicion 
+            string query = @"SELECT idCondicion, idUsuario, nombreCondicion, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM Condicion 
                             WHERE idCondicion=@idCondicion";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCondicion", Id);
@@ -93,7 +93,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            string query = @"SELECT C.idCondicion AS ID, C.nombreCondicion AS Condicion,C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM condicion AS C
+            string query = @"SELECT C.idCondicion AS ID, C.nombreCondicion AS Condicion,C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM Condicion AS C
                                 INNER JOIN usuario AS U ON C.idUsuario = U.idUsuario
                                 WHERE C.estado = 1 ORDER BY 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -109,7 +109,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT C.idCondicion AS ID, C.nombreCondicion AS Condicion,C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM condicion AS C
+            string query = @"SELECT C.idCondicion AS ID, C.nombreCondicion AS Condicion,C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM Condicion AS C
                                 INNER JOIN usuario AS U ON C.idUsuario = U.idUsuario
                                 WHERE (C.nombreCondicion LIKE @search) 
                                 AND C.estado = 1 AND C.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
@@ -129,7 +129,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectForComboBox()
         {
-            string query = @"SELECT idCondicion, nombreCondicion FROM condicion WHERE estado = 1";
+            string query = @"SELECT idCondicion, nombreCondicion FROM Condicion WHERE estado = 1";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -145,7 +145,7 @@ namespace sisgesoriadao.Implementation
         public string SelectGroupConcatIDForComboBox()
         {
             string groupConcatIDs = null;
-            string query = @"SELECT group_concat(idCondicion) AS idCondiciones FROM condicion WHERE estado = 1";
+            string query = @"SELECT group_concat(idCondicion) AS idCondiciones FROM Condicion WHERE estado = 1";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {

@@ -18,7 +18,7 @@ namespace sisgesoriadao.Implementation
         public Caja Get(int Id)
         {
             Caja c = null;
-            string query = @"SELECT idCaja, idSucursal, idUsuario, IFNULL(idUsuarioReceptor,'0'), estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM caja WHERE idCaja = @idCaja";
+            string query = @"SELECT idCaja, idSucursal, idUsuario, IFNULL(idUsuarioReceptor,'0'), estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM Caja WHERE idCaja = @idCaja";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCaja", Id);
             try
@@ -48,7 +48,7 @@ namespace sisgesoriadao.Implementation
         public Caja GetByBranch()
         {
             Caja c = null;
-            string query = @"SELECT MAX(idCaja), idSucursal, idUsuario, IFNULL(idUsuarioReceptor,'0'), estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM caja WHERE idSucursal = @idSucursal AND estado = 1";
+            string query = @"SELECT MAX(idCaja), idSucursal, idUsuario, IFNULL(idUsuarioReceptor,'0'), estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM Caja WHERE idSucursal = @idSucursal AND estado = 1";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idSucursal", Session.Sucursal_IdSucursal);
             try
@@ -81,13 +81,13 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            string query = @"SELECT C.idCaja AS ID, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Responsable, IFNULL(U2.nombreUsuario,'-') AS 'Recepcionado por', IF(C.Estado=1,'Pendiente',IF(C.Estado=2,'Cerrado','Recepcionado')) AS Estado, C.fechaActualizacion AS 'Fecha de Cierre o Recepcion', SUM(MP.montoUSD) AS 'Ingresos USD', SUM(MP.montoBOB) AS 'Ingresos Bs', C.fechaRegistro AS 'Fecha de Apertura' FROM caja C
-                            INNER JOIN sucursal S ON C.idSucursal = S.idSucursal
-                            INNER JOIN usuario U ON C.idUsuario = U.idUsuario
-                            LEFT JOIN usuario U2 ON C.idUsuarioReceptor = U2.idUsuario
-                            INNER JOIN detalle_caja DC ON C.idCaja = DC.idCaja
-                            INNER JOIN metodo_pago MP ON DC.idMetodoPago = MP.idMetodoPago
-                            INNER JOIN venta V ON V.idVenta = MP.idVenta
+            string query = @"SELECT C.idCaja AS ID, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Responsable, IFNULL(U2.nombreUsuario,'-') AS 'Recepcionado por', IF(C.Estado=1,'Pendiente',IF(C.Estado=2,'Cerrado','Recepcionado')) AS Estado, C.fechaActualizacion AS 'Fecha de Cierre o Recepcion', SUM(MP.montoUSD) AS 'Ingresos USD', SUM(MP.montoBOB) AS 'Ingresos Bs', C.fechaRegistro AS 'Fecha de Apertura' FROM Caja C
+                            INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal
+                            INNER JOIN Usuario U ON C.idUsuario = U.idUsuario
+                            LEFT JOIN Usuario U2 ON C.idUsuarioReceptor = U2.idUsuario
+                            INNER JOIN Detalle_Caja DC ON C.idCaja = DC.idCaja
+                            INNER JOIN Metodo_Pago MP ON DC.idMetodoPago = MP.idMetodoPago
+                            INNER JOIN Venta V ON V.idVenta = MP.idVenta
                             WHERE C.estado = 2 AND V.estado = 1
                             GROUP BY 1
                             ORDER BY 1 DESC
@@ -104,20 +104,20 @@ namespace sisgesoriadao.Implementation
             }
         }
 
-        public DataTable SelectDetails(Caja caja)
+        public DataTable SelectDetails(Caja Caja)
         {
-            string query = @"SELECT U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT(DISTINCT'- ',P.nombreProducto,' ',P.codigoSublote SEPARATOR ' \n'),')') AS Detalle, IF(MP.tipo = 1,'Efectivo',IF(MP.tipo = 2,'Transferencia','Tarjeta')) AS Tipo, IFNULL(MP.montoUSD,0) AS '$us', IFNULL(MP.montoBOB,0) AS 'Bs', V.fechaRegistro AS 'Fecha de Registro' FROM caja C
-                            INNER JOIN detalle_caja DC ON C.idCaja = DC.idCaja
-                            INNER JOIN metodo_pago MP ON DC.idMetodoPago = MP.idMetodoPago
-                            INNER JOIN venta V ON MP.idVenta = V.idVenta
-                            INNER JOIN detalle_venta DV ON V.idVenta = DV.idVenta
-                            INNER JOIN usuario U ON V.idUsuario = U.idUsuario
-                            INNER JOIN producto P ON DV.idProducto = P.idProducto
+            string query = @"SELECT U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT(DISTINCT'- ',P.nombreProducto,' ',P.codigoSublote SEPARATOR ' \n'),')') AS Detalle, IF(MP.tipo = 1,'Efectivo',IF(MP.tipo = 2,'Transferencia','Tarjeta')) AS Tipo, IFNULL(MP.montoUSD,0) AS '$us', IFNULL(MP.montoBOB,0) AS 'Bs', V.fechaRegistro AS 'Fecha de Registro' FROM Caja C
+                            INNER JOIN Detalle_Caja DC ON C.idCaja = DC.idCaja
+                            INNER JOIN Metodo_Pago MP ON DC.idMetodoPago = MP.idMetodoPago
+                            INNER JOIN Venta V ON MP.idVenta = V.idVenta
+                            INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
+                            INNER JOIN Usuario U ON V.idUsuario = U.idUsuario
+                            INNER JOIN Producto P ON DV.idProducto = P.idProducto
                             WHERE C.idCaja = @idCaja
                             GROUP BY V.idVenta, MP.tipo, MP.idMetodoPago
                             ORDER BY 6 DESC";
             MySqlCommand command = CreateBasicCommand(query);
-            command.Parameters.AddWithValue("@idCaja", caja.IdCaja);
+            command.Parameters.AddWithValue("@idCaja", Caja.IdCaja);
             try
             {
                 return ExecuteDataTableCommand(command);
@@ -135,12 +135,12 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectLikeByCashTypeAndUsers(string tipoCajas, string idUsuarios, DateTime fechaInicio, DateTime fechaFin)
         {
-            string query = @"SELECT C.idCaja AS ID, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Responsable, IFNULL(U2.nombreUsuario,'-') AS 'Recepcionado por', IF(C.Estado=1,'Pendiente',IF(C.Estado=2,'Cerrado','Recepcionado')) AS Estado, C.fechaActualizacion AS 'Fecha de Cierre o Recepcion', SUM(MP.montoUSD) AS 'Ingresos USD', SUM(MP.montoBOB) AS 'Ingresos Bs', C.fechaRegistro AS 'Fecha de Apertura' FROM caja C
-                            INNER JOIN sucursal S ON C.idSucursal = S.idSucursal
-                            INNER JOIN usuario U ON C.idUsuario = U.idUsuario
-                            LEFT JOIN usuario U2 ON C.idUsuarioReceptor = U2.idUsuario
-                            INNER JOIN detalle_caja DC ON C.idCaja = DC.idCaja
-                            INNER JOIN metodo_pago MP ON DC.idMetodoPago = MP.idMetodoPago
+            string query = @"SELECT C.idCaja AS ID, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Responsable, IFNULL(U2.nombreUsuario,'-') AS 'Recepcionado por', IF(C.Estado=1,'Pendiente',IF(C.Estado=2,'Cerrado','Recepcionado')) AS Estado, C.fechaActualizacion AS 'Fecha de Cierre o Recepcion', SUM(MP.montoUSD) AS 'Ingresos USD', SUM(MP.montoBOB) AS 'Ingresos Bs', C.fechaRegistro AS 'Fecha de Apertura' FROM Caja C
+                            INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal
+                            INNER JOIN Usuario U ON C.idUsuario = U.idUsuario
+                            LEFT JOIN Usuario U2 ON C.idUsuarioReceptor = U2.idUsuario
+                            INNER JOIN Detalle_Caja DC ON C.idCaja = DC.idCaja
+                            INNER JOIN Metodo_Pago MP ON DC.idMetodoPago = MP.idMetodoPago
                             WHERE C.estado IN (" + tipoCajas + ") AND C.idUsuario IN (" + idUsuarios + @")
                             AND C.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY 1
@@ -161,14 +161,14 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectPendingCashFromBranch()
         {
-            string query = @"SELECT U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT(DISTINCT'- ',P.nombreProducto,' ',P.codigoSublote SEPARATOR ' \n'),')') AS Detalle, IF(MP.tipo = 1,'Efectivo',IF(MP.tipo = 2,'Transferencia','Tarjeta')) AS Tipo, IFNULL(MP.montoUSD,0) AS '$us', IFNULL(MP.montoBOB,0) AS 'Bs', V.fechaRegistro AS 'Fecha de Registro' FROM caja C
-                            INNER JOIN detalle_caja DC ON C.idCaja = DC.idCaja
-                            INNER JOIN metodo_pago MP ON DC.idMetodoPago = MP.idMetodoPago
-                            INNER JOIN venta V ON MP.idVenta = V.idVenta
-                            INNER JOIN detalle_venta DV ON V.idVenta = DV.idVenta
-                            INNER JOIN usuario U ON V.idUsuario = U.idUsuario
-                            INNER JOIN producto P ON DV.idProducto = P.idProducto
-                            WHERE C.idSucursal = @idSucursal AND C.idCaja = (SELECT MAX(idCaja) FROM caja WHERE idSucursal = @idSucursal)
+            string query = @"SELECT U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT(DISTINCT'- ',P.nombreProducto,' ',P.codigoSublote SEPARATOR ' \n'),')') AS Detalle, IF(MP.tipo = 1,'Efectivo',IF(MP.tipo = 2,'Transferencia','Tarjeta')) AS Tipo, IFNULL(MP.montoUSD,0) AS '$us', IFNULL(MP.montoBOB,0) AS 'Bs', V.fechaRegistro AS 'Fecha de Registro' FROM Caja C
+                            INNER JOIN Detalle_Caja DC ON C.idCaja = DC.idCaja
+                            INNER JOIN Metodo_pago MP ON DC.idMetodoPago = MP.idMetodoPago
+                            INNER JOIN Venta V ON MP.idVenta = V.idVenta
+                            INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
+                            INNER JOIN Usuario U ON V.idUsuario = U.idUsuario
+                            INNER JOIN Producto P ON DV.idProducto = P.idProducto
+                            WHERE C.idSucursal = @idSucursal AND C.idCaja = (SELECT MAX(idCaja) FROM Caja WHERE idSucursal = @idSucursal)
                             GROUP BY V.idVenta, MP.tipo, MP.idMetodoPago
                             ORDER BY 6 DESC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -185,7 +185,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Update(Caja c)
         {
-            string query = @"UPDATE caja SET 
+            string query = @"UPDATE Caja SET 
                 idUsuarioReceptor = @idUsuarioReceptor, estado = 3, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCaja = @idCaja";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idUsuarioReceptor", Session.IdUsuario);
@@ -215,12 +215,12 @@ namespace sisgesoriadao.Implementation
             try
             {
                 //INSERCION DE NUEVA TRANSFERENCIA.
-                command.CommandText = @"UPDATE caja SET estado = 2, idUsuario = @idUsuario, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCaja = @idCaja";
+                command.CommandText = @"UPDATE Caja SET estado = 2, idUsuario = @idUsuario, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCaja = @idCaja";
                 command.Parameters.AddWithValue("@idUsuario", Session.IdUsuario);
                 command.Parameters.AddWithValue("@idCaja", c.IdCaja);
                 command.ExecuteNonQuery();
 
-                command.CommandText = @"INSERT INTO caja (idSucursal,idUsuario) 
+                command.CommandText = @"INSERT INTO Caja (idSucursal,idUsuario) 
                                         VALUES (@idSucursal,@idUsuario_Twice)";
                 command.Parameters.AddWithValue("@idSucursal", Session.Sucursal_IdSucursal);
                 command.Parameters.AddWithValue("@idUsuario_Twice", Session.IdUsuario);

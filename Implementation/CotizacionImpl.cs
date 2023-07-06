@@ -11,7 +11,7 @@ namespace sisgesoriadao.Implementation
 {
     public class CotizacionImpl : DataBase, ICotizacion
     {
-        public string InsertTransaction(List<Producto> ListaProductos, Cotizacion cotizacion)
+        public string InsertTransaction(List<Producto> ListaProductos, Cotizacion Cotizacion)
         {
             MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
             connection.Open();
@@ -25,29 +25,29 @@ namespace sisgesoriadao.Implementation
             try
             {
                 //AÑADIENDO NUEVA COTIZACION.
-                command.CommandText = @"INSERT INTO cotizacion (idUsuario,idSucursal,nombreCliente,nombreEmpresa,nit,direccion,correo,telefono,tiempoEntrega)
+                command.CommandText = @"INSERT INTO Cotizacion (idUsuario,idSucursal,nombreCliente,nombreEmpresa,nit,direccion,correo,telefono,tiempoEntrega)
                                         VALUES (@idUsuario,@idSucursal,@nombreCliente,@nombreEmpresa,@nit,@direccion,@correo,@telefono,@tiempoEntrega)";
                 command.Parameters.AddWithValue("@idUsuario", Session.IdUsuario);
                 command.Parameters.AddWithValue("@idSucursal", Session.Sucursal_IdSucursal);
-                command.Parameters.AddWithValue("@nombreCliente", cotizacion.NombreCliente);
-                command.Parameters.AddWithValue("@nombreEmpresa", cotizacion.NombreEmpresa);
-                command.Parameters.AddWithValue("@nit", cotizacion.Nit);
-                command.Parameters.AddWithValue("@direccion", cotizacion.Direccion);
-                command.Parameters.AddWithValue("@correo", cotizacion.Correo);
-                command.Parameters.AddWithValue("@telefono", cotizacion.Telefono);
-                command.Parameters.AddWithValue("@tiempoEntrega", cotizacion.TiempoEntrega);
+                command.Parameters.AddWithValue("@nombreCliente", Cotizacion.NombreCliente);
+                command.Parameters.AddWithValue("@nombreEmpresa", Cotizacion.NombreEmpresa);
+                command.Parameters.AddWithValue("@nit", Cotizacion.Nit);
+                command.Parameters.AddWithValue("@direccion", Cotizacion.Direccion);
+                command.Parameters.AddWithValue("@correo", Cotizacion.Correo);
+                command.Parameters.AddWithValue("@telefono", Cotizacion.Telefono);
+                command.Parameters.AddWithValue("@tiempoEntrega", Cotizacion.TiempoEntrega);
                 command.ExecuteNonQuery();
-                foreach (var producto in ListaProductos)
+                foreach (var Producto in ListaProductos)
                 {
                     //LIMPIEZA DE PARÁMETROS YA UTILIZADOS EN EL CICLO ANTERIOR PARA PROSEGUIR, CASO CONTRARIO LANZA ERROR.
                     command.Parameters.Clear();
                     //REGISTRO DEL DETALLE DE LA COTIZACION.
-                    command.CommandText = @"INSERT INTO detalle_cotizacion (idCotizacion,idProducto,cotizacionUSD,cotizacionBOB) 
-                                VALUES ((SELECT MAX(idCotizacion) FROM cotizacion WHERE idSucursal = @Session_idSucursal),@idProducto,@cotizacionUSD,@cotizacionBOB)";
+                    command.CommandText = @"INSERT INTO Detalle_Cotizacion (idCotizacion,idProducto,CotizacionUSD,CotizacionBOB) 
+                                VALUES ((SELECT MAX(idCotizacion) FROM Cotizacion WHERE idSucursal = @Session_idSucursal),@idProducto,@CotizacionUSD,@CotizacionBOB)";
                     command.Parameters.AddWithValue("@Session_idSucursal", Session.Sucursal_IdSucursal);
-                    command.Parameters.AddWithValue("@idProducto", producto.IdProducto);
-                    command.Parameters.AddWithValue("@cotizacionUSD", producto.PrecioVentaUSD);
-                    command.Parameters.AddWithValue("@cotizacionBOB", producto.PrecioVentaBOB);
+                    command.Parameters.AddWithValue("@idProducto", Producto.IdProducto);
+                    command.Parameters.AddWithValue("@CotizacionUSD", Producto.PrecioVentaUSD);
+                    command.Parameters.AddWithValue("@CotizacionBOB", Producto.PrecioVentaBOB);
                     command.ExecuteNonQuery();
                 }
                 myTrans.Commit();
@@ -80,7 +80,7 @@ namespace sisgesoriadao.Implementation
         public Cotizacion Get(int id)
         {
             Cotizacion c = null;
-            string query = @"SELECT idCotizacion, idUsuario, idSucursal, nombreCliente, nombreEmpresa, nit, direccion, correo, telefono, tiempoEntrega, fechaRegistro FROM cotizacion 
+            string query = @"SELECT idCotizacion, idUsuario, idSucursal, nombreCliente, nombreEmpresa, nit, direccion, correo, telefono, tiempoEntrega, fechaRegistro FROM Cotizacion 
                             WHERE idCotizacion=@idCotizacion";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCotizacion", id);
@@ -117,10 +117,10 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            string query = @"SELECT C.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCliente AS Cliente, C.nombreEmpresa AS Empresa, C.nit AS NIT, C.direccion AS Direccion, C.correo AS Correo, C.telefono AS Telefono, COUNT(DC.idCotizacion) AS 'Productos cotizados',C.fechaRegistro AS 'Fecha de Registro', C.tiempoEntrega AS 'Fecha de Entrega' FROM cotizacion C
-                            INNER JOIN usuario U ON C.idUsuario = U.idUsuario
-                            INNER JOIN sucursal S ON C.idSucursal = S.idSucursal
-                            INNER JOIN detalle_cotizacion DC ON C.idCotizacion = DC.idCotizacion
+            string query = @"SELECT C.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCliente AS Cliente, C.nombreEmpresa AS Empresa, C.nit AS NIT, C.direccion AS Direccion, C.correo AS Correo, C.telefono AS Telefono, COUNT(DC.idCotizacion) AS 'Productos cotizados',C.fechaRegistro AS 'Fecha de Registro', C.tiempoEntrega AS 'Fecha de Entrega' FROM Cotizacion C
+                            INNER JOIN Usuario U ON C.idUsuario = U.idUsuario
+                            INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal
+                            INNER JOIN Detalle_Cotizacion DC ON C.idCotizacion = DC.idCotizacion
                             GROUP BY C.idCotizacion
                             ORDER BY 1 DESC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -136,10 +136,10 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime fechaInicio, DateTime fechaFin)
         {
-            string query = @"SELECT C.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCliente AS Cliente, C.nombreEmpresa AS Empresa, C.nit AS NIT, C.direccion AS Direccion, C.correo AS Correo, C.telefono AS Telefono, COUNT(DC.idCotizacion) AS 'Productos cotizados',C.fechaRegistro AS 'Fecha de Registro', C.tiempoEntrega AS 'Fecha de Entrega' FROM cotizacion C
-                            INNER JOIN usuario U ON C.idUsuario = U.idUsuario
-                            INNER JOIN sucursal S ON C.idSucursal = S.idSucursal
-                            INNER JOIN detalle_cotizacion DC ON C.idCotizacion = DC.idCotizacion
+            string query = @"SELECT C.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCliente AS Cliente, C.nombreEmpresa AS Empresa, C.nit AS NIT, C.direccion AS Direccion, C.correo AS Correo, C.telefono AS Telefono, COUNT(DC.idCotizacion) AS 'Productos cotizados',C.fechaRegistro AS 'Fecha de Registro', C.tiempoEntrega AS 'Fecha de Entrega' FROM Cotizacion C
+                            INNER JOIN Usuario U ON C.idUsuario = U.idUsuario
+                            INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal
+                            INNER JOIN Detalle_Cotizacion DC ON C.idCotizacion = DC.idCotizacion
                             WHERE (U.nombreUsuario LIKE @search OR S.nombreSucursal LIKE @search OR C.idCotizacion LIKE @search OR C.nombreCliente LIKE @search OR C.nombreEmpresa LIKE @search OR C.nit LIKE @search OR C.telefono LIKE @search)
                             AND C.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY C.idCotizacion
@@ -160,10 +160,10 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectDetails(int idCotizacion)
         {
-            string query = @"SELECT DC.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, P.nombreProducto AS Producto, DC.cotizacionUSD AS 'Cotizacion USD', DC.cotizacionBOB AS 'Cotizacion BOB', C.fechaRegistro AS 'Fecha de Registro' FROM detalle_cotizacion DC
-                            INNER JOIN producto P ON DC.idProducto = P.idProducto
-                            INNER JOIN cotizacion C ON DC.idCotizacion = C.idCotizacion 
-                            INNER JOIN sucursal S ON C.idSucursal = S.idSucursal
+            string query = @"SELECT DC.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, P.nombreProducto AS Producto, DC.CotizacionUSD AS 'Cotizacion USD', DC.CotizacionBOB AS 'Cotizacion BOB', C.fechaRegistro AS 'Fecha de Registro' FROM Detalle_Cotizacion DC
+                            INNER JOIN Producto P ON DC.idProducto = P.idProducto
+                            INNER JOIN Cotizacion C ON DC.idCotizacion = C.idCotizacion 
+                            INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal
                             WHERE DC.idCotizacion = @idCotizacion
                             ORDER BY 1 DESC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -185,8 +185,8 @@ namespace sisgesoriadao.Implementation
         public Cotizacion GetLastFromBranch()
         {
             Cotizacion c = null;
-            string query = @"SELECT idCotizacion, idUsuario, idSucursal, nombreCliente, nombreEmpresa, nit, direccion, correo, telefono, tiempoEntrega, fechaRegistro FROM cotizacion 
-                            WHERE idSucursal = @idSucursal AND idCotizacion = (SELECT MAX(idCotizacion) FROM cotizacion WHERE idSucursal = @idSucursal) LIMIT 1";
+            string query = @"SELECT idCotizacion, idUsuario, idSucursal, nombreCliente, nombreEmpresa, nit, direccion, correo, telefono, tiempoEntrega, fechaRegistro FROM Cotizacion 
+                            WHERE idSucursal = @idSucursal AND idCotizacion = (SELECT MAX(idCotizacion) FROM Cotizacion WHERE idSucursal = @idSucursal) LIMIT 1";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idSucursal", Session.Sucursal_IdSucursal);
             try

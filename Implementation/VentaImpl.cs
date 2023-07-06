@@ -11,7 +11,7 @@ namespace sisgesoriadao.Implementation
 {
     public class VentaImpl : DataBase, IVenta
     {
-        public string InsertTransaction(Venta venta, List<Producto> ListaProductos, List<double> ListaDescuentosPorcentaje, List<byte> ListaGarantias, List<MetodoPago> ListaMetodosPago, Cliente cliente  )
+        public string InsertTransaction(Venta Venta, List<Producto> ListaProductos, List<double> ListaDescuentosPorcentaje, List<byte> ListaGarantias, List<MetodoPago> ListaMetodosPago, Cliente Cliente  )
         {
             MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
             connection.Open();
@@ -25,22 +25,22 @@ namespace sisgesoriadao.Implementation
             try
             {
                 //REGISTRO DE LA VENTA.
-                command.CommandText = @"INSERT INTO venta (idCliente,idUsuario,idSucursal,totalUSD,totalBOB,saldoUSD,saldoBOB,observaciones) 
+                command.CommandText = @"INSERT INTO Venta (idCliente,idUsuario,idSucursal,totalUSD,totalBOB,saldoUSD,saldoBOB,observaciones) 
                             VALUES(@idCliente,@idUsuario,@idSucursal,@totalUSD,@totalBOB,@saldoUSD,@saldoBOB,@observaciones)";
-                command.Parameters.AddWithValue("@idCliente", venta.IdCliente);
-                command.Parameters.AddWithValue("@idUsuario", venta.IdUsuario);
-                command.Parameters.AddWithValue("@idSucursal", venta.IdSucursal);
-                command.Parameters.AddWithValue("@totalUSD", venta.TotalUSD);
-                command.Parameters.AddWithValue("@totalBOB", venta.TotalBOB);
-                command.Parameters.AddWithValue("@saldoUSD", venta.SaldoUSD);
-                command.Parameters.AddWithValue("@saldoBOB", venta.SaldoBOB);
-                command.Parameters.AddWithValue("@observaciones", venta.Observaciones);
+                command.Parameters.AddWithValue("@idCliente", Venta.IdCliente);
+                command.Parameters.AddWithValue("@idUsuario", Venta.IdUsuario);
+                command.Parameters.AddWithValue("@idSucursal", Venta.IdSucursal);
+                command.Parameters.AddWithValue("@totalUSD", Venta.TotalUSD);
+                command.Parameters.AddWithValue("@totalBOB", Venta.TotalBOB);
+                command.Parameters.AddWithValue("@saldoUSD", Venta.SaldoUSD);
+                command.Parameters.AddWithValue("@saldoBOB", Venta.SaldoBOB);
+                command.Parameters.AddWithValue("@observaciones", Venta.Observaciones);
                 command.ExecuteNonQuery();
                 //REGISTRO DE LOS PRODUCTOS, ACTUALIZACIÓN DEL ESTADO DE LOS PRODUCTOS E INSERCIÓN EN HISTORIAL.
                 for (int i = 0; i < ListaProductos.Count; i++)
                 {
-                    command.CommandText = @"INSERT INTO detalle_venta (idVenta,idProducto,cantidad,precioUSD,precioBOB,descuento,garantia)
-                            VALUES((SELECT MAX(idVenta) FROM venta),@idProducto,@cantidad,@precioUSD,@precioBOB,@descuento,@garantia)";
+                    command.CommandText = @"INSERT INTO Detalle_Venta (idVenta,idProducto,cantidad,precioUSD,precioBOB,descuento,garantia)
+                            VALUES((SELECT MAX(idVenta) FROM Venta),@idProducto,@cantidad,@precioUSD,@precioBOB,@descuento,@garantia)";
                     command.Parameters.AddWithValue("@idProducto", ListaProductos[i].IdProducto);
                     command.Parameters.AddWithValue("@cantidad", 1);
                     command.Parameters.AddWithValue("@precioUSD", ListaProductos[i].PrecioVentaUSD);
@@ -49,14 +49,14 @@ namespace sisgesoriadao.Implementation
                     command.Parameters.AddWithValue("@garantia", ListaGarantias[i]);
                     command.ExecuteNonQuery();
 
-                    command.CommandText = "UPDATE producto SET estado = 2, fechaActualizacion = CURRENT_TIMESTAMP WHERE idProducto = @idProductoTwice";
+                    command.CommandText = "UPDATE Producto SET estado = 2, fechaActualizacion = CURRENT_TIMESTAMP WHERE idProducto = @idProductoTwice";
                     command.Parameters.AddWithValue("@idProductoTwice", ListaProductos[i].IdProducto);
                     command.ExecuteNonQuery();
 
-                    command.CommandText = @"INSERT INTO historial (idProducto,detalle) VALUES
+                    command.CommandText = @"INSERT INTO Historial (idProducto,detalle) VALUES
                                 (@idProductoThree,@detalle)";
                     command.Parameters.AddWithValue("@idProductoThree", ListaProductos[i].IdProducto);
-                    command.Parameters.AddWithValue("@detalle", "PRODUCTO VENDIDO POR EL USUARIO: " + Session.NombreUsuario + " AL CLIENTE: " + cliente.Nombre);
+                    command.Parameters.AddWithValue("@detalle", "PRODUCTO VENDIDO POR EL USUARIO: " + Session.NombreUsuario + " AL CLIENTE: " + Cliente.Nombre);
                     command.ExecuteNonQuery();
 
                     command.Parameters.Clear();
@@ -66,16 +66,16 @@ namespace sisgesoriadao.Implementation
                     foreach (var item in ListaMetodosPago)
                     {
                         //REGISTRO DEL DETALLE DE VENTA.
-                        command.CommandText = @"INSERT INTO metodo_pago (idVenta,montoUSD,montoBOB,tipo)
-                            VALUES((SELECT MAX(idVenta) FROM venta WHERE idSucursal = @Session_idSucursal),@montoUSD,@montoBOB,@tipo)";
+                        command.CommandText = @"INSERT INTO Metodo_Pago (idVenta,montoUSD,montoBOB,tipo)
+                            VALUES((SELECT MAX(idVenta) FROM Venta WHERE idSucursal = @Session_idSucursal),@montoUSD,@montoBOB,@tipo)";
                         command.Parameters.AddWithValue("@Session_idSucursal", Session.Sucursal_IdSucursal);
                         command.Parameters.AddWithValue("@montoUSD", item.MontoUSD);
                         command.Parameters.AddWithValue("@montoBOB", item.MontoBOB);
                         command.Parameters.AddWithValue("@tipo", item.Tipo);
                         command.ExecuteNonQuery();
                         //REGISTRO DEL DETALLE DE CAJA.
-                        command.CommandText = @"INSERT INTO detalle_caja (idCaja,idMetodoPago)
-                            VALUES((SELECT MAX(idCaja) FROM caja WHERE idSucursal = @Twice_Session_idSucursal),LAST_INSERT_ID())";
+                        command.CommandText = @"INSERT INTO Detalle_Caja (idCaja,idMetodoPago)
+                            VALUES((SELECT MAX(idCaja) FROM Caja WHERE idSucursal = @Twice_Session_idSucursal),LAST_INSERT_ID())";
                         command.Parameters.AddWithValue("@Twice_Session_idSucursal", Session.Sucursal_IdSucursal);
                         command.ExecuteNonQuery();
                         command.Parameters.Clear();
@@ -130,7 +130,7 @@ namespace sisgesoriadao.Implementation
         public string GetTodaySales(DateTime FechaHoy)
         {
             string numeroVentasdelDia = null;
-            string query = @"SELECT COUNT(idVenta) FROM venta WHERE idSucursal = @SessionIdSucursal AND estado = 1
+            string query = @"SELECT COUNT(idVenta) FROM Venta WHERE idSucursal = @SessionIdSucursal AND estado = 1
                                 AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@FechaInicio", FechaHoy.ToString("yyyy-MM-dd"));
@@ -155,11 +155,11 @@ namespace sisgesoriadao.Implementation
         public (double, double) GetCashAmounts()
         {
             double CajaUSD = 0, CajaBOB = 0;
-            string query = @"SELECT IFNULL(SUM(MP.montoUSD),0), IFNULL(SUM(MP.montoBOB),0) FROM caja C
-                                INNER JOIN detalle_caja DC ON C.idCaja = DC.idCaja
-                                INNER JOIN metodo_pago MP ON DC.idMetodoPago = MP.idMetodoPago
-                                INNER JOIN venta V ON MP.idVenta = V.idVenta
-                                WHERE C.idSucursal = @SessionIdSucursal AND V.estado = 1 AND C.idCaja = (SELECT MAX(idCaja) FROM caja WHERE idSucursal = @SessionIdSucursal)";
+            string query = @"SELECT IFNULL(SUM(MP.montoUSD),0), IFNULL(SUM(MP.montoBOB),0) FROM Caja C
+                                INNER JOIN Detalle_Caja DC ON C.idCaja = DC.idCaja
+                                INNER JOIN Metodo_Pago MP ON DC.idMetodoPago = MP.idMetodoPago
+                                INNER JOIN Venta V ON MP.idVenta = V.idVenta
+                                WHERE C.idSucursal = @SessionIdSucursal AND V.estado = 1 AND C.idCaja = (SELECT MAX(idCaja) FROM Caja WHERE idSucursal = @SessionIdSucursal)";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
             try
@@ -182,8 +182,8 @@ namespace sisgesoriadao.Implementation
         public string GetTodayProducts(DateTime FechaHoy)
         {
             string numeroProductosdelDia = null;
-            string query = @"SELECT COUNT(DV.idProducto) FROM venta V
-                            INNER JOIN detalle_venta DV ON V.idVenta = DV.idVenta
+            string query = @"SELECT COUNT(DV.idProducto) FROM Venta V
+                            INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
                             WHERE V.idSucursal = @SessionIdSucursal AND V.estado = 1
                             AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin";
             MySqlCommand command = CreateBasicCommand(query);
@@ -208,10 +208,10 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectSalesWithPendingBalanceFromBranch()
         {
-            string query = @"SELECT V.idVenta, U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT('- ',P.nombreProducto SEPARATOR ' '),')') AS Detalle, saldoUSD AS 'Saldo $us', saldoBOB AS 'Saldo Bs' FROM venta V
-                            INNER JOIN usuario U ON V.idUsuario = U.idUsuario
-                            INNER JOIN detalle_venta DV ON V.idVenta = DV.idVenta
-                            INNER JOIN producto P ON DV.idProducto = P.idProducto
+            string query = @"SELECT V.idVenta, U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT('- ',P.nombreProducto SEPARATOR ' '),')') AS Detalle, saldoUSD AS 'Saldo $us', saldoBOB AS 'Saldo Bs' FROM Venta V
+                            INNER JOIN Usuario U ON V.idUsuario = U.idUsuario
+                            INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
+                            INNER JOIN Producto P ON DV.idProducto = P.idProducto
                             WHERE V.saldoUSD > 1 AND V.idSucursal = @SessionIdSucursal AND V.estado = 1
                             GROUP BY V.idVenta ORDER BY 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -231,12 +231,12 @@ namespace sisgesoriadao.Implementation
         {
             string query = @"SELECT V.idVenta AS 'ID', V.fechaRegistro AS Fecha, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, 
                             V.idVenta AS 'Nro Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, P.costoUSD AS 'P Costo', DV.precioUSD AS 'P Venta', (DV.precioUSD - P.costoUSD) AS Utilidad FROM venta V
-                            INNER JOIN sucursal S ON S.idSucursal = V.idSucursal
-                            INNER JOIN usuario U ON U.idUsuario = V.idUsuario
-                            INNER JOIN detalle_venta DV ON DV.idVenta = V.idVenta
-                            INNER JOIN producto P ON P.idProducto = DV.idProducto
-                            INNER JOIN categoria C ON C.idCategoria = P.idCategoria
+                            C.nombreCategoria AS Categoria, P.costoUSD AS 'P Costo', DV.precioUSD AS 'P Venta', (DV.precioUSD - P.costoUSD) AS Utilidad FROM Venta V
+                            INNER JOIN Sucursal S ON S.idSucursal = V.idSucursal
+                            INNER JOIN Usuario U ON U.idUsuario = V.idUsuario
+                            INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN Producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
                             WHERE V.estado = 1 AND V.saldoUSD < 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY P.idProducto
@@ -258,12 +258,12 @@ namespace sisgesoriadao.Implementation
         {
             string query = @"SELECT V.fechaRegistro AS Fecha, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, 
                             V.idVenta AS 'Nro Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Precio USD', DV.precioBOB AS 'Precio Bs' FROM venta V
-                            INNER JOIN sucursal S ON S.idSucursal = V.idSucursal
-                            INNER JOIN usuario U ON U.idUsuario = V.idUsuario
-                            INNER JOIN detalle_venta DV ON DV.idVenta = V.idVenta
-                            INNER JOIN producto P ON P.idProducto = DV.idProducto
-                            INNER JOIN categoria C ON C.idCategoria = P.idCategoria
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Precio USD', DV.precioBOB AS 'Precio Bs' FROM Venta V
+                            INNER JOIN Sucursal S ON S.idSucursal = V.idSucursal
+                            INNER JOIN Usuario U ON U.idUsuario = V.idUsuario
+                            INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN Producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
                             WHERE V.estado = 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY P.idProducto
@@ -284,11 +284,11 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLikeReporteVentasLocales(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI)
         {
             string query = @"SELECT V.idVenta AS 'ID', V.fechaRegistro AS Fecha, CL.nombre AS Cliente, V.idVenta AS 'Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM venta V
-                            INNER JOIN cliente CL ON CL.idCliente = V.idCliente
-                            INNER JOIN detalle_venta DV ON DV.idVenta = V.idVenta
-                            INNER JOIN producto P ON P.idProducto = DV.idProducto
-                            INNER JOIN categoria C ON C.idCategoria = P.idCategoria
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM Venta V
+                            INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
+                            INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN Producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
                             WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto OR CL.nombre LIKE @clienteoci OR CL.numeroCI LIKE @clienteoci)
                             AND V.estado = 1 AND V.idSucursal = @SessionSucursal
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
@@ -313,11 +313,11 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLikeReporteVentasLocalesByID(int idVenta)
         {
             string query = @"SELECT V.idVenta AS 'ID', V.fechaRegistro AS Fecha, CL.nombre AS Cliente, V.idVenta AS 'Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM venta V
-                            INNER JOIN cliente CL ON CL.idCliente = V.idCliente
-                            INNER JOIN detalle_venta DV ON DV.idVenta = V.idVenta
-                            INNER JOIN producto P ON P.idProducto = DV.idProducto
-                            INNER JOIN categoria C ON C.idCategoria = P.idCategoria
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM Venta V
+                            INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
+                            INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN Producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
                             WHERE V.estado = 1 AND V.idSucursal = @SessionSucursal AND V.idVenta = @idVenta
                             GROUP BY P.idProducto
                             ORDER BY 1 DESC";
@@ -343,13 +343,13 @@ namespace sisgesoriadao.Implementation
                 CONCAT(P.codigoSublote,' ',P.nombreProducto) AS Producto, P.identificador AS Detalle, DV.garantia AS Garantia, DV.cantidad AS Cantidad, P.precioVentaBOB AS Precio, DV.descuento AS 'Descuento Porcentaje', (P.precioVentaBOB - DV.precioBOB) AS 'Descuento Bs', DV.precioBOB AS 'Total Producto',
                 V.totalBOB AS Total, V.saldoBOB AS Saldo, V.observaciones AS Observaciones, DATE_FORMAT(V.fechaRegistro,'%d/%m/%Y') AS Fecha,
                 V.totalUSD AS Total2, V.saldoUSD AS Saldo2
-                FROM venta V
-                INNER JOIN cliente CL ON CL.idCliente = V.idCliente
-                INNER JOIN usuario U ON U.idUsuario = V.idUsuario
-                INNER JOIN empleado E ON E.idEmpleado = U.idEmpleado
-                INNER JOIN sucursal S ON S.idSucursal = V.idSucursal
-                INNER JOIN detalle_venta DV ON DV.idVenta = V.idVenta
-                INNER JOIN producto P ON P.idProducto = DV.idProducto
+                FROM Venta V
+                INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
+                INNER JOIN Usuario U ON U.idUsuario = V.idUsuario
+                INNER JOIN Empleado E ON E.idEmpleado = U.idEmpleado
+                INNER JOIN Sucursal S ON S.idSucursal = V.idSucursal
+                INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
+                INNER JOIN Producto P ON P.idProducto = DV.idProducto
                 WHERE V.idVenta = @idVenta";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idVenta", Session.IdVentaDetalle);
@@ -364,7 +364,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectSaleDetails2()
         {
-            string query = @"SELECT montoBOB AS 'Monto Bs', DATE_FORMAT(fechaRegistro,'%d/%m/%Y') AS Fecha FROM metodo_pago
+            string query = @"SELECT montoBOB AS 'Monto Bs', DATE_FORMAT(fechaRegistro,'%d/%m/%Y') AS Fecha FROM Metodo_Pago
                 WHERE idVenta = @idVenta";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idVenta", Session.IdVentaDetalle);
@@ -381,7 +381,7 @@ namespace sisgesoriadao.Implementation
         public int GetIDAfterInsert()
         {
             int idVenta = 0;
-            string query = @"SELECT MAX(idVenta) FROM venta WHERE idSucursal = @sucursalOrigen";
+            string query = @"SELECT MAX(idVenta) FROM Venta WHERE idSucursal = @sucursalOrigen";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@sucursalOrigen", Session.Sucursal_IdSucursal);
             try
@@ -402,7 +402,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectPaymentMethodsFromSale(int IdVenta)
         {
-            string query = @"SELECT idMetodoPago AS ID, montoUSD AS 'Monto USD', montoBOB AS 'Monto Bs', IF(Tipo = 1, 'EFECTIVO',IF(Tipo = 2, 'TRANSFERENCIA BANCARIA', 'TARJETA')) AS 'Metodo Pago', DATE_FORMAT(fechaRegistro,'%d/%m/%Y') AS Fecha FROM metodo_pago
+            string query = @"SELECT idMetodoPago AS ID, montoUSD AS 'Monto USD', montoBOB AS 'Monto Bs', IF(Tipo = 1, 'EFECTIVO',IF(Tipo = 2, 'TRANSFERENCIA BANCARIA', 'TARJETA')) AS 'Metodo Pago', DATE_FORMAT(fechaRegistro,'%d/%m/%Y') AS Fecha FROM Metodo_Pago
                             WHERE idVenta = @idVenta";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idVenta", IdVenta);
@@ -431,7 +431,7 @@ namespace sisgesoriadao.Implementation
             try
             {
                 //REGISTRO DEL METODO DE PAGO.
-                command.CommandText = @"INSERT INTO metodo_pago (idVenta,montoUSD,montoBOB,tipo)
+                command.CommandText = @"INSERT INTO Metodo_Pago (idVenta,montoUSD,montoBOB,tipo)
                             VALUES(@idVenta,@montoUSD,@montoBOB,@tipo)";
                 command.Parameters.AddWithValue("@idVenta",IdVenta);
                 command.Parameters.AddWithValue("@montoUSD", PagoUSD);
@@ -441,7 +441,7 @@ namespace sisgesoriadao.Implementation
 
                 //UPDATE DEL SALDO DE LA VENTA.
                 command.Parameters.Clear();
-                command.CommandText = @"UPDATE venta SET saldoUSD = saldoUSD - @montoUSD, saldoBOB = saldoBOB - @montoBOB
+                command.CommandText = @"UPDATE Venta SET saldoUSD = saldoUSD - @montoUSD, saldoBOB = saldoBOB - @montoBOB
                                         WHERE idVenta = @idVenta";
                 command.Parameters.AddWithValue("@montoUSD", PagoUSD);
                 command.Parameters.AddWithValue("@montoBOB", PagoBOB);
@@ -450,8 +450,8 @@ namespace sisgesoriadao.Implementation
 
                 //REGISTRO DEL MP EN LA CAJA.
                 command.Parameters.Clear();
-                command.CommandText = @"INSERT INTO detalle_caja (idCaja,idMetodoPago)
-                            VALUES((SELECT MAX(idCaja) FROM caja WHERE idSucursal = @Twice_Session_idSucursal),LAST_INSERT_ID())";
+                command.CommandText = @"INSERT INTO Detalle_Caja (idCaja,idMetodoPago)
+                            VALUES((SELECT MAX(idCaja) FROM Caja WHERE idSucursal = @Twice_Session_idSucursal),LAST_INSERT_ID())";
                 command.Parameters.AddWithValue("@Twice_Session_idSucursal", Session.Sucursal_IdSucursal);
                 command.ExecuteNonQuery();
 
@@ -494,15 +494,15 @@ namespace sisgesoriadao.Implementation
             {
 
                 //ELIMINANDO EL MP DE LA CAJA.
-                command.CommandText = @"DELETE FROM detalle_caja WHERE idMetodoPago = @idMetodoPago";
+                command.CommandText = @"DELETE FROM Detalle_Caja WHERE idMetodoPago = @idMetodoPago";
                 command.Parameters.AddWithValue("@idMetodoPago", IdMetodoPago);
                 command.ExecuteNonQuery();
                 //ELIMINACION DEL METODO DE PAGO.
-                command.CommandText = @"DELETE FROM metodo_pago WHERE idMetodoPago = @idMetodoPago_twice";
+                command.CommandText = @"DELETE FROM Metodo_Pago WHERE idMetodoPago = @idMetodoPago_twice";
                 command.Parameters.AddWithValue("@idMetodoPago_twice", IdMetodoPago);
                 command.ExecuteNonQuery();
                 //UPDATE DEL SALDO DE LA VENTA.
-                command.CommandText = @"UPDATE venta SET saldoUSD = saldoUSD + @montoUSD, saldoBOB = saldoBOB + @montoBOB
+                command.CommandText = @"UPDATE Venta SET saldoUSD = saldoUSD + @montoUSD, saldoBOB = saldoBOB + @montoBOB
                                         WHERE idVenta = @idVenta";
                 command.Parameters.AddWithValue("@montoUSD", MontoUSD);
                 command.Parameters.AddWithValue("@montoBOB", MontoBOB);
@@ -536,7 +536,7 @@ namespace sisgesoriadao.Implementation
         public byte GetEstado(int IdVenta)
         {
             byte estado = 0;
-            string query = @"SELECT estado FROM venta WHERE idVenta = @idVenta";
+            string query = @"SELECT estado FROM Venta WHERE idVenta = @idVenta";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idVenta", IdVenta);
             try
@@ -568,13 +568,13 @@ namespace sisgesoriadao.Implementation
             try
             {
                 //ELIMINANDO EL MP DE LA CAJA.
-                command.CommandText = @"UPDATE producto P
-                                        INNER JOIN detalle_venta DV ON DV.idProducto = P.idProducto
+                command.CommandText = @"UPDATE Producto P
+                                        INNER JOIN Detalle_Venta DV ON DV.idProducto = P.idProducto
                                         SET P.estado = 1 WHERE DV.idVenta = @idVenta";
                 command.Parameters.AddWithValue("@idVenta", IdVenta);
                 command.ExecuteNonQuery();
                 //ELIMINACION DEL METODO DE PAGO.
-                command.CommandText = @"UPDATE venta SET observaciones = @observaciones, estado = 0 WHERE idVenta = @idVentaTwice";
+                command.CommandText = @"UPDATE Venta SET observaciones = @observaciones, estado = 0 WHERE idVenta = @idVentaTwice";
                 command.Parameters.AddWithValue("@observaciones", Observacion);
                 command.Parameters.AddWithValue("@idVentaTwice", IdVenta);
                 command.ExecuteNonQuery();
@@ -606,11 +606,11 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLikeReporteVentasLocalesDELETED(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI)
         {
             string query = @"SELECT V.idVenta AS 'ID', V.fechaRegistro AS Fecha, CL.nombre AS Cliente, V.idVenta AS 'Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM venta V
-                            INNER JOIN cliente CL ON CL.idCliente = V.idCliente
-                            INNER JOIN detalle_venta DV ON DV.idVenta = V.idVenta
-                            INNER JOIN producto P ON P.idProducto = DV.idProducto
-                            INNER JOIN categoria C ON C.idCategoria = P.idCategoria
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM Venta V
+                            INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
+                            INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN Producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
                             WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto OR CL.nombre LIKE @clienteoci OR CL.numeroCI LIKE @clienteoci)
                             AND V.estado = 0 AND V.idSucursal = @SessionSucursal
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
@@ -635,11 +635,11 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLikeReporteVentasLocalesByIDDELETED(int idVenta)
         {
             string query = @"SELECT V.idVenta AS 'ID', V.fechaRegistro AS Fecha, CL.nombre AS Cliente, V.idVenta AS 'Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM venta V
-                            INNER JOIN cliente CL ON CL.idCliente = V.idCliente
-                            INNER JOIN detalle_venta DV ON DV.idVenta = V.idVenta
-                            INNER JOIN producto P ON P.idProducto = DV.idProducto
-                            INNER JOIN categoria C ON C.idCategoria = P.idCategoria
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM Venta V
+                            INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
+                            INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN Producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
                             WHERE V.estado = 0 AND V.idSucursal = @SessionSucursal AND V.idVenta = @idVenta
                             GROUP BY P.idProducto
                             ORDER BY 1 DESC";
@@ -677,10 +677,10 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectAllSalesWithPendingBalanceByCustomers()
         {
-            string query = @"SELECT V.idVenta, U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT('- ',P.nombreProducto SEPARATOR ' '),')') AS Detalle, saldoUSD AS 'Saldo $us', saldoBOB AS 'Saldo Bs' FROM venta V
-                            INNER JOIN usuario U ON V.idUsuario = U.idUsuario
-                            INNER JOIN detalle_venta DV ON V.idVenta = DV.idVenta
-                            INNER JOIN producto P ON DV.idProducto = P.idProducto
+            string query = @"SELECT V.idVenta, U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT('- ',P.nombreProducto SEPARATOR ' '),')') AS Detalle, saldoUSD AS 'Saldo $us', saldoBOB AS 'Saldo Bs' FROM Venta V
+                            INNER JOIN Usuario U ON V.idUsuario = U.idUsuario
+                            INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
+                            INNER JOIN Producto P ON DV.idProducto = P.idProducto
                             WHERE V.saldoUSD > 1 AND V.idSucursal = @SessionIdSucursal AND V.estado = 1 AND V.idCliente = @SessionIdCliente
                             GROUP BY V.idVenta ORDER BY 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);

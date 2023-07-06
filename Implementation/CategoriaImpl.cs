@@ -13,7 +13,7 @@ namespace sisgesoriadao.Implementation
     {
         public int Insert(Categoria c)
         {
-            string query = @"INSERT INTO categoria (idUsuario,nombreCategoria,garantia) 
+            string query = @"INSERT INTO Categoria (idUsuario,nombreCategoria,garantia) 
                             VALUES (@idUsuario,@nombreCategoria,@garantia)";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idUsuario", c.IdUsuario);
@@ -31,7 +31,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Update(Categoria c)
         {
-            string query = @"UPDATE categoria SET 
+            string query = @"UPDATE Categoria SET 
                 idUsuario=@idUsuario, nombreCategoria=@nombreCategoria, garantia=@garantia, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCategoria = @idCategoria";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCategoria", c.IdCategoria);
@@ -50,7 +50,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Delete(Categoria c)
         {
-            string query = @"UPDATE categoria SET estado = 0, idUsuario=@idUsuario, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCategoria = @idCategoria";
+            string query = @"UPDATE Categoria SET estado = 0, idUsuario=@idUsuario, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCategoria = @idCategoria";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCategoria", c.IdCategoria);
             command.Parameters.AddWithValue("@idUsuario", c.IdUsuario);
@@ -67,7 +67,7 @@ namespace sisgesoriadao.Implementation
         public Categoria Get(byte Id)
         {
             Categoria c = null;
-            string query = @"SELECT idCategoria, idUsuario, nombreCategoria, garantia, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM categoria 
+            string query = @"SELECT idCategoria, idUsuario, nombreCategoria, garantia, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM Categoria 
                             WHERE idCategoria=@idCategoria";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCategoria", Id);
@@ -97,7 +97,7 @@ namespace sisgesoriadao.Implementation
         
         public DataTable Select()
         {
-            string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.garantia AS Garantia,C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM categoria AS C
+            string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.garantia AS Garantia,C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM Categoria AS C
                                 INNER JOIN usuario AS U ON C.idUsuario = U.idUsuario
                                 WHERE C.estado = 1 ORDER BY 3 DESC, 2 ASC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -113,7 +113,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectForComboBox()
         {
-            string query = @"SELECT idCategoria, nombreCategoria FROM categoria WHERE estado = 1";
+            string query = @"SELECT idCategoria, nombreCategoria FROM Categoria WHERE estado = 1";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -127,8 +127,8 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.garantia AS Garantia, C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM categoria AS C
-                                INNER JOIN usuario AS U ON C.idUsuario = U.idUsuario
+            string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.garantia AS Garantia, C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM Categoria AS C
+                                INNER JOIN Usuario AS U ON C.idUsuario = U.idUsuario
                                 WHERE (C.nombreCategoria LIKE @search OR C.garantia LIKE @search) 
                                 AND C.estado = 1 AND C.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                                 ORDER BY 3 DESC, 2 ASC";
@@ -149,7 +149,7 @@ namespace sisgesoriadao.Implementation
         public string SelectGroupConcatIDForComboBox()
         {
             string groupConcatIDs = null;
-            string query = @"SELECT group_concat(idCategoria) AS idCategorias FROM categoria WHERE estado = 1";
+            string query = @"SELECT group_concat(idCategoria) AS idCategorias FROM Categoria WHERE estado = 1";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {

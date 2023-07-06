@@ -14,7 +14,7 @@ namespace sisgesoriadao.Implementation
         public Usuario Login(string nombreUsuario, string contrasenha)
         {
             Usuario session = null;
-            string query = @"SELECT idUsuario, nombreUsuario, rol FROM usuario 
+            string query = @"SELECT idUsuario, nombreUsuario, rol FROM Usuario 
                             WHERE nombreUsuario=@nombreUsuario AND contrasenha=MD5(@contrasenha) AND estado=1";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@nombreUsuario", nombreUsuario);
@@ -40,7 +40,7 @@ namespace sisgesoriadao.Implementation
         public Usuario SelectRecoverPasswordWithPin(string nombreUsuario, string pin)
         {
             Usuario u = null;
-            string query = @"SELECT idUsuario, nombreUsuario, rol FROM usuario WHERE nombreUsuario = @nombreUsuario AND pin = @pin AND estado = 1";
+            string query = @"SELECT idUsuario, nombreUsuario, rol FROM Usuario WHERE nombreUsuario = @nombreUsuario AND pin = @pin AND estado = 1";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@nombreUsuario", nombreUsuario);
             command.Parameters.AddWithValue("@pin", pin);
@@ -61,7 +61,7 @@ namespace sisgesoriadao.Implementation
         }
         public int UpdateRecoverPasswordWithPin(byte IdUsuario, string NuevaContrasenha)
         {
-            string query = @"UPDATE usuario SET 
+            string query = @"UPDATE Usuario SET 
                 contrasenha=MD5(@contrasenha), fechaActualizacion = CURRENT_TIMESTAMP WHERE idUsuario = @idUsuario";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idUsuario", IdUsuario);
@@ -78,7 +78,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Insert(Usuario u)
         {
-            string query = @"INSERT INTO usuario (idEmpleado,idAjustes,nombreUsuario,contrasenha,rol,pin) 
+            string query = @"INSERT INTO Usuario (idEmpleado,idAjustes,nombreUsuario,contrasenha,rol,pin) 
                             VALUES (@idEmpleado,1,@nombreUsuario,MD5(@contrasenha),@rol,@pin)";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idEmpleado", u.IdEmpleado);
@@ -98,7 +98,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Update(Usuario u)
         {
-            string query = @"UPDATE usuario SET 
+            string query = @"UPDATE Usuario SET 
                 nombreUsuario=@nombreUsuario, rol=@rol, pin=@pin, 
                 fechaActualizacion = CURRENT_TIMESTAMP WHERE idUsuario = @idUsuario";
             MySqlCommand command = CreateBasicCommand(query);
@@ -118,8 +118,8 @@ namespace sisgesoriadao.Implementation
         }
         public int Delete(Usuario u)
         {
-            string query = @"UPDATE usuario SET estado = 0, fechaActualizacion = CURRENT_TIMESTAMP WHERE idUsuario = @idUsuario;
-                             UPDATE empleado SET estado = 1, fechaActualizacion = CURRENT_TIMESTAMP WHERE idEmpleado = @idEmpleado";
+            string query = @"UPDATE Usuario SET estado = 0, fechaActualizacion = CURRENT_TIMESTAMP WHERE idUsuario = @idUsuario;
+                             UPDATE Empleado SET estado = 1, fechaActualizacion = CURRENT_TIMESTAMP WHERE idEmpleado = @idEmpleado";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idUsuario", u.IdUsuario);
             command.Parameters.AddWithValue("@idEmpleado", u.IdEmpleado);
@@ -136,7 +136,7 @@ namespace sisgesoriadao.Implementation
         public Usuario Get(byte Id)
         {
             Usuario u = null;
-            string query = @"SELECT idUsuario, idEmpleado, idAjustes, nombreUsuario, contrasenha, rol, pin, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM usuario 
+            string query = @"SELECT idUsuario, idEmpleado, idAjustes, nombreUsuario, contrasenha, rol, pin, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM Usuario 
                             WHERE idUsuario=@idUsuario";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idUsuario", Id);
@@ -169,8 +169,8 @@ namespace sisgesoriadao.Implementation
 
         public DataTable Select()
         {
-            string query = @"SELECT u.idUsuario AS 'ID U', u.idEmpleado AS 'ID E' , CONCAT(e.nombres,' ', e.primerApellido,' ',IF(e.segundoApellido='-','',IFNULL(e.segundoApellido,''))) AS Empleado, u.nombreUsuario AS 'Usuario', IF(u.rol=1, 'ADMIN', IF(u.rol=2,'VENDEDOR','TERCER ROL')) AS Rol , u.pin AS Pin, u.fechaRegistro as 'Fecha de Registro', IFNULL(u.fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM usuario AS u
-                                INNER JOIN empleado AS e ON u.idEmpleado = e.idEmpleado
+            string query = @"SELECT u.idUsuario AS 'ID U', u.idEmpleado AS 'ID E' , CONCAT(e.nombres,' ', e.primerApellido,' ',IF(e.segundoApellido='-','',IFNULL(e.segundoApellido,''))) AS Empleado, u.nombreUsuario AS 'Usuario', IF(u.rol=1, 'ADMIN', IF(u.rol=2,'VENDEDOR','TERCER ROL')) AS Rol , u.pin AS Pin, u.fechaRegistro as 'Fecha de Registro', IFNULL(u.fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM Usuario AS u
+                                INNER JOIN Empleado AS e ON u.idEmpleado = e.idEmpleado
                                 WHERE u.estado = 1 ORDER BY 5,3 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             try
@@ -186,8 +186,8 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT u.idUsuario AS 'ID U', u.idEmpleado AS 'ID E' , CONCAT(e.nombres,' ', e.primerApellido,' ',IFNULL(e.segundoApellido,'')) AS Empleado, u.nombreUsuario AS 'Usuario', IF(u.rol=1, 'ADMIN', IF(u.rol=2,'VENDEDOR','TERCER ROL')) AS Rol , u.pin AS Pin, u.fechaRegistro as 'Fecha de Registro', IFNULL(u.fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM usuario AS u
-                                INNER JOIN empleado AS e ON u.idEmpleado = e.idEmpleado
+            string query = @"SELECT u.idUsuario AS 'ID U', u.idEmpleado AS 'ID E' , CONCAT(e.nombres,' ', e.primerApellido,' ',IFNULL(e.segundoApellido,'')) AS Empleado, u.nombreUsuario AS 'Usuario', IF(u.rol=1, 'ADMIN', IF(u.rol=2,'VENDEDOR','TERCER ROL')) AS Rol , u.pin AS Pin, u.fechaRegistro as 'Fecha de Registro', IFNULL(u.fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM Usuario AS u
+                                INNER JOIN Empleado AS e ON u.idEmpleado = e.idEmpleado
                                 WHERE (e.nombres LIKE @search OR e.primerApellido LIKE @search OR e.segundoApellido LIKE @search OR u.nombreUsuario LIKE @search) 
                                 AND u.estado = 1 AND u.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                                 ORDER BY 5,3 ASC";
@@ -207,7 +207,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectForComboBox()
         {
-            string query = @"SELECT idUsuario,nombreUsuario FROM usuario WHERE estado = 1";
+            string query = @"SELECT idUsuario,nombreUsuario FROM Usuario WHERE estado = 1";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -223,7 +223,7 @@ namespace sisgesoriadao.Implementation
         public string SelectGroupConcatIDForComboBox()
         {
             string groupConcatIDs = null;
-            string query = @"SELECT group_concat(idUsuario) AS idUsuarios FROM usuario WHERE estado = 1";
+            string query = @"SELECT group_concat(idUsuario) AS idUsuarios FROM Usuario WHERE estado = 1";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {

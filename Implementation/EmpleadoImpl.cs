@@ -13,7 +13,7 @@ namespace sisgesoriadao.Implementation
     {
         public int Insert(Empleado e)
         {
-            string query = @"INSERT INTO empleado (nombres,primerApellido,segundoApellido,numeroCelular,numeroCI) 
+            string query = @"INSERT INTO Empleado (nombres,primerApellido,segundoApellido,numeroCelular,numeroCI) 
                             VALUES (@nombres,@primerApellido,@segundoApellido,@numeroCelular,@numeroCI)";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@nombres", e.Nombres);
@@ -33,7 +33,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Update(Empleado e)
         {
-            string query = @"UPDATE empleado SET 
+            string query = @"UPDATE Empleado SET 
                 nombres=@nombres, primerApellido=@primerApellido,
                 segundoApellido=@segundoApellido, numeroCelular=@numeroCelular,
                 numeroCI=@numeroCI, fechaActualizacion = CURRENT_TIMESTAMP WHERE idEmpleado = @idEmpleado";
@@ -56,7 +56,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Delete(Empleado e)
         {
-            string query = @"UPDATE empleado SET estado = 0, fechaActualizacion = CURRENT_TIMESTAMP WHERE idEmpleado = @idEmpleado";
+            string query = @"UPDATE Empleado SET estado = 0, fechaActualizacion = CURRENT_TIMESTAMP WHERE idEmpleado = @idEmpleado";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idEmpleado", e.IdEmpleado);
             try
@@ -72,7 +72,7 @@ namespace sisgesoriadao.Implementation
         public Empleado Get(byte Id)
         {
             Empleado e = null;
-            string query = @"SELECT idEmpleado, nombres, primerApellido, IFNULL(segundoApellido,'-'), numeroCelular, numeroCI , estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM empleado 
+            string query = @"SELECT idEmpleado, nombres, primerApellido, IFNULL(segundoApellido,'-'), numeroCelular, numeroCI , estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM Empleado 
                             WHERE idEmpleado=@idEmpleado";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idEmpleado", Id);
@@ -98,7 +98,7 @@ namespace sisgesoriadao.Implementation
         public DataTable Select()
         {
             string query = @"SELECT idEmpleado as ID, nombres as Nombres, CONCAT(primerApellido,' ',IF(segundoApellido='-','',IFNULL(segundoApellido,''))) AS Apellidos,
-                            numeroCelular AS Celular, numeroCI AS Carnet, fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM empleado WHERE estado IN (1,2) ORDER BY 6 DESC";
+                            numeroCelular AS Celular, numeroCI AS Carnet, fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM Empleado WHERE estado IN (1,2) ORDER BY 6 DESC";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -114,7 +114,7 @@ namespace sisgesoriadao.Implementation
         {
             string query = @"SELECT idEmpleado as ID, nombres as Nombres, CONCAT(primerApellido,' ',IF(segundoApellido='-','',IFNULL(segundoApellido,''))) AS Apellidos,
                                 numeroCelular AS Celular, numeroCI AS Carnet, fechaRegistro AS 'Fecha de Registro',
-                                IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM bdventacelular.empleado 
+                                IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM bdventacelular.Empleado 
                                 WHERE (nombres LIKE @search OR primerApellido LIKE @search OR segundoApellido LIKE @search OR numeroCelular LIKE @search OR numeroCI LIKE @search) 
                                 AND estado IN (1,2) AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                                 ORDER BY 6 DESC";
@@ -134,7 +134,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectEmployeesWithoutUsers()
         {
-            string query = @"SELECT idEmpleado as ID, CONCAT(nombres, ' ',primerApellido,' ',IF(segundoApellido='-','',IFNULL(segundoApellido,''))) AS Nombre FROM empleado WHERE estado=1 ORDER BY 1 DESC";
+            string query = @"SELECT idEmpleado as ID, CONCAT(nombres, ' ',primerApellido,' ',IF(segundoApellido='-','',IFNULL(segundoApellido,''))) AS Nombre FROM Empleado WHERE estado=1 ORDER BY 1 DESC";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -149,7 +149,7 @@ namespace sisgesoriadao.Implementation
 
         public int UpdateCreatedUser(Empleado e)
         {
-            string query = @"UPDATE empleado SET estado = 2 WHERE idEmpleado = @idEmpleado";
+            string query = @"UPDATE Empleado SET estado = 2 WHERE idEmpleado = @idEmpleado";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idEmpleado", e.IdEmpleado);
             try

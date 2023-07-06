@@ -13,7 +13,7 @@ namespace sisgesoriadao.Implementation
     {
         public int Insert(ProductoComun p)
         {
-            string query = @"INSERT INTO producto_comun 
+            string query = @"INSERT INTO Producto_Comun 
                                 (nombreProductoComun,precioMinimo,precioSugerido) 
                                 VALUES 
                                 (@nombreProductoComun,@precioMinimo,@precioSugerido)";
@@ -33,7 +33,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Update(ProductoComun p)
         {
-            string query = @"UPDATE producto_comun SET 
+            string query = @"UPDATE Producto_Comun SET 
                 nombreProductoComun=@nombreProductoComun, precioMinimo=@precioMinimo, precioSugerido=@precioSugerido,
                 fechaActualizacion = CURRENT_TIMESTAMP WHERE idProductoComun = @idProductoComun";
             MySqlCommand command = CreateBasicCommand(query);
@@ -53,7 +53,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Delete(ProductoComun p)
         {
-            string query = @"UPDATE producto_comun SET estado = 0, fechaActualizacion = CURRENT_TIMESTAMP WHERE idProductoComun = @idProductoComun";
+            string query = @"UPDATE Producto_Comun SET estado = 0, fechaActualizacion = CURRENT_TIMESTAMP WHERE idProductoComun = @idProductoComun";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idProductoComun", p.IdProductoComun);
             try
@@ -71,7 +71,7 @@ namespace sisgesoriadao.Implementation
         {
             ProductoComun p = null;
             string query = @"SELECT idProductoComun, nombreProductoComun, precioMinimo, precioSugerido,
-                                estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM producto_comun
+                                estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM Producto_Comun
                                 WHERE idProductoComun=@idProductoComun";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idProductoComun", Id);
@@ -101,7 +101,7 @@ namespace sisgesoriadao.Implementation
         public DataTable Select()
         {
             string query = @"SELECT idProductoComun AS ID, nombreProductoComun AS 'Nombre Producto', precioMinimo AS 'Precio Minimo', precioSugerido AS 'Precio Sugerido', fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') AS 'Fecha de Actualizacion' 
-                            FROM producto_comun WHERE estado = 1 ORDER BY 2 ASC";
+                            FROM Producto_Comun WHERE estado = 1 ORDER BY 2 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@SessionSucursal", Session.Sucursal_IdSucursal);
             try
@@ -118,7 +118,7 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
             string query = @"SELECT idProductoComun AS ID, nombreProductoComun AS 'Nombre Producto', precioMinimo AS 'Precio Minimo', precioSugerido AS 'Precio Sugerido', fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') AS 'Fecha de Actualizacion' 
-                            FROM producto_comun 
+                            FROM Producto_Comun 
                             WHERE (nombreProductoComun LIKE @search OR precioMinimo LIKE @search OR precioSugerido LIKE @search) 
                             AND estado = 1 AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             ORDER BY 2 ASC";
@@ -138,7 +138,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectForComboBox()
         {
-            string query = @"SELECT idProductoComun, nombreProductoComun FROM producto_comun WHERE estado = 1";
+            string query = @"SELECT idProductoComun, nombreProductoComun FROM Producto_Comun WHERE estado = 1";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -165,7 +165,7 @@ namespace sisgesoriadao.Implementation
             try
             {
                 //REGISTRO DE LA VENTA.
-                command.CommandText = @"INSERT INTO venta_comun (idUsuario,idSucursal,totalBOB) 
+                command.CommandText = @"INSERT INTO Venta_Comun (idUsuario,idSucursal,totalBOB) 
                             VALUES(@idUsuario,@idSucursal,@totalBOB)";
                 command.Parameters.AddWithValue("@idUsuario", Session.IdUsuario);
                 command.Parameters.AddWithValue("@idSucursal", Session.Sucursal_IdSucursal);
@@ -174,8 +174,8 @@ namespace sisgesoriadao.Implementation
                 //REGISTRO DE LOS PRODUCTOS, ACTUALIZACIÓN DEL ESTADO DE LOS PRODUCTOS E INSERCIÓN EN HISTORIAL.
                 for (int i = 0; i < ListaProductosComunes.Count; i++)
                 {
-                    command.CommandText = @"INSERT INTO venta_comun_detalle (idVentaComun,idProductoComun,precioBOB,detalle)
-                            VALUES((SELECT MAX(idVentaComun) FROM venta_comun),@idProductoComun,@precioBOB,@detalle)";
+                    command.CommandText = @"INSERT INTO Venta_Comun_detalle (idVentaComun,idProductoComun,precioBOB,detalle)
+                            VALUES((SELECT MAX(idVentaComun) FROM Venta_Comun),@idProductoComun,@precioBOB,@detalle)";
                     command.Parameters.AddWithValue("@idProductoComun", ListaProductosComunes[i].IdProductoComun);
                     command.Parameters.AddWithValue("@precioBOB", ListaProductosComunes[i].PrecioSugerido);
                     command.Parameters.AddWithValue("@detalle", ListaDetalles[i]);
@@ -208,11 +208,11 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectLikeCommonProductsSales(DateTime FechaInicio, DateTime FechaFin, string IdSucursales, string IdUsuarios)
         {
-            string query = @"SELECT VC.idVentaComun AS ID, U.nombreUsuario AS Usuario, S.nombreSucursal AS Sucursal, CONCAT('Venta: ',VC.idVentaComun, ' ',GROUP_CONCAT('- ',PC.nombreProductoComun,' ', VCD.detalle, ' ',VCD.precioBOB SEPARATOR ' \n')) AS Detalle, VC.totalBOB AS 'Total Bs', VC.fechaRegistro AS 'Fecha' FROM venta_comun VC
-                            INNER JOIN usuario U ON U.idUsuario = VC.idUsuario
-                            INNER JOIN sucursal S ON S.idSucursal = VC.idSucursal
-                            INNER JOIN venta_comun_detalle VCD ON VCD.idVentaComun = VC.idVentaComun
-                            INNER JOIN producto_comun PC ON PC.idProductoComun = VCD.idProductoComun
+            string query = @"SELECT VC.idVentaComun AS ID, U.nombreUsuario AS Usuario, S.nombreSucursal AS Sucursal, CONCAT('Venta: ',VC.idVentaComun, ' ',GROUP_CONCAT('- ',PC.nombreProductoComun,' ', VCD.detalle, ' ',VCD.precioBOB SEPARATOR ' \n')) AS Detalle, VC.totalBOB AS 'Total Bs', VC.fechaRegistro AS 'Fecha' FROM Venta_Comun VC
+                            INNER JOIN Usuario U ON U.idUsuario = VC.idUsuario
+                            INNER JOIN Sucursal S ON S.idSucursal = VC.idSucursal
+                            INNER JOIN Venta_Comun_detalle VCD ON VCD.idVentaComun = VC.idVentaComun
+                            INNER JOIN Producto_Comun PC ON PC.idProductoComun = VCD.idProductoComun
                             WHERE VC.estado = 1 AND VC.idSucursal IN (" + IdSucursales + ") AND VC.idUsuario IN (" + IdUsuarios + @")
                             AND VC.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY VC.idVentaComun

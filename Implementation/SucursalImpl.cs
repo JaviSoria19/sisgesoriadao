@@ -13,7 +13,7 @@ namespace sisgesoriadao.Implementation
     {
         public int Insert(Sucursal s)
         {
-            string query = @"INSERT INTO sucursal (nombreSucursal,direccion,correo,telefono) 
+            string query = @"INSERT INTO Sucursal (nombreSucursal,direccion,correo,telefono) 
                             VALUES (@nombreSucursal,@direccion,@correo,@telefono)";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@nombreSucursal", s.NombreSucursal);
@@ -32,7 +32,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Update(Sucursal s)
         {
-            string query = @"UPDATE sucursal SET 
+            string query = @"UPDATE Sucursal SET 
                 nombreSucursal=@nombreSucursal, direccion=@direccion, correo=@correo, telefono=@telefono,
                 fechaActualizacion = CURRENT_TIMESTAMP WHERE idSucursal = @idSucursal";
             MySqlCommand command = CreateBasicCommand(query);
@@ -53,7 +53,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Delete(Sucursal s)
         {
-            string query = @"UPDATE sucursal SET estado = 0, fechaActualizacion = CURRENT_TIMESTAMP WHERE idSucursal = @idSucursal";
+            string query = @"UPDATE Sucursal SET estado = 0, fechaActualizacion = CURRENT_TIMESTAMP WHERE idSucursal = @idSucursal";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idSucursal", s.IdSucursal);
             try
@@ -69,7 +69,7 @@ namespace sisgesoriadao.Implementation
         public Sucursal Get(byte Id)
         {
             Sucursal s = null;
-            string query = @"SELECT idSucursal, nombreSucursal, direccion, correo, telefono, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM sucursal 
+            string query = @"SELECT idSucursal, nombreSucursal, direccion, correo, telefono, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM Sucursal 
                             WHERE idSucursal=@idSucursal";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idSucursal", Id);
@@ -100,7 +100,7 @@ namespace sisgesoriadao.Implementation
         public DataTable Select()
         {
             string query = @"SELECT idSucursal as ID, nombreSucursal as Sucursal, direccion AS Direccion, correo AS Correo, telefono AS Telefono,fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion'
-                                FROM sucursal WHERE estado = 1 ORDER BY 2 ASC";
+                                FROM Sucursal WHERE estado = 1 ORDER BY 2 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -114,7 +114,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectForComboBox()
         {
-            string query = @"SELECT idSucursal, nombreSucursal FROM sucursal WHERE estado = 1";
+            string query = @"SELECT idSucursal, nombreSucursal FROM Sucursal WHERE estado = 1";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -129,7 +129,7 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
             string query = @"SELECT idSucursal as ID, nombreSucursal as Sucursal, direccion AS Direccion, correo AS Correo, telefono AS Telefono,
-                                fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM sucursal
+                                fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Sucursal
                                 WHERE (nombreSucursal LIKE @search OR direccion LIKE @search OR correo LIKE @search OR telefono LIKE @search) 
                                 AND estado = 1 AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                                 ORDER BY 5 DESC";
@@ -149,7 +149,7 @@ namespace sisgesoriadao.Implementation
 
         public void GetBranchForSession(byte IdSucursal)
         {
-            string query = @"SELECT nombreSucursal, direccion, correo, telefono FROM sucursal 
+            string query = @"SELECT nombreSucursal, direccion, correo, telefono FROM Sucursal 
                             WHERE idSucursal=@idSucursal";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idSucursal", IdSucursal);
@@ -174,7 +174,7 @@ namespace sisgesoriadao.Implementation
         public string SelectGroupConcatIDForComboBox()
         {
             string groupConcatIDs = null;
-            string query = @"SELECT group_concat(idSucursal) AS idSucursales FROM sucursal WHERE estado = 1";
+            string query = @"SELECT group_concat(idSucursal) AS idSucursales FROM Sucursal WHERE estado = 1";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {

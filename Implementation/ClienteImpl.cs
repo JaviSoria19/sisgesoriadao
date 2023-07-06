@@ -13,7 +13,7 @@ namespace sisgesoriadao.Implementation
     {
         public int Insert(Cliente c)
         {
-            string query = @"INSERT INTO cliente (nombre,numeroCelular,numeroCI) 
+            string query = @"INSERT INTO Cliente (nombre,numeroCelular,numeroCI) 
                             VALUES (@nombre,@numeroCelular,@numeroCI)";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@nombre", c.Nombre);
@@ -31,7 +31,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Update(Cliente c)
         {
-            string query = @"UPDATE cliente SET 
+            string query = @"UPDATE Cliente SET 
                 nombre=@nombre, numeroCelular=@numeroCelular,
                 numeroCI=@numeroCI, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCliente = @idCliente";
             MySqlCommand command = CreateBasicCommand(query);
@@ -51,7 +51,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Delete(Cliente c)
         {
-            string query = @"UPDATE cliente SET estado = 0, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCliente = @idCliente";
+            string query = @"UPDATE Cliente SET estado = 0, fechaActualizacion = CURRENT_TIMESTAMP WHERE idCliente = @idCliente";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCliente", c.IdCliente);
             try
@@ -67,7 +67,7 @@ namespace sisgesoriadao.Implementation
         public Cliente Get(int Id)
         {
             Cliente c = null;
-            string query = @"SELECT idCliente, nombre, numeroCelular, numeroCI , estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM cliente 
+            string query = @"SELECT idCliente, nombre, numeroCelular, numeroCI , estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM Cliente 
                             WHERE idCliente=@idCliente";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCliente", Id);
@@ -97,7 +97,7 @@ namespace sisgesoriadao.Implementation
         public Cliente GetByCIorCelular(string CadenaBusqueda)
         {
             Cliente c = null;
-            string query = @"SELECT idCliente, nombre, numeroCelular, numeroCI , estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM cliente 
+            string query = @"SELECT idCliente, nombre, numeroCelular, numeroCI , estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM Cliente 
                                 WHERE (numeroCelular = @search OR numeroCI = @search) AND estado = 1;";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@search", CadenaBusqueda);
@@ -126,7 +126,7 @@ namespace sisgesoriadao.Implementation
         public DataTable Select()
         {
             string query = @"SELECT idCliente as ID, nombre as Nombre, numeroCelular AS Celular, numeroCI AS Carnet, fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion' 
-                                FROM cliente WHERE estado = 1 ORDER BY 5 DESC";
+                                FROM Cliente WHERE estado = 1 ORDER BY 5 DESC";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -141,7 +141,7 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
             string query = @"SELECT idCliente as ID, nombre as Nombre, numeroCelular AS Celular, numeroCI AS Carnet, fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion'
-                                FROM cliente WHERE (nombre LIKE @search OR numeroCelular LIKE @search OR numeroCI LIKE @search) 
+                                FROM Cliente WHERE (nombre LIKE @search OR numeroCelular LIKE @search OR numeroCI LIKE @search) 
                                 AND estado = 1 AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                                 ORDER BY 6 DESC"; 
             MySqlCommand command = CreateBasicCommand(query);
@@ -160,7 +160,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectCustomerNamesForComboBox()
         {
-            string query = @"SELECT idCliente, nombre FROM cliente";
+            string query = @"SELECT idCliente, nombre FROM Cliente";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -176,8 +176,8 @@ namespace sisgesoriadao.Implementation
         public Cliente GetFromSale(int idVenta)
         {
             Cliente c = null;
-            string query = @"SELECT C.idCliente, C.nombre, C.numeroCelular, C.numeroCI , C.estado, C.fechaRegistro, IFNULL(C.fechaActualizacion,'-') FROM cliente C
-                             INNER JOIN venta V ON V.idCliente = C.idCliente
+            string query = @"SELECT C.idCliente, C.nombre, C.numeroCelular, C.numeroCI , C.estado, C.fechaRegistro, IFNULL(C.fechaActualizacion,'-') FROM Cliente C
+                             INNER JOIN Venta V ON V.idCliente = C.idCliente
                              WHERE V.idVenta = @idVenta";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idVenta", Session.IdVentaDetalle);
@@ -207,7 +207,7 @@ namespace sisgesoriadao.Implementation
 
         public int UpdateSaleCustomer(Cliente c, int idVenta)
         {
-            string query = @"UPDATE venta SET idCliente = @idCliente, fechaActualizacion = CURRENT_TIMESTAMP WHERE idVenta = @idVenta";
+            string query = @"UPDATE Venta SET idCliente = @idCliente, fechaActualizacion = CURRENT_TIMESTAMP WHERE idVenta = @idVenta";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCliente", c.IdCliente);
             command.Parameters.AddWithValue("@idVenta", idVenta);

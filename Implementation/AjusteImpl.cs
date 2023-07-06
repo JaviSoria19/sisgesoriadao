@@ -14,7 +14,7 @@ namespace sisgesoriadao.Implementation
         public Ajuste Get()
         {
             Ajuste a = null;
-            string query = @"SELECT idAjustes, cambio_dolar, limite_descuento, IFNULL(fechaActualizacion,'-') FROM ajustes WHERE idAjustes=1";
+            string query = @"SELECT idAjustes, cambio_dolar, limite_descuento, IFNULL(fechaActualizacion,'-') FROM Ajustes WHERE idAjustes=1";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -38,7 +38,7 @@ namespace sisgesoriadao.Implementation
         }
         public int Update(Ajuste a)
         {
-            string query = @"UPDATE ajustes SET 
+            string query = @"UPDATE Ajustes SET 
                 cambio_dolar=@cambio_dolar, limite_descuento=@limite_descuento, 
                 fechaActualizacion = CURRENT_TIMESTAMP WHERE idAjustes = 1";
             MySqlCommand command = CreateBasicCommand(query);
