@@ -53,7 +53,7 @@ namespace sisgesoriadao.Implementation
                     command.ExecuteNonQuery();
 
                     command.CommandText = @"INSERT INTO Historial (idProducto,detalle) VALUES
-                                ((SELECT MAX(idProducto) FROM Producto),'Producto INGRESADO POR EL USUARIO: " + Session.NombreUsuario + ", EN SUCURSAL: " + Session.Sucursal_NombreSucursal + "')";
+                                ((SELECT MAX(idProducto) FROM Producto),'PRODUCTO INGRESADO POR EL USUARIO: " + Session.NombreUsuario + ", EN SUCURSAL: " + Session.Sucursal_NombreSucursal + "')";
                     command.ExecuteNonQuery();
                 }
                 //command.CommandText = "Insert into mytable (id, desc) VALUES (101, 'Description')";
@@ -146,10 +146,12 @@ namespace sisgesoriadao.Implementation
         }
         public int Delete(Producto p)
         {
-            string query = @"UPDATE Producto SET estado = 0, idUsuario = @idUsuario, fechaActualizacion = CURRENT_TIMESTAMP WHERE idProducto = @idProducto";
+            string query = @"UPDATE Producto SET estado = 0, idUsuario = @idUsuario, fechaActualizacion = CURRENT_TIMESTAMP WHERE idProducto = @idProducto;
+                             INSERT INTO Historial (idProducto,detalle) VALUES (@idProducto,@detalle)";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idProducto", p.IdProducto);
             command.Parameters.AddWithValue("@idUsuario", p.IdUsuario);
+            command.Parameters.AddWithValue("@detalle", "PRODUCTO ELIMINADO POR EL USUARIO: " + Session.NombreUsuario);
             try
             {
                 return ExecuteBasicCommand(command);
@@ -575,7 +577,7 @@ namespace sisgesoriadao.Implementation
                     command.CommandText = @"INSERT INTO Historial (idProducto,detalle) VALUES
                                 (@idProductoTwo,@detalle)";
                     command.Parameters.AddWithValue("@idProductoTwo", Producto.IdProducto);
-                    command.Parameters.AddWithValue("@detalle", "Producto TRANSFERIDO A LA SUCURSAL: " + SucursalDestino + ", POR EL USUARIO: " + Session.NombreUsuario);
+                    command.Parameters.AddWithValue("@detalle", "PRODUCTO TRANSFERIDO A LA SUCURSAL: " + SucursalDestino + ", POR EL USUARIO: " + Session.NombreUsuario);
                     command.ExecuteNonQuery();
                     
                     //LIMPIEZA DE PARÁMETROS YA UTILIZADOS EN EL CICLO ANTERIOR PARA PROSEGUIR, CASO CONTRARIO LANZA ERROR.

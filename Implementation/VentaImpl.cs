@@ -342,7 +342,7 @@ namespace sisgesoriadao.Implementation
                 U.nombreUsuario AS Usuario, E.numeroCelular AS 'Celular Usuario',
                 CONCAT(P.codigoSublote,' ',P.nombreProducto) AS Producto, P.identificador AS Detalle, DV.garantia AS Garantia, DV.cantidad AS Cantidad, P.precioVentaBOB AS Precio, DV.descuento AS 'Descuento Porcentaje', (P.precioVentaBOB - DV.precioBOB) AS 'Descuento Bs', DV.precioBOB AS 'Total Producto',
                 V.totalBOB AS Total, V.saldoBOB AS Saldo, V.observaciones AS Observaciones, DATE_FORMAT(V.fechaRegistro,'%d/%m/%Y') AS Fecha,
-                V.totalUSD AS Total2, V.saldoUSD AS Saldo2
+                V.totalUSD AS Total2, V.saldoUSD AS Saldo2, P.idProducto AS IDProducto
                 FROM Venta V
                 INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
                 INNER JOIN Usuario U ON U.idUsuario = V.idUsuario
@@ -554,7 +554,7 @@ namespace sisgesoriadao.Implementation
             }
             return estado;
         }
-        public string DeleteSaleTransaction(int IdVenta, string Observacion)
+        public string DeleteSaleTransaction(int IdVenta, string Observacion, List<int> ListaIDProductos)
         {
             MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
             connection.Open();
@@ -578,7 +578,15 @@ namespace sisgesoriadao.Implementation
                 command.Parameters.AddWithValue("@observaciones", Observacion);
                 command.Parameters.AddWithValue("@idVentaTwice", IdVenta);
                 command.ExecuteNonQuery();
-
+                foreach (var item in ListaIDProductos)
+                {
+                    command.CommandText = @"INSERT INTO Historial (idProducto,detalle) VALUES
+                                (@idProducto,@detalle)";
+                    command.Parameters.AddWithValue("@idProducto", item);
+                    command.Parameters.AddWithValue("@detalle", "EL PRODUCTO RETORNÓ A SISTEMA POR ELIMINACIÓN DE LA VENTA, MOTIVO: " + Observacion);
+                    command.ExecuteNonQuery();
+                    command.Parameters.Clear();
+                }
                 myTrans.Commit();
                 return "DELETEVENTA_EXITOSO";
             }

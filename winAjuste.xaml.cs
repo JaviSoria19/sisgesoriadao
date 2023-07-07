@@ -92,7 +92,7 @@ namespace sisgesoriadao
             }
         }
         //--------->VALIDACIÓN PARA QUE EL TEXTBOX SOLO PERMITA NÚMEROS (Y EN ESTE CASO, UNA COMA.)<---------
-        private static readonly Regex _regex = new Regex("[^0-9,]+"); //regex that matches disallowed text
+        private static readonly Regex _regex = new Regex("[^0-9.]+"); //regex that matches disallowed text
         private static bool IsTextAllowed(string text)
         {
             return !_regex.IsMatch(text);

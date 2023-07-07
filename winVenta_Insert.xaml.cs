@@ -621,7 +621,7 @@ namespace sisgesoriadao
             }
         }
         //--------->VALIDACIÓN PARA QUE EL TEXTBOX SOLO PERMITA NÚMEROS (Y EN ESTE CASO, UN PUNTO.)<---------
-        private static readonly Regex _regex = new Regex("[^0-9,-]+"); //regex that matches disallowed text
+        private static readonly Regex _regex = new Regex("[^0-9.-]+"); //regex that matches disallowed text
         private static bool IsTextAllowed(string text)
         {
             return !_regex.IsMatch(text);
@@ -976,6 +976,20 @@ namespace sisgesoriadao
             txtVentaTotalVentaBOB.Text = venta_TotalBOB.ToString();
             txtVentaTotalSaldoUSD.Text = venta_saldoUSD.ToString();
             txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
+        }
+        private void txtPagoBOB_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && string.IsNullOrEmpty(txtPagoBOB.Text) != true)
+            {
+                addPaymentMethodToDataGridandList();
+            }
+        }
+        private void txtPagoUSD_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && string.IsNullOrEmpty(txtPagoUSD.Text) != true)
+            {
+                addPaymentMethodToDataGridandList();
+            }
         }
     }
 }

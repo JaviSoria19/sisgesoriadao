@@ -35,6 +35,7 @@ namespace sisgesoriadao
         byte operacion = 0;
         int idVenta = 0;
         VentaImpl implVenta;
+        List<int> ListaIDProductos = new List<int>();
         public winVenta_Update()
         {
             InitializeComponent();
@@ -280,6 +281,12 @@ namespace sisgesoriadao
                 txtVentaTotalVentaUSD.Text = venta_TotalUSD.ToString();
                 txtVentaTotalPagoUSD.Text = Math.Round(venta_pagoTotalUSD, 2).ToString();
                 txtVentaTotalSaldoUSD.Text = venta_saldoUSD.ToString();
+
+                ListaIDProductos.Clear();
+                foreach (DataRow item in dt.Rows)
+                {
+                    ListaIDProductos.Add(int.Parse(item[24].ToString()));
+                }
             }
             catch (Exception ex)
             {
@@ -495,7 +502,7 @@ namespace sisgesoriadao
             }
         }
         //--------->VALIDACIÓN PARA QUE EL TEXTBOX SOLO PERMITA NÚMEROS (Y EN ESTE CASO, UN PUNTO.)<---------
-        private static readonly Regex _regex = new Regex("[^0-9,-]+"); //regex that matches disallowed text
+        private static readonly Regex _regex = new Regex("[^0-9.-]+"); //regex that matches disallowed text
         private static bool IsTextAllowed(string text)
         {
             return !_regex.IsMatch(text);
@@ -607,14 +614,13 @@ namespace sisgesoriadao
                 throw;
             }
         }
-
         private void btnDeleteSale_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("ATENCIÓN: ¿ESTÁ SEGUR@ DE ELIMINAR LA VENTA?\nSi es que si, justifiquelo debajo de esta ventana en el cuadro de OBSERVACIONES, esta acción hará que todos los productos involucrados retornen al SISTEMA.", "ELIMINAR VENTA", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 if (txtObservacionVenta.Text != "-")
                 {
-                    string deletetransaction = implVenta.DeleteSaleTransaction(idVenta, txtObservacionVenta.Text);
+                    string deletetransaction = implVenta.DeleteSaleTransaction(idVenta, txtObservacionVenta.Text, ListaIDProductos);
                     if (deletetransaction == "DELETEVENTA_EXITOSO")
                     {
                         MessageBox.Show("LA VENTA HA SIDO ELIMINADA CON ÉXITO, LOS PRODUCTOS HAN RETORNADO A SISTEMA.");
@@ -625,6 +631,20 @@ namespace sisgesoriadao
                 {
                     MessageBox.Show("LA OBSERVACIÓN PARA LA ELIMINACIÓN DE LA VENTA NO PUEDE QUEDAR VACÍA!");
                 }
+            }
+        }
+        private void txtPagoBOB_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && string.IsNullOrEmpty(txtPagoBOB.Text) != true)
+            {
+                addPaymentMethodToSale();
+            }
+        }
+        private void txtPagoUSD_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && string.IsNullOrEmpty(txtPagoUSD.Text) != true)
+            {
+                addPaymentMethodToSale();
             }
         }
     }

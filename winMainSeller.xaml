@@ -30,7 +30,7 @@
                 </Button>
                 <materialDesign:PackIcon Kind="ThemeLightDark" Width="25" Height="25" VerticalAlignment="Center" Margin="20,0,0,0"/>
                 <ToggleButton x:Name="tglDarkMode" Style="{StaticResource MaterialDesignSwitchToggleButton}" IsEnabled="True" ToolTip="MODO OSCURO" Margin="10,0,10,0" Click="tglDarkMode_Click"/>
-                <materialDesign:PackIcon Kind="MicrosoftWindows" Width="25" Height="25" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                <materialDesign:PackIcon Kind="MicrosoftWindows" Width="25" Height="25" VerticalAlignment="Center" Margin="20,0,0,0" ToolTip="VERSIÓN DE LA APLICACIÓN"/>
                 <TextBlock x:Name="txtVersionApp" Text="1.0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 

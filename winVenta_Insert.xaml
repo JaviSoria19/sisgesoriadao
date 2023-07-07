@@ -124,9 +124,9 @@
                     </TextBlock>
                     <StackPanel Orientation="Horizontal" Margin="15">
                         <Label Content="Monto ($.):"/>
-                        <TextBox x:Name="txtPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPagoUSD_KeyUp"/>
+                        <TextBox x:Name="txtPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPagoUSD_KeyUp" KeyDown="txtPagoUSD_KeyDown"/>
                         <Label Content="Monto (Bs.):"/>
-                        <TextBox x:Name="txtPagoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPagoBOB_KeyUp"/>
+                        <TextBox x:Name="txtPagoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPagoBOB_KeyUp" KeyDown="txtPagoBOB_KeyDown"/>
                         <Label Content="Tipo:"/>
                         <ComboBox x:Name="cbxPaymentMethod" IsEnabled="True" Margin="0,0,20,0"/>
                         <Button x:Name="btnAddPaymentMethod" ToolTip="AÑADIR MÉTODO DE PAGO" Click="btnAddPaymentMethod_Click" Margin="0,0,0,0" IsEnabled="True" Background="LimeGreen" BorderBrush="LimeGreen">
