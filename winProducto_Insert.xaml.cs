@@ -374,7 +374,7 @@ namespace sisgesoriadao
             {
                 label.SetObjectText("lblCodigoSublote", item.CodigoSublote);
                 label.SetObjectText("lblCodigoQR", item.CodigoSublote);
-                label.Print("DYMO LabelWriter 450");
+                label.Print("DYMO LabelWriter 450 Turbo");
             }
         }
         public class DataGridRowDetalleHelper
@@ -436,17 +436,17 @@ namespace sisgesoriadao
                 {
                     if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
                     {
-                        foreach (var item in listaHelper)
+                        for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
                         {
-                            item.CostoUSD = double.Parse(valorNuevo.Text.Trim());
-                            item.CostoBOB = Math.Round(item.CostoUSD * Session.Ajuste_Cambio_Dolar,2);
+                            listaHelper[i].CostoUSD = double.Parse(valorNuevo.Text.Trim());
+                            listaHelper[i].CostoBOB = Math.Round(listaHelper[i].CostoUSD * Session.Ajuste_Cambio_Dolar,2);
                         }
                         if (double.Parse(valorNuevo.Text.Trim()) > filaSeleccionada.PrecioVentaUSD)
                         {
-                            foreach (var item in listaHelper)
+                            for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
                             {
-                                item.PrecioVentaUSD = item.CostoUSD + 10;
-                                item.PrecioVentaBOB = Math.Round(item.CostoBOB + (Session.Ajuste_Cambio_Dolar * 10), 2);
+                                listaHelper[i].PrecioVentaUSD = listaHelper[i].CostoUSD + 10;
+                                listaHelper[i].PrecioVentaBOB = Math.Round(listaHelper[i].CostoBOB + (Session.Ajuste_Cambio_Dolar * 10), 2);
                             }
                         }
                     }
@@ -459,17 +459,17 @@ namespace sisgesoriadao
                 {
                     if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
                     {
-                        foreach (var item in listaHelper)
+                        for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
                         {
-                            item.CostoBOB = double.Parse(valorNuevo.Text.Trim());
-                            item.CostoUSD = Math.Round(item.CostoBOB / Session.Ajuste_Cambio_Dolar, 2);
+                            listaHelper[i].CostoBOB = double.Parse(valorNuevo.Text.Trim());
+                            listaHelper[i].CostoUSD = Math.Round(listaHelper[i].CostoBOB / Session.Ajuste_Cambio_Dolar, 2);
                         }
                         if (double.Parse(valorNuevo.Text.Trim()) > filaSeleccionada.PrecioVentaBOB)
                         {
-                            foreach (var item in listaHelper)
+                            for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
                             {
-                                item.PrecioVentaBOB = item.CostoBOB + (Session.Ajuste_Cambio_Dolar * 10);
-                                item.PrecioVentaUSD = Math.Round(item.CostoUSD + 10, 2);
+                                listaHelper[i].PrecioVentaBOB = listaHelper[i].CostoBOB + (Session.Ajuste_Cambio_Dolar * 10);
+                                listaHelper[i].PrecioVentaUSD = Math.Round(listaHelper[i].CostoUSD + 10, 2);
                             }
                         }
                     }
@@ -484,10 +484,10 @@ namespace sisgesoriadao
                     {
                         if (double.Parse(valorNuevo.Text.Trim()) > filaSeleccionada.CostoUSD)
                         {
-                            foreach (var item in listaHelper)
+                            for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
                             {
-                                item.PrecioVentaUSD = double.Parse(valorNuevo.Text.Trim());
-                                item.PrecioVentaBOB = Math.Round(item.PrecioVentaUSD * Session.Ajuste_Cambio_Dolar, 2);
+                                listaHelper[i].PrecioVentaUSD = double.Parse(valorNuevo.Text.Trim());
+                                listaHelper[i].PrecioVentaBOB = Math.Round(listaHelper[i].PrecioVentaUSD * Session.Ajuste_Cambio_Dolar, 2);
                             }
                         }
                         else
@@ -506,10 +506,10 @@ namespace sisgesoriadao
                     {
                         if (double.Parse(valorNuevo.Text.Trim()) > filaSeleccionada.CostoBOB)
                         {
-                            foreach (var item in listaHelper)
+                            for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
                             {
-                                item.PrecioVentaBOB = double.Parse(valorNuevo.Text.Trim());
-                                item.PrecioVentaUSD = Math.Round(item.PrecioVentaBOB / Session.Ajuste_Cambio_Dolar, 2);
+                                listaHelper[i].PrecioVentaBOB = double.Parse(valorNuevo.Text.Trim());
+                                listaHelper[i].PrecioVentaUSD = Math.Round(listaHelper[i].PrecioVentaBOB / Session.Ajuste_Cambio_Dolar, 2);
                             }
                         }
                         else

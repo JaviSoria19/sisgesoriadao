@@ -69,7 +69,7 @@
 
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
                 <Label x:Name="lblInfo" Content="" Foreground="Blue" Background="Transparent" Margin="0,0,0,10" HorizontalAlignment="Center"/>
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,0" HorizontalAlignment="Center">
                     <Label Content="Buscar:" VerticalAlignment="Center"/>
                     <TextBox x:Name="txtBuscar" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="20" Height="22" KeyDown="txtBuscar_KeyDown"/>
                     <Label Content="Desde:" VerticalAlignment="Center"/>
@@ -81,8 +81,12 @@
                     <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="20,0,0,0">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>
-                    <TextBlock x:Name="txtTotalProductosCostoUSD" Text="Total Costo USD: " Margin="20,0,30,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
-                    <TextBlock x:Name="txtTotalProductosCostoBOB" Text="Total Costo BOB: " Margin="0,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,20" HorizontalAlignment="Center">
+                    <TextBlock x:Name="txtTotalProductosCostoUSD" Text="T. Costo USD: " Margin="0,0,30,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                    <TextBlock x:Name="txtTotalProductosCostoBOB" Text="T. Costo BOB: " Margin="0,0,30,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                    <TextBlock x:Name="txtTotalProductosVentaUSD" Text="T. Venta USD: " Margin="0,0,30,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                    <TextBlock x:Name="txtTotalProductosVentaBOB" Text="T. Venta BOB: " Margin="0,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
                 </StackPanel>
                 <Border BorderBrush="Gray" BorderThickness="2">
                     <DataGrid x:Name="dgvDatos"

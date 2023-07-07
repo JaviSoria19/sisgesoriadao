@@ -470,10 +470,14 @@
     <Resource Include="iconosisgesoria.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\PlantillaReporteTransferencia.html" />
+    <None Include="Resources\PlantillaReporteTransferencia.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\PlantillaReporteCotizacion.html" />
+    <None Include="Resources\PlantillaReporteCotizacion.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\logo.png">
@@ -481,19 +485,29 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\PlantillaReporteCaja.html" />
+    <None Include="Resources\PlantillaReporteCaja.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\PlantillaReporteCajaActiva.html" />
+    <None Include="Resources\PlantillaReporteCajaActiva.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\PlantillaReporteInventario.html" />
+    <None Include="Resources\PlantillaReporteInventario.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\PlantillaReporteInventarioDigital.html" />
+    <None Include="Resources\PlantillaReporteInventarioDigital.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\PlantillaReporteVenta.html" />
+    <None Include="Resources\PlantillaReporteVenta.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

@@ -25,7 +25,7 @@ namespace sisgesoriadao
         ProductoImpl implProducto;
         Producto producto;
         byte operacion;
-        double productosCostoTotalUSD = 0, productosCostoTotalBOB = 0;
+        double productosCostoTotalUSD = 0, productosCostoTotalBOB = 0, productosVentaTotalUSD = 0, productosVentaTotalBOB = 0;
         //Implementaciones para obtener ID's y Nombres para los Combobox
         SucursalImpl implSucursal;
         CategoriaImpl implCategoria;
@@ -257,6 +257,8 @@ namespace sisgesoriadao
             {
                 productosCostoTotalUSD = 0;
                 productosCostoTotalBOB = 0;
+                productosVentaTotalUSD = 0;
+                productosVentaTotalBOB = 0;
                 implProducto = new ProductoImpl();
                 dgvDatos.ItemsSource = null;
                 dgvDatos.ItemsSource = implProducto.Select().DefaultView;
@@ -268,10 +270,14 @@ namespace sisgesoriadao
                     {
                         productosCostoTotalUSD += double.Parse(item[7].ToString());
                         productosCostoTotalBOB += double.Parse(item[8].ToString());
+                        productosVentaTotalUSD += double.Parse(item[9].ToString());
+                        productosVentaTotalBOB += double.Parse(item[10].ToString());
                     }
                 }
                 txtTotalProductosCostoUSD.Text = "Total Costo $us.: " + productosCostoTotalUSD.ToString();
                 txtTotalProductosCostoBOB.Text = "Total Costo Bs.: " + productosCostoTotalBOB.ToString();
+                txtTotalProductosVentaUSD.Text = "Total Venta $us.: " + productosVentaTotalUSD.ToString();
+                txtTotalProductosVentaBOB.Text = "Total Venta Bs.: " + productosVentaTotalBOB.ToString();
             }
             catch (Exception ex)
             {
@@ -481,7 +487,7 @@ namespace sisgesoriadao
                     var label = DYMO.Label.Framework.Label.Open("LabelWriterCodigoQRProducto.label");
                     label.SetObjectText("lblCodigoSublote", producto.CodigoSublote);
                     label.SetObjectText("lblCodigoQR", producto.CodigoSublote);
-                    label.Print("DYMO LabelWriter 450");
+                    label.Print("DYMO LabelWriter 450 Turbo");
                 }
             }
             else

@@ -43,7 +43,7 @@
                     <LineBreak/>
                     <Bold>4)</Bold> Presione <Bold>GUARDAR</Bold> para registrar los productos e imprimir las etiquetas que contienen el código correspondiente.
                     <LineBreak/>
-                    <Bold>IMPORTANTE: Las etiquetas que contienen los códigos de producto no se imprimirán si no está conectada e instalada la Etiquetadora DYMO LabelWriter 450.</Bold>
+                    <Bold>IMPORTANTE: Las etiquetas que contienen los códigos de producto no se imprimirán si no está conectada e instalada la Etiquetadora DYMO LabelWriter 450 Turbo.</Bold>
                 </TextBlock>
             </StackPanel>
 
