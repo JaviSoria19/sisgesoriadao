@@ -154,7 +154,14 @@ namespace sisgesoriadao
                     txtProducto_TotalBOB.Text = "";
                     foreach (DataRow item in dt.Rows)
                     {
-                        txtProducto_Descripcion.Text += item[10].ToString() + "\n";
+                        if (item[10].ToString().Length > 30)
+                        {
+                            txtProducto_Descripcion.Text += item[10].ToString() + "\n";
+                        }
+                        else
+                        {
+                            txtProducto_Descripcion.Text += item[10].ToString() + "\n \n";
+                        }
                         txtProducto_Detalle.Text += item[11].ToString() + "\n \n";
                         txtProducto_Garantia.Text += item[12].ToString() + " Meses\n \n" ;
                         txtProducto_Cantidad.Text += item[13].ToString() + "\n \n";

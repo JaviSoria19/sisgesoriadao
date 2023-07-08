@@ -2,7 +2,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
      TextElement.FontWeight="Regular"
-     TextElement.FontSize="13"
+     TextElement.FontSize="18"
      TextOptions.TextFormattingMode="Ideal"
      TextOptions.TextRenderingMode="Auto"
      Background="{DynamicResource MaterialDesignPaper}"
@@ -44,9 +44,9 @@
                 <StackPanel Orientation="Horizontal" Margin="15">
                     <Label Content="NOMBRE:"/>
                     <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                    <controls:AutoCompleteBox x:Name="acbtxtNameCustomer" Margin="5,0,20,0" MinWidth="120" IsEnabled="True" FilterMode="Contains" KeyDown="acbtxtNameCustomer_KeyDown" />
+                    <controls:AutoCompleteBox x:Name="acbtxtNameCustomer" Margin="5,0,20,0" MinWidth="120" IsEnabled="True" FilterMode="Contains" KeyDown="acbtxtNameCustomer_KeyDown" FontSize="18"/>
                     <Label Content="CARNET o CELULAR: " VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtSearchCustomer" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="True" Height="22" KeyDown="txtSearchCustomer_KeyDown"/>
+                    <TextBox x:Name="txtSearchCustomer" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="True" KeyDown="txtSearchCustomer_KeyDown"/>
                     <Button x:Name="btnSearchCustomer" ToolTip="BUSCAR CLIENTE" Click="btnSearchCustomer_Click" Margin="0,0,0,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>
@@ -59,9 +59,9 @@
                     <Label x:Name="lblSearchCustomerInfo" Content="" Foreground="Black" Background="Transparent" Margin="20,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>
                 </StackPanel>
                 <StackPanel x:Name="stackpanelCustomerFound" Orientation="Horizontal" Margin="15,15,0,25" Visibility="Collapsed">
-                    <Label x:Name="lblCustomerNombre" Content="NOMBRE: -" FontWeight="Bold" Margin="0,0,50,0"/>
-                    <Label x:Name="lblCustomerNumeroCI" Content="C.I.: -" FontWeight="Bold" Margin="0,0,50,0"/>
-                    <Label x:Name="lblCustomerNumeroCelular" Content="CELULAR: -" FontWeight="Bold"/>
+                    <Label x:Name="lblCustomerNombre" Content="NOMBRE: -" FontWeight="Bold" Margin="0,0,50,0" FontSize="20"/>
+                    <Label x:Name="lblCustomerNumeroCI" Content="C.I.: -" FontWeight="Bold" Margin="0,0,50,0" FontSize="20"/>
+                    <Label x:Name="lblCustomerNumeroCelular" Content="CELULAR: -" FontWeight="Bold" FontSize="20"/>
                 </StackPanel>                
                 <StackPanel x:Name="stackpanelCustomerForm" Orientation="Horizontal" Margin="15,15,0,0" Visibility="Collapsed">
                     <Label Content="NOMBRE:"/>
@@ -82,7 +82,7 @@
                 <StackPanel Orientation="Horizontal" Margin="15">
                     <Label Content="CÓDIGO DE PRODUCTO: " VerticalAlignment="Center"/>
                     <Label Content="* " Foreground="Red" FontWeight="Bold"/>
-                    <TextBox x:Name="txtSearchProduct" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="30" IsEnabled="True" Height="22" KeyDown="txtSearchProduct_KeyDown"/>
+                    <TextBox x:Name="txtSearchProduct" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="30" IsEnabled="True" KeyDown="txtSearchProduct_KeyDown"/>
                     <Button x:Name="btnSearchProduct" ToolTip="BUSCAR PRODUCTO" Click="btnSearchProduct_Click" Margin="0,0,0,0" IsEnabled="True" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>
