@@ -108,7 +108,7 @@ namespace sisgesoriadao
                                     cliente = implCliente.GetByCIorCelular(txtRegister_NumeroCI.Text.Trim());
                                     if (cliente != null)
                                     {
-                                        lblCustomerNombre.Content = "Nombre: " + cliente.Nombre.Trim();
+                                        acbtxtNameCustomer.Text = cliente.Nombre.Trim();
                                         lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
                                         lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
                                         DisableCustomerButtons();
@@ -139,7 +139,7 @@ namespace sisgesoriadao
                             int n = implCliente.Update(cliente);
                             if (n > 0)
                             {
-                                lblCustomerNombre.Content = "Nombre: " + cliente.Nombre.Trim();
+                                acbtxtNameCustomer.Text = cliente.Nombre.Trim();
                                 lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
                                 lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
                                 DisableCustomerButtons();
@@ -500,27 +500,6 @@ namespace sisgesoriadao
                 txtPagoUSD.Text = costoUSD.ToString();
             }
         }
-        private void dgvMetodosPago_Loaded(object sender, RoutedEventArgs e)
-        {
-            DataGridTextColumn col1 = new DataGridTextColumn
-            {
-                Header = "Monto ($.)",
-                Binding = new Binding("montoUSD")
-            };
-            DataGridTextColumn col2 = new DataGridTextColumn
-            {
-                Header = "Monto (Bs.)",
-                Binding = new Binding("montoBOB")
-            };
-            DataGridTextColumn col3 = new DataGridTextColumn
-            {
-                Header = "Tipo",
-                Binding = new Binding("tipo")
-            };
-            dgvMetodosPago.Columns.Add(col1);
-            dgvMetodosPago.Columns.Add(col2);
-            dgvMetodosPago.Columns.Add(col3);
-        }
         void SearchByPhoneorCI()
         {
             if (string.IsNullOrEmpty(txtSearchCustomer.Text) == false)
@@ -532,7 +511,7 @@ namespace sisgesoriadao
                     if (cliente != null)
                     {
                         stackpanelCustomerFound.Visibility = Visibility.Visible;
-                        lblCustomerNombre.Content = "Nombre: " + cliente.Nombre.Trim();
+                        acbtxtNameCustomer.Text = cliente.Nombre.Trim();
                         lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
                         lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
                     }
@@ -595,7 +574,7 @@ namespace sisgesoriadao
                         if (cliente != null)
                         {
                             stackpanelCustomerFound.Visibility = Visibility.Visible;
-                            lblCustomerNombre.Content = "Nombre: " + cliente.Nombre.Trim();
+                            acbtxtNameCustomer.Text = cliente.Nombre.Trim();
                             lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
                             lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
                             btnEditCustomer.IsEnabled = true;
@@ -972,6 +951,12 @@ namespace sisgesoriadao
             venta_TotalBOB += listaHelper[i].totalproductoBOB;
             venta_saldoUSD += listaHelper[i].totalproductoUSD;
             venta_saldoBOB += listaHelper[i].totalproductoBOB;
+
+            venta_TotalUSD = Math.Round(venta_TotalUSD, 2);
+            venta_TotalBOB = Math.Round(venta_TotalBOB, 2);
+            venta_saldoUSD = Math.Round(venta_saldoUSD, 2);
+            venta_saldoBOB = Math.Round(venta_saldoBOB, 2);
+
             txtVentaTotalVentaUSD.Text = venta_TotalUSD.ToString();
             txtVentaTotalVentaBOB.Text = venta_TotalBOB.ToString();
             txtVentaTotalSaldoUSD.Text = venta_saldoUSD.ToString();
@@ -990,6 +975,11 @@ namespace sisgesoriadao
             {
                 addPaymentMethodToDataGridandList();
             }
+        }
+
+        private void btndgvRemoverMetodoPago(object sender, RoutedEventArgs e)
+        {
+            removeFromDGVPaymentMethod(dgvMetodosPago.SelectedIndex);
         }
     }
 }

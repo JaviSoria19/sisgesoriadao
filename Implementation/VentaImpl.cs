@@ -704,5 +704,62 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public string UpdateProductPriceBeforeSaleTransaction(Venta Venta, Producto Producto, double Descuento, byte Garantia)
+        {
+            MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
+            connection.Open();
+            MySqlCommand command = connection.CreateCommand();
+            MySqlTransaction myTrans;
+            myTrans = connection.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            command.Connection = connection;
+            command.Transaction = myTrans;
+            try
+            {
+                //MODIFICACION DEL DETALLE Y DE LA VENTA
+                command.CommandText = @"UPDATE Detalle_Venta SET precioUSD = @precioUSD, precioBOB = @precioBOB, descuento = @descuento, garantia = @garantia
+                                        WHERE idVenta = @idVenta AND idProducto = @idProducto";
+                command.Parameters.AddWithValue("@precioUSD", Producto.PrecioVentaUSD);
+                command.Parameters.AddWithValue("@precioBOB", Producto.PrecioVentaBOB);
+                command.Parameters.AddWithValue("@descuento", Descuento);
+                command.Parameters.AddWithValue("@garantia", Garantia);
+                command.Parameters.AddWithValue("@idVenta", Venta.IdVenta);
+                command.Parameters.AddWithValue("@idProducto", Producto.IdProducto);
+                command.ExecuteNonQuery();
+                command.Parameters.Clear();
+                command.CommandText = @"UPDATE Venta SET totalUSD = @totalUSD, totalBOB = @totalBOB, saldoUSD = @saldoUSD, saldoBOB = @saldoBOB, fechaActualizacion = CURRENT_TIMESTAMP
+                                        WHERE idVenta = @idVenta";
+                command.Parameters.AddWithValue("@totalUSD", Venta.TotalUSD);
+                command.Parameters.AddWithValue("@totalBOB", Venta.TotalBOB);
+                command.Parameters.AddWithValue("@saldoUSD", Venta.SaldoUSD);
+                command.Parameters.AddWithValue("@saldoBOB", Venta.SaldoBOB);
+                command.Parameters.AddWithValue("@idVenta", Venta.IdVenta);
+                command.ExecuteNonQuery();
+
+                myTrans.Commit();
+                return "PRECIO_DE_PRODUCTO_Y_TOTAL_VENTA_MODIFICADO_CON_EXITO";
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (MySqlException ex)
+                {
+                    if (myTrans.Connection != null)
+                    {
+                        return "Una excepción del tipo " + ex.GetType() + " se encontró mientras se estaba intentando revertir la transacción.";
+                    }
+                }
+                return e.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
     }
 }

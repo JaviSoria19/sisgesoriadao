@@ -775,8 +775,10 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectProductsFromSale(int IdVenta)
         {
-            string query = @"SELECT P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Detalle, DV.cantidad AS Cantidad,
-                            P.precioVentaUSD AS 'Precio USD', P.precioVentaBOB AS 'Precio Bs', DV.precioUSD AS 'Total USD', DV. precioBOB AS 'Total Bs', DV.descuento AS Descuento FROM Detalle_Venta DV 
+            string query = @"SELECT P.idProducto AS idProducto, P.codigoSublote AS codigoSublote, P.nombreProducto AS nombreProducto, P.identificador AS identificador, 
+                            P.precioVentaUSD AS precioVentaUSD, P.precioVentaBOB AS precioVentaBOB, DV.descuento AS descuentoPorcentaje,
+                            P.precioVentaUSD - DV.precioUSD AS descuentoUSD, P.precioVentaBOB - DV.precioBOB AS descuentoBOB,
+                            DV.precioUSD AS 'Total USD', DV. precioBOB AS 'Total Bs', DV.Garantia, P.costoUSD AS 'Costo USD' FROM Detalle_Venta DV 
                             INNER JOIN Producto P ON P.idProducto = DV.idProducto
                             WHERE DV.idVenta = @idVenta";
             MySqlCommand command = CreateBasicCommand(query);

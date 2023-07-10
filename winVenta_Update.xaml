@@ -2,7 +2,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
      TextElement.FontWeight="Regular"
-     TextElement.FontSize="13"
+     TextElement.FontSize="18"
      TextOptions.TextFormattingMode="Ideal"
      TextOptions.TextRenderingMode="Auto"
      Background="{DynamicResource MaterialDesignPaper}"
@@ -53,7 +53,7 @@
                     <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                     <controls:AutoCompleteBox x:Name="acbtxtNameCustomer" Margin="5,0,20,0" MinWidth="120" IsEnabled="True" FilterMode="Contains" KeyDown="acbtxtNameCustomer_KeyDown" />
                     <Label Content="CARNET o CELULAR: " VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtSearchCustomer" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="True" Height="22" KeyDown="txtSearchCustomer_KeyDown"/>
+                    <TextBox x:Name="txtSearchCustomer" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="True" KeyDown="txtSearchCustomer_KeyDown"/>
                     <Button x:Name="btnSearchCustomer" ToolTip="BUSCAR CLIENTE" Click="btnSearchCustomer_Click" Margin="0,0,0,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>
@@ -65,8 +65,7 @@
                     </Button>
                     <Label x:Name="lblSearchCustomerInfo" Content="" Foreground="Black" Background="Transparent" Margin="20,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>
                 </StackPanel>
-                <StackPanel x:Name="stackpanelCustomerFound" Orientation="Horizontal" Margin="15,15,0,25" Visibility="Collapsed">
-                    <Label x:Name="lblCustomerNombre" Content="NOMBRE: -" FontWeight="Bold" Margin="0,0,50,0"/>
+                <StackPanel x:Name="stackpanelCustomerFound" Orientation="Vertical" Margin="15,0,0,25">
                     <Label x:Name="lblCustomerNumeroCI" Content="C.I.: -" FontWeight="Bold" Margin="0,0,50,0"/>
                     <Label x:Name="lblCustomerNumeroCelular" Content="CELULAR: -" FontWeight="Bold"/>
                 </StackPanel>
@@ -87,13 +86,29 @@
                 </StackPanel>
                 <TextBlock Text="DETALLE PRODUCTO(S)" FontWeight="Bold" FontSize="20"/>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                    <DataGrid x:Name="dgvProductos" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True" Loaded="dgvProductos_Loaded" HorizontalAlignment="Left" Margin="15"/>
+                    <DataGrid x:Name="dgvProductos" AutoGenerateColumns="False" PreviewTextInput="txtPrecio_PreviewTextInput" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" Loaded="dgvProductos_Loaded" CellEditEnding="dgvProductos_CellEditEnding" HorizontalAlignment="Left" Margin="15">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding idProducto}" IsReadOnly="True" Visibility="Collapsed"/>
+                            <DataGridTextColumn Header="Codigo" Binding="{Binding codigoSublote}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Producto" Binding="{Binding nombreProducto}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Detalle" Binding="{Binding identificador}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Precio USD" Binding="{Binding precioUSD}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Precio Bs." Binding="{Binding precioBOB}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Desc. %" Binding="{Binding descuentoPorcentaje}"/>
+                            <DataGridTextColumn Header="Desc. $." Binding="{Binding descuentoUSD}"/>
+                            <DataGridTextColumn Header="Desc. Bs." Binding="{Binding descuentoBOB}"/>
+                            <DataGridTextColumn Header="Total $." Binding="{Binding totalproductoUSD}"/>
+                            <DataGridTextColumn Header="Total Bs." Binding="{Binding totalproductoBOB}"/>
+                            <DataGridTextColumn Header="Garantia" Binding="{Binding garantia}"/>
+                            <DataGridTextColumn Header="Costo $." Binding="{Binding costoUSD}" IsReadOnly="True" Visibility="Collapsed"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
 
                     <TextBlock Text="MÉTODO(S) DE PAGO" FontWeight="Bold" FontSize="20"/>
                     <TextBlock Margin="10" TextWrapping="Wrap">
                     <Bold>CONSEJO:</Bold> Estimad@ usuari@, para quitar un método de pago seleccione uno de la tabla.
                     </TextBlock>
-                    <StackPanel Orientation="Horizontal" Margin="15">
+                    <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Right">
                         <Label Content="Monto ($.):"/>
                         <TextBox x:Name="txtPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPagoUSD_KeyUp" KeyDown="txtPagoUSD_KeyDown"/>
                         <Label Content="Monto (Bs.):"/>
@@ -104,7 +119,7 @@
                             <materialDesign:PackIcon Kind="CreditCardAdd"/>
                         </Button>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <DataGrid x:Name="dgvMetodosPago" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True" Margin="15"
                                   Loaded="dgvMetodosPago_Loaded" HorizontalAlignment="Left" SelectionChanged="dgvMetodosPago_SelectionChanged"/>
                         <StackPanel Orientation="Vertical">
@@ -129,13 +144,11 @@
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,30,0,0" HorizontalAlignment="Right">
+                        <Label Content="OBSERVACIONES: " VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        <TextBox x:Name="txtObservacionVenta" TextWrapping="Wrap" MinWidth="120" MaxLength="99" IsEnabled="True" Height="22" VerticalAlignment="Center"/>
+                    </StackPanel>
                 </StackPanel>
-
-                <StackPanel Orientation="Horizontal" Margin="0,30,0,0">
-                    <Label Content="OBSERVACIONES: " VerticalAlignment="Center" Margin="20,0,0,0"/>
-                    <TextBox x:Name="txtObservacionVenta" TextWrapping="Wrap" MinWidth="120" MaxLength="99" IsEnabled="True" Height="22" VerticalAlignment="Center"/>
-                </StackPanel>
-
             </StackPanel>
         </StackPanel>
     </ScrollViewer>
