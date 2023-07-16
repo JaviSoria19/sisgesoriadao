@@ -1,25 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
+using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System;
+using System.Data;//ADO.NET
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
-using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
-
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.xml;
-using System.IO;
-using iTextSharp.tool.xml;
 
 namespace sisgesoriadao
 {

@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System;
+using System.Data;//ADO.NET
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
-using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
 namespace sisgesoriadao
 {
     /// <summary>
@@ -27,7 +19,7 @@ namespace sisgesoriadao
         public winProducto_Lote()
         {
             InitializeComponent();
-        }        
+        }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -55,7 +47,7 @@ namespace sisgesoriadao
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             OperacionCRUD();
-        }        
+        }
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             DisabledButtons();
@@ -229,7 +221,7 @@ namespace sisgesoriadao
             {
                 MessageBox.Show(ex.Message);
             }
-        }        
+        }
         void EnabledButtons()
         {
             btnInsert.IsEnabled = false;
@@ -250,7 +242,7 @@ namespace sisgesoriadao
             btnCancel.IsEnabled = false;
 
             txtCodigoLote.IsEnabled = false;
-        }        
+        }
         public void labelClear(Label label)
         {
             label.Foreground = new SolidColorBrush(Colors.Transparent);

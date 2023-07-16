@@ -1,20 +1,14 @@
-﻿using System;
+﻿using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System;
 using System.Collections.Generic;
+using System.Data;//ADO.NET
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
-using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
 namespace sisgesoriadao
 {
     /// <summary>
@@ -33,7 +27,7 @@ namespace sisgesoriadao
         public winProducto()
         {
             InitializeComponent();
-        }        
+        }
         private void btnInsert_Click(object sender, RoutedEventArgs e)
         {
             winProducto_Insert winProducto_Insert = new winProducto_Insert();
@@ -121,7 +115,7 @@ namespace sisgesoriadao
                         {
                             MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
                         }
-                    }                    
+                    }
                     break;
                 default:
                     break;
@@ -291,9 +285,9 @@ namespace sisgesoriadao
                 productosCostoTotalUSD = 0;
                 productosCostoTotalBOB = 0;
                 dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implProducto.SelectLikeReporteValorado((cbxSucursal.SelectedItem as ComboboxItem).Valor,txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
+                dgvDatos.ItemsSource = implProducto.SelectLikeReporteValorado((cbxSucursal.SelectedItem as ComboboxItem).Valor, txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeReporteValorado((cbxSucursal.SelectedItem as ComboboxItem).Valor,txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeReporteValorado((cbxSucursal.SelectedItem as ComboboxItem).Valor, txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).Rows.Count;
                 if (dgvDatos.Items.Count > 0)
                 {
                     foreach (DataRowView item in dgvDatos.Items)
@@ -369,11 +363,11 @@ namespace sisgesoriadao
                 implSucursal = new SucursalImpl();
                 dataTable = implSucursal.SelectForComboBox();
                 listcomboboxSucursal = (from DataRow dr in dataTable.Rows
-                                         select new ComboboxItem()
-                                         {
-                                             Valor = Convert.ToByte(dr["idSucursal"]),
-                                             Texto = dr["nombreSucursal"].ToString()
-                                         }).ToList();
+                                        select new ComboboxItem()
+                                        {
+                                            Valor = Convert.ToByte(dr["idSucursal"]),
+                                            Texto = dr["nombreSucursal"].ToString()
+                                        }).ToList();
                 foreach (var item in listcomboboxSucursal)
                 {
                     cbxSucursal.Items.Add(item);
@@ -478,7 +472,7 @@ namespace sisgesoriadao
             }
         }
         private void btnPrintQR_Click(object sender, RoutedEventArgs e)
-        {            
+        {
             if (producto != null)
             {
                 labelClear(lblInfo);

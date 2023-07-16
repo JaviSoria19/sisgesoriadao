@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MySql.Data.MySqlClient;//MySql.Data
 using sisgesoriadao.Interfaces;
 using sisgesoriadao.Model;
-using MySql.Data.MySqlClient;//MySql.Data
+using System;
+using System.Data;
 namespace sisgesoriadao.Implementation
 {
     public class AjusteImpl : DataBase, IAjuste
@@ -69,6 +65,6 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLike(string CadenaBusqueda, DateTime fechaInicio, DateTime fechaFin)
         {
             throw new NotImplementedException();
-        }        
+        }
     }
 }

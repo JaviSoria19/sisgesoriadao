@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MySql.Data.MySqlClient;//MySql.Data
 using sisgesoriadao.Interfaces;
 using sisgesoriadao.Model;
-using MySql.Data.MySqlClient;//MySql.Data
+using System;
+using System.Data;
 namespace sisgesoriadao.Implementation
 {
     public class CategoriaImpl : DataBase, ICategoria
@@ -83,7 +79,7 @@ namespace sisgesoriadao.Implementation
 
                         //Estado, FechaRegistro y FechaActualizacion.
                         byte.Parse(dt.Rows[0][4].ToString()),
-                        DateTime.Parse(dt.Rows[0][5].ToString()), 
+                        DateTime.Parse(dt.Rows[0][5].ToString()),
                         dt.Rows[0][6].ToString());
                 }
             }
@@ -94,7 +90,7 @@ namespace sisgesoriadao.Implementation
             }
             return c;
         }
-        
+
         public DataTable Select()
         {
             string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.garantia AS Garantia,C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM Categoria AS C

@@ -1,21 +1,12 @@
-﻿using System;
+﻿using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;//ADO.NET
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
-using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
-using System.Text.RegularExpressions;
-using System.Collections.ObjectModel;
 
 namespace sisgesoriadao
 {
@@ -148,14 +139,14 @@ namespace sisgesoriadao
             listaDetalles.Clear();
             foreach (var item in listaHelper)
             {
-                listaProductosComunes.Add(new ProductoComun(item.idProductoComun,item.nombreProductoComun,item.precioVentaBOB));
+                listaProductosComunes.Add(new ProductoComun(item.idProductoComun, item.nombreProductoComun, item.precioVentaBOB));
                 listaDetalles.Add(item.detalle);
             }
 
             implProductoComun = new ProductoComunImpl();
             try
             {
-                string mensaje = implProductoComun.InsertTransaction(listaProductosComunes,listaDetalles,venta_TotalBOB);
+                string mensaje = implProductoComun.InsertTransaction(listaProductosComunes, listaDetalles, venta_TotalBOB);
                 if (mensaje == "VENTA_EXITOSA")
                 {
                     MessageBox.Show("VENTA REGISTRADA EXITOSAMENTE.");
@@ -185,11 +176,11 @@ namespace sisgesoriadao
                 implProductoComun = new ProductoComunImpl();
                 dataTable = implProductoComun.SelectForComboBox();
                 listcomboboxProductoComun = (from DataRow dr in dataTable.Rows
-                                         select new ComboboxItem()
-                                         {
-                                             Valor = Convert.ToByte(dr["idProductoComun"]),
-                                             Texto = dr["nombreProductoComun"].ToString()
-                                         }).ToList();
+                                             select new ComboboxItem()
+                                             {
+                                                 Valor = Convert.ToByte(dr["idProductoComun"]),
+                                                 Texto = dr["nombreProductoComun"].ToString()
+                                             }).ToList();
                 foreach (var item in listcomboboxProductoComun)
                 {
                     cbxProductoComun.Items.Add(item);

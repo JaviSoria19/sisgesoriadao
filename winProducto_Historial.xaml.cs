@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
+﻿using sisgesoriadao.Implementation;
 using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
+using System;
+using System.Windows;
+using System.Windows.Input;
 namespace sisgesoriadao
 {
     /// <summary>
@@ -25,14 +14,14 @@ namespace sisgesoriadao
         public winProducto_Historial()
         {
             InitializeComponent();
-        }        
+        }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtBuscar.Text)!=true)
+            if (string.IsNullOrEmpty(txtBuscar.Text) != true)
             {
                 Select();
             }

@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System;
+using System.Data;//ADO.NET
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
-using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
-using System.Text.RegularExpressions;
 
 namespace sisgesoriadao
 {
@@ -29,7 +21,7 @@ namespace sisgesoriadao
         public winCategoria()
         {
             InitializeComponent();
-        }              
+        }
         private void Select()
         {
             try
@@ -116,7 +108,7 @@ namespace sisgesoriadao
             {
                 //INSERT
                 case 1:
-                    if (string.IsNullOrEmpty(txtCategoria.Text)!=true && string.IsNullOrEmpty(txtGarantia.Text) != true)
+                    if (string.IsNullOrEmpty(txtCategoria.Text) != true && string.IsNullOrEmpty(txtGarantia.Text) != true)
                     {
                         categoria = new Categoria(Session.IdUsuario, txtCategoria.Text.Trim(), byte.Parse(txtGarantia.Text.Trim()));
                         implCategoria = new CategoriaImpl();
@@ -277,7 +269,7 @@ namespace sisgesoriadao
 
             txtCategoria.IsEnabled = false;
             txtGarantia.IsEnabled = false;
-        }        
+        }
         public void labelClear(Label label)
         {
             label.Foreground = new SolidColorBrush(Colors.Transparent);

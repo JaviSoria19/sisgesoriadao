@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System;
+using System.Data;//ADO.NET
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
-using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
 namespace sisgesoriadao
 {
     /// <summary>
@@ -163,7 +154,7 @@ namespace sisgesoriadao
                             txtProducto_Descripcion.Text += item[10].ToString() + "\n \n";
                         }
                         txtProducto_Detalle.Text += item[11].ToString() + "\n \n";
-                        txtProducto_Garantia.Text += item[12].ToString() + " Meses\n \n" ;
+                        txtProducto_Garantia.Text += item[12].ToString() + " Meses\n \n";
                         txtProducto_Cantidad.Text += item[13].ToString() + "\n \n";
                         txtProducto_Precio.Text += item[14].ToString() + "\n \n";
                         txtProducto_DescuentoPorcentaje.Text += item[15].ToString() + "\n \n";

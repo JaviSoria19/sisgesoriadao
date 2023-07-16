@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace sisgesoriadao.Model
 {
@@ -12,7 +8,7 @@ namespace sisgesoriadao.Model
         public byte IdUsuario { get; set; }
         public byte IdSucursal { get; set; }
         public string NombreCliente { get; set; }
-        public string NombreEmpresa{ get; set; }
+        public string NombreEmpresa { get; set; }
         public string Nit { get; set; }
         public string Direccion { get; set; }
         public string Correo { get; set; }

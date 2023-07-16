@@ -1,26 +1,18 @@
-﻿using System;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
+using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System;
 using System.Collections.Generic;
+using System.Data;//ADO.NET
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
-using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
-using System.Text.RegularExpressions;
-
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.xml;
-using System.IO;
-using iTextSharp.tool.xml;
 namespace sisgesoriadao
 {
     /// <summary>
@@ -51,7 +43,7 @@ namespace sisgesoriadao
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtNombreCliente.Text)!=true && string.IsNullOrEmpty(txtNombreEmpresa.Text) != true && string.IsNullOrEmpty(txtNit.Text) != true &&
+            if (string.IsNullOrEmpty(txtNombreCliente.Text) != true && string.IsNullOrEmpty(txtNombreEmpresa.Text) != true && string.IsNullOrEmpty(txtNit.Text) != true &&
                 string.IsNullOrEmpty(txtDireccion.Text) != true && string.IsNullOrEmpty(txtCorreo.Text) != true && string.IsNullOrEmpty(txtTelefono.Text) != true)
             {
                 cotizacion = new Cotizacion(Session.IdUsuario,
@@ -69,7 +61,7 @@ namespace sisgesoriadao
                     if (MessageBox.Show("¿Está seguro de haber ingresado todos los datos correctamente? \n Cantidad de productos ingresados en la cotización: " + listaProductos.Count + ". \n Presione SI para continuar.", "Confirmar cotización", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
                         implCotizacion = new CotizacionImpl();
-                        string mensaje = implCotizacion.InsertTransaction(listaProductos,cotizacion);
+                        string mensaje = implCotizacion.InsertTransaction(listaProductos, cotizacion);
                         if (mensaje == "COTIZACION REGISTRADA EXITOSAMENTE.")
                         {
                             MessageBox.Show(mensaje);
@@ -80,7 +72,7 @@ namespace sisgesoriadao
                                 {
                                     DataTable dt = new DataTable();
                                     dt = implCotizacion.SelectDetails(cotizacion.IdCotizacion);
-                                    pdf(dt,cotizacion);
+                                    pdf(dt, cotizacion);
                                 }
                                 catch (Exception ex)
                                 {
@@ -220,7 +212,7 @@ namespace sisgesoriadao
                                               {
                                                   Valor = Convert.ToInt32(dr["idProducto"]),
                                                   Texto = dr["nombreProducto"].ToString()
-                                                  
+
                                               }).ToList();
                 acbtxtNombreProducto.ItemsSource = listcomboboxNombreProducto;
             }

@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System;
+using System.Data;//ADO.NET
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
-using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
-using System.Text.RegularExpressions;
 
 namespace sisgesoriadao
 {
@@ -29,7 +21,7 @@ namespace sisgesoriadao
         public winSucursal()
         {
             InitializeComponent();
-        }        
+        }
         private void btnInsert_Click(object sender, RoutedEventArgs e)
         {
             labelClear(lblInfo);
@@ -196,7 +188,7 @@ namespace sisgesoriadao
             txtDireccion.IsEnabled = false;
             txtCorreo.IsEnabled = false;
             txtTelefono.IsEnabled = false;
-        }        
+        }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
@@ -319,7 +311,7 @@ namespace sisgesoriadao
         private static bool IsTextAllowed(string text)
         {
             return !_regex.IsMatch(text);
-        }        
+        }
         //------------------------------------------------------><---------------------------------------------
     }
 }

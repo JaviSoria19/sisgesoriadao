@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace sisgesoriadao.Model
 {
-    public class Empleado:BaseClass
+    public class Empleado : BaseClass
     {
         public byte IdEmpleado { get; set; }
         public string Nombres { get; set; }
@@ -33,7 +29,7 @@ namespace sisgesoriadao.Model
         /// <param name="fechaRegistro"></param>
         /// <param name="fechaActualizacion"></param>
         public Empleado(byte idEmpleado, string nombres, string primerApellido, string segundoApellido, string numeroCelular, string numeroCI, byte estado, DateTime fechaRegistro, string fechaActualizacion)
-            :base(estado,fechaRegistro,fechaActualizacion)
+            : base(estado, fechaRegistro, fechaActualizacion)
         {
             IdEmpleado = idEmpleado;
             Nombres = nombres;

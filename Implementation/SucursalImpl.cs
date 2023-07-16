@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MySql.Data.MySqlClient;//MySql.Data
 using sisgesoriadao.Interfaces;
 using sisgesoriadao.Model;
-using MySql.Data.MySqlClient;//MySql.Data
+using System;
+using System.Data;
 namespace sisgesoriadao.Implementation
 {
     public class SucursalImpl : DataBase, ISucursal
@@ -86,7 +82,7 @@ namespace sisgesoriadao.Implementation
 
                         /*Estado, F. Registro & F. Actualizacion.*/
                         byte.Parse(dt.Rows[0][5].ToString()),
-                        DateTime.Parse(dt.Rows[0][6].ToString()),   
+                        DateTime.Parse(dt.Rows[0][6].ToString()),
                         dt.Rows[0][7].ToString());
                 }
             }

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MySql.Data.MySqlClient;//MySql.Data
 using sisgesoriadao.Interfaces;
 using sisgesoriadao.Model;
-using MySql.Data.MySqlClient;//MySql.Data
+using System;
+using System.Collections.Generic;
+using System.Data;
 namespace sisgesoriadao.Implementation
 {
     public class VentaImpl : DataBase, IVenta
     {
-        public string InsertTransaction(Venta Venta, List<Producto> ListaProductos, List<double> ListaDescuentosPorcentaje, List<byte> ListaGarantias, List<MetodoPago> ListaMetodosPago, Cliente Cliente  )
+        public string InsertTransaction(Venta Venta, List<Producto> ListaProductos, List<double> ListaDescuentosPorcentaje, List<byte> ListaGarantias, List<MetodoPago> ListaMetodosPago, Cliente Cliente)
         {
             MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
             connection.Open();
@@ -176,7 +173,7 @@ namespace sisgesoriadao.Implementation
 
                 throw ex;
             }
-            return (CajaUSD,CajaBOB);
+            return (CajaUSD, CajaBOB);
         }
 
         public string GetTodayProducts(DateTime FechaHoy)
@@ -433,7 +430,7 @@ namespace sisgesoriadao.Implementation
                 //REGISTRO DEL METODO DE PAGO.
                 command.CommandText = @"INSERT INTO Metodo_Pago (idVenta,montoUSD,montoBOB,tipo)
                             VALUES(@idVenta,@montoUSD,@montoBOB,@tipo)";
-                command.Parameters.AddWithValue("@idVenta",IdVenta);
+                command.Parameters.AddWithValue("@idVenta", IdVenta);
                 command.Parameters.AddWithValue("@montoUSD", PagoUSD);
                 command.Parameters.AddWithValue("@montoBOB", PagoBOB);
                 command.Parameters.AddWithValue("@tipo", MetodoPago);

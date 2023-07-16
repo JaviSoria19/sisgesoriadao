@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MySql.Data.MySqlClient;//MySql.Data
 using sisgesoriadao.Interfaces;
 using sisgesoriadao.Model;
-using MySql.Data.MySqlClient;//MySql.Data
+using System;
+using System.Data;
 namespace sisgesoriadao.Implementation
 {
     public class ClienteImpl : DataBase, ICliente
@@ -143,7 +139,7 @@ namespace sisgesoriadao.Implementation
             string query = @"SELECT idCliente as ID, nombre as Nombre, numeroCelular AS Celular, numeroCI AS Carnet, fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion'
                                 FROM Cliente WHERE (nombre LIKE @search OR numeroCelular LIKE @search OR numeroCI LIKE @search) 
                                 AND estado = 1 AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin
-                                ORDER BY 6 DESC"; 
+                                ORDER BY 6 DESC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@search", "%" + CadenaBusqueda + "%");
             command.Parameters.AddWithValue("@FechaInicio", FechaInicio.ToString("yyyy-MM-dd"));

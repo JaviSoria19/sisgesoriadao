@@ -1,23 +1,15 @@
-﻿using System;
+﻿using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;//ADO.NET
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
-using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
-using DYMO.Label.Framework;
 using Label = DYMO.Label.Framework.Label;
-using System.Collections.ObjectModel;
 namespace sisgesoriadao
 {
     /// <summary>
@@ -29,7 +21,7 @@ namespace sisgesoriadao
         ProductoImpl implProducto;
         CondicionImpl implCondicion;
         List<Producto> listaproductos = new List<Producto>();
-        int contador=1;
+        int contador = 1;
         string codigoSublote;
         int idSublote = 0;
 
@@ -38,7 +30,7 @@ namespace sisgesoriadao
         public winProducto_Insert()
         {
             InitializeComponent();
-        }        
+        }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -59,8 +51,8 @@ namespace sisgesoriadao
                 listaproductos.Clear();
                 foreach (var item in listaHelper)
                 {
-                    listaproductos.Add(new Producto(item.IdSucursal,item.IdCategoria,item.IdSublote,item.IdCondicion,item.IdUsuario,
-                        item.CodigoSublote,item.NombreProducto,item.Identificador,item.CostoUSD,item.CostoBOB,item.PrecioVentaUSD,item.PrecioVentaBOB,item.Observaciones));
+                    listaproductos.Add(new Producto(item.IdSucursal, item.IdCategoria, item.IdSublote, item.IdCondicion, item.IdUsuario,
+                        item.CodigoSublote, item.NombreProducto, item.Identificador, item.CostoUSD, item.CostoBOB, item.PrecioVentaUSD, item.PrecioVentaBOB, item.Observaciones));
                 }
 
                 if (MessageBox.Show("¿Está seguro de haber ingresado todos los datos correctamente? \n Cantidad de productos ingresados al lote: " + listaproductos.Count + ". \n Presione SI para continuar.", "Confirmar lote", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -101,7 +93,7 @@ namespace sisgesoriadao
         }
         private void cbxLote_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (contador==1)
+            if (contador == 1)
             {
                 GetCodigoSubLoteFromDatabase();
                 GetIDSubLoteFromDatabase();
@@ -109,9 +101,9 @@ namespace sisgesoriadao
         }
         private void txtCostoUSD_KeyUp(object sender, KeyEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtCostoUSD.Text)!=true)
+            if (string.IsNullOrEmpty(txtCostoUSD.Text) != true)
             {
-                double costoBOB = Math.Round(double.Parse(txtCostoUSD.Text) * Session.Ajuste_Cambio_Dolar,2);
+                double costoBOB = Math.Round(double.Parse(txtCostoUSD.Text) * Session.Ajuste_Cambio_Dolar, 2);
                 txtCostoBOB.Text = costoBOB.ToString();
             }
         }
@@ -119,7 +111,7 @@ namespace sisgesoriadao
         {
             if (string.IsNullOrEmpty(txtCostoBOB.Text) != true)
             {
-                double costoUSD = Math.Round(double.Parse(txtCostoBOB.Text) / Session.Ajuste_Cambio_Dolar, 2);                
+                double costoUSD = Math.Round(double.Parse(txtCostoBOB.Text) / Session.Ajuste_Cambio_Dolar, 2);
                 txtCostoUSD.Text = costoUSD.ToString();
             }
         }
@@ -189,7 +181,7 @@ namespace sisgesoriadao
                     txtIdentificador.Text = "";
                     txtIdentificador.Focus();
 
-                    if (contador!=1)
+                    if (contador != 1)
                     {
                         cbxLote.IsEnabled = false;
                         cbxCategoria.IsEnabled = false;
@@ -205,7 +197,7 @@ namespace sisgesoriadao
             {
                 MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
             }
-        }    
+        }
         void removeFromDataGrid()
         {
             if (dgvProductos.Items.IsEmpty != true)
@@ -280,10 +272,10 @@ namespace sisgesoriadao
                 implProducto = new ProductoImpl();
                 dataTable = implProducto.SelectProductNamesForComboBox();
                 listcomboboxNombreProducto = (from DataRow dr in dataTable.Rows
-                                         select new ComboboxItem()
-                                         {
-                                             Texto = dr["nombreProducto"].ToString()
-                                         }).ToList();
+                                              select new ComboboxItem()
+                                              {
+                                                  Texto = dr["nombreProducto"].ToString()
+                                              }).ToList();
                 acbtxtNombreProducto.ItemsSource = listcomboboxNombreProducto;
             }
             catch (Exception ex)
@@ -300,11 +292,11 @@ namespace sisgesoriadao
                 implProducto = new ProductoImpl();
                 dataTable = implProducto.SelectBatchForComboBox();
                 listcomboboxLote = (from DataRow dr in dataTable.Rows
-                                         select new ComboboxItem()
-                                         {
-                                             Valor = Convert.ToInt32(dr["idLote"]),
-                                             Texto = dr["codigoLote"].ToString()
-                                         }).ToList();
+                                    select new ComboboxItem()
+                                    {
+                                        Valor = Convert.ToInt32(dr["idLote"]),
+                                        Texto = dr["codigoLote"].ToString()
+                                    }).ToList();
                 foreach (var item in listcomboboxLote)
                 {
                     cbxLote.Items.Add(item);
@@ -430,7 +422,7 @@ namespace sisgesoriadao
                     {
                         MessageBox.Show("EL IDENTIFICADOR DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
                     }
-                    
+
                 }
                 else if (indexSeleccionado == 8)/*COSTO USD*/
                 {
@@ -439,7 +431,7 @@ namespace sisgesoriadao
                         for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
                         {
                             listaHelper[i].CostoUSD = double.Parse(valorNuevo.Text.Trim());
-                            listaHelper[i].CostoBOB = Math.Round(listaHelper[i].CostoUSD * Session.Ajuste_Cambio_Dolar,2);
+                            listaHelper[i].CostoBOB = Math.Round(listaHelper[i].CostoUSD * Session.Ajuste_Cambio_Dolar, 2);
                         }
                         if (double.Parse(valorNuevo.Text.Trim()) > filaSeleccionada.PrecioVentaUSD)
                         {

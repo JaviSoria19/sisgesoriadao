@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using sisgesoriadao.Model;
-using System.Data;
+﻿using sisgesoriadao.Model;
 
 namespace sisgesoriadao.Interfaces
 {
-    public interface IAjuste: IDao<Ajuste>
+    public interface IAjuste : IDao<Ajuste>
     {
         Ajuste Get();
     }

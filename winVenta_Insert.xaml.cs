@@ -1,21 +1,15 @@
-﻿using System;
+﻿using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;//ADO.NET
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
-using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
-using System.Text.RegularExpressions;
-using System.Collections.ObjectModel;
 
 namespace sisgesoriadao
 {
@@ -128,7 +122,7 @@ namespace sisgesoriadao
                             MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
                         }
                         break;
-                        //UPDATE
+                    //UPDATE
                     case 2:
                         cliente.Nombre = txtRegister_Nombre.Text.Trim();
                         cliente.NumeroCelular = txtRegister_NumeroCelular.Text.Trim();
@@ -254,7 +248,7 @@ namespace sisgesoriadao
             txtRegister_NumeroCI.IsEnabled = false;
             btnSaveNewCustomer.IsEnabled = false;
             btnCancelNewCustomer.IsEnabled = false;
-        }        
+        }
         void SearchProductByCode()
         {
             if (string.IsNullOrEmpty(txtSearchProduct.Text) == false)
@@ -327,7 +321,7 @@ namespace sisgesoriadao
                     throw;
                 }
             }
-        }        
+        }
         void AddProductAndWarrantyToListAndDataGrid(Producto producto, Categoria categoria)
         {
             bool validoParaInsercion = true;
@@ -477,7 +471,7 @@ namespace sisgesoriadao
             {
                 listaDescuentosPorcentaje.Add(item.descuentoPorcentaje);
                 listaGarantias.Add(item.garantia);
-                listaProductos.Add(new Producto(item.idProducto,item.totalproductoUSD,item.totalproductoBOB));
+                listaProductos.Add(new Producto(item.idProducto, item.totalproductoUSD, item.totalproductoBOB));
             }
         }
         private void txtPrecio_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -542,11 +536,11 @@ namespace sisgesoriadao
                 implCliente = new ClienteImpl();
                 dataTable = implCliente.SelectCustomerNamesForComboBox();
                 listcomboboxCliente = (from DataRow dr in dataTable.Rows
-                                              select new ComboboxItem()
-                                              {
-                                                  Valor = Convert.ToInt32(dr["idCliente"]),
-                                                  Texto = dr["nombre"].ToString()
-                                              }).ToList();
+                                       select new ComboboxItem()
+                                       {
+                                           Valor = Convert.ToInt32(dr["idCliente"]),
+                                           Texto = dr["nombre"].ToString()
+                                       }).ToList();
                 acbtxtNameCustomer.ItemsSource = listcomboboxCliente;
             }
             catch (Exception ex)
@@ -590,7 +584,7 @@ namespace sisgesoriadao
                         throw;
                     }
                 }
-            }            
+            }
         }
         private void txtSearchProduct_KeyDown(object sender, KeyEventArgs e)
         {
@@ -633,7 +627,7 @@ namespace sisgesoriadao
                 venta_pagoTotalBOB += double.Parse(txtPagoBOB.Text);
                 txtVentaTotalPagoBOB.Text = venta_pagoTotalBOB.ToString();
 
-                venta_saldoUSD = Math.Round(venta_TotalUSD - venta_pagoTotalUSD,2);
+                venta_saldoUSD = Math.Round(venta_TotalUSD - venta_pagoTotalUSD, 2);
                 txtVentaTotalSaldoUSD.Text = venta_saldoUSD.ToString();
                 venta_saldoBOB = Math.Round(venta_TotalBOB - venta_pagoTotalBOB, 2);
                 txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
@@ -818,7 +812,7 @@ namespace sisgesoriadao
         }
         private void ModificarFilaPorDescuentoPorcentaje(int i, TextBox n, DataGridRowDetalleHelper fila)
         {
-            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento),2);
+            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2);
             double pago = 0;
             pago = Math.Round(fila.precioUSD * (1 - double.Parse(n.Text.ToString()) / 100), 2);
             if (pago >= limite)
@@ -842,7 +836,7 @@ namespace sisgesoriadao
         }
         private void ModificarFilaPorDescuentoUSD(int i, TextBox n, DataGridRowDetalleHelper fila)
         {
-            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento),2); ;
+            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2); ;
             double pago = 0;
             pago = Math.Round(fila.precioUSD - double.Parse(n.Text.ToString()), 2);
             if (pago >= limite)

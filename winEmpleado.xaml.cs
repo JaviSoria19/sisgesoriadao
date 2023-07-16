@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System;
+using System.Data;//ADO.NET
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
-using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
 namespace sisgesoriadao
 {
     /// <summary>
@@ -51,10 +42,10 @@ namespace sisgesoriadao
         }
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            if (empleado!=null)
+            if (empleado != null)
             {
                 labelClear(lblInfo);
-                if (MessageBox.Show("Está realmente segur@ de eliminar el registro?","Eliminar",MessageBoxButton.YesNo,MessageBoxImage.Warning)==MessageBoxResult.Yes)
+                if (MessageBox.Show("Está realmente segur@ de eliminar el registro?", "Eliminar", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
                     try
                     {
@@ -87,7 +78,7 @@ namespace sisgesoriadao
                 //INSERT
                 case 1:
                     //VALIDACIÓN DE DATOS.
-                    if (string.IsNullOrEmpty(txtNombre.Text)!=true && string.IsNullOrEmpty(txtPrimerApellido.Text) != true &&
+                    if (string.IsNullOrEmpty(txtNombre.Text) != true && string.IsNullOrEmpty(txtPrimerApellido.Text) != true &&
                         string.IsNullOrEmpty(txtNumeroCelular.Text) != true && string.IsNullOrEmpty(txtNumeroCI.Text) != true
                         )
                     {
@@ -159,7 +150,7 @@ namespace sisgesoriadao
         }
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            if (txtBuscar.Text==null || txtBuscar.Text=="")
+            if (txtBuscar.Text == null || txtBuscar.Text == "")
             {
                 Select();
             }
@@ -316,6 +307,6 @@ namespace sisgesoriadao
         {
             label.Foreground = new SolidColorBrush(Colors.Black);
             label.Background = new SolidColorBrush(Colors.Red);
-        }        
+        }
     }
 }

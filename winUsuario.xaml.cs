@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System;
+using System.Data;//ADO.NET
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
-using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
-using System.Text.RegularExpressions;
 
 namespace sisgesoriadao
 {
@@ -31,7 +23,7 @@ namespace sisgesoriadao
         public winUsuario()
         {
             InitializeComponent();
-        }        
+        }
         private void btnInsert_Click(object sender, RoutedEventArgs e)
         {
             if (empleado == null)
@@ -100,7 +92,7 @@ namespace sisgesoriadao
                 //INSERT
                 case 1:
                     //VALIDACIÓN DE DATOS.
-                    if (string.IsNullOrEmpty(txtUsuario.Text)!=true && string.IsNullOrEmpty(txtPin.Text)!=true && string.IsNullOrEmpty(txtContrasenha.Text)!=true && string.IsNullOrEmpty(txtReContrasenha.Text)!=true)
+                    if (string.IsNullOrEmpty(txtUsuario.Text) != true && string.IsNullOrEmpty(txtPin.Text) != true && string.IsNullOrEmpty(txtContrasenha.Text) != true && string.IsNullOrEmpty(txtReContrasenha.Text) != true)
                     {
                         if (txtContrasenha.Text != txtReContrasenha.Text)
                         {

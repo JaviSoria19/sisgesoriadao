@@ -1,25 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
-using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
-
-using iTextSharp.text;
+﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
-using iTextSharp.text.xml;
-using System.IO;
 using iTextSharp.tool.xml;
+using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System;
+using System.Collections.Generic;
+using System.Data;//ADO.NET
+using System.IO;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 namespace sisgesoriadao
 {
     /// <summary>
@@ -67,7 +57,7 @@ namespace sisgesoriadao
             cbxGetGroupConcatCondicion();
             cbxGetCondicionFromDatabase();
 
-            cbxDisponibilidad.Items.Add(new ComboboxItem("TODOS","0,1,2"));
+            cbxDisponibilidad.Items.Add(new ComboboxItem("TODOS", "0,1,2"));
             cbxDisponibilidad.Items.Add(new ComboboxItem("DISPONIBLES", "1"));
             cbxDisponibilidad.Items.Add(new ComboboxItem("VENDIDOS", "2"));
             cbxDisponibilidad.Items.Add(new ComboboxItem("ELIMINADOS", "0"));
@@ -100,11 +90,11 @@ namespace sisgesoriadao
                 implSucursal = new SucursalImpl();
                 dataTable = implSucursal.SelectForComboBox();
                 listcomboboxSucursal = (from DataRow dr in dataTable.Rows
-                                         select new ComboboxItem()
-                                         {
-                                             Valor = dr["idSucursal"].ToString(),
-                                             Texto = dr["nombreSucursal"].ToString()
-                                         }).ToList();
+                                        select new ComboboxItem()
+                                        {
+                                            Valor = dr["idSucursal"].ToString(),
+                                            Texto = dr["nombreSucursal"].ToString()
+                                        }).ToList();
                 foreach (var item in listcomboboxSucursal)
                 {
                     cbxSucursal.Items.Add(item);
@@ -220,9 +210,9 @@ namespace sisgesoriadao
             {
                 implProducto = new ProductoImpl();
                 dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implProducto.SelectLikeInventoryFilter(txtBuscar.Text,(cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCondicion.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxDisponibilidad.SelectedItem as ComboboxItem).Valor).DefaultView;
+                dgvDatos.ItemsSource = implProducto.SelectLikeInventoryFilter(txtBuscar.Text, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCondicion.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxDisponibilidad.SelectedItem as ComboboxItem).Valor).DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeInventoryFilter(txtBuscar.Text,(cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCondicion.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxDisponibilidad.SelectedItem as ComboboxItem).Valor).Rows.Count;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeInventoryFilter(txtBuscar.Text, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCondicion.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxDisponibilidad.SelectedItem as ComboboxItem).Valor).Rows.Count;
                 cadenaFiltroSucursal = (cbxSucursal.SelectedItem as ComboboxItem).Texto;
                 cadenaFiltroCondicion = (cbxCondicion.SelectedItem as ComboboxItem).Texto;
                 cadenaFiltroCategoria = (cbxCategoria.SelectedItem as ComboboxItem).Texto;

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace sisgesoriadao.Model
 {
-    public class Venta:BaseClass
+    public class Venta : BaseClass
     {
         public int IdVenta { get; set; }
         public int IdCliente { get; set; }
@@ -17,7 +13,7 @@ namespace sisgesoriadao.Model
         public double SaldoUSD { get; set; }
         public double SaldoBOB { get; set; }
         public string Observaciones { get; set; }
-        
+
         public Venta()
         {
 

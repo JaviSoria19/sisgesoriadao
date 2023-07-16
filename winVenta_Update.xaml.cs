@@ -1,21 +1,15 @@
-﻿using System;
+﻿using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;//ADO.NET
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;//ADO.NET
-using sisgesoriadao.Model;
-using sisgesoriadao.Implementation;
-using System.Text.RegularExpressions;
-using System.Collections.ObjectModel;
 
 namespace sisgesoriadao
 {
@@ -226,7 +220,7 @@ namespace sisgesoriadao
             {
                 implVenta = new VentaImpl();
                 byte estado = implVenta.GetEstado(idVenta);
-                if (estado == 0 )
+                if (estado == 0)
                 {
                     btnDeleteSale.IsEnabled = false;
                 }
@@ -726,7 +720,7 @@ namespace sisgesoriadao
         }
         private void ModificarFilaPorDescuentoPorcentaje(int i, TextBox n, DataGridRowDetalleHelper fila)
         {
-            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento),2);
+            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2);
             double pago = 0;
             pago = Math.Round(fila.precioUSD * (1 - double.Parse(n.Text.ToString()) / 100), 2);
             if (pago >= limite)
@@ -752,7 +746,7 @@ namespace sisgesoriadao
         }
         private void ModificarFilaPorDescuentoUSD(int i, TextBox n, DataGridRowDetalleHelper fila)
         {
-            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento),2); ;
+            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2); ;
             double pago = 0;
             pago = Math.Round(fila.precioUSD - double.Parse(n.Text.ToString()), 2);
             if (pago >= limite)

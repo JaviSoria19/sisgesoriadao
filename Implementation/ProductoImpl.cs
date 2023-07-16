@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MySql.Data.MySqlClient;//MySql.Data
 using sisgesoriadao.Interfaces;
 using sisgesoriadao.Model;
-using MySql.Data.MySqlClient;//MySql.Data
+using System;
+using System.Collections.Generic;
+using System.Data;
 namespace sisgesoriadao.Implementation
 {
     public class ProductoImpl : DataBase, IProducto
@@ -193,7 +190,7 @@ namespace sisgesoriadao.Implementation
                         dt.Rows[0][13].ToString(),                          /*observaciones*/
 
                         /*estado, f. registro & f. actualización.*/
-                        byte.Parse(dt.Rows[0][14].ToString()), 
+                        byte.Parse(dt.Rows[0][14].ToString()),
                         DateTime.Parse(dt.Rows[0][15].ToString()),
                         dt.Rows[0][16].ToString());
                 }
@@ -236,7 +233,7 @@ namespace sisgesoriadao.Implementation
                         dt.Rows[0][13].ToString(),                          /*observaciones*/
 
                         /*estado, f. registro & f. actualización.*/
-                        byte.Parse(dt.Rows[0][14].ToString()), 
+                        byte.Parse(dt.Rows[0][14].ToString()),
                         DateTime.Parse(dt.Rows[0][15].ToString()),
                         dt.Rows[0][16].ToString());
                 }
@@ -466,7 +463,7 @@ namespace sisgesoriadao.Implementation
                         /*estado, f. registro & f. actualización.*/
                         byte.Parse(dt.Rows[0][3].ToString()),
                         DateTime.Parse(dt.Rows[0][4].ToString()),
-                        dt.Rows[0][ 5].ToString());
+                        dt.Rows[0][5].ToString());
                 }
             }
             catch (Exception ex)
@@ -579,7 +576,7 @@ namespace sisgesoriadao.Implementation
                     command.Parameters.AddWithValue("@idProductoTwo", Producto.IdProducto);
                     command.Parameters.AddWithValue("@detalle", "PRODUCTO TRANSFERIDO A LA SUCURSAL: " + SucursalDestino + ", POR EL USUARIO: " + Session.NombreUsuario);
                     command.ExecuteNonQuery();
-                    
+
                     //LIMPIEZA DE PARÁMETROS YA UTILIZADOS EN EL CICLO ANTERIOR PARA PROSEGUIR, CASO CONTRARIO LANZA ERROR.
                     command.Parameters.Clear();
                 }
