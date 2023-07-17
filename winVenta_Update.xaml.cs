@@ -557,6 +557,7 @@ namespace sisgesoriadao
                         MessageBox.Show("METODO DE PAGO REGISTRADO CON ÉXITO.");
                         getSale_Products();
                         SelectMetodosPago();
+                        imprimirVenta();
                     }
                     else
                     {
@@ -594,6 +595,7 @@ namespace sisgesoriadao
                                 MessageBox.Show("METODO DE PAGO ELIMINADO CON ÉXITO.");
                                 getSale_Products();
                                 SelectMetodosPago();
+                                imprimirVenta();
                             }
                             else
                             {
@@ -653,7 +655,7 @@ namespace sisgesoriadao
                     if (deletetransaction == "DELETEVENTA_EXITOSO")
                     {
                         MessageBox.Show("LA VENTA HA SIDO ELIMINADA CON ÉXITO, LOS PRODUCTOS HAN RETORNADO A SISTEMA.");
-                        getSale_Info();
+                        this.Close();
                     }
                 }
                 else
@@ -711,6 +713,7 @@ namespace sisgesoriadao
                 SumarTotalySaldo(dgvProductos.SelectedIndex);
                 dgvProductos.ItemsSource = null;
                 dgvProductos.ItemsSource = listaHelper;
+                imprimirVenta();
             }
             catch (Exception ex)
             {

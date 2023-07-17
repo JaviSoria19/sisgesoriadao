@@ -11,7 +11,7 @@ namespace sisgesoriadao.Interfaces
         String GetCodeFormatToInsertProducts(int IdLote);
         int GetSubBatchToInsertProducts(int IdLote);
         DataTable SelectProductHistory(string CadenaBusqueda);
-        DataTable SelectLikeReporteValorado(byte idSucursal, string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin);
+        DataTable SelectLikeReporteValorado(string idSucursal, string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin);
         DataTable SelectSoldProducts();
         DataTable SelectLikeSoldProducts(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin);
         DataTable SelectProductNamesForComboBox();
@@ -20,6 +20,7 @@ namespace sisgesoriadao.Interfaces
         //LOTES
         int InsertBatch(Lote l);
         int UpdateBatch(Lote l);
+        int DeleteBatch(Lote l);
         Lote GetBatch(int Id);
         DataTable SelectBatch();
         DataTable SelectLikeBatch(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin);

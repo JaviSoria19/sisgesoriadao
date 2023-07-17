@@ -207,5 +207,12 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void btnQuotationAdd_Click(object sender, RoutedEventArgs e)
+        {
+            winCotizacion_Insert winCotizacion_Insert = new winCotizacion_Insert();
+            winCotizacion_Insert.Show();
+            this.Close();
+        }
     }
 }

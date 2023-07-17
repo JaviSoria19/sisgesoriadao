@@ -264,5 +264,37 @@ namespace sisgesoriadao
             label.Foreground = new SolidColorBrush(Colors.Black);
             label.Background = new SolidColorBrush(Colors.Red);
         }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (lote != null)
+            {
+                labelClear(lblInfo);
+                if (MessageBox.Show("Está realmente segur@ de eliminar el registro?", "Eliminar", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        implProducto = new ProductoImpl();
+                        int n = implProducto.DeleteBatch(lote);
+                        if (n > 0)
+                        {
+                            labelSuccess(lblInfo);
+                            lblInfo.Content = "REGISTRO ELIMINADO CON ÉXITO.";
+                            Select();
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                }
+            }
+            else
+            {
+                labelWarning(lblInfo);
+                lblInfo.Content = "¡PARA ELIMINAR UN LOTE DEBE SELECCIONAR UN REGISTRO!";
+            }
+        }
     }
 }

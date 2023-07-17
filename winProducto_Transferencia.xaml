@@ -49,7 +49,15 @@
                         <materialDesign:PackIcon Kind="PackageVariantAdd" Width="30" Height="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Button>
                 </StackPanel>
-                <DataGrid x:Name="dgvProductos" CanUserAddRows="False" CanUserDeleteRows="False" HorizontalAlignment="Center" IsReadOnly="True" SelectionChanged="dgvProductos_SelectionChanged" Loaded="dgvProductos_Loaded"/>
+                <DataGrid x:Name="dgvProductos" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" HorizontalAlignment="Center" IsReadOnly="True" SelectionChanged="dgvProductos_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Nro." Binding="{Binding Numero}"/>
+                        <DataGridTextColumn Header="Código" Binding="{Binding CodigoSublote}"/>
+                        <DataGridTextColumn Header="Producto" Binding="{Binding NombreProducto}"/>
+                        <DataGridTextColumn Header="S/N o IMEI" Binding="{Binding Identificador}"/>
+                        <DataGridTextColumn Header="Obs." Binding="{Binding Observaciones}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
                 <Button x:Name="btnSave" Content="GUARDAR" Margin="0,30,0,0" Click="btnSave_Click" Width="100"/>
             </StackPanel>
         </StackPanel>

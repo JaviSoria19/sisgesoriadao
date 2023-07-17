@@ -146,7 +146,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,30,0,0" HorizontalAlignment="Right">
                         <Label Content="OBSERVACIONES: " VerticalAlignment="Center" Margin="20,0,0,0"/>
-                        <TextBox x:Name="txtObservacionVenta" TextWrapping="Wrap" MinWidth="120" MaxLength="99" IsEnabled="True" Height="22" VerticalAlignment="Center"/>
+                        <TextBox x:Name="txtObservacionVenta" TextWrapping="Wrap" MinWidth="120" MaxLength="99" IsEnabled="True" VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

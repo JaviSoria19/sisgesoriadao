@@ -287,14 +287,14 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
-        public DataTable SelectLikeReporteValorado(byte idSucursal, string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
+        public DataTable SelectLikeReporteValorado(string idSucursal, string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
             string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Producto AS P
                                 INNER JOIN Sucursal AS S ON P.idSucursal = S.idSucursal
                                 INNER JOIN Categoria AS C ON P.idCategoria = C.idCategoria
                                 INNER JOIN Condicion AS CC ON P.idCondicion = CC.idCondicion
                                 WHERE (C.nombreCategoria LIKE @search OR P.nombreProducto LIKE @search OR P.identificador LIKE @search OR CC.nombreCondicion LIKE @search OR P.codigoSublote LIKE @search)
-                                AND P.idSucursal = @idSucursal AND P.estado = 1 AND P.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
+                                AND P.idSucursal IN (" + idSucursal + @") AND P.estado = 1 AND P.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                                 ORDER BY 2 ASC, 6 ASC, 5 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idSucursal", idSucursal);
@@ -788,6 +788,22 @@ namespace sisgesoriadao.Implementation
             {
 
                 throw;
+            }
+        }
+
+        public int DeleteBatch(Lote l)
+        {
+            string query = @"UPDATE Lote SET estado = 0, fechaActualizacion = CURRENT_TIMESTAMP WHERE idLote = @idLote";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idLote", l.IdLote);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
         }
     }

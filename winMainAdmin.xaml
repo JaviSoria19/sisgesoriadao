@@ -94,18 +94,10 @@
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
-                    <Button x:Name="btnQuotationAdd" Width="100" Height="100" Click="btnQuotationAdd_Click" Background="LimeGreen" BorderBrush="LimeGreen" Foreground="{DynamicResource MaterialDesignBody}">
-                        <materialDesign:PackIcon Kind="NoteEditOutline" Width="75" Height="75" HorizontalAlignment="Center"/>
-                    </Button>
-                    <TextBlock Text="REALIZAR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
-                    <TextBlock Text="COTIZACIÓN" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
-                </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
-                    <Button x:Name="btnQuotations" Width="100" Height="100" Click="btnQuotations_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}">
+                    <Button x:Name="btnQuotations" Width="100" Height="100" Click="btnQuotations_Click" Background="{DynamicResource MaterialDesignPaper}" Foreground="{DynamicResource MaterialDesignBody}" BorderBrush="{DynamicResource MaterialDesignBody}">
                         <materialDesign:PackIcon Kind="NoteMultipleOutline" Width="75" Height="75" HorizontalAlignment="Center"/>
                     </Button>
-                    <TextBlock Text="VER" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
-                    <TextBlock Text="COTIZACIONES" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="COTIZACIONES" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnTransferProducts" Width="100" Height="100" Click="btnTransferProducts_Click" Background="Orange" BorderBrush="Orange" Foreground="{DynamicResource MaterialDesignBody}">

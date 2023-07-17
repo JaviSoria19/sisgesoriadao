@@ -168,6 +168,24 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
+        private void dgvDatos_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)
+            {
+                try
+                {
+                    DataRowView d = (DataRowView)dgvDatos.SelectedItem;
+                    Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[3].ToString());
+                    winVenta_Update winVenta_Update = new winVenta_Update();
+                    winVenta_Update.Show();
+                    dgvDatos.SelectedItem = null;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
         void cbxGetGroupConcatUsuarios()
         {
             try

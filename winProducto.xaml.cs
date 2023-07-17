@@ -140,7 +140,24 @@ namespace sisgesoriadao
             txtBlockWelcome.Text = Session.NombreUsuario;
             cbxGetCategoriaFromDatabase();
             cbxGetCondicionFromDatabase();
+            cbxGetGroupConcatSucursal();
             cbxGetSucursalFromDatabase();
+        }
+        void cbxGetGroupConcatSucursal()
+        {
+            try
+            {
+                implSucursal = new SucursalImpl();
+                string sucursalGroupConcatID = implSucursal.SelectGroupConcatIDForComboBox();
+                if (sucursalGroupConcatID != null)
+                {
+                    cbxSucursal.Items.Add(new ComboboxItem("TODOS", sucursalGroupConcatID));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
         {
@@ -174,7 +191,7 @@ namespace sisgesoriadao
                         for (int i = 0; i < cbxCategoria.Items.Count; i++)
                         {
                             cbxCategoria.SelectedIndex = i;
-                            if ((cbxCategoria.SelectedItem as ComboboxItem).Valor == producto.IdCategoria)
+                            if ((cbxCategoria.SelectedItem as ComboboxItem).Valor == producto.IdCategoria.ToString())
                             {
                                 break;
                             }
@@ -182,7 +199,7 @@ namespace sisgesoriadao
                         for (int i = 0; i < cbxCondicion.Items.Count; i++)
                         {
                             cbxCondicion.SelectedIndex = i;
-                            if ((cbxCondicion.SelectedItem as ComboboxItem).Valor == producto.IdCondicion)
+                            if ((cbxCondicion.SelectedItem as ComboboxItem).Valor == producto.IdCondicion.ToString())
                             {
                                 break;
                             }
@@ -315,7 +332,7 @@ namespace sisgesoriadao
                 listcomboboxCategoria = (from DataRow dr in dataTable.Rows
                                          select new ComboboxItem()
                                          {
-                                             Valor = Convert.ToByte(dr["idCategoria"]),
+                                             Valor = dr["idCategoria"].ToString(),
                                              Texto = dr["nombreCategoria"].ToString()
                                          }).ToList();
                 foreach (var item in listcomboboxCategoria)
@@ -340,7 +357,7 @@ namespace sisgesoriadao
                 listcomboboxCondicion = (from DataRow dr in dataTable.Rows
                                          select new ComboboxItem()
                                          {
-                                             Valor = Convert.ToByte(dr["idCondicion"]),
+                                             Valor = dr["idCondicion"].ToString(),
                                              Texto = dr["nombreCondicion"].ToString()
                                          }).ToList();
                 foreach (var item in listcomboboxCondicion)
@@ -365,7 +382,7 @@ namespace sisgesoriadao
                 listcomboboxSucursal = (from DataRow dr in dataTable.Rows
                                         select new ComboboxItem()
                                         {
-                                            Valor = Convert.ToByte(dr["idSucursal"]),
+                                            Valor = dr["idSucursal"].ToString(),
                                             Texto = dr["nombreSucursal"].ToString()
                                         }).ToList();
                 foreach (var item in listcomboboxSucursal)
@@ -455,13 +472,13 @@ namespace sisgesoriadao
         public class ComboboxItem
         {
             public string Texto { get; set; }
-            public byte Valor { get; set; }
+            public string Valor { get; set; }
 
             public override string ToString()
             {
                 return Texto;
             }
-            public ComboboxItem(string texto, byte valor)
+            public ComboboxItem(string texto, string valor)
             {
                 Texto = texto;
                 Valor = valor;

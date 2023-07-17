@@ -94,98 +94,6 @@ namespace sisgesoriadao
         {
             removeFromDataGridandList(dgvProductos.SelectedIndex);
         }
-        private void dgvProductos_Loaded(object sender, RoutedEventArgs e)
-        {
-            DataGridTextColumn columna1 = new DataGridTextColumn
-            {
-                Header = "ID SUCURSAL",
-                Binding = new Binding("IdSucursal")
-            };
-            DataGridTextColumn columna2 = new DataGridTextColumn
-            {
-                Header = "ID CATEGORIA",
-                Binding = new Binding("IdCategoria")
-            };
-            DataGridTextColumn columna3 = new DataGridTextColumn
-            {
-                Header = "ID SUBLOTE",
-                Binding = new Binding("IdSublote")
-            };
-            DataGridTextColumn columna4 = new DataGridTextColumn
-            {
-                Header = "ID CONDICION",
-                Binding = new Binding("IdCondicion")
-            };
-            DataGridTextColumn columna5 = new DataGridTextColumn
-            {
-                Header = "ID USUARIO",
-                Binding = new Binding("IdUsuario")
-            };
-            DataGridTextColumn columna6 = new DataGridTextColumn
-            {
-                Header = "Codigo",
-                Binding = new Binding("CodigoSublote")
-            };
-            DataGridTextColumn columna7 = new DataGridTextColumn
-            {
-                Header = "Producto",
-                Binding = new Binding("NombreProducto")
-            };
-            DataGridTextColumn columna8 = new DataGridTextColumn
-            {
-                Header = "SN/IMEI",
-                Binding = new Binding("Identificador")
-            };
-            DataGridTextColumn columna9 = new DataGridTextColumn
-            {
-                Header = "C. $.",
-                Binding = new Binding("CostoUSD")
-            };
-            DataGridTextColumn columna10 = new DataGridTextColumn
-            {
-                Header = "C. Bs.",
-                Binding = new Binding("CostoBOB")
-            };
-            DataGridTextColumn columna11 = new DataGridTextColumn
-            {
-                Header = "P. $.",
-                Binding = new Binding("PrecioVentaUSD")
-            };
-            DataGridTextColumn columna12 = new DataGridTextColumn
-            {
-                Header = "P. Bs.",
-                Binding = new Binding("PrecioVentaBOB")
-            };
-            DataGridTextColumn columna13 = new DataGridTextColumn
-            {
-                Header = "Obs.",
-                Binding = new Binding("Observaciones")
-            };
-            dgvProductos.Columns.Add(columna1);
-            dgvProductos.Columns.Add(columna2);
-            dgvProductos.Columns.Add(columna3);
-            dgvProductos.Columns.Add(columna4);
-            dgvProductos.Columns.Add(columna5);
-            dgvProductos.Columns.Add(columna6);
-            dgvProductos.Columns.Add(columna7);
-            dgvProductos.Columns.Add(columna8);
-            dgvProductos.Columns.Add(columna9);
-            dgvProductos.Columns.Add(columna10);
-            dgvProductos.Columns.Add(columna11);
-            dgvProductos.Columns.Add(columna12);
-            dgvProductos.Columns.Add(columna13);
-
-            dgvProductos.Columns[0].Visibility = Visibility.Collapsed;
-            dgvProductos.Columns[1].Visibility = Visibility.Collapsed;
-            dgvProductos.Columns[2].Visibility = Visibility.Collapsed;
-            dgvProductos.Columns[3].Visibility = Visibility.Collapsed;
-            dgvProductos.Columns[4].Visibility = Visibility.Collapsed;
-
-            dgvProductos.Columns[8].Visibility = Visibility.Collapsed;
-            dgvProductos.Columns[9].Visibility = Visibility.Collapsed;
-            dgvProductos.Columns[10].Visibility = Visibility.Collapsed;
-            dgvProductos.Columns[11].Visibility = Visibility.Collapsed;
-        }
         void GetProductoFromDB()
         {
             if (string.IsNullOrEmpty(txtCodigoSublote.Text) != true)
@@ -253,7 +161,14 @@ namespace sisgesoriadao
             }
             if (validoParaInsercion == true)
             {
-                dgvProductos.Items.Add(producto);
+                dgvProductos.Items.Add(new DataGridRowDetalleHelper {
+                    Numero = contador,
+                    CodigoSublote = producto.CodigoSublote,
+                    NombreProducto = producto.NombreProducto,
+                    Identificador = producto.Identificador,
+                    Observaciones = producto.Observaciones
+                }
+                );
                 listaProductos.Add(producto);
                 txtCodigoSublote.Text = "";
                 txtCodigoSublote.Focus();
@@ -279,6 +194,14 @@ namespace sisgesoriadao
                         {
                             cbxSucursal.IsEnabled = true;
                         }
+
+                        int i = 1;
+                        foreach (DataGridRowDetalleHelper item in dgvProductos.Items)
+                        {
+                            item.Numero = i;
+                            i++;
+                        }
+                        dgvProductos.Items.Refresh();
                     }
                 }
             }
@@ -370,6 +293,14 @@ namespace sisgesoriadao
             {
 
             }
+        }
+        public class DataGridRowDetalleHelper
+        {
+            public int Numero { get; set; }
+            public string CodigoSublote { get; set; }
+            public string NombreProducto { get; set; }
+            public string Identificador { get; set; }
+            public string Observaciones { get; set; }
         }
     }
 }

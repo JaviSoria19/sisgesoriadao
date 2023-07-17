@@ -13,6 +13,7 @@ namespace sisgesoriadao
     public partial class winVenta_DeudasClientes : Window
     {
         VentaImpl implVenta;
+        double SaldoUSD = 0, SaldoBOB = 0;
         public winVenta_DeudasClientes()
         {
             InitializeComponent();
@@ -39,6 +40,14 @@ namespace sisgesoriadao
                 dgvDatos.ItemsSource = implVenta.SelectAllSalesWithPendingBalanceByCustomers().DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRows.Content = "Registros: " + dgvDatos.Items.Count;
+
+                foreach (DataRowView item in dgvDatos.Items)
+                {
+                    SaldoUSD += double.Parse(item[3].ToString());
+                    SaldoBOB += double.Parse(item[4].ToString());
+                }
+                txtTotalSaldoUSD.Text = "Total Saldo $.: " + SaldoUSD;
+                txtTotalSaldoBOB.Text = "Total Saldo Bs.: " + SaldoBOB;
             }
             catch (Exception ex)
             {

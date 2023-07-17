@@ -32,6 +32,9 @@
                 <TextBlock Margin="0,0,0,5" TextWrapping="Wrap">
                     <Bold>ATENCION:</Bold> Estimad@ usuari@, en esta ventana se encuentran todas las cotizaciones realizadas, seleccione una cotización para ver los detalles.
                 </TextBlock>
+                <StackPanel Orientation="Horizontal" Margin="0" HorizontalAlignment="Left">
+                    <Button x:Name="btnQuotationAdd" Content="NUEVA COTIZACIÓN" Click="btnQuotationAdd_Click" Background="LimeGreen" BorderBrush="LimeGreen"/>
+                </StackPanel>
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">

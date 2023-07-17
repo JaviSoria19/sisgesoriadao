@@ -37,12 +37,13 @@
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="CÓDIGO DE LOTE:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <TextBox x:Name="txtCodigoLote" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="30" KeyUp="TextBoxUppercase" IsEnabled="False" KeyDown="txtCodigoLote_KeyDown"/>
+                <TextBox x:Name="txtCodigoLote" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="8" KeyUp="TextBoxUppercase" IsEnabled="False" KeyDown="txtCodigoLote_KeyDown"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Button x:Name="btnInsert" Content="INSERTAR" Margin="0,0,5,0" Click="btnInsert_Click"/>
                 <Button x:Name="btnUpdate" Content="MODIFICAR" Margin="5" Click="btnUpdate_Click"/>
+                <Button x:Name="btnDelete" Content="ELIMINAR" Margin="5" Click="btnDelete_Click"/>
                 <Button x:Name="btnSave" Content="GUARDAR" Margin="5" IsEnabled="False" Click="btnSave_Click"/>
                 <Button x:Name="btnCancel" Content="CANCELAR" Margin="5" IsEnabled="False" Click="btnCancel_Click"/>
             </StackPanel>
