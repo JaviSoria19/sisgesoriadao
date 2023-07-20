@@ -128,6 +128,13 @@
                     <TextBlock Text="NUEVO LOTE" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+                    <Button x:Name="btnUpdateProducts" Width="100" Height="100" Click="btnUpdateProducts_Click" Background="Orange" BorderBrush="Orange" Foreground="{DynamicResource MaterialDesignBody}">
+                        <materialDesign:PackIcon Kind="PackageVariant" Width="80" Height="80" HorizontalAlignment="Center"/>
+                    </Button>
+                    <TextBlock Text="MODIFICAR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Text="LOTE" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
                     <Button x:Name="btnProducts" Width="100" Height="100" Click="btnProducts_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}">
                         <materialDesign:PackIcon Kind="PackageVariantClosed" Width="80" Height="80" HorizontalAlignment="Center"/>
                     </Button>

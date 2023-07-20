@@ -41,6 +41,10 @@
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,30">
                     <Button x:Name="btnSaveAndPDF" Content="IMPRIMIR" ToolTip="IMPRIMIR DETALLE DE VENTA" Click="btnSaveAndPDF_Click" IsEnabled="True" VerticalAlignment="Center" Background="White" Foreground="Black" BorderBrush="Black"/>
                     <Button x:Name="btnDeleteSale" Content="ELIMINAR VENTA" Margin="10,0" ToolTip="ELIMINAR VENTA" Click="btnDeleteSale_Click" IsEnabled="False" VerticalAlignment="Center" Background="Red" Foreground="White" BorderBrush="Red"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label Content="OBSERVACIONES: " VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        <TextBox x:Name="txtObservacionVenta" TextWrapping="Wrap" MinWidth="120" MaxWidth="300" MaxLength="99" IsEnabled="True" VerticalAlignment="Center"/>
+                    </StackPanel>
                 </StackPanel>
                 <TextBlock Text="DETALLE CLIENTE" FontWeight="Bold" FontSize="20"/>
                 <TextBlock Margin="10" TextWrapping="Wrap">
@@ -103,7 +107,15 @@
                             <DataGridTextColumn Header="Costo $." Binding="{Binding costoUSD}" IsReadOnly="True" Visibility="Collapsed"/>
                         </DataGrid.Columns>
                     </DataGrid>
-
+                    <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
+                        <Label Content="$.: " Margin="0,0,0,0"/>
+                        <Label Content="Bs.: " Margin="50,0,40,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
+                        <Label Content="Total: "/>
+                        <TextBox x:Name="txtVentaTotalVentaUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
+                        <TextBox x:Name="txtVentaTotalVentaBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
+                    </StackPanel>
                     <TextBlock Text="MÉTODO(S) DE PAGO" FontWeight="Bold" FontSize="20"/>
                     <TextBlock Margin="10" TextWrapping="Wrap">
                     <Bold>CONSEJO:</Bold> Estimad@ usuari@, para quitar un método de pago seleccione uno de la tabla.
@@ -127,11 +139,7 @@
                                 <Label Content="$.: " Margin="60,0,0,0"/>
                                 <Label Content="Bs.: " Margin="55,0,0,0"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <Label Content="Total: "/>
-                                <TextBox x:Name="txtVentaTotalVentaUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
-                                <TextBox x:Name="txtVentaTotalVentaBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
-                            </StackPanel>
+                            
                             <StackPanel Orientation="Horizontal" Margin="5">
                                 <Label Content="Pago: "/>
                                 <TextBox x:Name="txtVentaTotalPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
@@ -143,10 +151,6 @@
                                 <TextBox x:Name="txtVentaTotalSaldoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
                             </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,30,0,0" HorizontalAlignment="Right">
-                        <Label Content="OBSERVACIONES: " VerticalAlignment="Center" Margin="20,0,0,0"/>
-                        <TextBox x:Name="txtObservacionVenta" TextWrapping="Wrap" MinWidth="120" MaxLength="99" IsEnabled="True" VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

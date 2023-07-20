@@ -806,5 +806,86 @@ namespace sisgesoriadao.Implementation
                 throw ex;
             }
         }
+
+        public DataTable SelectBatchOfProductsToUpdate(string CadenaBusqueda)
+        {
+            string query = @"SELECT idProducto, idCategoria, idCondicion, idSublote, codigoSublote AS Codigo, nombreProducto AS Producto,
+                            identificador AS 'SN o IMEI',costoUSD, costoBOB, precioVentaUSD, precioVentaBOB, observaciones, IF(estado = 0,'Eliminado',IF(estado = 1,'Disponible','Vendido')) AS Disponibilidad
+                            FROM Producto WHERE idSublote = (SELECT idSublote FROM producto WHERE codigoSublote LIKE @search LIMIT 1)
+                            GROUP BY 1 ORDER BY 1 ASC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@search", "%" + CadenaBusqueda + "%");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public string UpdateBatchOfProductsTransaction(List<Producto> ListaProductos)
+        {
+            MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
+            connection.Open();
+            MySqlCommand command = connection.CreateCommand();
+            MySqlTransaction myTrans;
+            myTrans = connection.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            command.Connection = connection;
+            command.Transaction = myTrans;
+            try
+            {
+                foreach (var Producto in ListaProductos)
+                {
+                    //LIMPIEZA DE PARÁMETROS YA UTILIZADOS EN EL CICLO ANTERIOR PARA PROSEGUIR, CASO CONTRARIO LANZA ERROR.
+                    command.Parameters.Clear();
+                    //REGISTRO DEL LOTE.
+                    command.CommandText = @"UPDATE Producto SET idCategoria=@idCategoria, idCondicion=@idCondicion, idUsuario=@idUsuario,
+                    nombreProducto=@nombreProducto, identificador=@identificador,
+                    costoUSD=@costoUSD, costoBOB=@costoBOB, precioVentaUSD=@precioVentaUSD, precioVentaBOB=@precioVentaBOB, observaciones=@observaciones,
+                    fechaActualizacion = CURRENT_TIMESTAMP WHERE idProducto = @idProducto";
+                    command.Parameters.AddWithValue("@idCategoria", Producto.IdCategoria);
+                    command.Parameters.AddWithValue("@idCondicion", Producto.IdCondicion);
+                    command.Parameters.AddWithValue("@idUsuario", Session.IdUsuario);
+                    command.Parameters.AddWithValue("@nombreProducto", Producto.NombreProducto);
+                    command.Parameters.AddWithValue("@identificador", Producto.Identificador);
+                    command.Parameters.AddWithValue("@costoUSD", Producto.CostoUSD);
+                    command.Parameters.AddWithValue("@costoBOB", Producto.CostoBOB);
+                    command.Parameters.AddWithValue("@precioVentaUSD", Producto.PrecioVentaUSD);
+                    command.Parameters.AddWithValue("@precioVentaBOB", Producto.PrecioVentaBOB);
+                    command.Parameters.AddWithValue("@observaciones", Producto.Observaciones);
+                    command.Parameters.AddWithValue("@idProducto", Producto.IdProducto);
+                    command.ExecuteNonQuery();
+                    command.CommandText = @"INSERT INTO Historial (idProducto,detalle) VALUES
+                                (@idProductoTwice,'EL LOTE AL QUE PERTENECE ESTE PRODUCTO FUE ACTUALIZADO POR EL USUARIO: " + Session.NombreUsuario + "')";
+                    command.Parameters.AddWithValue("@idProductoTwice", Producto.IdProducto);
+                    command.ExecuteNonQuery();
+                }
+                myTrans.Commit();
+                return "LOTE MODIFICADO EXITOSAMENTE.";
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (MySqlException ex)
+                {
+                    if (myTrans.Connection != null)
+                    {
+                        return "Una excepción del tipo " + ex.GetType() + " se encontró mientras se estaba intentando revertir la transacción.";
+                    }
+                }
+                return e.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
     }
 }

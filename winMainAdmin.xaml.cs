@@ -63,6 +63,11 @@ namespace sisgesoriadao
             winProducto_Insert winProducto_Insert = new winProducto_Insert();
             winProducto_Insert.Show();
         }
+        private void btnUpdateProducts_Click(object sender, RoutedEventArgs e)
+        {
+            winProducto_Update winProducto_Update = new winProducto_Update();
+            winProducto_Update.Show();
+        }
         private void btnBatches_Click(object sender, RoutedEventArgs e)
         {
             winProducto_Lote winProducto_Lote = new winProducto_Lote();

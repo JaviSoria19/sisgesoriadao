@@ -1,0 +1,94 @@
+﻿<Window x:Class="sisgesoriadao.winProducto_Update"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
+     Background="{DynamicResource MaterialDesignPaper}"
+     FontFamily="{DynamicResource MaterialDesignFont}"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:sisgesoriadao"
+        mc:Ignorable="d"
+        Title="Sistema de Ventas - Actualizar lote de productos" Height="720" Width="1280"
+        WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Button x:Name="btnReturn" ToolTip="VOLVER A INICIO" Margin="0,0,20,0" Click="btnReturn_Click">
+                    <materialDesign:PackIcon Kind="ArrowLeftBold"/>
+                </Button>
+                <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="PackageVariantClosed" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="ACTUALIZAR LOTE DE PRODUCTOS" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
+                <Label Content="Producto o Código:" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtBuscar" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="20" KeyDown="txtBuscar_KeyDown" VerticalAlignment="Center"/>
+                <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0">
+                    <materialDesign:PackIcon Kind="Search"/>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label Content="CATEGORIA:" Margin="15,0,0,0"/>
+                <ComboBox x:Name="cbxCategoria" IsEnabled="False" SelectionChanged="cbxCategoria_SelectionChanged"/>
+                <Label Content="CONDICION:" Margin="15,0,0,0"/>
+                <ComboBox x:Name="cbxCondicion" IsEnabled="False" SelectionChanged="cbxCondicion_SelectionChanged"/>
+                <Button x:Name="btnPrintLabel" Content="IMPRIMIR DISPONIBLES" Margin="15,0,0,0" Click="btnPrintLabel_Click" IsEnabled="False"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
+                <Border BorderBrush="Gray" BorderThickness="2">
+                    <DataGrid x:Name="dgvProductos" Loaded="dgvProductos_Loaded" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CellEditEnding="dgvProductos_CellEditEnding" HorizontalAlignment="Center" IsEnabled="False" FontWeight="DemiBold">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID PRODUCTO" Binding="{Binding IdProducto}" IsReadOnly="True" Visibility="Collapsed"/>
+                            <DataGridTextColumn Header="ID CATEGORIA" Binding="{Binding IdCategoria}" IsReadOnly="True" Visibility="Collapsed"/>
+                            <DataGridTextColumn Header="ID CONDICION" Binding="{Binding IdCondicion}" IsReadOnly="True" Visibility="Collapsed"/>
+                            <DataGridTextColumn Header="ID SUBLOTE" Binding="{Binding IdSublote}" IsReadOnly="True" Visibility="Collapsed"/>
+                            <DataGridTextColumn Header="Codigo" Binding="{Binding CodigoSublote}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Producto" Binding="{Binding NombreProducto}"/>
+                            <DataGridTextColumn Header="SN/IMEI" Binding="{Binding Identificador}"/>
+                            <DataGridTextColumn Header="C. $." Binding="{Binding CostoUSD}"/>
+                            <DataGridTextColumn Header="C. Bs." Binding="{Binding CostoBOB}"/>
+                            <DataGridTextColumn Header="P. $." Binding="{Binding PrecioVentaUSD}"/>
+                            <DataGridTextColumn Header="P. Bs." Binding="{Binding PrecioVentaBOB}"/>
+                            <DataGridTextColumn Header="Obs." Binding="{Binding Observaciones}" MaxWidth="100"/>
+                            <DataGridTextColumn Header="Estado" Binding="{Binding Estado}" IsReadOnly="True"/>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Click="btndgvImprimirEtiqueta">IMPRIMIR</Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Estado}" Value="Vendido">
+                                        <Setter Property="Background" Value="Gold"></Setter>
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Estado}" Value="Eliminado">
+                                        <Setter Property="Background" Value="Salmon"></Setter>
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Estado}" Value="Disponible">
+                                        <Setter Property="Background" Value="LightGreen"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                    </DataGrid>
+                </Border>
+                <Button x:Name="btnSave" Content="GUARDAR" Margin="0,30,0,0" Click="btnSave_Click" Width="100" IsEnabled="False"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

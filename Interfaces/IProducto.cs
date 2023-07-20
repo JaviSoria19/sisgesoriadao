@@ -35,5 +35,7 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectMovementsHistory_Details(int IdTransferencia);
         int GetLastMovementFromBranch();
         DataTable SelectProductsFromSale(int IdVenta);
+        DataTable SelectBatchOfProductsToUpdate(string CadenaBusqueda);
+        string UpdateBatchOfProductsTransaction(List<Producto> ListaProductos);
     }
 }
