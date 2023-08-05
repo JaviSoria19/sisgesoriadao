@@ -811,7 +811,7 @@ namespace sisgesoriadao.Implementation
         {
             string query = @"SELECT idProducto, idCategoria, idCondicion, idSublote, codigoSublote AS Codigo, nombreProducto AS Producto,
                             identificador AS 'SN o IMEI',costoUSD, costoBOB, precioVentaUSD, precioVentaBOB, observaciones, IF(estado = 0,'Eliminado',IF(estado = 1,'Disponible','Vendido')) AS Disponibilidad
-                            FROM Producto WHERE idSublote = (SELECT idSublote FROM producto WHERE codigoSublote LIKE @search LIMIT 1)
+                            FROM Producto WHERE idSublote = (SELECT idSublote FROM Producto WHERE codigoSublote LIKE @search LIMIT 1)
                             GROUP BY 1 ORDER BY 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@search", "%" + CadenaBusqueda + "%");

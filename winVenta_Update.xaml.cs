@@ -31,10 +31,10 @@ namespace sisgesoriadao
         int idVenta = 0;
         VentaImpl implVenta;
         List<int> ListaIDProductos = new List<int>();
-
         private ObservableCollection<DataGridRowDetalleHelper> listaHelper = new ObservableCollection<DataGridRowDetalleHelper>();
         DataGridRowDetalleHelper objetoHelper = null;
         byte modificacionPrecioValida = 0;
+        double auxTotalProductoBOB = 0, auxTotalProductoUSD = 0;
         public winVenta_Update()
         {
             InitializeComponent();
@@ -202,6 +202,7 @@ namespace sisgesoriadao
                 btnSearchCustomer.IsEnabled = false;
                 btnAddCustomer.IsEnabled = false;
                 btnEditCustomer.IsEnabled = false;
+                btnUpdateProducts.IsEnabled = false;
 
                 dgvProductos.IsEnabled = false;
 
@@ -612,25 +613,6 @@ namespace sisgesoriadao
                 }
             }
         }
-        public class ComboboxItem
-        {
-            public string Texto { get; set; }
-            public int Valor { get; set; }
-
-            public override string ToString()
-            {
-                return Texto;
-            }
-            public ComboboxItem(string texto, byte valor)
-            {
-                Texto = texto;
-                Valor = valor;
-            }
-            public ComboboxItem()
-            {
-
-            }
-        }
         void imprimirVenta()
         {
             try
@@ -710,10 +692,10 @@ namespace sisgesoriadao
                 {
                     ModificarGarantia(dgvProductos.SelectedIndex, valorNuevo, filaSeleccionada);
                 }
-                SumarTotalySaldo(dgvProductos.SelectedIndex);
+                SumarTotalySaldo(dgvProductos.SelectedIndex, modificacionPrecioValida);
                 dgvProductos.ItemsSource = null;
                 dgvProductos.ItemsSource = listaHelper;
-                imprimirVenta();
+                /*imprimirVenta();*/
             }
             catch (Exception ex)
             {
@@ -860,14 +842,25 @@ namespace sisgesoriadao
             venta_TotalBOB -= listaHelper[i].totalproductoBOB;
             venta_saldoUSD -= listaHelper[i].totalproductoUSD;
             venta_saldoBOB -= listaHelper[i].totalproductoBOB;
+            auxTotalProductoUSD = listaHelper[i].totalproductoUSD;
+            auxTotalProductoBOB = listaHelper[i].totalproductoBOB;
         }
-        private void SumarTotalySaldo(int i)
+        private void SumarTotalySaldo(int i, byte modificacionValida)
         {
-            venta_TotalUSD += listaHelper[i].totalproductoUSD;
-            venta_TotalBOB += listaHelper[i].totalproductoBOB;
-            venta_saldoUSD += listaHelper[i].totalproductoUSD;
-            venta_saldoBOB += listaHelper[i].totalproductoBOB;
-
+            if (modificacionPrecioValida == 1)
+            {
+                venta_TotalUSD += listaHelper[i].totalproductoUSD;
+                venta_TotalBOB += listaHelper[i].totalproductoBOB;
+                venta_saldoUSD += listaHelper[i].totalproductoUSD;
+                venta_saldoBOB += listaHelper[i].totalproductoBOB;
+            }
+            else
+            {
+                venta_TotalUSD += auxTotalProductoUSD;
+                venta_TotalBOB += auxTotalProductoBOB;
+                venta_saldoUSD += auxTotalProductoUSD;
+                venta_saldoBOB += auxTotalProductoBOB;
+            }
             venta_TotalUSD = Math.Round(venta_TotalUSD, 2);
             venta_TotalBOB = Math.Round(venta_TotalBOB, 2);
             venta_saldoUSD = Math.Round(venta_saldoUSD, 2);
@@ -880,85 +873,6 @@ namespace sisgesoriadao
 
             objetoHelper = null;
             objetoHelper = listaHelper[i];
-            ModificarPrecioProducto(modificacionPrecioValida);
-        }
-        private void ModificarPrecioProducto(byte ModificacionPrecioValida)
-        {
-            if (ModificacionPrecioValida == 1)/*MODIFICACION DE PRECIO*/
-            {
-                Venta venta = new Venta();
-                Producto producto = new Producto();
-                venta.IdVenta = idVenta;
-                venta.TotalUSD = venta_TotalUSD;
-                venta.TotalBOB = venta_TotalBOB;
-                venta.SaldoUSD = venta_saldoUSD;
-                venta.SaldoBOB = venta_saldoBOB;
-                producto.IdProducto = objetoHelper.idProducto;
-                producto.PrecioVentaUSD = objetoHelper.totalproductoUSD;
-                producto.PrecioVentaBOB = objetoHelper.totalproductoBOB;
-                if (MessageBox.Show("¿Desea modificar el precio del siguiente producto?: \n" + objetoHelper.codigoSublote + " " + objetoHelper.nombreProducto + " a $. " +
-                    objetoHelper.totalproductoUSD + " y Bs. " + objetoHelper.totalproductoBOB + "\nPresione SI para confirmar.", "MODIFICAR PRECIO DE PRODUCTO", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                {
-                    implVenta = new VentaImpl();
-                    try
-                    {
-                        string mensaje = implVenta.UpdateProductPriceBeforeSaleTransaction(venta, producto, objetoHelper.descuentoPorcentaje, objetoHelper.garantia);
-                        if (mensaje == "PRECIO_DE_PRODUCTO_Y_TOTAL_VENTA_MODIFICADO_CON_EXITO")
-                        {
-                            MessageBox.Show("PRECIO DE VENTA MODIFICADO EXITOSAMENTE.");
-                        }
-                        else
-                        {
-                            MessageBox.Show(mensaje);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                }
-                modificacionPrecioValida = 0;
-            }
-            else if (ModificacionPrecioValida == 2)/*MODIFICACION GARANTIA*/
-            {
-                Venta venta = new Venta();
-                Producto producto = new Producto();
-                venta.IdVenta = idVenta;
-                venta.TotalUSD = venta_TotalUSD;
-                venta.TotalBOB = venta_TotalBOB;
-                venta.SaldoUSD = venta_saldoUSD;
-                venta.SaldoBOB = venta_saldoBOB;
-                producto.IdProducto = objetoHelper.idProducto;
-                producto.PrecioVentaUSD = objetoHelper.totalproductoUSD;
-                producto.PrecioVentaBOB = objetoHelper.totalproductoBOB;
-                if (MessageBox.Show("¿Desea modificar la garantia del siguiente producto?: \n" + objetoHelper.codigoSublote + " " + objetoHelper.nombreProducto + " a " +
-                    objetoHelper.garantia + " Meses.\nPresione SI para confirmar.", "MODIFICAR GARANTIA DE PRODUCTO", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                {
-                    implVenta = new VentaImpl();
-                    try
-                    {
-                        string mensaje = implVenta.UpdateProductPriceBeforeSaleTransaction(venta, producto, objetoHelper.descuentoPorcentaje, objetoHelper.garantia);
-                        if (mensaje == "PRECIO_DE_PRODUCTO_Y_TOTAL_VENTA_MODIFICADO_CON_EXITO")
-                        {
-                            MessageBox.Show("GARANTIA DE PRODUCTO MODIFICADO EXITOSAMENTE.");
-                        }
-                        else
-                        {
-                            MessageBox.Show(mensaje);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                }
-                modificacionPrecioValida = 0;
-            }
-            else /*MODIFICACION NO VALIDA*/
-            {
-                MessageBox.Show("ESTIMADO USUARIO:\nEl precio ingresado no ha sido válido y por ende no se ha realizado modificación alguna a la venta y al precio del producto.");
-                modificacionPrecioValida = 0;
-            }
         }
         public class DataGridRowDetalleHelper
         {
@@ -976,6 +890,75 @@ namespace sisgesoriadao
             public byte garantia { get; set; }
             public double costoUSD { get; set; }
             public DataGridRowDetalleHelper()
+            {
+
+            }
+        }
+
+        private void btnUpdateProducts_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("¿Está seguro de MODIFICAR los precios de esta venta?", "MODIFICAR PRECIO DE PRODUCTOS", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                List<byte> listaGarantias = new List<byte>();
+                List<double> listaDescuentosPorcentaje = new List<double>();
+                List<Producto> listaProductos = new List<Producto>();
+                listaGarantias.Clear();
+                listaDescuentosPorcentaje.Clear();
+                listaProductos.Clear();
+                foreach (var item in listaHelper)
+                {
+                    listaGarantias.Add(item.garantia);
+                    listaDescuentosPorcentaje.Add(item.descuentoPorcentaje);
+                    listaProductos.Add(new Producto
+                    {
+                        IdProducto = item.idProducto,
+                        PrecioVentaUSD = item.totalproductoUSD,
+                        PrecioVentaBOB = item.totalproductoBOB,
+                    });
+                }
+                Venta venta = new Venta();
+                venta.IdVenta = idVenta;
+                venta.TotalUSD = venta_TotalUSD;
+                venta.TotalBOB = venta_TotalBOB;
+                venta.SaldoUSD = venta_saldoUSD;
+                venta.SaldoBOB = venta_saldoBOB;
+                try
+                {
+                    string update = implVenta.UpdateSaleProductsTransaction(venta,listaProductos,listaDescuentosPorcentaje,listaGarantias);
+                    if (update == "UPDATEPRODUCTOS_EXITOSO")
+                    {
+                        MessageBox.Show("PRECIO DE VENTA DE LOS PRODUCTOS MODIFICADO CON ÉXITO.");
+                        getSale_Products();
+                        SelectMetodosPago();
+                        imprimirVenta();
+                    }
+                    else
+                    {
+                        MessageBox.Show(update);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    throw;
+                }
+            }
+        }
+        public class ComboboxItem
+        {
+            public string Texto { get; set; }
+            public int Valor { get; set; }
+
+            public override string ToString()
+            {
+                return Texto;
+            }
+            public ComboboxItem(string texto, byte valor)
+            {
+                Texto = texto;
+                Valor = valor;
+            }
+            public ComboboxItem()
             {
 
             }

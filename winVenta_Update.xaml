@@ -116,6 +116,7 @@
                         <TextBox x:Name="txtVentaTotalVentaUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
                         <TextBox x:Name="txtVentaTotalVentaBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
                     </StackPanel>
+                    <Button x:Name="btnUpdateProducts" Content="GUARDAR" Margin="20,10" ToolTip="GUARDAR CAMBIOS REALIZADOS" Click="btnUpdateProducts_Click" HorizontalAlignment="Right" Background="Orange" BorderBrush="Orange"/>
                     <TextBlock Text="MÉTODO(S) DE PAGO" FontWeight="Bold" FontSize="20"/>
                     <TextBlock Margin="10" TextWrapping="Wrap">
                     <Bold>CONSEJO:</Bold> Estimad@ usuari@, para quitar un método de pago seleccione uno de la tabla.

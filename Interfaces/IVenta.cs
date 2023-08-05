@@ -28,6 +28,6 @@ namespace sisgesoriadao.Interfaces
         string DeleteSaleTransaction(int IdVenta, string Observacion, List<int> ListaIDProductos);
         DataTable SelectSalesWithPendingBalanceByCustomers();
         DataTable SelectAllSalesWithPendingBalanceByCustomers();
-        string UpdateProductPriceBeforeSaleTransaction(Venta Venta, Producto Producto, double Descuento, byte Garantia);
+        string UpdateSaleProductsTransaction(Venta venta, List<Producto> ListaProductos, List<double> ListaDescuentosPorcentaje, List<byte> ListaGarantias);
     }
 }

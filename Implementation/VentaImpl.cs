@@ -702,7 +702,7 @@ namespace sisgesoriadao.Implementation
             }
         }
 
-        public string UpdateProductPriceBeforeSaleTransaction(Venta Venta, Producto Producto, double Descuento, byte Garantia)
+        public string UpdateSaleProductsTransaction(Venta venta, List<Producto> ListaProductos, List<double> ListaDescuentosPorcentaje, List<byte> ListaGarantias)
         {
             MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
             connection.Open();
@@ -715,28 +715,29 @@ namespace sisgesoriadao.Implementation
             command.Transaction = myTrans;
             try
             {
-                //MODIFICACION DEL DETALLE Y DE LA VENTA
-                command.CommandText = @"UPDATE Detalle_Venta SET precioUSD = @precioUSD, precioBOB = @precioBOB, descuento = @descuento, garantia = @garantia
-                                        WHERE idVenta = @idVenta AND idProducto = @idProducto";
-                command.Parameters.AddWithValue("@precioUSD", Producto.PrecioVentaUSD);
-                command.Parameters.AddWithValue("@precioBOB", Producto.PrecioVentaBOB);
-                command.Parameters.AddWithValue("@descuento", Descuento);
-                command.Parameters.AddWithValue("@garantia", Garantia);
-                command.Parameters.AddWithValue("@idVenta", Venta.IdVenta);
-                command.Parameters.AddWithValue("@idProducto", Producto.IdProducto);
+                for (int i = 0; i < ListaProductos.Count; i++)
+                {
+                    command.CommandText = @"UPDATE Detalle_Venta SET precioUSD = @precioUSD, precioBOB = @precioBOB, descuento = @descuento, garantia = @garantia
+                    WHERE idVenta = @idVenta AND idProducto = @idProducto";
+                    command.Parameters.AddWithValue("@precioUSD", ListaProductos[i].PrecioVentaUSD);
+                    command.Parameters.AddWithValue("@precioBOB", ListaProductos[i].PrecioVentaBOB);
+                    command.Parameters.AddWithValue("@descuento", ListaDescuentosPorcentaje[i]);
+                    command.Parameters.AddWithValue("@garantia", ListaGarantias[i]);
+                    command.Parameters.AddWithValue("@idVenta", venta.IdVenta);
+                    command.Parameters.AddWithValue("@idProducto", ListaProductos[i].IdProducto);
+                    command.ExecuteNonQuery();
+                    command.Parameters.Clear();
+                }
+                command.CommandText = @"UPDATE Venta SET totalUSD = @totalUSD, totalBOB = @totalBOB, saldoUSD = @saldoUSD, saldoBOB = @saldoBOB,
+                    fechaActualizacion = CURRENT_TIMESTAMP WHERE idVenta = @idVenta";
+                command.Parameters.AddWithValue("@totalUSD", venta.TotalUSD);
+                command.Parameters.AddWithValue("@totalBOB", venta.TotalBOB);
+                command.Parameters.AddWithValue("@saldoUSD", venta.SaldoUSD);
+                command.Parameters.AddWithValue("@saldoBOB", venta.SaldoBOB);
+                command.Parameters.AddWithValue("@idVenta", venta.IdVenta);
                 command.ExecuteNonQuery();
-                command.Parameters.Clear();
-                command.CommandText = @"UPDATE Venta SET totalUSD = @totalUSD, totalBOB = @totalBOB, saldoUSD = @saldoUSD, saldoBOB = @saldoBOB, fechaActualizacion = CURRENT_TIMESTAMP
-                                        WHERE idVenta = @idVenta";
-                command.Parameters.AddWithValue("@totalUSD", Venta.TotalUSD);
-                command.Parameters.AddWithValue("@totalBOB", Venta.TotalBOB);
-                command.Parameters.AddWithValue("@saldoUSD", Venta.SaldoUSD);
-                command.Parameters.AddWithValue("@saldoBOB", Venta.SaldoBOB);
-                command.Parameters.AddWithValue("@idVenta", Venta.IdVenta);
-                command.ExecuteNonQuery();
-
                 myTrans.Commit();
-                return "PRECIO_DE_PRODUCTO_Y_TOTAL_VENTA_MODIFICADO_CON_EXITO";
+                return "UPDATEPRODUCTOS_EXITOSO";
             }
             catch (Exception e)
             {
