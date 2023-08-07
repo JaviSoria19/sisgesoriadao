@@ -42,8 +42,8 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Horizontal" Margin="10,20" Grid.Row="0">
-                        <Image Height="150" Source="/sisgesoriadao;component/Resources/logo.png"
-                               Margin="20,0,0,0"/>
+                        <Image Height="180" Source="/sisgesoriadao;component/Resources/logo.png"
+                               Margin="0,0,0,0"/>
                         
                         <StackPanel Margin="10" Orientation="Vertical" VerticalAlignment="Center">
                             <TextBlock Text="BOLETA DE GARANTIA" 
@@ -61,7 +61,7 @@
                         </StackPanel>
                     </StackPanel>
                     
-                    <StackPanel Orientation="Horizontal" Margin="20" Grid.Row="1">
+                    <StackPanel Orientation="Horizontal" Margin="20,30" Grid.Row="1">
                         <TextBlock x:Name="txtCliente_nombre" Text="Cliente: CLIENTE_NOMBRE" FontWeight="Bold" FontSize="18" Margin="10,0"/>
                         <TextBlock x:Name="txtCliente_celular" Text="Telefono/Celular: CLIENTE_CELULAR" FontSize="18" FontWeight="Bold" Margin="20,0"/>
                         <TextBlock x:Name="txtCliente_ci" Text="C.I.: CLIENTE_CI" FontSize="18" FontWeight="Bold" Margin="20,0"/>
@@ -145,7 +145,7 @@
                                 </StackPanel>
                             </StackPanel>
                             
-                            <TextBlock Text="¡GRACIAS POR SU PREFERENCIA!" FontSize="18" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,8"/>
+                            <TextBlock Text="¡GRACIAS POR SU PREFERENCIA!" FontSize="18" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,20"/>
                         </StackPanel>
                         <TextBlock Text="IMPORTANTE: Por favor tenga en cuenta que si el equipo sufre daños por caída, aplastamiento, daño por agua o mala actualización de software, quedará fuera de garantía. También es importante destacar que cualquier modificación no autorizada en el dispositivo o uso inadecuado del mismo también invalidará la garantía. Por favor, lea detenidamente las instrucciones de uso y conservación del equipo para asegurar su correcto funcionamiento y durabilidad." FontSize="18" TextWrapping="Wrap" FontWeight="DemiBold" HorizontalAlignment="Center" Foreground="DarkRed"/>
                     </StackPanel>

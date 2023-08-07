@@ -663,10 +663,11 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectSalesWithPendingBalanceByCustomers()
         {
-            string query = @"SELECT V.idCliente AS ID, C.nombre AS Nombre, C.numeroCelular AS Celular, SUM(V.saldoUSD) AS 'Saldo Total' FROM Venta V
+            string query = @"SELECT V.idCliente AS ID, C.nombre AS Nombre, C.numeroCelular AS Celular, SUM(V.saldoUSD) AS 'Saldo Total', DATE_FORMAT(V.fechaRegistro,'%d/%m/%Y') AS 'Fecha' FROM Venta V
                                 INNER JOIN Cliente C ON C.idCliente = V.idCliente
                                 WHERE V.saldoUSD > 10 AND V.estado = 1 AND V.idSucursal = @SessionIdSucursal
-                                GROUP BY V.idCliente";
+                                GROUP BY V.idCliente
+                                ORDER BY V.fechaRegistro ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
             try
@@ -682,7 +683,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectAllSalesWithPendingBalanceByCustomers()
         {
-            string query = @"SELECT V.idVenta, U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT('- ',P.nombreProducto SEPARATOR ' '),')') AS Detalle, saldoUSD AS 'Saldo $us', saldoBOB AS 'Saldo Bs' FROM Venta V
+            string query = @"SELECT V.idVenta, U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT('- ',P.nombreProducto SEPARATOR ' '),')') AS Detalle, saldoUSD AS 'Saldo $us', saldoBOB AS 'Saldo Bs', DATE_FORMAT(V.fechaRegistro,'%d/%m/%Y') AS 'Fecha' FROM Venta V
                             INNER JOIN Usuario U ON V.idUsuario = U.idUsuario
                             INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
                             INNER JOIN Producto P ON DV.idProducto = P.idProducto
