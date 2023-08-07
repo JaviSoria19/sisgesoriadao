@@ -157,7 +157,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectPendingCashFromBranch()
         {
-            string query = @"SELECT U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT(DISTINCT'- ',P.nombreProducto,' ',P.codigoSublote SEPARATOR ' \n'),')') AS Detalle, IF(MP.tipo = 1,'Efectivo',IF(MP.tipo = 2,'Transferencia','Tarjeta')) AS Tipo, IFNULL(MP.montoUSD,0) AS '$us', IFNULL(MP.montoBOB,0) AS 'Bs', V.fechaRegistro AS 'Fecha de Registro' FROM Caja C
+            string query = @"SELECT U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT(DISTINCT'- ',P.nombreProducto,' ',P.codigoSublote SEPARATOR ' \n'),')') AS Detalle, IF(MP.tipo = 1,'Efectivo',IF(MP.tipo = 2,'Transferencia','Tarjeta')) AS Tipo, IFNULL(MP.montoUSD,0) AS '$us', IFNULL(MP.montoBOB,0) AS 'Bs', V.fechaRegistro AS 'Fecha de Registro', V.idVenta AS ID FROM Caja C
                             INNER JOIN Detalle_Caja DC ON C.idCaja = DC.idCaja
                             INNER JOIN Metodo_Pago MP ON DC.idMetodoPago = MP.idMetodoPago
                             INNER JOIN Venta V ON MP.idVenta = V.idVenta

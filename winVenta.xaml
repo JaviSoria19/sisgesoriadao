@@ -45,8 +45,6 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                <TextBlock x:Name="txtTotalUSD" Text="Total $us.: 0" Margin="0,0,50,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
-                <TextBlock x:Name="txtTotalBOB" Text="Total Bs.: 0" Margin="0,0,50,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
                 <Button x:Name="btnPrintPDF" Content="GENERAR PDF" Click="btnPrintPDF_Click" IsEnabled="False"/>
             </StackPanel>
 
@@ -58,6 +56,10 @@
                   CanUserResizeRows="False" CanUserResizeColumns="False" MaxHeight="363" SelectionChanged="dgvDatos_SelectionChanged"/>
                 </Border>
                 <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock x:Name="txtTotalUSD" Text="Total $us.: 0" Margin="0,0,50,0" FontSize="19" FontWeight="Bold"/>
+                    <TextBlock x:Name="txtTotalBOB" Text="Total Bs.: 0" Margin="0,0,0,0" FontSize="19" FontWeight="Bold"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

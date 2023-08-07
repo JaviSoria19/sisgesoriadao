@@ -48,7 +48,7 @@
                   HorizontalAlignment="Left" VerticalAlignment="Top"
                   Loaded="dgvDatos_Loaded" GridLinesVisibility="Horizontal"
                   CanUserAddRows="False" IsReadOnly="True" 
-                  CanUserResizeRows="False" CanUserResizeColumns="False" MaxHeight="363"/>
+                  CanUserResizeRows="False" CanUserResizeColumns="False" MaxHeight="363" SelectionChanged="dgvDatos_SelectionChanged"/>
                 </Border>
                 <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
             </StackPanel>
