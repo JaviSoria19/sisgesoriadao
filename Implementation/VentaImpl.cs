@@ -759,5 +759,59 @@ namespace sisgesoriadao.Implementation
                 connection.Close();
             }
         }
+
+        public string DeleteAfterSaleProductTransaction(Venta venta, int IdProducto)
+        {
+            MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
+            connection.Open();
+            MySqlCommand command = connection.CreateCommand();
+            MySqlTransaction myTrans;
+            myTrans = connection.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            command.Connection = connection;
+            command.Transaction = myTrans;
+            try
+            {
+                //ELIMINANDO EL PRODUCTO DE LA VENTA.
+                command.CommandText = @"DELETE FROM Detalle_Venta WHERE idVenta = @idVenta AND idProducto = @idProducto";
+                command.Parameters.AddWithValue("@idVenta", venta.IdVenta);
+                command.Parameters.AddWithValue("@idProducto", IdProducto);
+                command.ExecuteNonQuery();
+
+                command.Parameters.Clear();
+                //UPDATE DEL SALDO DE LA VENTA.
+                command.CommandText = @"UPDATE Venta SET totalUSD = @totalUSD, totalBOB = @totalBOB, saldoUSD = @saldoUSD, saldoBOB = @saldoBOB
+                                        WHERE idVenta = @idVenta";
+                command.Parameters.AddWithValue("@totalUSD", venta.TotalUSD);
+                command.Parameters.AddWithValue("@totalBOB", venta.TotalBOB);
+                command.Parameters.AddWithValue("@saldoUSD", venta.SaldoUSD);
+                command.Parameters.AddWithValue("@saldoBOB", venta.SaldoBOB);
+                command.Parameters.AddWithValue("@idVenta", venta.IdVenta);
+                command.ExecuteNonQuery();
+
+                myTrans.Commit();
+                return "DELETEPRODUCTO_EXITOSO";
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (MySqlException ex)
+                {
+                    if (myTrans.Connection != null)
+                    {
+                        return "Una excepción del tipo " + ex.GetType() + " se encontró mientras se estaba intentando revertir la transacción.";
+                    }
+                }
+                return e.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
     }
 }

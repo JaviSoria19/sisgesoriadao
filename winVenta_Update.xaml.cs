@@ -636,8 +636,12 @@ namespace sisgesoriadao
                     string deletetransaction = implVenta.DeleteSaleTransaction(idVenta, txtObservacionVenta.Text, ListaIDProductos);
                     if (deletetransaction == "DELETEVENTA_EXITOSO")
                     {
-                        MessageBox.Show("LA VENTA HA SIDO ELIMINADA CON ÉXITO, LOS PRODUCTOS HAN RETORNADO A SISTEMA.");
+                        MessageBox.Show("LA VENTA HA SIDO ELIMINADA CON ÉXITO, LOS PRODUCTOS HAN RETORNADO AL SISTEMA.");
                         this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show(deletetransaction);
                     }
                 }
                 else
@@ -874,27 +878,6 @@ namespace sisgesoriadao
             objetoHelper = null;
             objetoHelper = listaHelper[i];
         }
-        public class DataGridRowDetalleHelper
-        {
-            public int idProducto { get; set; }
-            public string codigoSublote { get; set; }
-            public string nombreProducto { get; set; }
-            public string identificador { get; set; }
-            public double precioUSD { get; set; }
-            public double precioBOB { get; set; }
-            public double descuentoPorcentaje { get; set; }
-            public double descuentoUSD { get; set; }
-            public double descuentoBOB { get; set; }
-            public double totalproductoUSD { get; set; }
-            public double totalproductoBOB { get; set; }
-            public byte garantia { get; set; }
-            public double costoUSD { get; set; }
-            public DataGridRowDetalleHelper()
-            {
-
-            }
-        }
-
         private void btnUpdateProducts_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("¿Está seguro de MODIFICAR los precios de esta venta?", "MODIFICAR PRECIO DE PRODUCTOS", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -944,6 +927,73 @@ namespace sisgesoriadao
                 }
             }
         }
+        private void btndgvRemoverProducto(object sender, RoutedEventArgs e)
+        {
+            objetoHelper = null;
+            objetoHelper = listaHelper[dgvProductos.SelectedIndex];
+            if (listaHelper.Count > 1)
+            {
+                if (MessageBox.Show("¿Está seguro de REMOVER el producto seleccionado de esta venta? \n" + objetoHelper.codigoSublote + " " + objetoHelper.nombreProducto, "REMOVER PRODUCTO DE LA VENTA", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    RestarTotalySaldo(dgvProductos.SelectedIndex);
+                    venta_TotalUSD = Math.Round(venta_TotalUSD, 2);
+                    venta_TotalBOB = Math.Round(venta_TotalBOB, 2);
+                    venta_saldoUSD = Math.Round(venta_saldoUSD, 2);
+                    venta_saldoBOB = Math.Round(venta_saldoBOB, 2);
+                    txtVentaTotalVentaUSD.Text = venta_TotalUSD.ToString();
+                    txtVentaTotalVentaBOB.Text = venta_TotalBOB.ToString();
+                    txtVentaTotalSaldoUSD.Text = venta_saldoUSD.ToString();
+                    txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
+                    listaHelper.Remove(listaHelper[dgvProductos.SelectedIndex]);
+                    dgvProductos.Items.Refresh();
+
+                    Venta venta = new Venta {
+                        IdVenta = idVenta,
+                        TotalUSD = venta_TotalUSD,
+                        TotalBOB = venta_TotalBOB,
+                        SaldoUSD = venta_saldoUSD,
+                        SaldoBOB = venta_saldoBOB
+                    };
+                    //TRANSACCION PARA ELIMINAR EL PRODUCTO
+                    string deletetransaction = implVenta.DeleteAfterSaleProductTransaction(venta, objetoHelper.idProducto);
+                    if (deletetransaction == "DELETEPRODUCTO_EXITOSO")
+                    {
+                        MessageBox.Show("EL PRODUCTO HA SIDO ELIMINADO DE LA VENTA CON ÉXITO Y HA RETORNADO AL SISTEMA.");
+                        getSale_Products();
+                        SelectMetodosPago();
+                        imprimirVenta();
+                        objetoHelper = null;
+                    }
+                    else
+                    {
+                        MessageBox.Show(deletetransaction);
+                    }
+                }
+            }
+            else
+            {
+                if (MessageBox.Show("La venta cuenta con sólo 1 producto, ¿Desea eliminar la venta?", "ELIMINAR VENTA", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    if (txtObservacionVenta.Text != "-")
+                    {
+                        string deletetransaction = implVenta.DeleteSaleTransaction(idVenta, txtObservacionVenta.Text, ListaIDProductos);
+                        if (deletetransaction == "DELETEVENTA_EXITOSO")
+                        {
+                            MessageBox.Show("LA VENTA HA SIDO ELIMINADA CON ÉXITO, EL PRODUCTO HA RETORNADO AL SISTEMA.");
+                            this.Close();
+                        }
+                        else
+                        {
+                            MessageBox.Show(deletetransaction);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("LA OBSERVACIÓN PARA LA ELIMINACIÓN DE LA VENTA NO PUEDE QUEDAR VACÍA!");
+                    }
+                }
+            }
+        }
         public class ComboboxItem
         {
             public string Texto { get; set; }
@@ -959,6 +1009,26 @@ namespace sisgesoriadao
                 Valor = valor;
             }
             public ComboboxItem()
+            {
+
+            }
+        }
+        public class DataGridRowDetalleHelper
+        {
+            public int idProducto { get; set; }
+            public string codigoSublote { get; set; }
+            public string nombreProducto { get; set; }
+            public string identificador { get; set; }
+            public double precioUSD { get; set; }
+            public double precioBOB { get; set; }
+            public double descuentoPorcentaje { get; set; }
+            public double descuentoUSD { get; set; }
+            public double descuentoBOB { get; set; }
+            public double totalproductoUSD { get; set; }
+            public double totalproductoBOB { get; set; }
+            public byte garantia { get; set; }
+            public double costoUSD { get; set; }
+            public DataGridRowDetalleHelper()
             {
 
             }
