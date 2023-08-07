@@ -778,8 +778,20 @@ namespace sisgesoriadao.Implementation
                 command.Parameters.AddWithValue("@idVenta", venta.IdVenta);
                 command.Parameters.AddWithValue("@idProducto", IdProducto);
                 command.ExecuteNonQuery();
-
                 command.Parameters.Clear();
+                //UPDATE DEL PRODUCTO PARA SU DISPONIBILIDAD.
+                command.CommandText = @"UPDATE Producto SET estado = 1, fechaActualizacion = CURRENT_TIMESTAMP
+                                        WHERE idProducto = @idProducto";
+                command.Parameters.AddWithValue("@idProducto", IdProducto);
+                command.ExecuteNonQuery();
+                command.Parameters.Clear();
+                //REGISTRANDO EL RETORNO AL SISTEMA EN EL HISTORIAL.
+                command.CommandText = @"INSERT INTO Historial (idProducto,detalle) VALUES
+                                (@idProducto,@detalle)";
+                command.Parameters.AddWithValue("@idProducto", IdProducto);
+                command.Parameters.AddWithValue("@detalle", "PRODUCTO RETORNÓ AL SISTEMA PORQUE SE HA REMOVIDO INDIVIDUALMENTE DE LA VENTA.");
+                command.ExecuteNonQuery();
+
                 //UPDATE DEL SALDO DE LA VENTA.
                 command.CommandText = @"UPDATE Venta SET totalUSD = @totalUSD, totalBOB = @totalBOB, saldoUSD = @saldoUSD, saldoBOB = @saldoBOB
                                         WHERE idVenta = @idVenta";

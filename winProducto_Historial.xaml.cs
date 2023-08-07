@@ -33,6 +33,7 @@ namespace sisgesoriadao
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
+            txtBuscar.Focus();
         }
         private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
         {
