@@ -281,7 +281,7 @@ namespace sisgesoriadao
                 txtVentaTotalVentaUSD.Text = venta_TotalUSD.ToString();
                 txtVentaTotalPagoUSD.Text = Math.Round(venta_pagoTotalUSD, 2).ToString();
                 txtVentaTotalSaldoUSD.Text = venta_saldoUSD.ToString();
-
+                txtFechaVenta.Text = dt.Rows[0][21].ToString();
                 ListaIDProductos.Clear();
                 foreach (DataRow item in dt.Rows)
                 {

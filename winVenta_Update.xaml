@@ -35,6 +35,9 @@
                 <TextBlock x:Name="txtCambioDolar" Text="0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBlock x:Name="txtIDVenta" Text="Nro.: 0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="DateRange" Width="25" Height="25" VerticalAlignment="Center" ToolTip="FECHA DE LA VENTA"/>
+                <TextBlock x:Name="txtFechaVenta" Text="0/0/2000" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
             
             <StackPanel Orientation="Vertical" Margin="10">
@@ -130,12 +133,12 @@
                     <Bold>CONSEJO:</Bold> Estimad@ usuari@, para quitar un método de pago seleccione uno de la tabla.
                     </TextBlock>
                     <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Right">
+                        <Label Content="Tipo:"/>
+                        <ComboBox x:Name="cbxPaymentMethod" IsEnabled="True" Margin="0,0,20,0"/>
                         <Label Content="Monto ($.):"/>
                         <TextBox x:Name="txtPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPagoUSD_KeyUp" KeyDown="txtPagoUSD_KeyDown"/>
                         <Label Content="Monto (Bs.):"/>
                         <TextBox x:Name="txtPagoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPagoBOB_KeyUp" KeyDown="txtPagoBOB_KeyDown"/>
-                        <Label Content="Tipo:"/>
-                        <ComboBox x:Name="cbxPaymentMethod" IsEnabled="True" Margin="0,0,20,0"/>
                         <Button x:Name="btnAddPaymentMethod" ToolTip="AÑADIR MÉTODO DE PAGO" Click="btnAddPaymentMethod_Click" Margin="0,0,0,0" IsEnabled="True" Background="LimeGreen" BorderBrush="LimeGreen">
                             <materialDesign:PackIcon Kind="CreditCardAdd"/>
                         </Button>

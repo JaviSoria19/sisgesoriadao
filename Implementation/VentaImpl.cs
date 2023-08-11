@@ -338,7 +338,7 @@ namespace sisgesoriadao.Implementation
                 CL.nombre AS Cliente, CL.numeroCelular AS Celular, CL.numeroCI AS CI,
                 U.nombreUsuario AS Usuario, E.numeroCelular AS 'Celular Usuario',
                 CONCAT(P.codigoSublote,' ',P.nombreProducto) AS Producto, P.identificador AS Detalle, DV.garantia AS Garantia, DV.cantidad AS Cantidad, P.precioVentaBOB AS Precio, DV.descuento AS 'Descuento Porcentaje', (P.precioVentaBOB - DV.precioBOB) AS 'Descuento Bs', DV.precioBOB AS 'Total Producto',
-                V.totalBOB AS Total, V.saldoBOB AS Saldo, V.observaciones AS Observaciones, DATE_FORMAT(V.fechaRegistro,'%d/%m/%Y') AS Fecha,
+                V.totalBOB AS Total, V.saldoBOB AS Saldo, V.observaciones AS Observaciones, " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha,
                 V.totalUSD AS Total2, V.saldoUSD AS Saldo2, P.idProducto AS IDProducto
                 FROM Venta V
                 INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
@@ -361,7 +361,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectSaleDetails2()
         {
-            string query = @"SELECT montoBOB AS 'Monto Bs', DATE_FORMAT(fechaRegistro,'%d/%m/%Y') AS Fecha FROM Metodo_Pago
+            string query = @"SELECT montoBOB AS 'Monto Bs', " + Session.FormatoFechaMySql("fechaRegistro") + @" AS Fecha FROM Metodo_Pago
                 WHERE idVenta = @idVenta";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idVenta", Session.IdVentaDetalle);
@@ -399,7 +399,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectPaymentMethodsFromSale(int IdVenta)
         {
-            string query = @"SELECT idMetodoPago AS ID, montoUSD AS 'Monto USD', montoBOB AS 'Monto Bs', IF(Tipo = 1, 'EFECTIVO',IF(Tipo = 2, 'TRANSFERENCIA BANCARIA', 'TARJETA')) AS 'Metodo Pago', DATE_FORMAT(fechaRegistro,'%d/%m/%Y') AS Fecha FROM Metodo_Pago
+            string query = @"SELECT idMetodoPago AS ID, montoUSD AS 'Monto USD', montoBOB AS 'Monto Bs', IF(Tipo = 1, 'EFECTIVO',IF(Tipo = 2, 'TRANSFERENCIA BANCARIA', 'TARJETA')) AS 'Metodo Pago', " + Session.FormatoFechaMySql("fechaRegistro") + @" AS Fecha FROM Metodo_Pago
                             WHERE idVenta = @idVenta";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idVenta", IdVenta);
@@ -663,7 +663,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectSalesWithPendingBalanceByCustomers()
         {
-            string query = @"SELECT V.idCliente AS ID, C.nombre AS Nombre, C.numeroCelular AS Celular, SUM(V.saldoUSD) AS 'Saldo Total', DATE_FORMAT(V.fechaRegistro,'%d/%m/%Y') AS 'Fecha' FROM Venta V
+            string query = @"SELECT V.idCliente AS ID, C.nombre AS Nombre, C.numeroCelular AS Celular, SUM(V.saldoUSD) AS 'Saldo Total', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS 'Fecha' FROM Venta V
                                 INNER JOIN Cliente C ON C.idCliente = V.idCliente
                                 WHERE V.saldoUSD > 10 AND V.estado = 1 AND V.idSucursal = @SessionIdSucursal
                                 GROUP BY V.idCliente
@@ -683,7 +683,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectAllSalesWithPendingBalanceByCustomers()
         {
-            string query = @"SELECT V.idVenta, U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT('- ',P.nombreProducto SEPARATOR ' '),')') AS Detalle, saldoUSD AS 'Saldo $us', saldoBOB AS 'Saldo Bs', DATE_FORMAT(V.fechaRegistro,'%d/%m/%Y') AS 'Fecha' FROM Venta V
+            string query = "SELECT V.idVenta, U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT('- ',P.nombreProducto SEPARATOR ' '),')') AS Detalle, saldoUSD AS 'Saldo $us', saldoBOB AS 'Saldo Bs', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS 'Fecha' FROM Venta V
                             INNER JOIN Usuario U ON V.idUsuario = U.idUsuario
                             INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
                             INNER JOIN Producto P ON DV.idProducto = P.idProducto
