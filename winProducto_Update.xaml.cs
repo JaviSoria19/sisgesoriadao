@@ -133,10 +133,7 @@ namespace sisgesoriadao
                 {
                     if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
                     {
-                        for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
-                        {
-                            listaHelper[i].NombreProducto = valorNuevo.Text.Trim().ToString();
-                        }
+                        listaHelper[dgvProductos.SelectedIndex].NombreProducto = valorNuevo.Text.Trim().ToString();
                     }
                     else
                     {
