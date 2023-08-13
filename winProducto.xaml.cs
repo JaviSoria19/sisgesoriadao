@@ -285,6 +285,10 @@ namespace sisgesoriadao
                         productosVentaTotalBOB += double.Parse(item[10].ToString());
                     }
                 }
+                productosCostoTotalUSD = Math.Round(productosCostoTotalUSD, 2);
+                productosCostoTotalBOB = Math.Round(productosCostoTotalBOB, 2);
+                productosVentaTotalUSD = Math.Round(productosVentaTotalUSD, 2);
+                productosVentaTotalBOB = Math.Round(productosVentaTotalBOB, 2);
                 txtTotalProductosCostoUSD.Text = "Total Costo $us.: " + productosCostoTotalUSD.ToString();
                 txtTotalProductosCostoBOB.Text = "Total Costo Bs.: " + productosCostoTotalBOB.ToString();
                 txtTotalProductosVentaUSD.Text = "Total Venta $us.: " + productosVentaTotalUSD.ToString();

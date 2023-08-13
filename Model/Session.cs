@@ -3,7 +3,7 @@
     public static class Session
     {
         //Cadena de conexión requerida para llamar a la base de datos.
-        public static string CadenaConexionBdD { get; set; } = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
+        public static string CadenaConexionBdD { get; set; } = "server=162.144.4.18;database=planetc5_bdventacelular;uid=planetc5_root;pwd=thejockeydeath1;port=3306";
         public static string VersionApp { get; set; } = "v. 1.3.4.2";
         //Atributo indispensable para manejar la totalidad del sistema.
         public static byte IdUsuario { get; set; }
@@ -23,28 +23,28 @@
         public static int IdVentaDetalle { get; set; } = 0;
         public static int IdCliente { get; set; } = 0;
         public static byte NumeroFormatoFecha { get; set; } = 2;
+        public static byte IntervaloHora { get; set; } = 1;
 
         public static string FormatoFechaMySql(string MySqlAtributoFecha)
         {
             switch (NumeroFormatoFecha)
             {
-                
+
                 case 1:
                     /*DD/MM/AAAA*/
-                    return "DATE_FORMAT(" + MySqlAtributoFecha + ",'%d/%m/%Y')";
+                    return "DATE_FORMAT(" + MySqlAtributoFecha + " + INTERVAL " + IntervaloHora + " HOUR,'%d/%m/%Y')";
                 case 2:
                     /*DD/MM/AAAA HH:MM*/
-                    return "DATE_FORMAT(" + MySqlAtributoFecha + ",'%d/%m/%Y %h:%i')";
+                    return "DATE_FORMAT(" + MySqlAtributoFecha + " + INTERVAL " + IntervaloHora + " HOUR,'%d/%m/%Y %h:%i')";
                 case 3:
                     /*YYYY/MM/DD*/
-                    return "DATE_FORMAT(" + MySqlAtributoFecha + ",'%Y/%m/%d')";
+                    return "DATE_FORMAT(" + MySqlAtributoFecha + " + INTERVAL " + IntervaloHora + " HOUR,'%Y/%m/%d')";
                 case 4:
                     /*YYYY/MM/DD HH:MM*/
-                    return "DATE_FORMAT(" + MySqlAtributoFecha + ",'%Y/%m/%d %h:%i')";
+                    return "DATE_FORMAT(" + MySqlAtributoFecha + " + INTERVAL " + IntervaloHora + " HOUR,'%Y/%m/%d %h:%i')";
                 default:
                     return MySqlAtributoFecha;
             }
-            
         }
     }
 }

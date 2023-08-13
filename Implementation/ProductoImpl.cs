@@ -247,7 +247,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Producto AS P
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones," + Session.FormatoFechaMySql("P.fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Producto AS P
                                 INNER JOIN Sucursal AS S ON P.idSucursal = S.idSucursal
                                 INNER JOIN Categoria AS C ON P.idCategoria = C.idCategoria
                                 INNER JOIN Condicion AS CC ON P.idCondicion = CC.idCondicion
@@ -267,7 +267,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Producto AS P
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones," + Session.FormatoFechaMySql("P.fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Producto AS P
                                 INNER JOIN Sucursal AS S ON P.idSucursal = S.idSucursal
                                 INNER JOIN Categoria AS C ON P.idCategoria = C.idCategoria
                                 INNER JOIN Condicion AS CC ON P.idCondicion = CC.idCondicion
@@ -289,7 +289,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLikeReporteValorado(string idSucursal, string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Producto AS P
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones," + Session.FormatoFechaMySql("P.fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Producto AS P
                                 INNER JOIN Sucursal AS S ON P.idSucursal = S.idSucursal
                                 INNER JOIN Categoria AS C ON P.idCategoria = C.idCategoria
                                 INNER JOIN Condicion AS CC ON P.idCondicion = CC.idCondicion
@@ -312,7 +312,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectSoldProducts()
         {
-            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Producto AS P
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones," + Session.FormatoFechaMySql("P.fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Producto AS P
                                 INNER JOIN Sucursal AS S ON P.idSucursal = S.idSucursal
                                 INNER JOIN Categoria AS C ON P.idCategoria = C.idCategoria
                                 INNER JOIN Condicion AS CC ON P.idCondicion = CC.idCondicion
@@ -330,7 +330,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLikeSoldProducts(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones,P.fechaRegistro AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Producto AS P
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.costoUSD AS 'C USD', P.costoBOB AS 'C Bs', P.precioVentaUSD AS 'P USD', P.precioVentaBOB AS 'P BOB', P.observaciones AS Observaciones," + Session.FormatoFechaMySql("P.fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(P.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Producto AS P
                                 INNER JOIN Sucursal AS S ON P.idSucursal = S.idSucursal
                                 INNER JOIN Categoria AS C ON P.idCategoria = C.idCategoria
                                 INNER JOIN Condicion AS CC ON P.idCondicion = CC.idCondicion
@@ -396,7 +396,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectProductHistory(string CadenaBusqueda)
         {
-            string query = @"SELECT P.codigoSublote AS Codigo, P.nombreProducto AS 'Producto', P.identificador AS 'IMEI o SN', H.detalle AS Detalle, H.fechaRegistro AS 'Fecha de Registro' FROM Historial AS H
+            string query = @"SELECT P.codigoSublote AS Codigo, P.nombreProducto AS 'Producto', P.identificador AS 'IMEI o SN', H.detalle AS Detalle, " + Session.FormatoFechaMySql("H.fechaRegistro") + @" AS 'Fecha de Registro' FROM Historial AS H
                             INNER JOIN Producto AS P ON H.idProducto = P.idProducto 
                             WHERE (P.identificador LIKE @search OR P.codigoSublote LIKE @search) ORDER BY 5 DESC, 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -475,7 +475,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectBatch()
         {
-            string query = @"SELECT L.idLote AS ID, U.nombreUsuario AS Usuario, L.codigoLote AS 'Codigo', L.fechaRegistro AS 'Fecha de Registro', IFNULL(L.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Lote AS L
+            string query = @"SELECT L.idLote AS ID, U.nombreUsuario AS Usuario, L.codigoLote AS 'Codigo', " + Session.FormatoFechaMySql("L.fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(L.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Lote AS L
                                 INNER JOIN Usuario AS U ON L.idUsuario = U.idUsuario
                                 WHERE L.estado = 1 ORDER BY 4 DESC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -491,7 +491,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLikeBatch(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT L.idLote AS ID, U.nombreUsuario AS Usuario, L.codigoLote AS 'Codigo', L.fechaRegistro AS 'Fecha de Registro', IFNULL(L.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Lote AS L
+            string query = @"SELECT L.idLote AS ID, U.nombreUsuario AS Usuario, L.codigoLote AS 'Codigo', " + Session.FormatoFechaMySql("L.fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(L.fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Lote AS L
                                 INNER JOIN Usuario AS U ON L.idUsuario = U.idUsuario
                                 WHERE (U.nombreUsuario LIKE @search OR L.codigoLote LIKE @search)
                                 AND L.estado = 1 AND L.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
@@ -646,7 +646,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectMovementsHistory()
         {
-            string query = @"SELECT T.idTransferencia AS ID, S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino', COUNT(DT.idProducto) AS 'Productos transferidos', T.fechaRegistro AS 'Fecha de Registro' FROM Transferencia AS T
+            string query = @"SELECT T.idTransferencia AS ID, S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino', COUNT(DT.idProducto) AS 'Productos transferidos', " + Session.FormatoFechaMySql("T.fechaRegistro") + @" AS 'Fecha de Registro' FROM Transferencia AS T
                         INNER JOIN Sucursal S1 ON S1.idSucursal = T.SucursalOrigen
                         INNER JOIN Sucursal S2 ON S2.idSucursal = T.SucursalDestino
                         INNER JOIN Detalle_Transferencia AS DT ON DT.idTransferencia = T.idTransferencia
@@ -666,7 +666,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLikeMovementsHistory(string SucursalOrigen, string SucursalDestino, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT T.idTransferencia AS ID, S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino', COUNT(DT.idProducto) AS 'Productos transferidos', T.fechaRegistro AS 'Fecha de Registro' FROM Transferencia AS T
+            string query = @"SELECT T.idTransferencia AS ID, S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino', COUNT(DT.idProducto) AS 'Productos transferidos', " + Session.FormatoFechaMySql("T.fechaRegistro") + @" AS 'Fecha de Registro' FROM Transferencia AS T
                         INNER JOIN Sucursal S1 ON S1.idSucursal = T.SucursalOrigen
                         INNER JOIN Sucursal S2 ON S2.idSucursal = T.SucursalDestino
                         INNER JOIN Detalle_Transferencia AS DT ON DT.idTransferencia = T.idTransferencia
@@ -690,7 +690,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectMovementsHistory_Details(int IdTransferencia)
         {
-            string query = @"SELECT DT.idTransferencia, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'IMEI o SN', S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino', T.fechaRegistro FROM Detalle_Transferencia AS DT
+            string query = @"SELECT DT.idTransferencia, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'IMEI o SN', S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino', " + Session.FormatoFechaMySql("T.fechaRegistro") + @" FROM Detalle_Transferencia AS DT
                             INNER JOIN Producto P ON P.idProducto = DT.idProducto
                             INNER JOIN Transferencia T ON T.idTransferencia = DT.idTransferencia
                             INNER JOIN Sucursal S1 ON S1.idSucursal = T.SucursalOrigen
