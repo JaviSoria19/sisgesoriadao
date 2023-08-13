@@ -43,13 +43,13 @@
 
                     <StackPanel Orientation="Horizontal" Margin="10,20" Grid.Row="0">
                         <Image Height="180" Source="/sisgesoriadao;component/Resources/logo.png"
-                               Margin="0,0,0,0"/>
+                               Margin="110,0,0,0"/>
                         
                         <StackPanel Margin="10" Orientation="Vertical" VerticalAlignment="Center">
                             <TextBlock Text="BOLETA DE GARANTIA" 
-                                   Margin="210,0,70,0" FontWeight="Bold" FontSize="40"/>
+                                   Margin="100,0,70,0" FontWeight="Bold" FontSize="40"/>
                             <TextBlock x:Name="txtIdVenta" Text="Nro.: NRO_VENTA"
-                                   Margin="210,0,70,0" FontWeight="Bold" FontSize="25" HorizontalAlignment="Center"/>
+                                   Margin="100,0,70,0" FontWeight="Bold" FontSize="25" HorizontalAlignment="Center"/>
                         </StackPanel>
                         
                         <StackPanel Margin="10" Width="320">

@@ -109,7 +109,7 @@
                             <DataGridTextColumn Header="Total Bs." Binding="{Binding totalproductoBOB}"/>
                             <DataGridTextColumn Header="Garantia" Binding="{Binding garantia}"/>
                             <DataGridTextColumn Header="Costo $." Binding="{Binding costoUSD}" IsReadOnly="True" Visibility="Collapsed"/>
-                            
+
                             <DataGridTemplateColumn>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -117,28 +117,26 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                        </DataGrid.Columns>                        
+                        </DataGrid.Columns>
                     </DataGrid>
-                    <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
-                        <Label Content="$.: " Margin="0,0,0,0"/>
-                        <Label Content="Bs.: " Margin="50,0,40,0"/>
-                    </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Right">
-                        <Label Content="Total: "/>
+                        <Label Content="Total: ($.)"/>
                         <TextBox x:Name="txtVentaTotalVentaUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
+                        <Label Content="Total: (Bs.)"/>
                         <TextBox x:Name="txtVentaTotalVentaBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
                     </StackPanel>
                     <TextBlock Text="MÉTODO(S) DE PAGO" FontWeight="Bold" FontSize="20" HorizontalAlignment="Right"/>
                     <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Right">
+                        <Button x:Name="btnAddPaymentMethod" ToolTip="AÑADIR MÉTODO DE PAGO" Click="btnAddPaymentMethod_Click" Margin="0,0,0,0" IsEnabled="True" Background="LimeGreen" BorderBrush="LimeGreen">
+                            <materialDesign:PackIcon Kind="CreditCardAdd"/>
+                        </Button>
                         <Label Content="Tipo:"/>
                         <ComboBox x:Name="cbxPaymentMethod" IsEnabled="True" Margin="0,0,20,0"/>
                         <Label Content="Monto ($.):"/>
                         <TextBox x:Name="txtPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPagoUSD_KeyUp" KeyDown="txtPagoUSD_KeyDown"/>
                         <Label Content="Monto (Bs.):"/>
                         <TextBox x:Name="txtPagoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPagoBOB_KeyUp" KeyDown="txtPagoBOB_KeyDown"/>
-                        <Button x:Name="btnAddPaymentMethod" ToolTip="AÑADIR MÉTODO DE PAGO" Click="btnAddPaymentMethod_Click" Margin="0,0,0,0" IsEnabled="True" Background="LimeGreen" BorderBrush="LimeGreen">
-                            <materialDesign:PackIcon Kind="CreditCardAdd"/>
-                        </Button>
+                        
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <DataGrid x:Name="dgvMetodosPago" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True" Margin="15"
@@ -159,17 +157,15 @@
                         </DataGrid>
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal" Margin="5">
-                                <Label Content="$.: " Margin="60,0,0,0"/>
-                                <Label Content="Bs.: " Margin="55,0,0,0"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <Label Content="Pago: "/>
+                                <Label Content="Pago: ($.)"/>
                                 <TextBox x:Name="txtVentaTotalPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
+                                <Label Content="Pago: (Bs.)"/>
                                 <TextBox x:Name="txtVentaTotalPagoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="5">
-                                <Label Content="Saldo: "/>
+                                <Label Content="Saldo: ($.)"/>
                                 <TextBox x:Name="txtVentaTotalSaldoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
+                                <Label Content="Saldo: (Bs.)"/>
                                 <TextBox x:Name="txtVentaTotalSaldoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
                             </StackPanel>
                         </StackPanel>

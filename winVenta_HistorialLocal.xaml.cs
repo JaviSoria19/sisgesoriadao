@@ -1,7 +1,10 @@
 ﻿using sisgesoriadao.Implementation;
 using sisgesoriadao.Model;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;//ADO.NET
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,6 +19,7 @@ namespace sisgesoriadao
     {
         VentaImpl implVenta;
         string cadenaAuxiliar = string.Empty;
+        ClienteImpl implCliente;
         public winVenta_HistorialLocal()
         {
             InitializeComponent();
@@ -135,6 +139,47 @@ namespace sisgesoriadao
         {
             winVenta_Eliminados winVenta_Eliminados = new winVenta_Eliminados();
             winVenta_Eliminados.Show();
+        }
+
+        private void txtBuscar_Cliente_o_CI_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                List<ComboboxItem> listcomboboxCliente = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implCliente = new ClienteImpl();
+                dataTable = implCliente.SelectCustomerNamesForComboBox();
+                listcomboboxCliente = (from DataRow dr in dataTable.Rows
+                                       select new ComboboxItem()
+                                       {
+                                           Valor = Convert.ToInt32(dr["idCliente"]),
+                                           Texto = dr["nombre"].ToString()
+                                       }).ToList();
+                txtBuscar_Cliente_o_CI.ItemsSource = listcomboboxCliente;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        public class ComboboxItem
+        {
+            public string Texto { get; set; }
+            public int Valor { get; set; }
+
+            public override string ToString()
+            {
+                return Texto;
+            }
+            public ComboboxItem(string texto, byte valor)
+            {
+                Texto = texto;
+                Valor = valor;
+            }
+            public ComboboxItem()
+            {
+
+            }
         }
     }
 }

@@ -12,6 +12,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
+        xmlns:controls="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
         mc:Ignorable="d"
         Title="Sistema de Ventas - Ventas Locales" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
@@ -36,7 +37,7 @@
                 <Label Content="Producto o Código:" VerticalAlignment="Center"/>
                 <TextBox x:Name="txtBuscar_Producto_o_Codigo" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="50" Height="22" KeyDown="txtBuscar_Producto_o_Codigo_KeyDown"/>
                 <Label Content="Cliente o C.I:" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtBuscar_Cliente_o_CI" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="60" Height="22" KeyDown="txtBuscar_Producto_o_Codigo_KeyDown"/>
+                <controls:AutoCompleteBox x:Name="txtBuscar_Cliente_o_CI" Margin="0,0,20,0" Width="150" FilterMode="Contains" KeyDown="txtBuscar_Producto_o_Codigo_KeyDown" FontSize="18" VerticalAlignment="Center" Loaded="txtBuscar_Cliente_o_CI_Loaded"/>
                 <Button x:Name="btnSearch" ToolTip="BUSCAR POR PRODUCTO O CLIENTE" Click="btnSearch_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                     <materialDesign:PackIcon Kind="Search"/>
                 </Button>
