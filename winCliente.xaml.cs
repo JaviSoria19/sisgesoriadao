@@ -190,7 +190,7 @@ namespace sisgesoriadao
                 try
                 {
                     DataRowView d = (DataRowView)dgvDatos.SelectedItem;
-                    byte id = byte.Parse(d.Row.ItemArray[0].ToString());
+                    int id = int.Parse(d.Row.ItemArray[0].ToString());
                     implCliente = new ClienteImpl();
                     cliente = implCliente.Get(id);
                     if (cliente != null)

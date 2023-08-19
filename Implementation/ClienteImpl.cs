@@ -72,7 +72,7 @@ namespace sisgesoriadao.Implementation
                 DataTable dt = ExecuteDataTableCommand(command);
                 if (dt.Rows.Count > 0)
                 {
-                    c = new Cliente(byte.Parse(dt.Rows[0][0].ToString()),   /*idCliente*/
+                    c = new Cliente(int.Parse(dt.Rows[0][0].ToString()),   /*idCliente*/
                         dt.Rows[0][1].ToString(),                           /*nombre*/
                         dt.Rows[0][2].ToString(),                           /*numeroCelular*/
                         dt.Rows[0][3].ToString(),                           /*numeroCI*/
@@ -102,7 +102,7 @@ namespace sisgesoriadao.Implementation
                 DataTable dt = ExecuteDataTableCommand(command);
                 if (dt.Rows.Count > 0)
                 {
-                    c = new Cliente(byte.Parse(dt.Rows[0][0].ToString()),   /*idCliente*/
+                    c = new Cliente(int.Parse(dt.Rows[0][0].ToString()),   /*idCliente*/
                         dt.Rows[0][1].ToString(),                           /*nombre*/
                         dt.Rows[0][2].ToString(),                           /*numeroCelular*/
                         dt.Rows[0][3].ToString(),                           /*numeroCI*/
@@ -182,7 +182,7 @@ namespace sisgesoriadao.Implementation
                 DataTable dt = ExecuteDataTableCommand(command);
                 if (dt.Rows.Count > 0)
                 {
-                    c = new Cliente(byte.Parse(dt.Rows[0][0].ToString()),   /*idCliente*/
+                    c = new Cliente(int.Parse(dt.Rows[0][0].ToString()),   /*idCliente*/
                         dt.Rows[0][1].ToString(),                           /*nombre*/
                         dt.Rows[0][2].ToString(),                           /*numeroCelular*/
                         dt.Rows[0][3].ToString(),                           /*numeroCI*/
