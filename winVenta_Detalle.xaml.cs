@@ -13,6 +13,7 @@ namespace sisgesoriadao
     public partial class winVenta_Detalle : Window
     {
         VentaImpl implVenta;
+        string clipboardTexto = "";
         public winVenta_Detalle()
         {
             InitializeComponent();
@@ -160,7 +161,10 @@ namespace sisgesoriadao
                         txtProducto_DescuentoPorcentaje.Text += item[15].ToString() + "\n \n";
                         txtProducto_DescuentoBOB.Text += item[16].ToString() + "\n \n";
                         txtProducto_TotalBOB.Text += item[17].ToString() + "\n \n";
+
+                        clipboardTexto += item[10].ToString() + " " + item[11].ToString() + "\n";
                     }
+                    clipboardTexto = clipboardTexto.Trim();
 
                     txtPagos.Text = "";
                     DataTable dt_two = new DataTable();
@@ -182,6 +186,12 @@ namespace sisgesoriadao
                     MessageBox.Show(ex.Message);
                 }
             }
+        }
+
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("¡Se ha copiado la descripción de los Productos e IMEI's o S/N en el portapapeles!");
+            Clipboard.SetText(clipboardTexto);
         }
     }
 }

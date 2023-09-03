@@ -39,8 +39,8 @@
             <Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="75*"/>
-                        <ColumnDefinition Width="25*"/>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
                         <Grid.RowDefinitions>
@@ -225,17 +225,15 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="5">
-                            <StackPanel Orientation="Horizontal" Margin="20">
-                                <materialDesign:Card Margin="5" UniformCornerRadius="10" Background="Orange">
-                                    <TextBlock x:Name="infoTotalSalesFromToday" FontSize="20" Text="VENTAS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
-                                </materialDesign:Card>
-                                <materialDesign:Card Margin="5" UniformCornerRadius="10" Background="Gold">
-                                    <TextBlock x:Name="infoTotalProductsFromToday" FontSize="20" Text="PRODUCTOS VENDIDOS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
-                                </materialDesign:Card>
-                                <materialDesign:Card Margin="5" UniformCornerRadius="10" Background="LimeGreen">
-                                    <TextBlock x:Name="infoCashAmount" FontSize="20" Text="EFECTIVO EN CAJA: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
-                                </materialDesign:Card>
-                            </StackPanel>
+                            <materialDesign:Card Margin="5" UniformCornerRadius="10" Background="Orange">
+                                <TextBlock x:Name="infoTotalSalesFromToday" FontSize="20" Text="VENTAS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
+                            </materialDesign:Card>
+                            <materialDesign:Card Margin="5" UniformCornerRadius="10" Background="Gold">
+                                <TextBlock x:Name="infoTotalProductsFromToday" FontSize="20" Text="PRODUCTOS VENDIDOS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
+                            </materialDesign:Card>
+                            <materialDesign:Card Margin="5" UniformCornerRadius="10" Background="LimeGreen">
+                                <TextBlock x:Name="infoCashAmount" FontSize="20" Text="EFECTIVO EN CAJA: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
+                            </materialDesign:Card>
                         </StackPanel>
                     </Grid>
                     

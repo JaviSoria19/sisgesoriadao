@@ -4,7 +4,7 @@
     {
         //Cadena de conexión requerida para llamar a la base de datos.
         public static string CadenaConexionBdD { get; set; } = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
-        public static string VersionApp { get; set; } = "v. 1.3.5";
+        public static string VersionApp { get; set; } = "v. 1.3.6.1";
         //Atributo indispensable para manejar la totalidad del sistema.
         public static byte IdUsuario { get; set; }
         //Atributo de referencia para dar a conocer al usuario que ha iniciado sesión correctamente.
@@ -35,13 +35,13 @@
                     return "DATE_FORMAT(" + MySqlAtributoFecha + " + INTERVAL " + IntervaloHora + " HOUR,'%d/%m/%Y')";
                 case 2:
                     /*DD/MM/AAAA HH:MM*/
-                    return "DATE_FORMAT(" + MySqlAtributoFecha + " + INTERVAL " + IntervaloHora + " HOUR,'%d/%m/%Y %h:%i')";
+                    return "DATE_FORMAT(" + MySqlAtributoFecha + " + INTERVAL " + IntervaloHora + " HOUR,'%d/%m/%Y %T')";
                 case 3:
                     /*YYYY/MM/DD*/
                     return "DATE_FORMAT(" + MySqlAtributoFecha + " + INTERVAL " + IntervaloHora + " HOUR,'%Y/%m/%d')";
                 case 4:
                     /*YYYY/MM/DD HH:MM*/
-                    return "DATE_FORMAT(" + MySqlAtributoFecha + " + INTERVAL " + IntervaloHora + " HOUR,'%Y/%m/%d %h:%i')";
+                    return "DATE_FORMAT(" + MySqlAtributoFecha + " + INTERVAL " + IntervaloHora + " HOUR,'%Y/%m/%d %T')";
                 default:
                     return MySqlAtributoFecha;
             }

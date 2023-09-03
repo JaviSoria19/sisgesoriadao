@@ -32,6 +32,9 @@
                 <Button x:Name="btnPrintPDF" ToolTip="IMPRIMIR PARA PDF" Margin="15,0,0,0" Click="btnPrintPDF_Click" Foreground="White">
                     <materialDesign:PackIcon Kind="FilePdfBox" Width="50"/>
                 </Button>
+                <Button x:Name="btnCopy" ToolTip="COPIAR IMEIS O S/N's AL PORTAPAPELES" Margin="15,0,0,0" Click="btnCopy_Click" Background="White" Foreground="Black" BorderBrush="Black">
+                    <materialDesign:PackIcon Kind="ContentCopy" Width="50"/>
+                </Button>
             </StackPanel>
             <Grid>
                 <Grid x:Name="ZonaImpresionGrid">

@@ -530,8 +530,9 @@ namespace sisgesoriadao
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                throw;
+                MessageBox.Show(ex.Message + "\nDebido a la excepción presentada, se cerrará esta ventana para evitar errores.");
+                loteRegistrado = true;
+                this.Close();
             }
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

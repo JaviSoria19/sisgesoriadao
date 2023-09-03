@@ -35,6 +35,7 @@ namespace sisgesoriadao
         DataGridRowDetalleHelper objetoHelper = null;
         byte modificacionPrecioValida = 0;
         double auxTotalProductoBOB = 0, auxTotalProductoUSD = 0;
+        string clipboardTexto = "";
         public winVenta_Update()
         {
             InitializeComponent();
@@ -381,6 +382,11 @@ namespace sisgesoriadao
                     }
                     );
                 }
+                foreach (var item in listaHelper)
+                {
+                    clipboardTexto += item.codigoSublote + " " + item.nombreProducto + " " + item.identificador + "\n";
+                }
+                clipboardTexto = clipboardTexto.Trim();
             }
             catch (Exception ex)
             {
@@ -1013,6 +1019,13 @@ namespace sisgesoriadao
 
             }
         }
+
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("¡Se ha copiado la descripción de los Productos e IMEI's o S/N en el portapapeles!");
+            Clipboard.SetText(clipboardTexto);
+        }
+
         public class DataGridRowDetalleHelper
         {
             public int idProducto { get; set; }
