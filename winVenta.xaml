@@ -33,6 +33,8 @@
                 <DatePicker x:Name="dtpFechaInicio" Margin="0,0,20,0"/>
                 <Label Content="Hasta:" VerticalAlignment="Center"/>
                 <DatePicker x:Name="dtpFechaFin" Loaded="dtpFechaFin_Loaded" Margin="0,0,20,0"/>
+                <Label Content="Producto o Código:" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtBuscar_Producto_o_Codigo" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="50" Height="22" KeyDown="txtBuscar_Producto_o_Codigo_KeyDown"/>
                 <Label Content="SUCURSAL:" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 <ComboBox x:Name="cbxSucursal" IsEnabled="True" Margin="0,0,20,0"/>
                 <Label Content="CATEGORIA:" Margin="10,0,0,0" VerticalAlignment="Center"/>

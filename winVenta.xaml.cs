@@ -9,6 +9,8 @@ using System.Data;//ADO.NET
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
+
 namespace sisgesoriadao
 {
     /// <summary>
@@ -55,9 +57,9 @@ namespace sisgesoriadao
             {
                 implVenta = new VentaImpl();
                 dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasGlobales(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor).DefaultView;
+                dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasGlobales(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor, txtBuscar_Producto_o_Codigo.Text.Trim()).DefaultView;
                 //dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implVenta.SelectLikeReporteVentasGlobales(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor).Rows.Count;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implVenta.SelectLikeReporteVentasGlobales(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor, txtBuscar_Producto_o_Codigo.Text.Trim()).Rows.Count;
                 totalUSD = 0;
                 totalBOB = 0;
                 foreach (DataRowView item in dgvDatos.Items)
@@ -186,6 +188,15 @@ namespace sisgesoriadao
                 }
             }
         }
+
+        private void txtBuscar_Producto_o_Codigo_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SelectLike();
+            }
+        }
+
         void cbxGetGroupConcatUsuarios()
         {
             try
