@@ -22,6 +22,22 @@ namespace sisgesoriadao
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
             txtVersionApp.Text = Session.VersionApp;
             LoadInfoFromDB();
+            if (Session.NombreUsuario == "CRAZY STORE")
+            {
+                btnSaleAdd.IsEnabled = false;
+                btnLocalSales.IsEnabled = false;
+                btnCashPending.IsEnabled = false;
+                btnCashHistory.IsEnabled = false;
+                btnQuotationAdd.IsEnabled = false;
+                btnQuotations.IsEnabled = false;
+                btnTransferProducts.IsEnabled = false;
+                btnReceiveProducts.IsEnabled = false;
+                btnMovementProductHistory.IsEnabled = false;
+                btnHistoryProducts.IsEnabled = false;
+                btnCommonSaleAdd.IsEnabled = false;
+                btnCommonLocalSales.IsEnabled = false;
+                btnRefresh.IsEnabled = false;
+            }
         }
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
