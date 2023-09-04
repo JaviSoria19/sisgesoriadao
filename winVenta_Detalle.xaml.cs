@@ -5,6 +5,13 @@ using System.Data;//ADO.NET
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using MessagingToolkit.QRCode.Codec;
+using MessagingToolkit.QRCode.Codec.Data;
+using System.Drawing;
+using System.IO;
+using System.Drawing.Imaging;
+using System.Windows.Media.Imaging;
+
 namespace sisgesoriadao
 {
     /// <summary>
@@ -179,6 +186,22 @@ namespace sisgesoriadao
                     else
                     {
                         txtPagos.Text = "-";
+                    }
+                    QRCodeEncoder encoder = new QRCodeEncoder();
+                    Bitmap bitmap;
+                    encoder.QRCodeScale = 8;
+                    bitmap = encoder.Encode(clipboardTexto);
+                    using (var memory = new MemoryStream())
+                    {
+                        bitmap.Save(memory, ImageFormat.Png);
+                        memory.Position = 0;
+                        var bitmapimage = new BitmapImage();
+                        bitmapimage.BeginInit();
+                        bitmapimage.StreamSource = memory;
+                        bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapimage.EndInit();
+                        bitmapimage.Freeze();
+                        imgQR.Source = bitmapimage;
                     }
                 }
                 catch (Exception ex)

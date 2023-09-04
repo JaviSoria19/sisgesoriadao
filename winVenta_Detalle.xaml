@@ -148,9 +148,17 @@
                                 </StackPanel>
                             </StackPanel>
                             
-                            <TextBlock Text="¡GRACIAS POR SU PREFERENCIA!" FontSize="18" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,20"/>
+                            <TextBlock Text="¡GRACIAS POR SU PREFERENCIA!" FontSize="18" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,10"/>
                         </StackPanel>
-                        <TextBlock Text="IMPORTANTE: Por favor tenga en cuenta que si el equipo sufre daños por caída, aplastamiento, daño por agua o mala actualización de software, quedará fuera de garantía. También es importante destacar que cualquier modificación no autorizada en el dispositivo o uso inadecuado del mismo también invalidará la garantía. Por favor, lea detenidamente las instrucciones de uso y conservación del equipo para asegurar su correcto funcionamiento y durabilidad." FontSize="18" TextWrapping="Wrap" FontWeight="DemiBold" HorizontalAlignment="Center" Foreground="DarkRed"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="8*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="IMPORTANTE: Por favor tenga en cuenta que si el equipo sufre daños por caída, aplastamiento, daño por agua o mala actualización de software, quedará fuera de garantía. También es importante destacar que cualquier modificación no autorizada en el dispositivo o uso inadecuado del mismo también invalidará la garantía. Por favor, lea detenidamente las instrucciones de uso y conservación del equipo para asegurar su correcto funcionamiento y durabilidad." FontSize="18" TextWrapping="Wrap" FontWeight="DemiBold" HorizontalAlignment="Center" Foreground="DarkRed"/>
+                            <Image Height="120" Width="120" x:Name="imgQR" Grid.Column="1"/>
+                        </Grid>
                     </StackPanel>
                 </Grid>
             </Grid>
