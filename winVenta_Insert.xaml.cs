@@ -806,8 +806,9 @@ namespace sisgesoriadao
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                throw;
+                MessageBox.Show(ex.Message + "\nDebido a la excepción presentada, se cerrará esta ventana para evitar errores.");
+                ventaRegistrada = true;
+                this.Close();
             }
         }
         private void ModificarFilaPorDescuentoPorcentaje(int i, TextBox n, DataGridRowDetalleHelper fila)

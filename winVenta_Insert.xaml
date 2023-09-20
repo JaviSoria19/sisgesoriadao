@@ -107,7 +107,7 @@
                             <DataGridTextColumn Header="Desc. Bs." Binding="{Binding descuentoBOB}"/>
                             <DataGridTextColumn Header="Total $." Binding="{Binding totalproductoUSD}"/>
                             <DataGridTextColumn Header="Total Bs." Binding="{Binding totalproductoBOB}"/>
-                            <DataGridTextColumn Header="Garantia" Binding="{Binding garantia}"/>
+                            <DataGridTextColumn Header="Garantia" Binding="{Binding garantia}" Foreground="Red" FontWeight="Bold"/>
                             <DataGridTextColumn Header="Costo $." Binding="{Binding costoUSD}" IsReadOnly="True" Visibility="Collapsed"/>
 
                             <DataGridTemplateColumn>

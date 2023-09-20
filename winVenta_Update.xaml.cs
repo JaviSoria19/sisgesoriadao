@@ -592,7 +592,7 @@ namespace sisgesoriadao
                         try
                         {
                             DataRowView d = (DataRowView)dgvMetodosPago.SelectedItem;
-                            byte id = byte.Parse(d.Row.ItemArray[0].ToString());
+                            int id = int.Parse(d.Row.ItemArray[0].ToString());
                             double montoUSD, montoBOB;
                             montoUSD = double.Parse(d.Row.ItemArray[1].ToString());
                             montoBOB = double.Parse(d.Row.ItemArray[2].ToString());
