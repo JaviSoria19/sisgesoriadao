@@ -29,6 +29,7 @@ namespace sisgesoriadao
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
+            txtCodigoSublote.Focus();
         }
         private void txtCodigoSublote_KeyDown(object sender, KeyEventArgs e)
         {

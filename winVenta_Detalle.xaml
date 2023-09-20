@@ -13,7 +13,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
-        Title="Sistema de Ventas - Detalle de Venta" Height="720" Width="1280"
+        Title="Sistema de Ventas - Detalle de Venta" Height="850" Width="1280"
         WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ResizeMode="NoResize">
     <ScrollViewer>
         <StackPanel Orientation="Vertical">

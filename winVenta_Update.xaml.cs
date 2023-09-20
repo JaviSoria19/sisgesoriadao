@@ -39,6 +39,7 @@ namespace sisgesoriadao
         public winVenta_Update()
         {
             InitializeComponent();
+            WindowState = WindowState.Maximized;
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
