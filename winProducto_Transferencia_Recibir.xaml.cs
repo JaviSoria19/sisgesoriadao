@@ -158,5 +158,10 @@ namespace sisgesoriadao
                 }
             }
         }
+
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            Select();
+        }
     }
 }

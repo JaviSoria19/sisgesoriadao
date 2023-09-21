@@ -26,6 +26,9 @@
                 <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
                 <materialDesign:PackIcon Kind="BoxArrowDown" Width="25" Height="25" VerticalAlignment="Center"/>
                 <TextBlock Text="RECIBIR PRODUCTOS" Margin="5,0,20,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <Button x:Name="btnRefresh" ToolTip="REFRESCAR INFORMACIÓN" HorizontalAlignment="Right" Margin="10,0,0,0" Click="btnRefresh_Click" Background="LimeGreen" BorderBrush="LimeGreen">
+                    <materialDesign:PackIcon Kind="Sync"/>
+                </Button>
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Margin="10">
