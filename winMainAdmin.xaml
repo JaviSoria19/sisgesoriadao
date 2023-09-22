@@ -77,10 +77,17 @@
                             </StackPanel>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5">
                                 <Button x:Name="btnSaleProfit" Width="100" Height="100" Click="btnSaleProfit_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}">
-                                    <materialDesign:PackIcon Kind="Cash" Width="80" Height="80" HorizontalAlignment="Center"/>
+                                    <materialDesign:PackIcon Kind="CashPlus" Width="80" Height="80" HorizontalAlignment="Center"/>
                                 </Button>
                                 <TextBlock Text="REPORTE DE" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                                 <TextBlock Text="UTILIDADES" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5">
+                                <Button x:Name="btnSaleDeficit" Width="100" Height="100" Click="btnSaleDeficit_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}">
+                                    <materialDesign:PackIcon Kind="CashMinus" Width="80" Height="80" HorizontalAlignment="Center"/>
+                                </Button>
+                                <TextBlock Text="REPORTE DE" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                                <TextBlock Text="PERDIDAS" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                             </StackPanel>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5">
                                 <Button x:Name="btnCashPending" Width="100" Height="100" Click="btnCashPending_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}">

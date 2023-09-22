@@ -234,7 +234,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
                             INNER JOIN Producto P ON P.idProducto = DV.idProducto
                             INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
-                            WHERE V.estado = 1 AND V.saldoUSD < 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
+                            WHERE V.estado = 1 AND V.saldoUSD < 10 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY P.idProducto
                             ORDER BY 1 DESC";
@@ -826,6 +826,33 @@ namespace sisgesoriadao.Implementation
             finally
             {
                 connection.Close();
+            }
+        }
+
+        public DataTable SelectLikeReportePerdidas(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios)
+        {
+            string query = @"SELECT V.idVenta AS 'ID', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, 
+                            V.idVenta AS 'Nro Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
+                            C.nombreCategoria AS Categoria, P.costoUSD AS 'P Costo', DV.precioUSD AS 'P Venta', (DV.precioUSD - P.costoUSD) AS Utilidad FROM Venta V
+                            INNER JOIN Sucursal S ON S.idSucursal = V.idSucursal
+                            INNER JOIN Usuario U ON U.idUsuario = V.idUsuario
+                            INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN Producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
+                            WHERE DV.precioUSD < P.costoUSD AND V.estado = 1 AND V.saldoUSD < 10 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
+                            AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
+                            GROUP BY P.idProducto
+                            ORDER BY 1 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@FechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", fechaFin.ToString("yyyy-MM-dd") + " 23:59:59");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

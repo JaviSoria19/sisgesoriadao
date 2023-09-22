@@ -13,6 +13,7 @@ namespace sisgesoriadao.Interfaces
         string GetTodayProducts(DateTime FechaHoy);
         DataTable SelectSalesWithPendingBalanceFromBranch();
         DataTable SelectLikeReporteUtilidades(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios);
+        DataTable SelectLikeReportePerdidas(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios);
         DataTable SelectLikeReporteVentasGlobales(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo);
         DataTable SelectLikeReporteVentasLocales(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI);
         DataTable SelectLikeReporteVentasLocalesByID(int idVenta);

@@ -149,6 +149,11 @@ namespace sisgesoriadao
             winVenta_Utilidad winVenta_Utilidad = new winVenta_Utilidad();
             winVenta_Utilidad.Show();
         }
+        private void btnSaleDeficit_Click(object sender, RoutedEventArgs e)
+        {
+            winVenta_Perdida winVenta_Perdida = new winVenta_Perdida();
+            winVenta_Perdida.Show();
+        }
         private void btnLocalSales_Click(object sender, RoutedEventArgs e)
         {
             winVenta_HistorialLocal winVenta_HistorialLocal = new winVenta_HistorialLocal();
@@ -253,6 +258,6 @@ namespace sisgesoriadao
                     throw;
                 }
             }
-        }
+        }        
     }
 }

@@ -1,0 +1,70 @@
+﻿<Window x:Class="sisgesoriadao.winVenta_Perdida"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
+     Background="{DynamicResource MaterialDesignPaper}"
+     FontFamily="{DynamicResource MaterialDesignFont}"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:sisgesoriadao"
+        mc:Ignorable="d"
+        Title="Sistema de Ventas - Reporte de Perdidas" Height="720" Width="1280"
+        WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Button x:Name="btnReturn" ToolTip="VOLVER A INICIO" Margin="0,0,20,0" Click="btnReturn_Click">
+                    <materialDesign:PackIcon Kind="ArrowLeftBold"/>
+                </Button>
+                <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="Cash" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="REPORTE DE PERDIDAS" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Margin="0,0,0,5" TextWrapping="Wrap">
+                    <Bold>ATENCION:</Bold> Estimad@ usuari@, en esta ventana solamente saldrán las ventas a pérdida.
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
+                <Label Content="Desde:" VerticalAlignment="Center"/>
+                <DatePicker x:Name="dtpFechaInicio" Margin="0,0,20,0"/>
+                <Label Content="Hasta:" VerticalAlignment="Center"/>
+                <DatePicker x:Name="dtpFechaFin" Loaded="dtpFechaFin_Loaded" Margin="0,0,20,0"/>
+                <Label Content="SUCURSAL:" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                <ComboBox x:Name="cbxSucursal" IsEnabled="True" Margin="0,0,20,0"/>
+                <Label Content="CATEGORIA:" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                <ComboBox x:Name="cbxCategoria" IsEnabled="True" Margin="0,0,20,0"/>
+                <Label Content="USUARIO:" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                <ComboBox x:Name="cbxUsuario" IsEnabled="True" Margin="0,0,20,0"/>
+                <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0">
+                    <materialDesign:PackIcon Kind="Search"/>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <TextBlock x:Name="txtTotalCosto" Text="Total P. Costo: 0" Margin="0,0,50,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock x:Name="txtTotalVenta" Text="Total P. Venta: 0" Margin="0,0,50,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock x:Name="txtTotalUtilidad" Text="Total Pérdida: 0" Margin="0,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">
+                <Border BorderBrush="Gray" BorderThickness="2">
+                    <DataGrid x:Name="dgvDatos"
+                  HorizontalAlignment="Left" VerticalAlignment="Top" GridLinesVisibility="Horizontal"
+                  CanUserAddRows="False" IsReadOnly="True" 
+                  CanUserResizeRows="False" CanUserResizeColumns="False" MaxHeight="363"/>
+                </Border>
+                <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
