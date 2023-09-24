@@ -36,6 +36,7 @@ namespace sisgesoriadao
         byte modificacionPrecioValida = 0;
         double auxTotalProductoBOB = 0, auxTotalProductoUSD = 0;
         string clipboardTexto = "";
+        bool usuario_modifico_precio = false;
         public winVenta_Update()
         {
             InitializeComponent();
@@ -554,23 +555,65 @@ namespace sisgesoriadao
             {
                 if (MessageBox.Show("¿Está seguro de REGISTRAR un nuevo pago de esta venta?", "REGISTRAR PAGO Y ACTUALIZAR VENTA", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    double pagoUSD, pagoBOB;
-                    byte metodoPago;
-                    pagoUSD = double.Parse(txtPagoUSD.Text);
-                    pagoBOB = double.Parse(txtPagoBOB.Text);
-                    metodoPago = byte.Parse((cbxPaymentMethod.SelectedItem as ComboboxItem).Valor.ToString());
-                    string insert = implVenta.InsertPaymentMethodTransaction(idVenta, pagoUSD, pagoBOB, metodoPago);
-                    if (insert == "INSERTMETODOPAGO_EXITOSO")
+                    if (usuario_modifico_precio == true)
                     {
-                        MessageBox.Show("METODO DE PAGO REGISTRADO CON ÉXITO.");
-                        getSale_Products();
-                        SelectMetodosPago();
-                        imprimirVenta();
+                        List<byte> listaGarantias = new List<byte>();
+                        List<double> listaDescuentosPorcentaje = new List<double>();
+                        List<Producto> listaProductos = new List<Producto>();
+                        listaGarantias.Clear();
+                        listaDescuentosPorcentaje.Clear();
+                        listaProductos.Clear();
+                        foreach (var item in listaHelper)
+                        {
+                            listaGarantias.Add(item.garantia);
+                            listaDescuentosPorcentaje.Add(item.descuentoPorcentaje);
+                            listaProductos.Add(new Producto
+                            {
+                                IdProducto = item.idProducto,
+                                PrecioVentaUSD = item.totalproductoUSD,
+                                PrecioVentaBOB = item.totalproductoBOB,
+                            });
+                        }
+                        Venta venta = new Venta();
+                        venta.IdVenta = idVenta;
+                        venta.TotalUSD = venta_TotalUSD;
+                        venta.TotalBOB = venta_TotalBOB;
+                        venta.SaldoUSD = venta_saldoUSD;
+                        venta.SaldoBOB = venta_saldoBOB;
+                        try
+                        {
+                            string update = implVenta.UpdateSaleProductsTransaction(venta, listaProductos, listaDescuentosPorcentaje, listaGarantias);
+                            if (update == "UPDATEPRODUCTOS_EXITOSO")
+                            {
+                                double pagoUSD, pagoBOB;
+                                byte metodoPago;
+                                pagoUSD = double.Parse(txtPagoUSD.Text);
+                                pagoBOB = double.Parse(txtPagoBOB.Text);
+                                metodoPago = byte.Parse((cbxPaymentMethod.SelectedItem as ComboboxItem).Valor.ToString());
+                                string insert = implVenta.InsertPaymentMethodTransaction(idVenta, pagoUSD, pagoBOB, metodoPago);
+                                if (insert == "INSERTMETODOPAGO_EXITOSO")
+                                {
+                                    MessageBox.Show("METODO DE PAGO REGISTRADO CON ÉXITO Y PRODUCTOS MODIFICADOS CORRECTAMENTE");
+                                    getSale_Products();
+                                    SelectMetodosPago();
+                                    imprimirVenta();
+                                }
+                                else
+                                {
+                                    MessageBox.Show(insert);
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show(update);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
                     }
-                    else
-                    {
-                        MessageBox.Show(insert);
-                    }
+                    
                 }
             }
             else
@@ -673,6 +716,7 @@ namespace sisgesoriadao
         }
         private void dgvProductos_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
+            usuario_modifico_precio = true;
             int indexSeleccionado = e.Column.DisplayIndex;
             DataGridRowDetalleHelper filaSeleccionada = e.Row.Item as DataGridRowDetalleHelper;
             TextBox valorNuevo = e.EditingElement as TextBox;  // Assumes columns are all TextBoxes
