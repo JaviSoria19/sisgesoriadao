@@ -169,6 +169,9 @@
     <Compile Include="winCaja_AdminRecepcion.xaml.cs">
       <DependentUpon>winCaja_AdminRecepcion.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winCaja_Detalle.xaml.cs">
+      <DependentUpon>winCaja_Detalle.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winCaja_Registros.xaml.cs">
       <DependentUpon>winCaja_Registros.xaml</DependentUpon>
     </Compile>
@@ -286,6 +289,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winCaja_AdminRecepcion.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winCaja_Detalle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -37,8 +37,9 @@
             <StackPanel Orientation="Horizontal" Margin="20">
                 <TextBlock x:Name="txtCajaTotalUSD" Text="Total USD: " Margin="0,0,50,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBlock x:Name="txtCajaTotalBOB" Text="Total BOB: " Margin="0,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
-                <Button x:Name="btnClosePendingCash" Content="CERRAR CAJA" Margin="200,0,0,0" Click="btnClosePendingCash_Click" Width="125"/>
-                <Button x:Name="btnPrintPDF" Content="IMPRIMIR PDF" Margin="20,0,0,0" Click="btnPrintPDF_Click" Width="130"/>
+                <Button x:Name="btnClosePendingCash" Content="CERRAR CAJA" Margin="130,0,0,0" Click="btnClosePendingCash_Click" Width="125"/>
+                <Button x:Name="btnPrint" Content="IMPRIMIR" Margin="20,0,0,0" Click="btnPrint_Click" Width="130" Background="White" Foreground="Black" BorderBrush="Black"/>
+                <Button x:Name="btnPrintPDF" Content="IMPRIMIR PDF" Margin="20,0,0,0" Click="btnPrintPDF_Click" Width="130" Background="White" Foreground="Black" BorderBrush="Black"/>
             </StackPanel>
             
             <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">

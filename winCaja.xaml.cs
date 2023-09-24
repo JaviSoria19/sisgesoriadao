@@ -131,10 +131,15 @@ namespace sisgesoriadao
                         if (mensaje == "CAJA CERRADA EXITOSAMENTE.")
                         {
                             MessageBox.Show(mensaje);
-                            imprimirPDF(1);
+                            /*imprimirPDF(1);*/
                             totalCajaUSD = 0;
                             totalCajaBOB = 0;
                             Select();
+
+                            Session.IdCaja = caja.IdCaja;
+                            Session.Caja_Operacion = 2; //CIERRE DE CAJA
+                            winCaja_Detalle winCaja_Detalle = new winCaja_Detalle();
+                            winCaja_Detalle.Show();
                         }
                     }
                 }
@@ -299,6 +304,27 @@ namespace sisgesoriadao
                     MessageBox.Show(ex.Message);
                     throw;
                 }
+            }
+        }
+
+        private void btnPrint_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (dgvDatos.Items.IsEmpty != true)
+                {
+                    Session.Caja_Operacion = 1;
+                    winCaja_Detalle winCaja_Detalle = new winCaja_Detalle();
+                    winCaja_Detalle.Show();
+                }
+                else
+                {
+                    MessageBox.Show("¡No puede imprimir el reporte de la caja actual si ésta encuentra vacía!");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }

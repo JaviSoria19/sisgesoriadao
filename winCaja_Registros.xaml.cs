@@ -123,6 +123,7 @@ namespace sisgesoriadao
                 //dgvDetalles.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRowsDetalles.Content = "NÚMERO DE REGISTROS: " + implCaja.SelectDetails(caja).Rows.Count;
                 btnPrintPDF.IsEnabled = true;
+                btnPrint.IsEnabled = true;
             }
             catch (Exception ex)
             {
@@ -325,6 +326,29 @@ namespace sisgesoriadao
                 //MessageBox.Show("Caja específica y un usuario específic:" + (cbxTipoCaja.SelectedItem as ComboboxItem).Valor.ToString() + "|" + (cbxUsuario.SelectedItem as ComboboxItem).Valor.ToString());
             }
         }
+
+        private void btnPrint_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (dgvDatos.Items.IsEmpty != true)
+                {
+                    Session.IdCaja = caja.IdCaja;
+                    Session.Caja_Operacion = 3;
+                    winCaja_Detalle winCaja_Detalle = new winCaja_Detalle();
+                    winCaja_Detalle.Show();
+                }
+                else
+                {
+                    MessageBox.Show("¡No puede imprimir el reporte de la caja actual si ésta encuentra vacía!");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
         private void SelectLike(string tipoCajas, string idUsuarios)
         {
             try

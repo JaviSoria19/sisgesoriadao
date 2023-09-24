@@ -1,0 +1,134 @@
+﻿<Window x:Class="sisgesoriadao.winCaja_Detalle"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+     TextElement.Foreground="#212121"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
+     Background="#fafafa"
+     FontFamily="{DynamicResource MaterialDesignFont}"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:sisgesoriadao"
+        mc:Ignorable="d"
+        Title="Sistema de Ventas - Detalle de Caja" Height="850" Width="1280"
+        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ResizeMode="NoResize">
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Button x:Name="btnReturn" ToolTip="VOLVER A INICIO" Margin="0,0,20,0" Click="btnReturn_Click">
+                    <materialDesign:PackIcon Kind="ArrowLeftBold"/>
+                </Button>
+                <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="CashRegister" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="DETALLE DE CAJA" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <Button x:Name="btnPrint" ToolTip="IMPRIMIR VENTA" Margin="15,0,0,0" Click="btnPrint_Click" Background="White" Foreground="Black" BorderBrush="Black">
+                    <materialDesign:PackIcon Kind="Printer" Width="50"/>
+                </Button>
+                <Button x:Name="btnPrintPDF" ToolTip="IMPRIMIR PARA PDF" Margin="15,0,0,0" Click="btnPrintPDF_Click" Foreground="White">
+                    <materialDesign:PackIcon Kind="FilePdfBox" Width="50"/>
+                </Button>
+            </StackPanel>
+            <Grid>
+                <Grid x:Name="ZonaImpresionGrid" Margin="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="REPORTE DE CAJA" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20"/>
+                        <TextBlock x:Name="txtCaja_Usuario" Text="Usuario: -" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="20"/>
+                        <TextBlock x:Name="txtCaja_Sucursal" Text="Sucursal: -" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="20"/>
+                        <TextBlock x:Name="txtCaja_FechaApertura" Text="Fecha de Apertura: -" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="20"/>
+                        <TextBlock x:Name="txtCaja_FechaCierre" Text="Fecha de Cierre: -" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="20"/>
+                        <TextBlock x:Name="txtCaja_FechaImpresion" Text="Fecha de Impresión: -" HorizontalAlignment="Left" FontWeight="DemiBold" FontSize="20"/>
+                    </StackPanel>
+                    <TextBlock Text="INGRESOS POR VENTAS" Grid.Row="1" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="0,15,0,0"/>
+                    <StackPanel Orientation="Vertical" Grid.Row="2" HorizontalAlignment="Center">
+                        <Border BorderBrush="Gray" BorderThickness="2" HorizontalAlignment="Center">
+                            <DataGrid x:Name="dgvDatos" VerticalAlignment="Top" HorizontalAlignment="Center"
+                  Loaded="dgvDatos_Loaded" GridLinesVisibility="Horizontal"
+                  CanUserAddRows="False" IsReadOnly="True" 
+                  CanUserResizeRows="False" CanUserResizeColumns="False" Foreground="#212121" Background="White" BorderBrush="Gray">
+                                <DataGrid.Resources>
+                                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="DataGridColumnHeader">
+                                        <Setter Property="Foreground" Value="Gray"/>
+                                    </Style>
+                                </DataGrid.Resources>
+                            </DataGrid>
+                        </Border>
+                        <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="TOTAL: " FontWeight="Bold" FontSize="20"/>
+                            <TextBlock x:Name="txtCajaTotalUSD" Text="$us. 0" Margin="0,0,10,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <TextBlock Text=" | " Margin="0,0,10,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <TextBlock x:Name="txtCajaTotalBOB" Text="Bs. 0" Margin="0,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <TextBlock Text="METODOS DE PAGO" Grid.Row="3" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="0,15,0,0"/>
+
+                    <Border BorderBrush="Gray" BorderThickness="2" Grid.Row="4" HorizontalAlignment="Center">
+                        <DataGrid x:Name="dgvMetodosPago" VerticalAlignment="Top" GridLinesVisibility="Horizontal"
+                  CanUserAddRows="False" IsReadOnly="True"
+                  CanUserResizeRows="False" CanUserResizeColumns="False" MaxHeight="363" AutoGenerateColumns="False" Foreground="#212121" Background="White" BorderBrush="Gray">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="$us." Binding="{Binding USD}" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Bs." Binding="{Binding BOB}" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                            <DataGrid.Resources>
+                                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="DataGridColumnHeader">
+                                    <Setter Property="Foreground" Value="Gray"/>
+                                </Style>
+                            </DataGrid.Resources>
+                        </DataGrid>
+                    </Border>
+                    
+                    <StackPanel x:Name="stckpnlSaldoPendiente" Orientation="Vertical" Grid.Row="5" HorizontalAlignment="Center" Visibility="Visible">
+                        <TextBlock Text="VENTAS CON SALDO PENDIENTE" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="0,25,0,0"/>
+                        <Border BorderBrush="Gray" BorderThickness="2" HorizontalAlignment="Center">
+                            <DataGrid x:Name="dgvVentasPendientes" VerticalAlignment="Top" HorizontalAlignment="Center"
+                  Loaded="dgvVentasPendientes_Loaded" GridLinesVisibility="Horizontal"
+                  CanUserAddRows="False" IsReadOnly="True" 
+                  CanUserResizeRows="False" CanUserResizeColumns="False" Foreground="#212121" Background="White" BorderBrush="Gray">
+                                <DataGrid.Resources>
+                                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="DataGridColumnHeader">
+                                        <Setter Property="Foreground" Value="Gray"/>
+                                    </Style>
+                                </DataGrid.Resources>
+                            </DataGrid>
+                        </Border>
+                        <Label x:Name="lblDataGridRowsVentasPendientes" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="TOTAL: " FontWeight="Bold" FontSize="20"/>
+                            <TextBlock x:Name="txtSaldoTotalUSD" Text="$us. 0" Margin="0,0,10,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <TextBlock Text=" | " Margin="0,0,10,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <TextBlock x:Name="txtSaldoTotalBOB" Text="Bs. 0" Margin="0,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                        </StackPanel>
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal" Grid.Row="6" HorizontalAlignment="Center" Margin="0,100">
+                        <StackPanel VerticalAlignment="Bottom" Margin="0,0,100,0">
+                            <Rectangle Fill="Black" Height="1" Margin="40,2"/>
+                            <TextBlock x:Name="txtCaja_Firma_Usuario" Text="USUARIO" FontSize="20" HorizontalAlignment="Center" Margin="100,0"/>
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Bottom">
+                            <Rectangle Fill="Black" Height="1" Margin="0,2"/>
+                            <TextBlock Text="Recepcionado" FontSize="20" HorizontalAlignment="Center" Margin="50,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

@@ -70,7 +70,8 @@
             </StackPanel>
 
             <StackPanel HorizontalAlignment="Center">
-                <Button x:Name="btnPrintPDF" Content="GENERAR PDF" Click="btnPrintPDF_Click" Margin="20" IsEnabled="False"/>
+                <Button x:Name="btnPrint" Content="IMPRIMIR" Click="btnPrint_Click" Width="130" IsEnabled="False" Background="White" Foreground="Black" BorderBrush="Black"/>
+                <Button x:Name="btnPrintPDF" Content="GENERAR PDF" Click="btnPrintPDF_Click" Margin="20" IsEnabled="False" Background="White" Foreground="Black" BorderBrush="Black"/>                
             </StackPanel>
         </StackPanel>
     </ScrollViewer>
