@@ -613,6 +613,26 @@ namespace sisgesoriadao
                             MessageBox.Show(ex.Message);
                         }
                     }
+                    else
+                    {
+                        double pagoUSD, pagoBOB;
+                        byte metodoPago;
+                        pagoUSD = double.Parse(txtPagoUSD.Text);
+                        pagoBOB = double.Parse(txtPagoBOB.Text);
+                        metodoPago = byte.Parse((cbxPaymentMethod.SelectedItem as ComboboxItem).Valor.ToString());
+                        string insert = implVenta.InsertPaymentMethodTransaction(idVenta, pagoUSD, pagoBOB, metodoPago);
+                        if (insert == "INSERTMETODOPAGO_EXITOSO")
+                        {
+                            MessageBox.Show("METODO DE PAGO REGISTRADO CON ÉXITO");
+                            getSale_Products();
+                            SelectMetodosPago();
+                            imprimirVenta();
+                        }
+                        else
+                        {
+                            MessageBox.Show(insert);
+                        }
+                    }
                     
                 }
             }
