@@ -42,7 +42,7 @@
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                     <Label Content="Buscar:" VerticalAlignment="Center"/>
                     <TextBox x:Name="txtBuscar" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="30" Height="22" materialDesign:HintAssist.HelperText="Nro., Sucursal,Usuario." KeyDown="txtBuscar_KeyDown"/>
-                    <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0">
+                    <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>
                     <Label Content="Desde:" VerticalAlignment="Center"/>
@@ -59,21 +59,6 @@
                   SelectionChanged="dgvDatos_SelectionChanged" MaxHeight="363"/>
                 </Border>
                 <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
-            </StackPanel>
-
-            <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
-                <TextBlock Text="DETALLE DE COTIZACION:" FontWeight="Bold" FontSize="16" Margin="0,20,0,10" HorizontalAlignment="Center"/>
-                <Border BorderBrush="Gray" BorderThickness="2">
-                    <DataGrid x:Name="dgvDetalle"
-                  HorizontalAlignment="Left" VerticalAlignment="Top" GridLinesVisibility="Horizontal"
-                  CanUserAddRows="False" IsReadOnly="True" 
-                  CanUserResizeRows="False" CanUserResizeColumns="False" MaxHeight="363"/>
-                </Border>
-                <Label x:Name="lblDataGridViewDetalles" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
-            </StackPanel>
-
-            <StackPanel HorizontalAlignment="Center">
-                <Button x:Name="btnPrintPDF" Content="GENERAR PDF" Click="btnPrintPDF_Click" Margin="20" IsEnabled="False"/>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

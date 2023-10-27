@@ -78,7 +78,7 @@
                     <DatePicker x:Name="dtpFechaFin" Loaded="dtpFechaFin_Loaded"/>
                     <Label Content="SUCURSAL:" Margin="10,0,0,0" VerticalAlignment="Center"/>
                     <ComboBox x:Name="cbxSucursal" IsEnabled="True"/>
-                    <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="20,0,0,0">
+                    <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="20,0,0,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>
                 </StackPanel>

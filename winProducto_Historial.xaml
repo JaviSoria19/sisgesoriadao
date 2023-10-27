@@ -37,7 +37,7 @@
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="Buscar:" VerticalAlignment="Center"/>
                 <TextBox x:Name="txtBuscar" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="215" MaxLength="30" Height="22" materialDesign:HintAssist.HelperText="Código, IMEI o S/N." KeyDown="txtBuscar_KeyDown"/>
-                <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0">
+                <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                     <materialDesign:PackIcon Kind="Search"/>
                 </Button>
             </StackPanel>

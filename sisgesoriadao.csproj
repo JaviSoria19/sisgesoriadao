@@ -187,6 +187,9 @@
     <Compile Include="winCotizacion.xaml.cs">
       <DependentUpon>winCotizacion.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winCotizacion_Detalle.xaml.cs">
+      <DependentUpon>winCotizacion_Detalle.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winCotizacion_Insert.xaml.cs">
       <DependentUpon>winCotizacion_Insert.xaml</DependentUpon>
     </Compile>
@@ -228,6 +231,9 @@
     </Compile>
     <Compile Include="winProducto_Inventario.xaml.cs">
       <DependentUpon>winProducto_Inventario.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="winProducto_Inventario_Cantidad.xaml.cs">
+      <DependentUpon>winProducto_Inventario_Cantidad.xaml</DependentUpon>
     </Compile>
     <Compile Include="winProducto_Lote.xaml.cs">
       <DependentUpon>winProducto_Lote.xaml</DependentUpon>
@@ -316,6 +322,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="winCotizacion_Detalle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="winCotizacion_Insert.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -385,6 +395,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winProducto_Inventario.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winProducto_Inventario_Cantidad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

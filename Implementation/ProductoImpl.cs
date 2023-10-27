@@ -769,7 +769,30 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
-
+        public DataTable SelectLikeInventoryOnlyQuantityFilter(string cadenaBusqueda, string idSucursales, string idCondiciones, string idCategorias)
+        {
+            string query = @"SELECT S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.nombreProducto AS Producto, COUNT(P.idProducto) AS Cantidad FROM Producto P
+                                INNER JOIN Sucursal S ON S.idSucursal = P.idSucursal
+                                INNER JOIN Categoria AS C ON P.idCategoria = C.idCategoria
+                                INNER JOIN Condicion AS CC ON P.idCondicion = CC.idCondicion
+                                WHERE P.idSucursal IN (" + idSucursales + @")
+                                AND P.idCondicion IN (" + idCondiciones + @")
+                                AND P.idCategoria IN (" + idCategorias + @")
+                                AND  P.estado IN (1,3)
+                                AND (P.nombreProducto LIKE @search OR P.codigoSublote LIKE @search)
+                                GROUP BY P.nombreProducto
+                                ORDER BY 2 ASC, 3 ASC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@search", "%" + cadenaBusqueda + "%");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public DataTable SelectProductsFromSale(int IdVenta)
         {
             string query = @"SELECT P.idProducto AS idProducto, P.codigoSublote AS codigoSublote, P.nombreProducto AS nombreProducto, P.identificador AS identificador, 

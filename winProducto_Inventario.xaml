@@ -39,13 +39,14 @@
                 <ComboBox x:Name="cbxCategoria" IsEnabled="True" Margin="0,0,20,0"/>
                 <Label Content="DISPONIBILIDAD:" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 <ComboBox x:Name="cbxDisponibilidad" IsEnabled="True" Margin="0,0,20,0"/>
-                <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0">
+                <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                     <materialDesign:PackIcon Kind="Search"/>
                 </Button>
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
-                <Button x:Name="btnVerifyMode" Content="VERIFICACIÓN DIGITAL" Click="btnVerifyMode_Click" Margin="20" IsEnabled="True"/>
+                <Button x:Name="btnVerifyMode" Content="VERIFICACIÓN DIGITAL" Click="btnVerifyMode_Click" Margin="5" IsEnabled="True" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue"/>
+                <Button x:Name="btnInventoryQuantity" Content="REPORTE SOLO CANTIDAD" Click="btnInventoryQuantity_Click" Margin="5" IsEnabled="True" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue"/>
             </StackPanel>
             
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">

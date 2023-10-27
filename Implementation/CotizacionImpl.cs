@@ -157,12 +157,28 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectDetails(int idCotizacion)
         {
-            string query = @"SELECT DC.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, P.nombreProducto AS Producto, DC.CotizacionUSD AS 'Cotizacion USD', DC.CotizacionBOB AS 'Cotizacion BOB', C.fechaRegistro AS 'Fecha de Registro' FROM Detalle_Cotizacion DC
+            string query = @"SELECT DC.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, P.nombreProducto AS Producto, DC.CotizacionUSD AS 'Cotizacion USD', DC.CotizacionBOB AS 'Cotizacion BOB', " + Session.FormatoFechaMySql("C.fechaRegistro") + @" AS 'Fecha de Registro' FROM Detalle_Cotizacion DC
                             INNER JOIN Producto P ON DC.idProducto = P.idProducto
                             INNER JOIN Cotizacion C ON DC.idCotizacion = C.idCotizacion 
                             INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal
                             WHERE DC.idCotizacion = @idCotizacion
                             ORDER BY 1 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idCotizacion", idCotizacion);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public DataTable SelectDetails2(int idCotizacion)
+        {
+            string query = @"SELECT C.idCotizacion, S.nombreSucursal, S.direccion, S.telefono, S.correo, C.nombreCliente, C.nombreEmpresa, C.nit, C.direccion, C.correo, C.telefono, DATE_FORMAT(C.tiempoEntrega,'%d/%m/%Y'), " + Session.FormatoFechaMySql("C.fechaRegistro") + @" FROM Cotizacion C
+                            INNER JOIN Sucursal S ON S.idSucursal = C.idSucursal
+                            WHERE C.idCotizacion = @idCotizacion;";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCotizacion", idCotizacion);
             try

@@ -204,6 +204,13 @@ namespace sisgesoriadao
             this.Close();
         }
 
+        private void btnInventoryQuantity_Click(object sender, RoutedEventArgs e)
+        {
+            winProducto_Inventario_Cantidad winProducto_Inventario_Cantidad = new winProducto_Inventario_Cantidad();
+            winProducto_Inventario_Cantidad.Show();
+            Close();
+        }
+
         void SelectLike()
         {
             try

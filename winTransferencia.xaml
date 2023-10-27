@@ -43,7 +43,7 @@
                 <DatePicker x:Name="dtpFechaInicio" Margin="0,0,20,0"/>
                 <Label Content="Hasta:" VerticalAlignment="Center"/>
                 <DatePicker x:Name="dtpFechaFin" Loaded="dtpFechaFin_Loaded"  Margin="0,0,20,0"/>
-                <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0">
+                <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                     <materialDesign:PackIcon Kind="Search"/>
                 </Button>
                 <Button x:Name="btnReset" ToolTip="REINICIAR FILTROS Y BUSQUEDA" Click="btnReset_Click">

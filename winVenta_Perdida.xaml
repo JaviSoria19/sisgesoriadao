@@ -45,7 +45,7 @@
                 <ComboBox x:Name="cbxCategoria" IsEnabled="True" Margin="0,0,20,0"/>
                 <Label Content="USUARIO:" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 <ComboBox x:Name="cbxUsuario" IsEnabled="True" Margin="0,0,20,0"/>
-                <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0">
+                <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                     <materialDesign:PackIcon Kind="Search"/>
                 </Button>
             </StackPanel>

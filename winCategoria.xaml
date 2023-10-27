@@ -51,7 +51,7 @@
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                     <Label Content="Buscar:" VerticalAlignment="Center"/>
                     <TextBox x:Name="txtBuscar" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="20" Height="22" materialDesign:HintAssist.HelperText="Categoría, Garantía." KeyDown="txtBuscar_KeyDown"/>
-                    <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0">
+                    <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>
                     <Label Content="Desde:" VerticalAlignment="Center"/>
