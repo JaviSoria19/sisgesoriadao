@@ -89,6 +89,10 @@ namespace sisgesoriadao
                     GetProductoFromDB();
                 }
             }
+            if (e.Key == Key.Escape)
+            {
+                CleanText();
+            }
         }
         private void dgvProductos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -301,6 +305,16 @@ namespace sisgesoriadao
             public string NombreProducto { get; set; }
             public string Identificador { get; set; }
             public string Observaciones { get; set; }
+        }
+
+        private void btnErase_Click(object sender, RoutedEventArgs e)
+        {
+            CleanText();
+        }
+        void CleanText()
+        {
+            txtCodigoSublote.Text = "";
+            txtCodigoSublote.Focus();
         }
     }
 }

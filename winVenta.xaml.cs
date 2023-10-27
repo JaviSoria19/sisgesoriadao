@@ -195,8 +195,21 @@ namespace sisgesoriadao
             {
                 SelectLike();
             }
+            if (e.Key == Key.Escape)
+            {
+                CleanText();
+            }
         }
 
+        private void btnErase_Click(object sender, RoutedEventArgs e)
+        {
+            CleanText();
+        }
+        void CleanText()
+        {
+            txtBuscar_Producto_o_Codigo.Text = "";
+            txtBuscar_Producto_o_Codigo.Focus();
+        }
         void cbxGetGroupConcatUsuarios()
         {
             try

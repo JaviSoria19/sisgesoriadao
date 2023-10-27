@@ -236,6 +236,10 @@ namespace sisgesoriadao
                     SelectLike();
                 }
             }
+            if (e.Key == Key.Escape)
+            {
+                CleanText();
+            }
         }
         private void TextBoxUppercase(object sender, KeyEventArgs e)
         {
@@ -303,5 +307,14 @@ namespace sisgesoriadao
             return !_regex.IsMatch(text);
         }
         //------------------------------------------------------><---------------------------------------------
+        private void btnErase_Click(object sender, RoutedEventArgs e)
+        {
+            CleanText();
+        }
+        void CleanText()
+        {
+            txtBuscar.Text = "";
+            txtBuscar.Focus();
+        }
     }
 }

@@ -221,6 +221,10 @@ namespace sisgesoriadao
             {
                 SelectLike();
             }
+            if (e.Key == Key.Escape)
+            {
+                CleanText();
+            }
         }
         private void txtCostoUSD_KeyUp(object sender, KeyEventArgs e)
         {
@@ -468,6 +472,17 @@ namespace sisgesoriadao
             label.Foreground = new SolidColorBrush(Colors.Black);
             label.Background = new SolidColorBrush(Colors.Gold);
         }
+
+        private void btnErase_Click(object sender, RoutedEventArgs e)
+        {
+            CleanText();
+        }
+        void CleanText()
+        {
+            txtBuscar.Text = "";
+            txtBuscar.Focus();
+        }
+
         public void labelDanger(Label label)
         {
             label.Foreground = new SolidColorBrush(Colors.Black);

@@ -182,6 +182,10 @@ namespace sisgesoriadao
                     SelectLike();
                 }
             }
+            if (e.Key == Key.Escape)
+            {
+                CleanText();
+            }
         }
         private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -307,5 +311,14 @@ namespace sisgesoriadao
             return !_regex.IsMatch(text);
         }
         //------------------------------------------------------><---------------------------------------------
+        private void btnErase_Click(object sender, RoutedEventArgs e)
+        {
+            CleanText();
+        }
+        void CleanText()
+        {
+            txtBuscar.Text = "";
+            txtBuscar.Focus();
+        }
     }
 }

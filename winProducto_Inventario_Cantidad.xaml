@@ -31,6 +31,9 @@
             <StackPanel Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
                 <Label Content="Producto o Código:" VerticalAlignment="Center"/>
                 <TextBox x:Name="txtBuscar" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="20" Height="22" KeyDown="txtBuscar_KeyDown"/>
+                <Button x:Name="btnErase" ToolTip="LIMPIAR BÚSQUEDA" Click="btnErase_Click" Margin="0,0,10,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
+                    <materialDesign:PackIcon Kind="Clear"/>
+                </Button>
                 <Label Content="SUCURSAL:" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 <ComboBox x:Name="cbxSucursal" IsEnabled="True" Margin="0,0,20,0"/>
                 <Label Content="CONDICIÓN:" Margin="10,0,0,0" VerticalAlignment="Center"/>

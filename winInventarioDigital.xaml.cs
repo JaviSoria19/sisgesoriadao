@@ -191,6 +191,10 @@ namespace sisgesoriadao
             {
                 SelectLike();
             }
+            if (e.Key == Key.Escape)
+            {
+                CleanText();
+            }
         }
         private void tglDisableButtons_Click(object sender, RoutedEventArgs e)
         {
@@ -291,6 +295,15 @@ namespace sisgesoriadao
             }
         }
 
+        private void btnErase_Click(object sender, RoutedEventArgs e)
+        {
+            CleanText();
+        }
+        void CleanText()
+        {
+            txtBuscar.Text = "";
+            txtBuscar.Focus();
+        }
         private void dgvDatosVerificados_Loaded(object sender, RoutedEventArgs e)
         {
             DataGridTextColumn columna1 = new DataGridTextColumn

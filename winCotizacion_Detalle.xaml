@@ -61,7 +61,7 @@
                             <TextBlock x:Name="txtSucursal_telefono" Text="SUCURSAL_TELEFONO" FontSize="16" Margin="0,3"/>
                             <TextBlock x:Name="txtSucursal_correo" Text="SUCURSAL_CORREO" FontSize="16" Margin="0,3"/>
                             <TextBlock x:Name="txtCotizacion_fecha" Text="Fecha: VENTA_FECHA" FontWeight="Bold" FontSize="16" Margin="0,3"/>
-                            <TextBlock x:Name="txtCotizacion_tiempoEntrega" Text="Validez: VENTA_FECHA" FontWeight="Bold" FontSize="16" Margin="0,3"/>
+                            <TextBlock x:Name="txtCotizacion_tiempoEntrega" Text="Tiempo de validez: VENTA_FECHA" FontWeight="Bold" FontSize="16" Margin="0,3"/>
                         </StackPanel>
                     </StackPanel>
 

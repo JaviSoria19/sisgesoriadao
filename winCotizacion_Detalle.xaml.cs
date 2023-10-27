@@ -137,7 +137,7 @@ namespace sisgesoriadao
                     txtCliente_correo.Text = "Correo: " + dt.Rows[0][9].ToString();
 
                     txtCotizacion_fecha.Text = "Fecha: " + dt.Rows[0][12].ToString();
-                    txtCotizacion_tiempoEntrega.Text = "Validez: " + dt.Rows[0][11].ToString();
+                    txtCotizacion_tiempoEntrega.Text = "Tiempo de validez: " + dt.Rows[0][11].ToString();
 
                     txtProducto_Descripcion.Text = "";
                     txtProducto_Cantidad.Text = "";

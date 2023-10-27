@@ -511,13 +511,11 @@ namespace sisgesoriadao
                     }
                     else
                     {
-                        if (MessageBox.Show("Cliente no encontrado en sistema, ¿Desea registrarlo?", "Registrar nuevo cliente", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
-                        {
-                            stackpanelCustomerFound.Visibility = Visibility.Collapsed;
-                            stackpanelCustomerForm.Visibility = Visibility.Visible;
-                            stackpanelCustomerButtons.Visibility = Visibility.Visible;
-                            EnableCustomerButtons();
-                        }
+                        stackpanelCustomerFound.Visibility = Visibility.Collapsed;
+                        stackpanelCustomerForm.Visibility = Visibility.Visible;
+                        stackpanelCustomerButtons.Visibility = Visibility.Visible;
+                        EnableCustomerButtons();
+                        txtRegister_NumeroCI.Text = txtSearchCustomer.Text;
                     }
                 }
                 catch (Exception ex)
@@ -554,6 +552,10 @@ namespace sisgesoriadao
             {
                 SearchByPhoneorCI();
             }
+            if (e.Key == Key.Escape)
+            {
+                txtSearchCustomer.Text = "";
+            }
         }
         private void acbtxtNameCustomer_KeyDown(object sender, KeyEventArgs e)
         {
@@ -585,12 +587,21 @@ namespace sisgesoriadao
                     }
                 }
             }
+            if (e.Key == Key.Escape)
+            {
+                acbtxtNameCustomer.Text = "";
+            }
         }
         private void txtSearchProduct_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 SearchProductByCode();
+            }
+            if (e.Key == Key.Escape)
+            {
+                txtSearchProduct.Text = "";
+                txtSearchProduct.Focus();
             }
         }
         //--------->VALIDACIÓN PARA QUE EL TEXTBOX SOLO PERMITA NÚMEROS (Y EN ESTE CASO, UN PUNTO.)<---------

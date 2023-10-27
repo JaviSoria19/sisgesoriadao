@@ -41,6 +41,9 @@
                 <Label Content="CÓDIGO DE PRODUCTO:" Margin="20,0,0,0"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtCodigoSublote" TextWrapping="Wrap" MinWidth="138" MaxLength="30" IsEnabled="True" KeyDown="txtCodigoSublote_KeyDown"/>
+                <Button x:Name="btnErase" ToolTip="LIMPIAR BÚSQUEDA" Click="btnErase_Click" Margin="10,0,0,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
+                    <materialDesign:PackIcon Kind="Clear"/>
+                </Button>
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">

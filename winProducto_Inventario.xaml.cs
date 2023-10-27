@@ -195,6 +195,10 @@ namespace sisgesoriadao
             {
                 SelectLike();
             }
+            if (e.Key == Key.Escape)
+            {
+                CleanText();
+            }
         }
 
         private void btnVerifyMode_Click(object sender, RoutedEventArgs e)
@@ -211,6 +215,15 @@ namespace sisgesoriadao
             Close();
         }
 
+        private void btnErase_Click(object sender, RoutedEventArgs e)
+        {
+            CleanText();
+        }
+        void CleanText()
+        {
+            txtBuscar.Text = "";
+            txtBuscar.Focus();
+        }
         void SelectLike()
         {
             try

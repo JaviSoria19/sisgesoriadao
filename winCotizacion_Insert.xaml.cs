@@ -70,9 +70,10 @@ namespace sisgesoriadao
                             {
                                 try
                                 {
-                                    DataTable dt = new DataTable();
-                                    dt = implCotizacion.SelectDetails(cotizacion.IdCotizacion);
-                                    pdf(dt, cotizacion);
+                                    Session.IdCotizacion = cotizacion.IdCotizacion;
+                                    winCotizacion_Detalle winCotizacion_Detalle = new winCotizacion_Detalle();
+                                    winCotizacion_Detalle.Show();
+                                    Close();
                                 }
                                 catch (Exception ex)
                                 {

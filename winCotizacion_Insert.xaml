@@ -44,23 +44,24 @@
                 <Label Content="CLIENTE:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtNombreCliente" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="60" IsEnabled="True"/>
-                <Label Content="EMPRESA:"/>
-                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <TextBox x:Name="txtNombreEmpresa" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="60" IsEnabled="True"/>
-                <Label Content="NIT:"/>
+                
+                <Label Content="NIT/C.I.:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtNit" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="20" IsEnabled="True"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
-                <Label Content="DIRECCION:"/>
-                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <TextBox x:Name="txtDireccion" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="100" IsEnabled="True"/>
-                <Label Content="CORREO:"/>
-                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <TextBox x:Name="txtCorreo" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="40" IsEnabled="True"/>
                 <Label Content="TELEFONO:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtTelefono" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="True"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
+                <Label Content="EMPRESA:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtNombreEmpresa" Text="-" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="60" IsEnabled="True"/>
+                <Label Content="DIRECCION:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtDireccion" Text="-" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="100" IsEnabled="True"/>
+                <Label Content="CORREO:"/>
+                <Label Content="*" Foreground="Red" FontWeight="Bold"/>
+                <TextBox x:Name="txtCorreo" Text="-" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="40" IsEnabled="True"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
@@ -92,7 +93,7 @@
             <StackPanel Orientation="Horizontal" Margin="0,20,0,20" HorizontalAlignment="Center">
                 <Button x:Name="btnAdd" Content="AÑADIR PRODUCTO" Click="btnAdd_Click" IsEnabled="False"/>
             </StackPanel>
-            <DataGrid x:Name="dgvProductos" CanUserAddRows="False" CanUserDeleteRows="False" HorizontalAlignment="Center" IsReadOnly="True" SelectionChanged="dgvProductos_SelectionChanged" Loaded="dgvProductos_Loaded"/>
+            <DataGrid x:Name="dgvProductos" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" HorizontalAlignment="Center" IsReadOnly="True" SelectionChanged="dgvProductos_SelectionChanged" Loaded="dgvProductos_Loaded"/>
             <Button x:Name="btnSave" Content="GUARDAR E IMPRIMIR" Margin="0,30,0,0" Click="btnSave_Click" Width="180"/>
         </StackPanel>
     </ScrollViewer>

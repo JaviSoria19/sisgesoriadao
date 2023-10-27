@@ -204,6 +204,10 @@ namespace sisgesoriadao
                     SelectLike();
                 }
             }
+            if (e.Key == Key.Escape)
+            {
+                CleanText();
+            }
         }
         private void TextBoxUppercase(object sender, KeyEventArgs e)
         {
@@ -285,6 +289,16 @@ namespace sisgesoriadao
         {
             label.Foreground = new SolidColorBrush(Colors.Black);
             label.Background = new SolidColorBrush(Colors.Red);
+        }
+
+        private void btnErase_Click(object sender, RoutedEventArgs e)
+        {
+            CleanText();
+        }
+        void CleanText()
+        {
+            txtBuscar.Text = "";
+            txtBuscar.Focus();
         }
     }
 }

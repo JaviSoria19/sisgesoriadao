@@ -113,6 +113,10 @@ namespace sisgesoriadao
                     SelectLike();
                 }
             }
+            if (e.Key == Key.Escape)
+            {
+                CleanText();
+            }
         }
         private void txtCodigoLote_KeyDown(object sender, KeyEventArgs e)
         {
@@ -295,6 +299,16 @@ namespace sisgesoriadao
                 labelWarning(lblInfo);
                 lblInfo.Content = "¡PARA ELIMINAR UN LOTE DEBE SELECCIONAR UN REGISTRO!";
             }
+        }
+
+        private void btnErase_Click(object sender, RoutedEventArgs e)
+        {
+            CleanText();
+        }
+        void CleanText()
+        {
+            txtBuscar.Text = "";
+            txtBuscar.Focus();
         }
     }
 }

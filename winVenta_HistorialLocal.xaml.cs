@@ -55,12 +55,28 @@ namespace sisgesoriadao
             {
                 SelectLike();
             }
+            if (e.Key == Key.Escape)
+            {
+                if (sender == (sender as TextBox))
+                {
+                    (sender as TextBox).Text = "";
+                }
+                if (sender == (sender as AutoCompleteBox))
+                {
+                    (sender as AutoCompleteBox).Text = "";
+                }
+            }
         }
         private void txtBuscar_IDVenta_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 SelectLikeByID();
+            }
+            if (e.Key == Key.Escape)
+            {
+                txtBuscar_IDVenta.Text = "";
+                txtBuscar_IDVenta.Focus();
             }
         }
         private void txtBuscar_IDVenta_PreviewTextInput(object sender, TextCompositionEventArgs e)

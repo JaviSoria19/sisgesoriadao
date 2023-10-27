@@ -54,6 +54,10 @@ namespace sisgesoriadao
                     SelectLike();
                 }
             }
+            if (e.Key == Key.Escape)
+            {
+                CleanText();
+            }
         }
         private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
         {
@@ -138,6 +142,16 @@ namespace sisgesoriadao
                     MessageBox.Show(ex.Message);
                 }
             }
+        }
+
+        private void btnErase_Click(object sender, RoutedEventArgs e)
+        {
+            CleanText();
+        }
+        void CleanText()
+        {
+            txtBuscar.Text = "";
+            txtBuscar.Focus();
         }
     }
 }
