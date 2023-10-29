@@ -82,6 +82,7 @@ namespace sisgesoriadao
             {
                 btnPrintPDF.IsEnabled = true;
                 btnPrint.IsEnabled = true;
+                Focus();
             }
         }
         private void btnPrintPDF_Click(object sender, RoutedEventArgs e)
@@ -157,7 +158,9 @@ namespace sisgesoriadao
                         totalBOB += double.Parse(item[4].ToString());
                         clipboardTexto += item[2].ToString() + " $. " + item[3].ToString() + " Bs. " + item[4].ToString() + "\n";
                     }
-                    txtVenta_Total.Text = totalBOB + " Bs.";
+                    txtVenta_TotalUSD.Text = Math.Round(totalUSD, 2) + " $.";
+                    txtVenta_TotalBOB.Text = Math.Round(totalBOB, 2) + " Bs.";
+
                     clipboardTexto = clipboardTexto.Trim();
 
                     QRCodeEncoder encoder = new QRCodeEncoder();

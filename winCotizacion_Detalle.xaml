@@ -125,7 +125,8 @@
                                     <TextBlock Text="TOTAL: " FontWeight="Bold" FontSize="15" HorizontalAlignment="Right"/>
                                 </StackPanel>
                                 <StackPanel Margin="-60,0" Orientation="Vertical" VerticalAlignment="Top" Background="LightGray">
-                                    <TextBlock x:Name="txtVenta_Total" Text="0" FontWeight="Bold" FontSize="15" HorizontalAlignment="Right"/>
+                                    <TextBlock x:Name="txtVenta_TotalBOB" Text="0" FontWeight="Bold" FontSize="15" HorizontalAlignment="Right"/>
+                                    <TextBlock x:Name="txtVenta_TotalUSD" Text="0" FontWeight="Bold" FontSize="15" HorizontalAlignment="Right"/>
                                 </StackPanel>
                             </StackPanel>
 

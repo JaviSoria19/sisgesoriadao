@@ -85,6 +85,7 @@ namespace sisgesoriadao
             {
                 btnPrintPDF.IsEnabled = true;
                 btnPrint.IsEnabled = true;
+                Focus();
             }
         }
         private void btnPrintPDF_Click(object sender, RoutedEventArgs e)
