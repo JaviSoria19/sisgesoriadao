@@ -82,17 +82,17 @@
                 <StackPanel x:Name="stackpanelCustomerForm" Orientation="Horizontal" Margin="15,15,0,0" Visibility="Collapsed">
                     <Label Content="NOMBRE:"/>
                     <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                    <TextBox x:Name="txtRegister_Nombre" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="150" KeyUp="TextBoxUppercase" MaxLength="60" IsEnabled="False"/>
+                    <TextBox x:Name="txtRegister_Nombre" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="150" KeyUp="TextBoxUppercase" MaxLength="60" IsEnabled="False" KeyDown="txtClear_KeyDown"/>
                     <Label Content="NRO. CELULAR:"/>
                     <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                    <TextBox x:Name="txtRegister_NumeroCelular" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="False"/>
+                    <TextBox x:Name="txtRegister_NumeroCelular" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="False" KeyDown="txtClear_KeyDown"/>
                     <Label Content="NRO. CARNET:"/>
                     <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                    <TextBox x:Name="txtRegister_NumeroCI" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="False"/>
+                    <TextBox x:Name="txtRegister_NumeroCI" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="False" KeyDown="txtClear_KeyDown"/>
                 </StackPanel>
                 <StackPanel x:Name="stackpanelCustomerButtons" Orientation="Horizontal" Margin="15,25,0,25" Visibility="Collapsed">
                     <Button x:Name="btnSaveNewCustomer" Content="GUARDAR" IsEnabled="False" Click="btnSaveNewCustomer_Click"/>
-                    <Button x:Name="btnCancelNewCustomer" Content="CANCELAR" Margin="10,0,0,0" IsEnabled="False" Click="btnCancelNewCustomer_Click"/>
+                    <Button x:Name="btnCancelNewCustomer" Content="CANCELAR" Margin="10,0,0,0" IsEnabled="False" Click="btnCancelNewCustomer_Click" Background="White" Foreground="Black" BorderBrush="Black"/>
                 </StackPanel>
                 <TextBlock Text="DETALLE PRODUCTO(S)" FontWeight="Bold" FontSize="20"/>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left">

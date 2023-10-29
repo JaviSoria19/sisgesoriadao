@@ -781,7 +781,7 @@ namespace sisgesoriadao.Implementation
                                 AND  P.estado IN (1,3)
                                 AND (P.nombreProducto LIKE @search OR P.codigoSublote LIKE @search)
                                 GROUP BY P.nombreProducto
-                                ORDER BY 2 ASC, 3 ASC";
+                                ORDER BY 4 ASC, 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@search", "%" + cadenaBusqueda + "%");
             try

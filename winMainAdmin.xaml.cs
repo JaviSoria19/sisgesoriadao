@@ -5,6 +5,7 @@ using System;
 using System.Data;//ADO.NET
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace sisgesoriadao
 {
@@ -21,12 +22,7 @@ namespace sisgesoriadao
         }
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("¿Está segur@ de cerrar la sesión actual?", "CERRAR SESIÓN", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-            {
-                winLogin winLogin = new winLogin();
-                winLogin.Show();
-                this.Close();
-            }
+            Close();
         }
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
@@ -258,6 +254,33 @@ namespace sisgesoriadao
                     throw;
                 }
             }
-        }        
+        }
+
+        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.W)
+            {
+                Close();
+            }
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MessageBoxResult result =
+                  MessageBox.Show(
+                    "¿Está segur@ de cerrar la sesión actual?",
+                    "CERRAR SESIÓN",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+            if (result == MessageBoxResult.No)
+            {
+                // If user doesn't want to close, cancel closure
+                e.Cancel = true;
+            }
+            else if (result == MessageBoxResult.Yes)
+            {
+                winLogin winLogin = new winLogin();
+                winLogin.Show();
+            }
+        }
     }
 }

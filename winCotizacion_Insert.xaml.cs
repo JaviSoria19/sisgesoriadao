@@ -32,6 +32,8 @@ namespace sisgesoriadao
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             acbxGetProductosFromDatabase();
+            txtBlockWelcome.Text = Session.NombreUsuario;
+            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
@@ -156,6 +158,7 @@ namespace sisgesoriadao
                             txtCotizacionBOB.IsEnabled = true;
                             btnAdd.IsEnabled = true;
                             tglOcultarUSD.IsEnabled = true;
+                            acbtxtNombreProducto.Text = "";
                         }
                     }
                     catch (Exception)
@@ -164,6 +167,10 @@ namespace sisgesoriadao
                         throw;
                     }
                 }
+            }
+            if (e.Key == Key.Escape)
+            {
+                (sender as AutoCompleteBox).Text = "";
             }
         }
         private void txtCotizacionUSD_KeyUp(object sender, KeyEventArgs e)
@@ -188,12 +195,20 @@ namespace sisgesoriadao
             {
                 addToDataGrid_andList(producto);
             }
+            if (e.Key == Key.Escape)
+            {
+                (sender as TextBox).Text = "";
+            }
         }
         private void txtCotizacionUSD_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 addToDataGrid_andList(producto);
+            }
+            if (e.Key == Key.Escape)
+            {
+                (sender as TextBox).Text = "";
             }
         }
         private void dtpFechaEntrega_Loaded(object sender, RoutedEventArgs e)
@@ -329,6 +344,13 @@ namespace sisgesoriadao
                     pdfDoc.Close();
                     stream.Close();
                 }
+            }
+        }
+        private void txtClear_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                (sender as TextBox).Text = "";
             }
         }
         public class ComboboxItem

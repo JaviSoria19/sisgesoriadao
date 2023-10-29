@@ -63,6 +63,9 @@ namespace sisgesoriadao
             stackpanelCustomerButtons.Visibility = Visibility.Visible;
             EnableCustomerButtons();
             operacion = 1;
+            btnSaveNewCustomer.Background = new SolidColorBrush(Colors.LimeGreen);
+            btnSaveNewCustomer.BorderBrush = new SolidColorBrush(Colors.LimeGreen);
+            btnSaveNewCustomer.Content = "REGISTRAR CLIENTE";
         }
         private void btnEditCustomer_Click(object sender, RoutedEventArgs e)
         {
@@ -73,7 +76,9 @@ namespace sisgesoriadao
             txtRegister_NumeroCelular.Text = cliente.NumeroCelular.Trim();
             txtRegister_NumeroCI.Text = cliente.NumeroCI.Trim();
             operacion = 2;
-
+            btnSaveNewCustomer.Background = new SolidColorBrush(Colors.Orange);
+            btnSaveNewCustomer.BorderBrush = new SolidColorBrush(Colors.Orange);
+            btnSaveNewCustomer.Content = "EDITAR CLIENTE";
             btnAddCustomer.IsEnabled = false;
             btnEditCustomer.IsEnabled = false;
             EnableCustomerButtons();
@@ -516,6 +521,11 @@ namespace sisgesoriadao
                         stackpanelCustomerButtons.Visibility = Visibility.Visible;
                         EnableCustomerButtons();
                         txtRegister_NumeroCI.Text = txtSearchCustomer.Text;
+                        operacion = 1;
+                        btnSaveNewCustomer.Background = new SolidColorBrush(Colors.LimeGreen);
+                        btnSaveNewCustomer.BorderBrush = new SolidColorBrush(Colors.LimeGreen);
+                        btnSaveNewCustomer.Content = "REGISTRAR CLIENTE";
+                        btnEditCustomer.IsEnabled = false;
                     }
                 }
                 catch (Exception ex)
@@ -555,6 +565,13 @@ namespace sisgesoriadao
             if (e.Key == Key.Escape)
             {
                 txtSearchCustomer.Text = "";
+            }
+        }
+        private void txtClear_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                (sender as TextBox).Text = "";
             }
         }
         private void acbtxtNameCustomer_KeyDown(object sender, KeyEventArgs e)
@@ -974,12 +991,20 @@ namespace sisgesoriadao
             {
                 addPaymentMethodToDataGridandList();
             }
+            if (e.Key == Key.Escape)
+            {
+                (sender as TextBox).Text = "";
+            }
         }
         private void txtPagoUSD_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter && string.IsNullOrEmpty(txtPagoUSD.Text) != true)
             {
                 addPaymentMethodToDataGridandList();
+            }
+            if (e.Key == Key.Escape)
+            {
+                (sender as TextBox).Text = "";
             }
         }
 

@@ -2,7 +2,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
      TextElement.FontWeight="Regular"
-     TextElement.FontSize="13"
+     TextElement.FontSize="18"
      TextOptions.TextFormattingMode="Ideal"
      TextOptions.TextRenderingMode="Auto"
      Background="{DynamicResource MaterialDesignPaper}"
@@ -41,36 +41,36 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
-                <Label Content="CLIENTE:"/>
+                <Label Content="CLIENTE:" FontWeight="Bold"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <TextBox x:Name="txtNombreCliente" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="60" IsEnabled="True"/>
-                
-                <Label Content="NIT/C.I.:"/>
+                <TextBox x:Name="txtNombreCliente" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="60" IsEnabled="True" KeyDown="txtClear_KeyDown"/>
+
+                <Label Content="NIT/C.I.:" FontWeight="Bold"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <TextBox x:Name="txtNit" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="20" IsEnabled="True"/>
-                <Label Content="TELEFONO:"/>
+                <TextBox x:Name="txtNit" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="20" IsEnabled="True" KeyDown="txtClear_KeyDown"/>
+                <Label Content="TELEFONO:" FontWeight="Bold"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <TextBox x:Name="txtTelefono" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="True"/>
+                <TextBox x:Name="txtTelefono" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="15" IsEnabled="True" KeyDown="txtClear_KeyDown"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
-                <Label Content="EMPRESA:"/>
+                <Label Content="EMPRESA:" FontWeight="Bold"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <TextBox x:Name="txtNombreEmpresa" Text="-" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="60" IsEnabled="True"/>
-                <Label Content="DIRECCION:"/>
+                <TextBox x:Name="txtNombreEmpresa" Text="-" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="60" IsEnabled="True" KeyDown="txtClear_KeyDown"/>
+                <Label Content="DIRECCION:" FontWeight="Bold"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <TextBox x:Name="txtDireccion" Text="-" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="100" IsEnabled="True"/>
-                <Label Content="CORREO:"/>
+                <TextBox x:Name="txtDireccion" Text="-" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="100" IsEnabled="True" KeyDown="txtClear_KeyDown"/>
+                <Label Content="CORREO:" FontWeight="Bold"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <TextBox x:Name="txtCorreo" Text="-" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="40" IsEnabled="True"/>
+                <TextBox x:Name="txtCorreo" Text="-" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="40" IsEnabled="True" KeyDown="txtClear_KeyDown"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
-                <Label Content="Tiempo de Entrega:" VerticalAlignment="Center"/>
+                <Label Content="Tiempo de validez:" FontWeight="Bold" VerticalAlignment="Center"/>
                 <DatePicker x:Name="dtpFechaEntrega" Margin="0,0,20,0" Loaded="dtpFechaEntrega_Loaded"/>
             </StackPanel>
             
             <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
-                <Label Content="BÚSQUEDA DE PRODUCTO:"/>
+                <Label Content="BÚSQUEDA DE PRODUCTO:" FontWeight="Bold"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <controls:AutoCompleteBox x:Name="acbtxtNombreProducto" Margin="0,0,20,0" MinWidth="120" IsEnabled="True" FilterMode="Contains" KeyDown="acbtxtNombreProducto_KeyDown"/>
             </StackPanel>
@@ -85,16 +85,16 @@
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="Ocultar Precio $.:" VerticalAlignment="Center"/>
                 <ToggleButton x:Name="tglOcultarUSD" Style="{StaticResource MaterialDesignSwitchToggleButton}" ToolTip="Ocultar precio en dólar para el cliente." IsEnabled="False" Margin="0,0,20,0"/>
-                <Label Content="Precio $:" VerticalAlignment="Center"/>
+                <Label Content="Precio $:" FontWeight="Bold" VerticalAlignment="Center"/>
                 <TextBox x:Name="txtCotizacionUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" VerticalAlignment="Center" KeyUp="txtCotizacionUSD_KeyUp" KeyDown="txtCotizacionUSD_KeyDown"/>
-                <Label Content="Precio BS:" VerticalAlignment="Center"/>
+                <Label Content="Precio BS:" FontWeight="Bold" VerticalAlignment="Center"/>
                 <TextBox x:Name="txtCotizacionBOB" TextWrapping="Wrap" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" VerticalAlignment="Center" KeyUp="txtCotizacionBOB_KeyUp" KeyDown="txtCotizacionBOB_KeyDown"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,20,0,20" HorizontalAlignment="Center">
-                <Button x:Name="btnAdd" Content="AÑADIR PRODUCTO" Click="btnAdd_Click" IsEnabled="False"/>
+                <Button x:Name="btnAdd" Content="AÑADIR PRODUCTO" Click="btnAdd_Click" IsEnabled="False" Background="LimeGreen" BorderBrush="LimeGreen"/>
             </StackPanel>
             <DataGrid x:Name="dgvProductos" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" HorizontalAlignment="Center" IsReadOnly="True" SelectionChanged="dgvProductos_SelectionChanged" Loaded="dgvProductos_Loaded"/>
-            <Button x:Name="btnSave" Content="GUARDAR E IMPRIMIR" Margin="0,30,0,0" Click="btnSave_Click" Width="180"/>
+            <Button x:Name="btnSave" Content="GUARDAR E IMPRIMIR" Margin="0,30,0,0" Click="btnSave_Click" Width="180" Background="LimeGreen" BorderBrush="LimeGreen"/>
         </StackPanel>
     </ScrollViewer>
 </Window>

@@ -48,7 +48,7 @@
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
                 <Border BorderBrush="Gray" BorderThickness="2">
-                    <DataGrid x:Name="dgvProductos" Loaded="dgvProductos_Loaded" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CellEditEnding="dgvProductos_CellEditEnding" HorizontalAlignment="Center" IsEnabled="False" FontWeight="DemiBold">
+                    <DataGrid x:Name="dgvProductos" Loaded="dgvProductos_Loaded" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CellEditEnding="dgvProductos_CellEditEnding" HorizontalAlignment="Center" IsEnabled="False" FontWeight="DemiBold" Foreground="#212121">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID PRODUCTO" Binding="{Binding IdProducto}" IsReadOnly="True" Visibility="Collapsed"/>
                             <DataGridTextColumn Header="ID CATEGORIA" Binding="{Binding IdCategoria}" IsReadOnly="True" Visibility="Collapsed"/>

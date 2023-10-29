@@ -57,6 +57,9 @@ namespace sisgesoriadao
             stackpanelCustomerButtons.Visibility = Visibility.Visible;
             EnableCustomerButtons();
             operacion = 1;
+            btnSaveNewCustomer.Background = new SolidColorBrush(Colors.LimeGreen);
+            btnSaveNewCustomer.BorderBrush = new SolidColorBrush(Colors.LimeGreen);
+            btnSaveNewCustomer.Content = "REGISTRAR CLIENTE";
         }
         private void btnEditCustomer_Click(object sender, RoutedEventArgs e)
         {
@@ -67,7 +70,9 @@ namespace sisgesoriadao
             txtRegister_NumeroCelular.Text = cliente.NumeroCelular.Trim();
             txtRegister_NumeroCI.Text = cliente.NumeroCI.Trim();
             operacion = 2;
-
+            btnSaveNewCustomer.Background = new SolidColorBrush(Colors.Orange);
+            btnSaveNewCustomer.BorderBrush = new SolidColorBrush(Colors.Orange);
+            btnSaveNewCustomer.Content = "EDITAR CLIENTE";
             btnAddCustomer.IsEnabled = false;
             btnEditCustomer.IsEnabled = false;
             EnableCustomerButtons();
@@ -457,13 +462,16 @@ namespace sisgesoriadao
                     }
                     else
                     {
-                        if (MessageBox.Show("Cliente no encontrado en sistema, ¿Desea registrarlo?", "Registrar nuevo cliente", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
-                        {
-                            stackpanelCustomerFound.Visibility = Visibility.Collapsed;
-                            stackpanelCustomerForm.Visibility = Visibility.Visible;
-                            stackpanelCustomerButtons.Visibility = Visibility.Visible;
-                            EnableCustomerButtons();
-                        }
+                        stackpanelCustomerFound.Visibility = Visibility.Collapsed;
+                        stackpanelCustomerForm.Visibility = Visibility.Visible;
+                        stackpanelCustomerButtons.Visibility = Visibility.Visible;
+                        EnableCustomerButtons();
+                        txtRegister_NumeroCI.Text = txtSearchCustomer.Text;
+                        operacion = 1;
+                        btnSaveNewCustomer.Background = new SolidColorBrush(Colors.LimeGreen);
+                        btnSaveNewCustomer.BorderBrush = new SolidColorBrush(Colors.LimeGreen);
+                        btnSaveNewCustomer.Content = "REGISTRAR CLIENTE";
+                        btnEditCustomer.IsEnabled = false;
                     }
                 }
                 catch (Exception ex)
@@ -500,6 +508,17 @@ namespace sisgesoriadao
             {
                 SearchByPhoneorCI();
             }
+            if (e.Key == Key.Escape)
+            {
+                txtSearchCustomer.Text = "";
+            }
+        }
+        private void txtClear_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                (sender as TextBox).Text = "";
+            }
         }
         private void acbtxtNameCustomer_KeyDown(object sender, KeyEventArgs e)
         {
@@ -535,6 +554,10 @@ namespace sisgesoriadao
 
                         throw;
                     }
+                }
+                if (e.Key == Key.Escape)
+                {
+                    acbtxtNameCustomer.Text = "";
                 }
             }
         }
@@ -726,12 +749,20 @@ namespace sisgesoriadao
             {
                 addPaymentMethodToSale();
             }
+            if (e.Key == Key.Escape)
+            {
+                (sender as TextBox).Text = "";
+            }
         }
         private void txtPagoUSD_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter && string.IsNullOrEmpty(txtPagoUSD.Text) != true)
             {
                 addPaymentMethodToSale();
+            }
+            if (e.Key == Key.Escape)
+            {
+                (sender as TextBox).Text = "";
             }
         }
         private void dgvProductos_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
