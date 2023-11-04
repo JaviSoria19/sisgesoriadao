@@ -17,7 +17,7 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectProductNamesForComboBox();
         DataTable SelectProductIDandNamesForAutoCompleteBox();
         DataTable SelectLikeInventoryFilter(string cadenaBusqueda, string idSucursales, string idCondiciones, string idCategorias, string estados);
-        DataTable SelectLikeInventoryOnlyQuantityFilter(string cadenaBusqueda, string idSucursales, string idCondiciones, string idCategorias);
+        DataTable SelectLikeInventoryOnlyQuantityFilter(string cadenaBusqueda, string idSucursales, string idCondiciones, string idCategorias, int mayor_o_igual_que, int menor_o_igual_que);
         //LOTES
         int InsertBatch(Lote l);
         int UpdateBatch(Lote l);

@@ -21,6 +21,7 @@ namespace sisgesoriadao
     {
         VentaImpl implVenta;
         string clipboardTexto = "";
+        int idVenta = 0;
         public winVenta_Detalle()
         {
             InitializeComponent();
@@ -30,6 +31,11 @@ namespace sisgesoriadao
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
             SelectDetalle();
+            idVenta = Session.IdVentaDetalle;
+            if (Session.Rol != 1)
+            {
+                btnModifySale.IsEnabled = false;
+            }
         }
 
         private void btnReturn_Click(object sender, RoutedEventArgs e)
@@ -216,6 +222,22 @@ namespace sisgesoriadao
         {
             MessageBox.Show("¡Se ha copiado la descripción de los Productos e IMEI's o S/N en el portapapeles!");
             Clipboard.SetText(clipboardTexto);
+        }
+
+        private void btnModifySale_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Session.IdVentaDetalle = idVenta;
+                winVenta_Update winVenta_Update = new winVenta_Update();
+                winVenta_Update.Show();
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                throw;
+            }
         }
     }
 }

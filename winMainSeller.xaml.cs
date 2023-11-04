@@ -22,31 +22,10 @@ namespace sisgesoriadao
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
             txtVersionApp.Text = Session.VersionApp;
             LoadInfoFromDB();
-            if (Session.NombreUsuario == "CRAZY STORE")
-            {
-                btnSaleAdd.IsEnabled = false;
-                btnLocalSales.IsEnabled = false;
-                btnCashPending.IsEnabled = false;
-                btnCashHistory.IsEnabled = false;
-                btnQuotationAdd.IsEnabled = false;
-                btnQuotations.IsEnabled = false;
-                btnTransferProducts.IsEnabled = false;
-                btnReceiveProducts.IsEnabled = false;
-                btnMovementProductHistory.IsEnabled = false;
-                btnHistoryProducts.IsEnabled = false;
-                btnCommonSaleAdd.IsEnabled = false;
-                btnCommonLocalSales.IsEnabled = false;
-                btnRefresh.IsEnabled = false;
-            }
         }
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("¿Está segur@ de cerrar la sesión actual?", "CERRAR SESIÓN", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-            {
-                winLogin winLogin = new winLogin();
-                winLogin.Show();
-                this.Close();
-            }
+            Close();
         }
         private void btnSaleAdd_Click(object sender, RoutedEventArgs e)
         {
@@ -159,6 +138,26 @@ namespace sisgesoriadao
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MessageBoxResult result =
+                  MessageBox.Show(
+                    "¿Está segur@ de cerrar la sesión actual?",
+                    "CERRAR SESIÓN",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+            if (result == MessageBoxResult.No)
+            {
+                // If user doesn't want to close, cancel closure
+                e.Cancel = true;
+            }
+            else if (result == MessageBoxResult.Yes)
+            {
+                winLogin winLogin = new winLogin();
+                winLogin.Show();
             }
         }
     }

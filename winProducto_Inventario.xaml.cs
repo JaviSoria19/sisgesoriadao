@@ -61,7 +61,7 @@ namespace sisgesoriadao
             cbxDisponibilidad.Items.Add(new ComboboxItem("DISPONIBLES", "1"));
             cbxDisponibilidad.Items.Add(new ComboboxItem("VENDIDOS", "2"));
             cbxDisponibilidad.Items.Add(new ComboboxItem("ELIMINADOS", "0"));
-            cbxDisponibilidad.SelectedIndex = 0;
+            cbxDisponibilidad.SelectedIndex = 1;
 
             txtBuscar.Focus();
         }

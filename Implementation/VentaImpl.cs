@@ -349,7 +349,8 @@ namespace sisgesoriadao.Implementation
                 INNER JOIN Sucursal S ON S.idSucursal = V.idSucursal
                 INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
                 INNER JOIN Producto P ON P.idProducto = DV.idProducto
-                WHERE V.idVenta = @idVenta";
+                WHERE V.idVenta = @idVenta
+                ORDER BY P.nombreProducto ASC, DV.precioBOB ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idVenta", Session.IdVentaDetalle);
             try

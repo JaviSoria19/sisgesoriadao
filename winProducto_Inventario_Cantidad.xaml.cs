@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;//ADO.NET
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 namespace sisgesoriadao
@@ -168,13 +169,21 @@ namespace sisgesoriadao
         }
         void SelectLike()
         {
+            if (string.IsNullOrEmpty(txtMayorA.Text))
+            {
+                txtMayorA.Text = "1";
+            }
+            if (string.IsNullOrEmpty(txtMenorA.Text))
+            {
+                txtMenorA.Text = "999";
+            }
             try
             {
                 implProducto = new ProductoImpl();
                 dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implProducto.SelectLikeInventoryOnlyQuantityFilter(txtBuscar.Text, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCondicion.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor).DefaultView;
+                dgvDatos.ItemsSource = implProducto.SelectLikeInventoryOnlyQuantityFilter(txtBuscar.Text, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCondicion.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, int.Parse(txtMayorA.Text), int.Parse(txtMenorA.Text)).DefaultView;
                 /*dgvDatos.Columns[0].Visibility = Visibility.Collapsed;*/
-                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeInventoryOnlyQuantityFilter(txtBuscar.Text, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCondicion.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor).Rows.Count;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implProducto.SelectLikeInventoryOnlyQuantityFilter(txtBuscar.Text, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCondicion.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, int.Parse(txtMayorA.Text), int.Parse(txtMenorA.Text)).Rows.Count;
             }
             catch (Exception ex)
             {
@@ -221,5 +230,17 @@ namespace sisgesoriadao
             txtBuscar.Text = "";
             txtBuscar.Focus();
         }
+
+        private void txtMayorA_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !IsTextAllowed(e.Text);
+        }
+        //--------->VALIDACIÓN PARA QUE EL TEXTBOX SOLO PERMITA NÚMEROS (Y EN ESTE CASO, UN PUNTO.)<---------
+        private static readonly Regex _regex = new Regex("[^0-9-]+"); //regex that matches disallowed text
+        private static bool IsTextAllowed(string text)
+        {
+            return !_regex.IsMatch(text);
+        }
+        //------------------------------------------------------><---------------------------------------------
     }
 }

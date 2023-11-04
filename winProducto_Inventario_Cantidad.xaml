@@ -40,6 +40,10 @@
                 <ComboBox x:Name="cbxCondicion" IsEnabled="True" Margin="0,0,20,0"/>
                 <Label Content="CATEGORIA:" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 <ComboBox x:Name="cbxCategoria" IsEnabled="True" Margin="0,0,20,0"/>
+                <Label Content="Mayor o igual a:" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtMayorA" TextWrapping="Wrap" Margin="0,0,20,0" Text="1" Width="30" MaxLength="3" Height="22" KeyDown="txtBuscar_KeyDown" PreviewTextInput="txtMayorA_PreviewTextInput"/>
+                <Label Content="Menor o igual a:" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtMenorA" TextWrapping="Wrap" Margin="0,0,20,0" Text="999" Width="30" MaxLength="3" Height="22" KeyDown="txtBuscar_KeyDown" PreviewTextInput="txtMayorA_PreviewTextInput"/>
                 <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                     <materialDesign:PackIcon Kind="Search"/>
                 </Button>

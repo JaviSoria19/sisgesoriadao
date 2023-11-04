@@ -769,7 +769,7 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
-        public DataTable SelectLikeInventoryOnlyQuantityFilter(string cadenaBusqueda, string idSucursales, string idCondiciones, string idCategorias)
+        public DataTable SelectLikeInventoryOnlyQuantityFilter(string cadenaBusqueda, string idSucursales, string idCondiciones, string idCategorias, int mayor_o_igual_que, int menor_o_igual_que)
         {
             string query = @"SELECT S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.nombreProducto AS Producto, COUNT(P.idProducto) AS Cantidad FROM Producto P
                                 INNER JOIN Sucursal S ON S.idSucursal = P.idSucursal
@@ -781,9 +781,12 @@ namespace sisgesoriadao.Implementation
                                 AND  P.estado IN (1,3)
                                 AND (P.nombreProducto LIKE @search OR P.codigoSublote LIKE @search)
                                 GROUP BY P.nombreProducto
+                                HAVING Cantidad >= @mayor_o_igual_que AND Cantidad <= @menor_o_igual_que
                                 ORDER BY 4 ASC, 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@search", "%" + cadenaBusqueda + "%");
+            command.Parameters.AddWithValue("@mayor_o_igual_que", mayor_o_igual_que);
+            command.Parameters.AddWithValue("@menor_o_igual_que", menor_o_igual_que);
             try
             {
                 return ExecuteDataTableCommand(command);

@@ -35,6 +35,9 @@
                 <Button x:Name="btnCopy" ToolTip="COPIAR IMEIS O S/N's AL PORTAPAPELES" Margin="15,0,0,0" Click="btnCopy_Click" Background="White" Foreground="Black" BorderBrush="Black">
                     <materialDesign:PackIcon Kind="ContentCopy" Width="50"/>
                 </Button>
+                <Button x:Name="btnModifySale" ToolTip="MODIFICAR VENTA" Margin="15,0,0,0" Click="btnModifySale_Click" Background="Orange" Foreground="White" BorderBrush="Orange">
+                    <materialDesign:PackIcon Kind="Edit" Width="50"/>
+                </Button>
             </StackPanel>
             <Grid>
                 <Grid x:Name="ZonaImpresionGrid">
