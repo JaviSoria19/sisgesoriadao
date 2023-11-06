@@ -3,7 +3,6 @@ using sisgesoriadao.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;//ADO.NET
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;

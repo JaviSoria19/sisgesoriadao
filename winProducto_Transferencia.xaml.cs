@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 namespace sisgesoriadao
 {
@@ -165,7 +164,8 @@ namespace sisgesoriadao
             }
             if (validoParaInsercion == true)
             {
-                dgvProductos.Items.Add(new DataGridRowDetalleHelper {
+                dgvProductos.Items.Add(new DataGridRowDetalleHelper
+                {
                     Numero = contador,
                     CodigoSublote = producto.CodigoSublote,
                     NombreProducto = producto.NombreProducto,

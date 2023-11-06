@@ -656,7 +656,7 @@ namespace sisgesoriadao
                             MessageBox.Show(insert);
                         }
                     }
-                    
+
                 }
             }
             else
@@ -1009,7 +1009,7 @@ namespace sisgesoriadao
                 venta.SaldoBOB = venta_saldoBOB;
                 try
                 {
-                    string update = implVenta.UpdateSaleProductsTransaction(venta,listaProductos,listaDescuentosPorcentaje,listaGarantias);
+                    string update = implVenta.UpdateSaleProductsTransaction(venta, listaProductos, listaDescuentosPorcentaje, listaGarantias);
                     if (update == "UPDATEPRODUCTOS_EXITOSO")
                     {
                         MessageBox.Show("PRECIO DE VENTA DE LOS PRODUCTOS MODIFICADO CON ÉXITO.");
@@ -1049,7 +1049,8 @@ namespace sisgesoriadao
                     listaHelper.Remove(listaHelper[dgvProductos.SelectedIndex]);
                     dgvProductos.Items.Refresh();
 
-                    Venta venta = new Venta {
+                    Venta venta = new Venta
+                    {
                         IdVenta = idVenta,
                         TotalUSD = venta_TotalUSD,
                         TotalBOB = venta_TotalBOB,

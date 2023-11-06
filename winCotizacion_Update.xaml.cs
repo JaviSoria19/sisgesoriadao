@@ -4,12 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;//ADO.NET
-using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 namespace sisgesoriadao
 {
@@ -298,7 +295,8 @@ namespace sisgesoriadao
             }
             if (string.IsNullOrEmpty(txtNombreCliente.Text) != true && string.IsNullOrEmpty(txtNit.Text) != true && string.IsNullOrEmpty(txtTelefono.Text) != true)
             {
-                cotizacion = new Cotizacion {
+                cotizacion = new Cotizacion
+                {
                     IdCotizacion = idCotizacion,
                     NombreCliente = txtNombreCliente.Text.Trim(),
                     NombreEmpresa = txtNombreEmpresa.Text.Trim(),

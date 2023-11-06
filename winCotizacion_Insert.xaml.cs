@@ -1,18 +1,13 @@
-﻿using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.tool.xml;
-using sisgesoriadao.Implementation;
+﻿using sisgesoriadao.Implementation;
 using sisgesoriadao.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;//ADO.NET
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 namespace sisgesoriadao
 {
@@ -218,7 +213,7 @@ namespace sisgesoriadao
                                         totalproductoBOB = producto.PrecioVentaBOB,
                                         costoUSD = producto.CostoUSD
                                     });
-                                }                                
+                                }
                                 dgvProductos.Items.Refresh();
                                 tglOcultarUSD.IsEnabled = true;
                                 acbtxtNombreProducto.Text = "";

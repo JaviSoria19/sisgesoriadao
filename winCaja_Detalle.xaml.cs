@@ -1,20 +1,11 @@
 ﻿using sisgesoriadao.Implementation;
 using sisgesoriadao.Model;
 using System;
-using System.Data;//ADO.NET
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;//ADO.NET
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace sisgesoriadao
 {
@@ -35,7 +26,8 @@ namespace sisgesoriadao
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
-            listaHelper.Add(new DataGridRowDetalleHelper {
+            listaHelper.Add(new DataGridRowDetalleHelper
+            {
                 Tipo = "Efectivo",
                 USD = "$us. 0",
                 BOB = "Bs. 0"
@@ -133,7 +125,7 @@ namespace sisgesoriadao
         }
         private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
         {
-            
+
             Select();
         }
         private void dgvVentasPendientes_Loaded(object sender, RoutedEventArgs e)
@@ -206,7 +198,7 @@ namespace sisgesoriadao
                             txtCaja_FechaCierre.Text = "Fecha de Cierre: " + caja.FechaActualizacion;
                         }
                     }
-                    
+
                 }
             }
             catch (Exception ex)

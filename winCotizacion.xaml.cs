@@ -1,11 +1,7 @@
-﻿using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.tool.xml;
-using sisgesoriadao.Implementation;
+﻿using sisgesoriadao.Implementation;
 using sisgesoriadao.Model;
 using System;
 using System.Data;//ADO.NET
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;

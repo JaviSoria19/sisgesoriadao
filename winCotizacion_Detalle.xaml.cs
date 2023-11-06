@@ -1,15 +1,14 @@
-﻿using sisgesoriadao.Implementation;
+﻿using MessagingToolkit.QRCode.Codec;
+using sisgesoriadao.Implementation;
 using sisgesoriadao.Model;
 using System;
 using System.Data;//ADO.NET
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using MessagingToolkit.QRCode.Codec;
-using MessagingToolkit.QRCode.Codec.Data;
-using System.Drawing;
-using System.IO;
-using System.Drawing.Imaging;
 using System.Windows.Media.Imaging;
 
 namespace sisgesoriadao
