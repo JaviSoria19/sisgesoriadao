@@ -21,6 +21,7 @@ namespace sisgesoriadao
     {
         CotizacionImpl implCotizacion;
         string clipboardTexto = "";
+        int idVenta = 0;
         public winCotizacion_Detalle()
         {
             InitializeComponent();
@@ -122,7 +123,7 @@ namespace sisgesoriadao
                     DataTable dt = new DataTable();
                     implCotizacion = new CotizacionImpl();
                     dt = implCotizacion.SelectDetails2(Session.IdCotizacion);
-                    int idVenta = int.Parse(dt.Rows[0][0].ToString());
+                    idVenta = int.Parse(dt.Rows[0][0].ToString());
                     txtIdVenta.Text = "Nro.: " + idVenta.ToString("D5");
 
                     txtSucursal_nombre.Text = dt.Rows[0][1].ToString();
@@ -185,6 +186,14 @@ namespace sisgesoriadao
                     MessageBox.Show(ex.Message);
                 }
             }
+        }
+
+        private void btnModifySale_Click(object sender, RoutedEventArgs e)
+        {
+            Session.IdCotizacion = idVenta;
+            winCotizacion_Update winCotizacion_Update = new winCotizacion_Update();
+            winCotizacion_Update.Show();
+            Close();
         }
     }
 }

@@ -23,6 +23,7 @@ namespace sisgesoriadao
         public winProducto_Inventario_Cantidad()
         {
             InitializeComponent();
+            WindowState = WindowState.Maximized;
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

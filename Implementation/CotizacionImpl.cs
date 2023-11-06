@@ -70,9 +70,81 @@ namespace sisgesoriadao.Implementation
                 connection.Close();
             }
         }
+        public string UpdateTransaction(List<Producto> ListaProductos, Cotizacion cotizacion)
+        {
+            MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
+            connection.Open();
+            MySqlCommand command = connection.CreateCommand();
+            MySqlTransaction myTrans;
+            myTrans = connection.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            command.Connection = connection;
+            command.Transaction = myTrans;
+            try
+            {
+                //AÑADIENDO NUEVA COTIZACION.
+                command.CommandText = @"UPDATE Cotizacion SET nombreCliente = @nombreCliente, nombreEmpresa = @nombreEmpresa, nit = @nit, direccion = @direccion, correo = @correo, telefono = @telefono, tiempoEntrega = @tiempoEntrega
+                    WHERE idCotizacion = @idCotizacion";
+                command.Parameters.AddWithValue("@nombreCliente", cotizacion.NombreCliente);
+                command.Parameters.AddWithValue("@nombreEmpresa", cotizacion.NombreEmpresa);
+                command.Parameters.AddWithValue("@nit", cotizacion.Nit);
+                command.Parameters.AddWithValue("@direccion", cotizacion.Direccion);
+                command.Parameters.AddWithValue("@correo", cotizacion.Correo);
+                command.Parameters.AddWithValue("@telefono", cotizacion.Telefono);
+                command.Parameters.AddWithValue("@tiempoEntrega", cotizacion.TiempoEntrega);
+                command.Parameters.AddWithValue("@idCotizacion", cotizacion.IdCotizacion);
+                command.ExecuteNonQuery();
+                foreach (var Producto in ListaProductos)
+                {
+                    //LIMPIEZA DE PARÁMETROS YA UTILIZADOS EN EL CICLO ANTERIOR PARA PROSEGUIR, CASO CONTRARIO LANZA ERROR.
+                    command.Parameters.Clear();
+                    //REGISTRO DEL DETALLE DE LA COTIZACION.
+                    command.CommandText = @"UPDATE Detalle_Cotizacion SET cotizacionUSD = @cotizacionUSD, cotizacionBOB = @cotizacionBOB
+                        WHERE idCotizacion = @idCotizacion AND idProducto = @idProducto";
+                    command.Parameters.AddWithValue("@idCotizacion", cotizacion.IdCotizacion);
+                    command.Parameters.AddWithValue("@idProducto", Producto.IdProducto);
+                    command.Parameters.AddWithValue("@cotizacionUSD", Producto.PrecioVentaUSD);
+                    command.Parameters.AddWithValue("@cotizacionBOB", Producto.PrecioVentaBOB);
+                    command.ExecuteNonQuery();
+                }
+                myTrans.Commit();
+                return "COTIZACION MODIFICADA EXITOSAMENTE.";
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (MySqlException ex)
+                {
+                    if (myTrans.Connection != null)
+                    {
+                        return "Una excepción del tipo " + ex.GetType() + " se encontró mientras se estaba intentando revertir la transacción.";
+                    }
+                }
+                return e.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
         public int Delete(Cotizacion c)
         {
-            throw new NotImplementedException();
+            string query = @"UPDATE Cotizacion SET estado = 0 WHERE idCotizacion = @idCotizacion";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idCotizacion", c.IdCotizacion);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
         public Cotizacion Get(int id)
         {
@@ -118,6 +190,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN Usuario U ON C.idUsuario = U.idUsuario
                             INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal
                             INNER JOIN Detalle_Cotizacion DC ON C.idCotizacion = DC.idCotizacion
+                            WHERE C.estado = 1
                             GROUP BY C.idCotizacion
                             ORDER BY 1 DESC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -137,7 +210,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN Usuario U ON C.idUsuario = U.idUsuario
                             INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal
                             INNER JOIN Detalle_Cotizacion DC ON C.idCotizacion = DC.idCotizacion
-                            WHERE (U.nombreUsuario LIKE @search OR S.nombreSucursal LIKE @search OR C.idCotizacion LIKE @search OR C.nombreCliente LIKE @search OR C.nombreEmpresa LIKE @search OR C.nit LIKE @search OR C.telefono LIKE @search)
+                            WHERE C.estado = 1 AND (U.nombreUsuario LIKE @search OR S.nombreSucursal LIKE @search OR C.idCotizacion LIKE @search OR C.nombreCliente LIKE @search OR C.nombreEmpresa LIKE @search OR C.nit LIKE @search OR C.telefono LIKE @search)
                             AND C.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY C.idCotizacion
                             ORDER BY 1 DESC";
@@ -157,7 +230,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectDetails(int idCotizacion)
         {
-            string query = @"SELECT DC.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, P.nombreProducto AS Producto, DC.CotizacionUSD AS 'Cotizacion USD', DC.CotizacionBOB AS 'Cotizacion BOB', " + Session.FormatoFechaMySql("C.fechaRegistro") + @" AS 'Fecha de Registro' FROM Detalle_Cotizacion DC
+            string query = @"SELECT DC.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, P.nombreProducto AS Producto, DC.CotizacionUSD AS 'Cotizacion USD', DC.CotizacionBOB AS 'Cotizacion BOB', " + Session.FormatoFechaMySql("C.fechaRegistro") + @" AS 'Fecha de Registro', P.idProducto AS IDProducto, P.costoUSD AS 'Costo USD', P.precioVentaUSD AS 'Precio USD', P.precioVentaBOB AS 'Precio BOB' FROM Detalle_Cotizacion DC
                             INNER JOIN Producto P ON DC.idProducto = P.idProducto
                             INNER JOIN Cotizacion C ON DC.idCotizacion = C.idCotizacion 
                             INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal
@@ -228,6 +301,70 @@ namespace sisgesoriadao.Implementation
                 throw ex;
             }
             return c;
+        }
+        public byte GetEstado(int idCotizacion)
+        {
+            byte estado = 0;
+            string query = @"SELECT estado FROM Cotizacion WHERE idCotizacion = @idCotizacion";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idCotizacion", idCotizacion);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    estado = byte.Parse(dt.Rows[0][0].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return estado;
+        }
+
+        public string DeleteAfterQuotationProductTransaction(Cotizacion cotizacion, int IdProducto)
+        {
+            MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
+            connection.Open();
+            MySqlCommand command = connection.CreateCommand();
+            MySqlTransaction myTrans;
+            myTrans = connection.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            command.Connection = connection;
+            command.Transaction = myTrans;
+            try
+            {
+                //ELIMINANDO EL PRODUCTO DE LA VENTA.
+                command.CommandText = @"DELETE FROM Detalle_Cotizacion WHERE idCotizacion = @idCotizacion AND idProducto = @idProducto";
+                command.Parameters.AddWithValue("@idCotizacion", cotizacion.IdCotizacion);
+                command.Parameters.AddWithValue("@idProducto", IdProducto);
+                command.ExecuteNonQuery();
+                command.Parameters.Clear();
+                myTrans.Commit();
+                return "DELETEPRODUCTO_EXITOSO";
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (MySqlException ex)
+                {
+                    if (myTrans.Connection != null)
+                    {
+                        return "Una excepción del tipo " + ex.GetType() + " se encontró mientras se estaba intentando revertir la transacción.";
+                    }
+                }
+                return e.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
         }
     }
 }

@@ -26,6 +26,7 @@ namespace sisgesoriadao
         public winProducto_Inventario()
         {
             InitializeComponent();
+            WindowState = WindowState.Maximized;
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {

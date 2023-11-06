@@ -28,6 +28,7 @@ namespace sisgesoriadao
         public winInventarioDigital()
         {
             InitializeComponent();
+            WindowState = WindowState.Maximized;
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {

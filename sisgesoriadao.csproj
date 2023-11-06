@@ -193,6 +193,9 @@
     <Compile Include="winCotizacion_Insert.xaml.cs">
       <DependentUpon>winCotizacion_Insert.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winCotizacion_Update.xaml.cs">
+      <DependentUpon>winCotizacion_Update.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winEULA.xaml.cs">
       <DependentUpon>winEULA.xaml</DependentUpon>
     </Compile>
@@ -327,6 +330,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winCotizacion_Insert.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winCotizacion_Update.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

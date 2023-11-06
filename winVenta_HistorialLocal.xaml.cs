@@ -23,6 +23,7 @@ namespace sisgesoriadao
         public winVenta_HistorialLocal()
         {
             InitializeComponent();
+            WindowState = WindowState.Maximized;
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
