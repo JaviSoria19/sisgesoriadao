@@ -235,7 +235,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN Cotizacion C ON DC.idCotizacion = C.idCotizacion 
                             INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal
                             WHERE DC.idCotizacion = @idCotizacion
-                            ORDER BY 1 DESC";
+                            ORDER BY 3 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idCotizacion", idCotizacion);
             try

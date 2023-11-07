@@ -55,10 +55,41 @@
 
             <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">
                 <Border BorderBrush="Gray" BorderThickness="2">
-                    <DataGrid x:Name="dgvDatos"
+                    <DataGrid x:Name="dgvDatos" AutoGenerateColumns="False"
                   HorizontalAlignment="Left" VerticalAlignment="Top" GridLinesVisibility="Horizontal"
                   CanUserAddRows="False" IsReadOnly="True" 
-                  CanUserResizeRows="False" CanUserResizeColumns="False" MaxHeight="363" SelectionChanged="dgvDatos_SelectionChanged"/>
+                  CanUserResizeRows="False" CanUserResizeColumns="False" MaxHeight="726" MaxWidth="1880">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Fecha" Binding="{Binding Fecha}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Sucursal" Binding="{Binding Sucursal}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Usuario" Binding="{Binding Usuario}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Nro. Venta" Binding="{Binding ID}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Codigo" Binding="{Binding Codigo}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Producto" Binding="{Binding Producto}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Identificador" Binding="{Binding Identificador}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Categoria" Binding="{Binding Categoria}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Precio $." Binding="{Binding PrecioUSD}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Precio Bs." Binding="{Binding PrecioBOB}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button ToolTip="MODIFICAR VENTA" Click="btndgvModificar" Background="Orange" Foreground="White" BorderBrush="Orange">
+                                            <materialDesign:PackIcon Kind="Edit" Width="50"/>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button ToolTip="IMPRIMIR DETALLE" Click="btndgvImprimir" Background="White" Foreground="Black" BorderBrush="Black">
+                                            <materialDesign:PackIcon Kind="Printer" Width="50"/>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Border>
                 <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

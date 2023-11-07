@@ -254,8 +254,8 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLikeReporteVentasGlobales(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo)
         {
             string query = @"SELECT " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, 
-                            V.idVenta AS 'Nro Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Precio USD', DV.precioBOB AS 'Precio Bs' FROM Venta V
+                            V.idVenta AS ID, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS PrecioUSD, DV.precioBOB AS PrecioBOB FROM Venta V
                             INNER JOIN Sucursal S ON S.idSucursal = V.idSucursal
                             INNER JOIN Usuario U ON U.idUsuario = V.idUsuario
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
@@ -282,8 +282,8 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectLikeReporteVentasLocales(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI)
         {
-            string query = @"SELECT V.idVenta AS 'ID', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, CL.nombre AS Cliente, V.idVenta AS 'Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM Venta V
+            string query = @"SELECT V.idVenta AS 'ID', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, CL.nombre AS Cliente, V.idVenta AS Venta, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS TotalUSD, IF(V.saldoUSD < 1, 0, V.saldoUSD) AS SaldoUSD FROM Venta V
                             INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
                             INNER JOIN Producto P ON P.idProducto = DV.idProducto

@@ -32,6 +32,7 @@ namespace sisgesoriadao
             acbxGetProductosFromDatabase();
             txtBlockWelcome.Text = Session.NombreUsuario;
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
+            txtNombreCliente.Focus();
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
@@ -233,7 +234,8 @@ namespace sisgesoriadao
         }
         private void dtpFechaEntrega_Loaded(object sender, RoutedEventArgs e)
         {
-            dtpFechaEntrega.SelectedDate = DateTime.Today;
+            DateTime fecha = DateTime.Today;
+            dtpFechaEntrega.SelectedDate = fecha.AddDays(3);
         }
         void acbxGetProductosFromDatabase()
         {

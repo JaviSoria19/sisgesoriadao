@@ -30,7 +30,9 @@ namespace sisgesoriadao
             if (Session.Rol != 1)
             {
                 btnDeletedSales.IsEnabled = false;
+                dgvDatos.Columns[10].Visibility = Visibility.Collapsed;
             }
+            txtBuscar_Producto_o_Codigo.Focus();
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
@@ -133,24 +135,6 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
-        private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)
-            {
-                try
-                {
-                    DataRowView d = (DataRowView)dgvDatos.SelectedItem;
-                    Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[0].ToString());
-                    winVenta_Update winVenta_Update = new winVenta_Update();
-                    winVenta_Update.Show();
-                    dgvDatos.SelectedItem = null;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
-        }
         private void btnDeletedSales_Click(object sender, RoutedEventArgs e)
         {
             winVenta_Eliminados winVenta_Eliminados = new winVenta_Eliminados();
@@ -195,6 +179,44 @@ namespace sisgesoriadao
             public ComboboxItem()
             {
 
+            }
+        }
+
+        private void btndgvModificar(object sender, RoutedEventArgs e)
+        {
+            if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)
+            {
+                try
+                {
+                    DataRowView d = (DataRowView)dgvDatos.SelectedItem;
+                    Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[0].ToString());
+                    winVenta_Update winVenta_Update = new winVenta_Update();
+                    winVenta_Update.Show();
+                    dgvDatos.SelectedItem = null;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void btndgvImprimir(object sender, RoutedEventArgs e)
+        {
+            if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)
+            {
+                try
+                {
+                    DataRowView d = (DataRowView)dgvDatos.SelectedItem;
+                    Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[0].ToString());
+                    winVenta_Detalle winVenta_Detalle = new winVenta_Detalle();
+                    winVenta_Detalle.Show();
+                    dgvDatos.SelectedItem = null;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
     }
