@@ -54,10 +54,41 @@
             
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
                 <Border BorderBrush="Gray" BorderThickness="2">
-                    <DataGrid x:Name="dgvDatos"
+                    <DataGrid x:Name="dgvDatos" AutoGenerateColumns="False"
                   HorizontalAlignment="Left" VerticalAlignment="Top" GridLinesVisibility="Horizontal"
                   CanUserAddRows="False" IsReadOnly="True" 
-                  CanUserResizeRows="False" CanUserResizeColumns="False" MaxHeight="726" MaxWidth="1880"/>
+                  CanUserResizeRows="False" CanUserResizeColumns="False" MaxHeight="726" MaxWidth="1880">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding ID}" IsReadOnly="True" Visibility="Collapsed"/>
+                            <DataGridTextColumn Header="Sucursal" Binding="{Binding Sucursal}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Categoria" Binding="{Binding Categoria}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Condicion" Binding="{Binding Condicion}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Codigo" Binding="{Binding Codigo}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Producto" Binding="{Binding Producto}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Identificador" Binding="{Binding Identificador}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Observaciones" Binding="{Binding Observaciones}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Disponibilidad" Binding="{Binding Disponibilidad}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Precio $." Binding="{Binding PrecioUSD}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button ToolTip="COPIAR CÓDIGO DE SUBLOTE AL PORTAPAPELES" Click="btndgvCopiarCodigoSublote" Background="White" Foreground="Black" BorderBrush="Black">
+                                            <materialDesign:PackIcon Kind="ContentCopy" Width="50"/>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button ToolTip="IR A HISTORIAL DE PRODUCTO" Click="btndgvHistorialdeProducto" Background="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}" BorderBrush="DeepSkyBlue">
+                                            <materialDesign:PackIcon Kind="History" Width="50"/>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Border>
                 <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
             </StackPanel>

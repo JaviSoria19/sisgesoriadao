@@ -34,6 +34,11 @@ namespace sisgesoriadao
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
             txtBuscar.Focus();
+            if (Session.Producto_Historial_CodigoSublote != null)
+            {
+                txtBuscar.Text = Session.Producto_Historial_CodigoSublote;
+                Select();
+            }
         }
         private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
         {

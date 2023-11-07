@@ -748,7 +748,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectLikeInventoryFilter(string cadenaBusqueda, string idSucursales, string idCondiciones, string idCategorias, string estados)
         {
-            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.observaciones AS Observaciones, IF(P.estado=0,'Eliminado',IF(P.estado=1,'Disponible','Vendido')) AS Disponibilidad, P.precioVentaUSD AS 'Precio USD' FROM Producto AS P
+            string query = @"SELECT P.idProducto AS ID, S.nombreSucursal AS Sucursal, C.nombreCategoria AS Categoria, CC.nombreCondicion AS Condicion, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS 'Identificador', P.observaciones AS Observaciones, IF(P.estado=0,'Eliminado',IF(P.estado=1,'Disponible','Vendido')) AS Disponibilidad, P.precioVentaUSD AS PrecioUSD FROM Producto AS P
                                 INNER JOIN Sucursal AS S ON P.idSucursal = S.idSucursal
                                 INNER JOIN Categoria AS C ON P.idCategoria = C.idCategoria
                                 INNER JOIN Condicion AS CC ON P.idCondicion = CC.idCondicion

@@ -225,6 +225,20 @@ namespace sisgesoriadao
             txtBuscar.Text = "";
             txtBuscar.Focus();
         }
+        private void btndgvCopiarCodigoSublote(object sender, RoutedEventArgs e)
+        {
+            string codigo = (dgvDatos.SelectedItem as DataRowView)[4].ToString();
+            MessageBox.Show("Se ha copiado el código de sublote " + codigo + " al portapapeles!");
+            Clipboard.SetText(codigo);
+        }
+        private void btndgvHistorialdeProducto(object sender, RoutedEventArgs e)
+        {
+            string codigo = (dgvDatos.SelectedItem as DataRowView)[4].ToString();
+            Clipboard.SetText(codigo);
+            Session.Producto_Historial_CodigoSublote = codigo;
+            winProducto_Historial winProducto_Historial = new winProducto_Historial();
+            winProducto_Historial.Show();
+        }
         void SelectLike()
         {
             try

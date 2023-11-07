@@ -208,7 +208,7 @@ namespace sisgesoriadao.Implementation
             string query = @"SELECT VC.idVentaComun AS ID, U.nombreUsuario AS Usuario, S.nombreSucursal AS Sucursal, CONCAT('Venta: ',VC.idVentaComun, ' ',GROUP_CONCAT('- ',PC.nombreProductoComun,' ', VCD.detalle, ' ',VCD.precioBOB SEPARATOR ' \n')) AS Detalle, VC.totalBOB AS 'Total Bs', VC.fechaRegistro AS 'Fecha' FROM Venta_Comun VC
                             INNER JOIN Usuario U ON U.idUsuario = VC.idUsuario
                             INNER JOIN Sucursal S ON S.idSucursal = VC.idSucursal
-                            INNER JOIN Venta_Comun_detalle VCD ON VCD.idVentaComun = VC.idVentaComun
+                            INNER JOIN Venta_Comun_Detalle VCD ON VCD.idVentaComun = VC.idVentaComun
                             INNER JOIN Producto_Comun PC ON PC.idProductoComun = VCD.idProductoComun
                             WHERE VC.estado = 1 AND VC.idSucursal IN (" + IdSucursales + ") AND VC.idUsuario IN (" + IdUsuarios + @")
                             AND VC.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
