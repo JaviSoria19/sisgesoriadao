@@ -188,7 +188,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            string query = @"SELECT C.idCotizacion AS ID, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCliente AS Cliente, C.nombreEmpresa AS Empresa, GROUP_CONCAT('- ',DC.cantidad, ' ', P.nombreProducto, ' ',cotizacionUSD,  ' $. | ',cotizacionBOB, ' Bs. ' SEPARATOR ' \n') AS Detalle, SUM(dc.cantidad*dc.cotizacionUSD) AS TotalUSD, SUM(dc.cantidad*dc.cotizacionBOB) AS TotalBOB, " + Session.FormatoFechaMySql("C.fechaRegistro") + @" AS FechaRegistro, DATE_FORMAT(C.tiempoEntrega, '%d/%m/%Y') AS FechaEntrega FROM Cotizacion C
+            string query = @"SELECT C.idCotizacion AS ID, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCliente AS Cliente, C.nombreEmpresa AS Empresa, GROUP_CONCAT('- ',DC.cantidad, ' ', P.nombreProducto, ' ',DC.cotizacionUSD,  ' $. | ',DC.cotizacionBOB, ' Bs. ' SEPARATOR ' \n') AS Detalle, SUM(DC.cantidad*DC.cotizacionUSD) AS TotalUSD, SUM(DC.cantidad*DC.cotizacionBOB) AS TotalBOB, " + Session.FormatoFechaMySql("C.fechaRegistro") + @" AS FechaRegistro, DATE_FORMAT(C.tiempoEntrega, '%d/%m/%Y') AS FechaEntrega FROM Cotizacion C
                             INNER JOIN Usuario U ON C.idUsuario = U.idUsuario
                             INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal
                             INNER JOIN Detalle_Cotizacion DC ON C.idCotizacion = DC.idCotizacion
@@ -209,7 +209,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime fechaInicio, DateTime fechaFin)
         {
-            string query = @"SELECT C.idCotizacion AS ID, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCliente AS Cliente, C.nombreEmpresa AS Empresa, GROUP_CONCAT('- ',DC.cantidad, ' ', P.nombreProducto, ' ',cotizacionUSD,  ' $. | ',cotizacionBOB, ' Bs. ' SEPARATOR ' \n') AS Detalle, SUM(dc.cantidad*dc.cotizacionUSD) AS TotalUSD, SUM(dc.cantidad*dc.cotizacionBOB) AS TotalBOB, " + Session.FormatoFechaMySql("C.fechaRegistro") + @" AS FechaRegistro, DATE_FORMAT(C.tiempoEntrega, '%d/%m/%Y') AS FechaEntrega FROM Cotizacion C
+            string query = @"SELECT C.idCotizacion AS ID, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCliente AS Cliente, C.nombreEmpresa AS Empresa, GROUP_CONCAT('- ',DC.cantidad, ' ', P.nombreProducto, ' ',DC.cotizacionUSD,  ' $. | ',DC.cotizacionBOB, ' Bs. ' SEPARATOR ' \n') AS Detalle, SUM(DC.cantidad*DC.cotizacionUSD) AS TotalUSD, SUM(DC.cantidad*DC.cotizacionBOB) AS TotalBOB, " + Session.FormatoFechaMySql("C.fechaRegistro") + @" AS FechaRegistro, DATE_FORMAT(C.tiempoEntrega, '%d/%m/%Y') AS FechaEntrega FROM Cotizacion C
                             INNER JOIN Usuario U ON C.idUsuario = U.idUsuario
                             INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal
                             INNER JOIN Detalle_Cotizacion DC ON C.idCotizacion = DC.idCotizacion
