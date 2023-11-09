@@ -79,10 +79,13 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding idProducto}" IsReadOnly="True" Visibility="Collapsed"/>
                     <DataGridTextColumn Header="Producto" Binding="{Binding nombreProducto}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Precio USD" Binding="{Binding precioUSD}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Precio $." Binding="{Binding precioUSD}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Precio Bs." Binding="{Binding precioBOB}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Total $." Binding="{Binding totalproductoUSD}"/>
-                    <DataGridTextColumn Header="Total Bs." Binding="{Binding totalproductoBOB}"/>
+                    <DataGridTextColumn Header="Cantidad" Binding="{Binding cantidad}"/>
+                    <DataGridTextColumn Header="P. Unitario $." Binding="{Binding totalproductoUSD}"/>
+                    <DataGridTextColumn Header="P. Unitario Bs." Binding="{Binding totalproductoBOB}"/>
+                    <DataGridTextColumn Header="Total $." Binding="{Binding totalcantidadUSD}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Total Bs." Binding="{Binding totalcantidadBOB}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Costo $." Binding="{Binding costoUSD}" IsReadOnly="True" Visibility="Collapsed"/>
                     
                     <DataGridTemplateColumn>

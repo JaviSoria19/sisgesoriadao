@@ -17,6 +17,7 @@ namespace sisgesoriadao
         public winCotizacion()
         {
             InitializeComponent();
+            WindowState = WindowState.Maximized;
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
@@ -36,6 +37,7 @@ namespace sisgesoriadao
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
+            Select();
         }
         private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
         {
@@ -59,28 +61,6 @@ namespace sisgesoriadao
         {
             dtpFechaFin.SelectedDate = DateTime.Today;
             dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
-        }
-        private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
-        {
-            Select();
-        }
-        private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)
-            {
-                try
-                {
-                    DataRowView d = (DataRowView)dgvDatos.SelectedItem;
-                    Session.IdCotizacion = int.Parse(d.Row.ItemArray[0].ToString());
-                    winCotizacion_Detalle winCotizacion_Detalle = new winCotizacion_Detalle();
-                    winCotizacion_Detalle.Show();
-                    dgvDatos.SelectedItem = null;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
         }
         private void Select()
         {
@@ -148,6 +128,44 @@ namespace sisgesoriadao
         {
             txtBuscar.Text = "";
             txtBuscar.Focus();
+        }
+
+        private void btndgvModificar(object sender, RoutedEventArgs e)
+        {
+            if (dgvDatos.Items.Count > 0)
+            {
+                try
+                {
+                    DataRowView d = (DataRowView)dgvDatos.SelectedItem;
+                    Session.IdCotizacion = int.Parse(d.Row.ItemArray[0].ToString());
+                    winCotizacion_Update winCotizacion_Update = new winCotizacion_Update();
+                    winCotizacion_Update.Show();
+                    dgvDatos.SelectedItem = null;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void btndgvImprimir(object sender, RoutedEventArgs e)
+        {
+            if (dgvDatos.Items.Count > 0)
+            {
+                try
+                {
+                    DataRowView d = (DataRowView)dgvDatos.SelectedItem;
+                    Session.IdCotizacion = int.Parse(d.Row.ItemArray[0].ToString());
+                    winCotizacion_Detalle winCotizacion_Detalle = new winCotizacion_Detalle();
+                    winCotizacion_Detalle.Show();
+                    dgvDatos.SelectedItem = null;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
     }
 }

@@ -144,18 +144,21 @@ namespace sisgesoriadao
                     txtProducto_Cantidad.Text = "";
                     txtProducto_PrecioUSD.Text = "";
                     txtProducto_PrecioBOB.Text = "";
-
+                    txtProducto_TotalCantidadUSD.Text = "";
+                    txtProducto_TotalCantidadBOB.Text = "";
                     DataTable dt_two = new DataTable();
                     dt_two = implCotizacion.SelectDetails(Session.IdCotizacion);
                     double totalUSD = 0, totalBOB = 0;
                     foreach (DataRow item in dt_two.Rows)
                     {
                         txtProducto_Descripcion.Text += item[2].ToString() + "\n \n";
-                        txtProducto_Cantidad.Text += "______\n \n";
+                        txtProducto_Cantidad.Text += item[10].ToString() + "\n \n";
                         txtProducto_PrecioUSD.Text += item[3].ToString() + "\n \n";
-                        totalUSD += double.Parse(item[3].ToString());
                         txtProducto_PrecioBOB.Text += item[4].ToString() + "\n \n";
-                        totalBOB += double.Parse(item[4].ToString());
+                        txtProducto_TotalCantidadUSD.Text += item[11].ToString() + "\n \n";
+                        txtProducto_TotalCantidadBOB.Text += item[12].ToString() + "\n \n";
+                        totalUSD += double.Parse(item[11].ToString());
+                        totalBOB += double.Parse(item[12].ToString());
                         clipboardTexto += item[2].ToString() + " $. " + item[3].ToString() + " Bs. " + item[4].ToString() + "\n";
                     }
                     txtVenta_TotalUSD.Text = Math.Round(totalUSD, 2) + " $.";

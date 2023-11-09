@@ -233,7 +233,7 @@
 
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="5">
                             <materialDesign:Card Margin="5" UniformCornerRadius="10" Background="Orange">
-                                <TextBlock x:Name="infoTotalSalesFromToday" FontSize="20" Text="VENTAS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
+                                <TextBlock x:Name="infoTotalSalesFromToday" FontSize="20" Text="HOY SE HAN CONCRETADO - VENTAS." Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
                             </materialDesign:Card>
                             <materialDesign:Card Margin="5" UniformCornerRadius="10" Background="Gold">
                                 <TextBlock x:Name="infoTotalProductsFromToday" FontSize="20" Text="PRODUCTOS VENDIDOS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>

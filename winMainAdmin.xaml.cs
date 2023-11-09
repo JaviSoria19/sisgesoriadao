@@ -187,7 +187,7 @@ namespace sisgesoriadao
             try
             {
                 implVenta = new VentaImpl();
-                infoTotalProductsFromToday.Text = "PRODUCTOS VENDIDOS DE HOY: " + implVenta.GetTodayProducts(DateTime.Today);
+                infoTotalProductsFromToday.Text = "HOY SE HAN CONCRETADO " + implVenta.GetTodayProducts(DateTime.Today) + " VENTAS.";
             }
             catch (Exception ex)
             {

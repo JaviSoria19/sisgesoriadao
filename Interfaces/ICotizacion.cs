@@ -6,8 +6,8 @@ namespace sisgesoriadao.Interfaces
 {
     public interface ICotizacion : IDao<Cotizacion>
     {
-        string InsertTransaction(List<Producto> ListaProductos, Cotizacion cotizacion);
-        string UpdateTransaction(List<Producto> ListaProductos, Cotizacion cotizacion);
+        string InsertTransaction(List<Producto> ListaProductos, Cotizacion cotizacion, List<short> ListaCantidades);
+        string UpdateTransaction(List<Producto> ListaProductos, Cotizacion cotizacion, List<short> ListaCantidades);
         string DeleteAfterQuotationProductTransaction(Cotizacion cotizacion, int IdProducto);
         Cotizacion Get(int id);
         DataTable SelectDetails(int idCotizacion);

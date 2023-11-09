@@ -19,6 +19,7 @@ namespace sisgesoriadao
         ProductoImpl implProducto;
         Producto producto;
         List<Producto> listaProductos = new List<Producto>();
+        List<short> listaCantidad = new List<short>();
         CotizacionImpl implCotizacion;
         Cotizacion cotizacion;
         private ObservableCollection<DataGridRowDetalleHelper> listaHelper = new ObservableCollection<DataGridRowDetalleHelper>();
@@ -69,6 +70,7 @@ namespace sisgesoriadao
                     if (MessageBox.Show("¿Está seguro de haber ingresado todos los datos correctamente? \nCantidad de productos ingresados en la cotización: " + listaHelper.Count + ". \nPresione SI para continuar.", "Confirmar cotización", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
                         listaProductos.Clear();
+                        listaCantidad.Clear();
                         if (tglOcultarUSD.IsChecked == true)
                         {
                             foreach (var item in listaHelper)
@@ -78,6 +80,7 @@ namespace sisgesoriadao
                                         item.idProducto, 0, item.totalproductoBOB
                                         )
                                     );
+                                listaCantidad.Add(item.cantidad);
                             }
                         }
                         else
@@ -89,10 +92,11 @@ namespace sisgesoriadao
                                         item.idProducto, item.totalproductoUSD, item.totalproductoBOB
                                         )
                                     );
+                                listaCantidad.Add(item.cantidad);
                             }
                         }
                         implCotizacion = new CotizacionImpl();
-                        string mensaje = implCotizacion.InsertTransaction(listaProductos, cotizacion);
+                        string mensaje = implCotizacion.InsertTransaction(listaProductos, cotizacion, listaCantidad);
                         if (mensaje == "COTIZACION REGISTRADA EXITOSAMENTE.")
                         {
                             MessageBox.Show(mensaje);
@@ -138,6 +142,7 @@ namespace sisgesoriadao
                     foreach (var item in listaHelper)
                     {
                         item.totalproductoUSD = 0;
+                        item.totalcantidadUSD = 0;
                     }
                 }
                 else
@@ -145,6 +150,7 @@ namespace sisgesoriadao
                     foreach (var item in listaHelper)
                     {
                         item.totalproductoUSD = Math.Round(item.totalproductoBOB / Session.Ajuste_Cambio_Dolar, 2);
+                        item.totalcantidadUSD = Math.Round(item.totalproductoUSD * item.cantidad, 2);
                     }
                 }
                 dgvProductos.Items.Refresh();
@@ -197,8 +203,11 @@ namespace sisgesoriadao
                                         nombreProducto = producto.NombreProducto,
                                         precioUSD = producto.PrecioVentaUSD,
                                         precioBOB = producto.PrecioVentaBOB,
+                                        cantidad = 1,
                                         totalproductoUSD = 0,
                                         totalproductoBOB = producto.PrecioVentaBOB,
+                                        totalcantidadUSD = 0,
+                                        totalcantidadBOB = producto.PrecioVentaBOB,
                                         costoUSD = producto.CostoUSD
                                     });
                                 }
@@ -210,8 +219,11 @@ namespace sisgesoriadao
                                         nombreProducto = producto.NombreProducto,
                                         precioUSD = producto.PrecioVentaUSD,
                                         precioBOB = producto.PrecioVentaBOB,
+                                        cantidad = 1,
                                         totalproductoUSD = producto.PrecioVentaUSD,
                                         totalproductoBOB = producto.PrecioVentaBOB,
+                                        totalcantidadUSD = producto.PrecioVentaUSD,
+                                        totalcantidadBOB = producto.PrecioVentaBOB,
                                         costoUSD = producto.CostoUSD
                                     });
                                 }
@@ -275,9 +287,13 @@ namespace sisgesoriadao
             {
                 if (indexSeleccionado == 4)
                 {
-                    ModificarFilaPorTotalUSD(dgvProductos.SelectedIndex, valorNuevo, filaSeleccionada);
+                    ModificarFilaPorCantidad(dgvProductos.SelectedIndex, valorNuevo, filaSeleccionada);
                 }
                 else if (indexSeleccionado == 5)
+                {
+                    ModificarFilaPorTotalUSD(dgvProductos.SelectedIndex, valorNuevo, filaSeleccionada);
+                }
+                else if (indexSeleccionado == 6)
                 {
                     ModificarFilaPorTotalBOB(dgvProductos.SelectedIndex, valorNuevo, filaSeleccionada);
                 }
@@ -290,6 +306,23 @@ namespace sisgesoriadao
                 this.Close();
             }
         }
+        private void ModificarFilaPorCantidad(int i, TextBox n, DataGridRowDetalleHelper fila)
+        {
+            short aux = short.Parse(n.Text);
+            if (aux > 0 && aux < 1000)
+            {
+                listaHelper[i].cantidad = aux;
+                listaHelper[i].totalcantidadUSD = Math.Round(aux * listaHelper[i].totalproductoUSD, 2);
+                listaHelper[i].totalcantidadBOB = Math.Round(aux * listaHelper[i].totalproductoBOB, 2);
+            }
+            else
+            {
+                MessageBox.Show("La cantidad ingresada debe ser mayor a 1 y menor 1000");
+                listaHelper[i].cantidad = 1;
+                listaHelper[i].totalcantidadUSD = Math.Round(listaHelper[i].cantidad * listaHelper[i].totalproductoUSD, 2);
+                listaHelper[i].totalcantidadBOB = Math.Round(listaHelper[i].cantidad * listaHelper[i].totalproductoBOB, 2);
+            }
+        }
         private void ModificarFilaPorTotalUSD(int i, TextBox n, DataGridRowDetalleHelper fila)
         {
             double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2); ;
@@ -300,6 +333,8 @@ namespace sisgesoriadao
                 //Asignación del total USD.
                 listaHelper[i].totalproductoUSD = double.Parse(n.Text.ToString());
                 listaHelper[i].totalproductoBOB = Math.Round(listaHelper[i].totalproductoUSD * Session.Ajuste_Cambio_Dolar, 2);
+                listaHelper[i].totalcantidadUSD = Math.Round(listaHelper[i].cantidad * listaHelper[i].totalproductoUSD, 2);
+                listaHelper[i].totalcantidadBOB = Math.Round(listaHelper[i].cantidad * listaHelper[i].totalproductoBOB, 2);
             }
             else
             {
@@ -319,6 +354,8 @@ namespace sisgesoriadao
                 //Asignación del total USD.
                 listaHelper[i].totalproductoBOB = double.Parse(n.Text.ToString());
                 listaHelper[i].totalproductoUSD = Math.Round(listaHelper[i].totalproductoBOB / Session.Ajuste_Cambio_Dolar, 2);
+                listaHelper[i].totalcantidadUSD = Math.Round(listaHelper[i].cantidad * listaHelper[i].totalproductoUSD, 2);
+                listaHelper[i].totalcantidadBOB = Math.Round(listaHelper[i].cantidad * listaHelper[i].totalproductoBOB, 2);
             }
             else
             {
@@ -362,8 +399,11 @@ namespace sisgesoriadao
             public string nombreProducto { get; set; }
             public double precioUSD { get; set; }
             public double precioBOB { get; set; }
+            public short cantidad { get; set; }
             public double totalproductoUSD { get; set; }
             public double totalproductoBOB { get; set; }
+            public double totalcantidadUSD { get; set; }
+            public double totalcantidadBOB { get; set; }
             public double costoUSD { get; set; }
         }
     }

@@ -8,7 +8,7 @@ namespace sisgesoriadao.Implementation
 {
     public class CotizacionImpl : DataBase, ICotizacion
     {
-        public string InsertTransaction(List<Producto> ListaProductos, Cotizacion Cotizacion)
+        public string InsertTransaction(List<Producto> ListaProductos, Cotizacion Cotizacion, List<short> ListaCantidades)
         {
             MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
             connection.Open();
@@ -34,17 +34,18 @@ namespace sisgesoriadao.Implementation
                 command.Parameters.AddWithValue("@telefono", Cotizacion.Telefono);
                 command.Parameters.AddWithValue("@tiempoEntrega", Cotizacion.TiempoEntrega);
                 command.ExecuteNonQuery();
-                foreach (var Producto in ListaProductos)
+                for (int i = 0; i < ListaProductos.Count; i++)
                 {
                     //LIMPIEZA DE PARÁMETROS YA UTILIZADOS EN EL CICLO ANTERIOR PARA PROSEGUIR, CASO CONTRARIO LANZA ERROR.
                     command.Parameters.Clear();
                     //REGISTRO DEL DETALLE DE LA COTIZACION.
-                    command.CommandText = @"INSERT INTO Detalle_Cotizacion (idCotizacion,idProducto,CotizacionUSD,CotizacionBOB) 
-                                VALUES ((SELECT MAX(idCotizacion) FROM Cotizacion WHERE idSucursal = @Session_idSucursal),@idProducto,@CotizacionUSD,@CotizacionBOB)";
+                    command.CommandText = @"INSERT INTO Detalle_Cotizacion (idCotizacion, idProducto, cantidad, cotizacionUSD, cotizacionBOB) 
+                                VALUES ((SELECT MAX(idCotizacion) FROM Cotizacion WHERE idSucursal = @Session_idSucursal),@idProducto,@cantidad,@cotizacionUSD,@cotizacionBOB)";
                     command.Parameters.AddWithValue("@Session_idSucursal", Session.Sucursal_IdSucursal);
-                    command.Parameters.AddWithValue("@idProducto", Producto.IdProducto);
-                    command.Parameters.AddWithValue("@CotizacionUSD", Producto.PrecioVentaUSD);
-                    command.Parameters.AddWithValue("@CotizacionBOB", Producto.PrecioVentaBOB);
+                    command.Parameters.AddWithValue("@idProducto", ListaProductos[i].IdProducto);
+                    command.Parameters.AddWithValue("@cantidad", ListaCantidades[i]);
+                    command.Parameters.AddWithValue("@cotizacionUSD", ListaProductos[i].PrecioVentaUSD);
+                    command.Parameters.AddWithValue("@cotizacionBOB", ListaProductos[i].PrecioVentaBOB);
                     command.ExecuteNonQuery();
                 }
                 myTrans.Commit();
@@ -70,7 +71,7 @@ namespace sisgesoriadao.Implementation
                 connection.Close();
             }
         }
-        public string UpdateTransaction(List<Producto> ListaProductos, Cotizacion cotizacion)
+        public string UpdateTransaction(List<Producto> ListaProductos, Cotizacion cotizacion, List<short> ListaCantidades)
         {
             MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
             connection.Open();
@@ -95,17 +96,18 @@ namespace sisgesoriadao.Implementation
                 command.Parameters.AddWithValue("@tiempoEntrega", cotizacion.TiempoEntrega);
                 command.Parameters.AddWithValue("@idCotizacion", cotizacion.IdCotizacion);
                 command.ExecuteNonQuery();
-                foreach (var Producto in ListaProductos)
+                for (int i = 0; i < ListaProductos.Count; i++)
                 {
                     //LIMPIEZA DE PARÁMETROS YA UTILIZADOS EN EL CICLO ANTERIOR PARA PROSEGUIR, CASO CONTRARIO LANZA ERROR.
                     command.Parameters.Clear();
                     //REGISTRO DEL DETALLE DE LA COTIZACION.
-                    command.CommandText = @"UPDATE Detalle_Cotizacion SET cotizacionUSD = @cotizacionUSD, cotizacionBOB = @cotizacionBOB
+                    command.CommandText = @"UPDATE Detalle_Cotizacion SET cantidad = @cantidad, cotizacionUSD = @cotizacionUSD, cotizacionBOB = @cotizacionBOB
                         WHERE idCotizacion = @idCotizacion AND idProducto = @idProducto";
                     command.Parameters.AddWithValue("@idCotizacion", cotizacion.IdCotizacion);
-                    command.Parameters.AddWithValue("@idProducto", Producto.IdProducto);
-                    command.Parameters.AddWithValue("@cotizacionUSD", Producto.PrecioVentaUSD);
-                    command.Parameters.AddWithValue("@cotizacionBOB", Producto.PrecioVentaBOB);
+                    command.Parameters.AddWithValue("@idProducto", ListaProductos[i].IdProducto);
+                    command.Parameters.AddWithValue("@cantidad", ListaCantidades[i]);
+                    command.Parameters.AddWithValue("@cotizacionUSD", ListaProductos[i].PrecioVentaUSD);
+                    command.Parameters.AddWithValue("@cotizacionBOB", ListaProductos[i].PrecioVentaBOB);
                     command.ExecuteNonQuery();
                 }
                 myTrans.Commit();
@@ -186,10 +188,11 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            string query = @"SELECT C.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCliente AS Cliente, C.nombreEmpresa AS Empresa, C.nit AS NIT, C.direccion AS Direccion, C.correo AS Correo, C.telefono AS Telefono, COUNT(DC.idCotizacion) AS 'Productos cotizados',C.fechaRegistro AS 'Fecha de Registro', C.tiempoEntrega AS 'Fecha de Entrega' FROM Cotizacion C
+            string query = @"SELECT C.idCotizacion AS ID, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCliente AS Cliente, C.nombreEmpresa AS Empresa, GROUP_CONCAT('- ',DC.cantidad, ' ', P.nombreProducto, ' ',cotizacionUSD,  ' $. | ',cotizacionBOB, ' Bs. ' SEPARATOR ' \n') AS Detalle, SUM(dc.cantidad*dc.cotizacionUSD) AS TotalUSD, SUM(dc.cantidad*dc.cotizacionBOB) AS TotalBOB, " + Session.FormatoFechaMySql("C.fechaRegistro") + @" AS FechaRegistro, DATE_FORMAT(C.tiempoEntrega, '%d/%m/%Y') AS FechaEntrega FROM Cotizacion C
                             INNER JOIN Usuario U ON C.idUsuario = U.idUsuario
                             INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal
                             INNER JOIN Detalle_Cotizacion DC ON C.idCotizacion = DC.idCotizacion
+                            INNER JOIN Producto P ON DC.idProducto = P.idProducto
                             WHERE C.estado = 1
                             GROUP BY C.idCotizacion
                             ORDER BY 1 DESC";
@@ -206,10 +209,11 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime fechaInicio, DateTime fechaFin)
         {
-            string query = @"SELECT C.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCliente AS Cliente, C.nombreEmpresa AS Empresa, C.nit AS NIT, C.direccion AS Direccion, C.correo AS Correo, C.telefono AS Telefono, COUNT(DC.idCotizacion) AS 'Productos cotizados',C.fechaRegistro AS 'Fecha de Registro', C.tiempoEntrega AS 'Fecha de Entrega' FROM Cotizacion C
+            string query = @"SELECT C.idCotizacion AS ID, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCliente AS Cliente, C.nombreEmpresa AS Empresa, GROUP_CONCAT('- ',DC.cantidad, ' ', P.nombreProducto, ' ',cotizacionUSD,  ' $. | ',cotizacionBOB, ' Bs. ' SEPARATOR ' \n') AS Detalle, SUM(dc.cantidad*dc.cotizacionUSD) AS TotalUSD, SUM(dc.cantidad*dc.cotizacionBOB) AS TotalBOB, " + Session.FormatoFechaMySql("C.fechaRegistro") + @" AS FechaRegistro, DATE_FORMAT(C.tiempoEntrega, '%d/%m/%Y') AS FechaEntrega FROM Cotizacion C
                             INNER JOIN Usuario U ON C.idUsuario = U.idUsuario
                             INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal
                             INNER JOIN Detalle_Cotizacion DC ON C.idCotizacion = DC.idCotizacion
+                            INNER JOIN Producto P ON DC.idProducto = P.idProducto
                             WHERE C.estado = 1 AND (U.nombreUsuario LIKE @search OR S.nombreSucursal LIKE @search OR C.idCotizacion LIKE @search OR C.nombreCliente LIKE @search OR C.nombreEmpresa LIKE @search OR C.nit LIKE @search OR C.telefono LIKE @search)
                             AND C.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY C.idCotizacion
@@ -230,7 +234,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectDetails(int idCotizacion)
         {
-            string query = @"SELECT DC.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, P.nombreProducto AS Producto, DC.CotizacionUSD AS 'Cotizacion USD', DC.CotizacionBOB AS 'Cotizacion BOB', " + Session.FormatoFechaMySql("C.fechaRegistro") + @" AS 'Fecha de Registro', P.idProducto AS IDProducto, P.costoUSD AS 'Costo USD', P.precioVentaUSD AS 'Precio USD', P.precioVentaBOB AS 'Precio BOB' FROM Detalle_Cotizacion DC
+            string query = @"SELECT DC.idCotizacion AS 'Nro', S.nombreSucursal AS Sucursal, P.nombreProducto AS Producto, DC.CotizacionUSD AS 'Cotizacion USD', DC.CotizacionBOB AS 'Cotizacion BOB', " + Session.FormatoFechaMySql("C.fechaRegistro") + @" AS 'Fecha de Registro', P.idProducto AS IDProducto, P.costoUSD AS 'Costo USD', P.precioVentaUSD AS 'Precio USD', P.precioVentaBOB AS 'Precio BOB', DC.cantidad AS Cantidad, DC.cantidad * DC.cotizacionUSD AS 'Total USD', DC.cantidad * DC.cotizacionBOB AS 'Total BOB' FROM Detalle_Cotizacion DC
                             INNER JOIN Producto P ON DC.idProducto = P.idProducto
                             INNER JOIN Cotizacion C ON DC.idCotizacion = C.idCotizacion 
                             INNER JOIN Sucursal S ON C.idSucursal = S.idSucursal

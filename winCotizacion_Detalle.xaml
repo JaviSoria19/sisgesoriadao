@@ -84,32 +84,40 @@
                     <StackPanel Margin="10" Grid.Row="2" HorizontalAlignment="Stretch">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="5*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="40*"/>
+                                <ColumnDefinition Width="12*"/>
+                                <ColumnDefinition Width="12*"/>
+                                <ColumnDefinition Width="12*"/>
+                                <ColumnDefinition Width="12*"/>
+                                <ColumnDefinition Width="12*"/>
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" Text="DESCRIPCION" FontSize="15" FontWeight="DemiBold" Margin="20,0" TextAlignment="Center"/>
                             <TextBlock Grid.Column="1" Text="CANTIDAD" FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
-                            <TextBlock Grid.Column="2" Text="PRECIO $." FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
-                            <TextBlock Grid.Column="3" Text="PRECIO Bs." FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="P. UNITARIO $." FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="P. UNITARIO Bs." FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text="TOTAL $." FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="5" Text="TOTAL Bs." FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
                         </Grid>
 
                         <Rectangle Fill="Black" Height="1" Margin="20,5"/>
 
                         <Grid MinHeight="100">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="5*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="40*"/>
+                                <ColumnDefinition Width="12*"/>
+                                <ColumnDefinition Width="12*"/>
+                                <ColumnDefinition Width="12*"/>
+                                <ColumnDefinition Width="12*"/>
+                                <ColumnDefinition Width="12*"/>
                             </Grid.ColumnDefinitions>
 
                             <TextBlock x:Name="txtProducto_Descripcion" Grid.Column="0" Text="PRODUCTO_DESCRIPCION" FontSize="15" Margin="20,0" TextWrapping="Wrap"/>
-                            <TextBlock x:Name="txtProducto_Cantidad" Grid.Column="1" Text="_____" FontSize="15" TextAlignment="Center"/>
+                            <TextBlock x:Name="txtProducto_Cantidad" Grid.Column="1" Text="0" FontSize="15" TextAlignment="Center"/>
                             <TextBlock x:Name="txtProducto_PrecioUSD" Grid.Column="2" Text="0" FontSize="15" TextAlignment="Center"/>
                             <TextBlock x:Name="txtProducto_PrecioBOB" Grid.Column="3" Text="0" FontSize="15" TextAlignment="Center"/>
+                            <TextBlock x:Name="txtProducto_TotalCantidadUSD" Grid.Column="4" Text="0" FontSize="15" TextAlignment="Center"/>
+                            <TextBlock x:Name="txtProducto_TotalCantidadBOB" Grid.Column="5" Text="0" FontSize="15" TextAlignment="Center"/>
                         </Grid>
 
                         <Rectangle Fill="Black" Height="1" Margin="20,5"/>
@@ -124,10 +132,10 @@
                                     <Rectangle Fill="Black" Height="1" Margin="0,2"/>
                                     <TextBlock Text="Conformidad Cliente" FontSize="15" HorizontalAlignment="Center" Margin="50,0"/>
                                 </StackPanel>
-                                <StackPanel Margin="400,0,60,0" VerticalAlignment="Top" Background="LightGray">
+                                <StackPanel Margin="400,0,80,0" VerticalAlignment="Top" Background="LightGray">
                                     <TextBlock Text="TOTAL: " FontWeight="Bold" FontSize="15" HorizontalAlignment="Right"/>
                                 </StackPanel>
-                                <StackPanel Margin="-60,0" Orientation="Vertical" VerticalAlignment="Top" Background="LightGray">
+                                <StackPanel Margin="-80,0" Orientation="Vertical" VerticalAlignment="Top" Background="LightGray">
                                     <TextBlock x:Name="txtVenta_TotalBOB" Text="0" FontWeight="Bold" FontSize="15" HorizontalAlignment="Right"/>
                                     <TextBlock x:Name="txtVenta_TotalUSD" Text="0" FontWeight="Bold" FontSize="15" HorizontalAlignment="Right"/>
                                 </StackPanel>
