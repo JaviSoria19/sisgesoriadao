@@ -169,12 +169,14 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
-
         private void btnCopy_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAPortapapeles(dgvDatos);
         }
-
+        private void btnExcel_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvDatos);
+        }
         void cbxGetUsuarioFromDatabase()
         {
             try

@@ -134,17 +134,16 @@
             </StackPanel>
 
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                <StackPanel Orientation="Horizontal" Margin="20">
-                    <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="Orange">
-                        <TextBlock x:Name="infoTotalSalesFromToday" FontSize="20" Text="VENTAS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="5">
+                    <materialDesign:Card Margin="5" UniformCornerRadius="10" Background="Orange">
+                        <TextBlock x:Name="infoTotalSalesFromToday" FontSize="20" Text="HOY SE HAN CONCRETADO - VENTAS." Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
                     </materialDesign:Card>
-                    <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="Gold">
+                    <materialDesign:Card Margin="5" UniformCornerRadius="10" Background="Gold">
                         <TextBlock x:Name="infoTotalProductsFromToday" FontSize="20" Text="PRODUCTOS VENDIDOS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
                     </materialDesign:Card>
-                    <materialDesign:Card Margin="10" UniformCornerRadius="10" Background="LimeGreen">
+                    <materialDesign:Card Margin="5" UniformCornerRadius="10" Background="LimeGreen">
                         <TextBlock x:Name="infoCashAmount" FontSize="20" Text="EFECTIVO EN CAJA: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
                     </materialDesign:Card>
-
                 </StackPanel>
 
             </StackPanel>

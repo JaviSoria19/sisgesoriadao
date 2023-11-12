@@ -320,15 +320,21 @@ namespace sisgesoriadao
             winProducto_Historial winProducto_Historial = new winProducto_Historial();
             winProducto_Historial.Show();
         }
-
         private void btnCopy_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAPortapapeles(dgvDatosVerificados);
         }
-
         private void btnCopy2_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAPortapapeles(dgvDatos);
+        }
+        private void btnExcel_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvDatosVerificados);
+        }
+        private void btnExcel2_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvDatos);
         }
 
         private void dgvDatosVerificados_Loaded(object sender, RoutedEventArgs e)

@@ -331,5 +331,10 @@ namespace sisgesoriadao
         {
             Session.ExportarAPortapapeles(dgvDatos);
         }
+
+        private void btnExcel_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvDatos);
+        }
     }
 }

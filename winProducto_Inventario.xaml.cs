@@ -239,12 +239,14 @@ namespace sisgesoriadao
             winProducto_Historial winProducto_Historial = new winProducto_Historial();
             winProducto_Historial.Show();
         }
-
         private void btnCopy_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAPortapapeles(dgvDatos);
         }
-
+        private void btnExcel_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvDatos);
+        }
         void SelectLike()
         {
             try

@@ -348,17 +348,22 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
-
         private void btnCopy_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAPortapapeles(dgvDatos);
         }
-
         private void btnCopy2_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAPortapapeles(dgvDetalles);
         }
-
+        private void btnExcel_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvDatos);
+        }
+        private void btnExcel2_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvDetalles);
+        }
         private void SelectLike(string tipoCajas, string idUsuarios)
         {
             try

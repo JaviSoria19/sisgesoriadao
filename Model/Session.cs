@@ -8,7 +8,7 @@ namespace sisgesoriadao.Model
     {
         //Cadena de conexión requerida para llamar a la base de datos.
         public static string CadenaConexionBdD { get; set; } = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
-        public static string VersionApp { get; set; } = "v. 1.6.2";
+        public static string VersionApp { get; set; } = "v. 1.7";
         //Atributo indispensable para manejar la totalidad del sistema.
         public static byte IdUsuario { get; set; }
         //Atributo de referencia para dar a conocer al usuario que ha iniciado sesión correctamente.
@@ -61,10 +61,13 @@ namespace sisgesoriadao.Model
             {
                 int columnasConTexto = 0;
                 int columnaOculta = -1;
+                /*ITERACION DE ENCABEZADOS*/
                 foreach (var item in dataGrid.Columns)
                 {
+                    /*SI EL ENCABEZADO NO ESTÁ VACIO, SE COPIARÁ*/
                     if (item.Header != null)
                     {
+                        /*SI LA COLUMNA NO ESTÁ OCULTA, SE COPIARÁ, CASO CONTRARIO SE GUARDARÁ EL ÍNDICE PARA NO COPIAR LOS DATOS DE ESA COLUMNA*/
                         if (item.Visibility != Visibility.Collapsed)
                         {
                             portapapeles += item.Header + ",";
@@ -76,16 +79,22 @@ namespace sisgesoriadao.Model
                         columnasConTexto++;
                     }
                 }
+                /*REMUEVE EL ÚLTIMO CARACTER (COMA [,]) DE LA ITERACIÓN DE ENCABEZADOS*/
                 portapapeles = portapapeles.Remove(portapapeles.Length - 1, 1);
+                /*ITERACION DE DATOS DE LA TABLA*/
                 foreach (DataRowView row in dataGrid.Items)
                 {
                     portapapeles += "\n";
+                    /*RECORRIDO DE CADA COLUMNA DE 1 SOLA FILA*/
                     for (int i = 0; i < columnasConTexto; i++)
                     {
+                        /*SI LA COLUMNA ITERADA NO ES UN BOTÓN, CONTINUAR*/
                         if (row[i] != (row[i] as Button))
                         {
+                            /*SI EL INDICE ITERADO NO ES IGUAL AL INDICE DE LA COLUMNA OCULTA, COPIAR*/
                             if (i != columnaOculta)
                             {
+                                /*SI CONTIENE SALTOS DE LINEA, LIMPIARLOS Y COPIARLO, CASO CONTRARIO SOLO COPIARLO*/
                                 if (row[i].ToString().Contains("\n"))
                                 {
                                     portapapeles += row[i].ToString().Replace("\n", "") + ",";
@@ -105,6 +114,72 @@ namespace sisgesoriadao.Model
             else
             {
                 MessageBox.Show("¡Para exportar al portapapeles debe haber por lo menos 1 registro!");
+            }
+        }
+        public static void ExportarAExcel(DataGrid dataGrid)
+        {
+            if (dataGrid.Items.Count > 0)
+            {
+                int columnasConTexto = 0;
+                int columnaOculta = -1;
+                Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
+                excel.Application.Workbooks.Add(true);
+                int IndiceColumna = 0;
+                /*ITERACION DE ENCABEZADOS*/
+                foreach (var item in dataGrid.Columns)
+                {
+                    /*SI EL ENCABEZADO NO ESTÁ VACIO, SE EXPORTARÁ*/
+                    if (item.Header != null)
+                    {
+                        /*SI LA COLUMNA NO ESTÁ OCULTA, SE EXPORTARÁ, CASO CONTRARIO SE GUARDARÁ EL ÍNDICE PARA NO EXPORTAR LOS DATOS DE ESA COLUMNA*/
+                        if (item.Visibility != Visibility.Collapsed)
+                        {
+                            IndiceColumna++;
+                            excel.Cells[1, IndiceColumna] = item.Header;
+                        }
+                        else
+                        {
+                            columnaOculta = item.DisplayIndex;
+                        }
+                        columnasConTexto++;
+                    }
+                }
+                int IndeceFila = 0;
+                /*ITERACION DE DATOS DE LA TABLA*/
+                foreach (DataRowView row in dataGrid.Items)
+                {
+                    IndeceFila++;
+                    IndiceColumna = 0;
+                    /*RECORRIDO DE CADA COLUMNA DE 1 SOLA FILA*/
+                    for (int i = 0; i < columnasConTexto; i++)
+                    {
+                        /*SI LA COLUMNA ITERADA NO ES UN BOTÓN, CONTINUAR*/
+                        if (row[i] != (row[i] as Button))
+                        {
+                            /*SI EL INDICE ITERADO NO ES IGUAL AL INDICE DE LA COLUMNA OCULTA, EXPORTAR*/
+                            if (i != columnaOculta)
+                            {
+                                IndiceColumna++;
+                                /*SI CONTIENE SALTOS DE LINEA, LIMPIARLOS Y EXPORTARLO, CASO CONTRARIO SOLO EXPORTARLO*/
+                                if (row[i].ToString().Contains("\n"))
+                                {
+                                    excel.Cells[IndeceFila + 1, IndiceColumna] = row[i].ToString().Replace("\n", "") + ",";
+                                }
+                                else
+                                {
+                                    excel.Cells[IndeceFila + 1, IndiceColumna] = row[i].ToString();
+                                }
+                            }
+                        }
+                    }
+                }
+                MessageBox.Show("¡Se ha exportado " + dataGrid.Items.Count + " registros a Excel!");
+                /*DESPLEGAR AL USUARIO LA VENTANA DE EXCEL*/
+                excel.Visible = true;
+            }
+            else
+            {
+                MessageBox.Show("¡Para exportar a Excel debe haber por lo menos 1 registro!");
             }
         }
     }

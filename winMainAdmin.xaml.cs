@@ -178,7 +178,7 @@ namespace sisgesoriadao
             try
             {
                 implVenta = new VentaImpl();
-                infoTotalSalesFromToday.Text = "VENTAS DE HOY: " + implVenta.GetTodaySales(DateTime.Today);
+                infoTotalSalesFromToday.Text = "HOY SE HAN CONCRETADO " + implVenta.GetTodaySales(DateTime.Today) + " VENTAS.";
             }
             catch (Exception ex)
             {
@@ -187,7 +187,7 @@ namespace sisgesoriadao
             try
             {
                 implVenta = new VentaImpl();
-                infoTotalProductsFromToday.Text = "HOY SE HAN CONCRETADO " + implVenta.GetTodayProducts(DateTime.Today) + " VENTAS.";
+                infoTotalProductsFromToday.Text = "PRODUCTOS VENDIDOS DE HOY: " + implVenta.GetTodayProducts(DateTime.Today);
             }
             catch (Exception ex)
             {

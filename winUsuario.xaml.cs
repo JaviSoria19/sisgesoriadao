@@ -420,7 +420,6 @@ namespace sisgesoriadao
                 return Text;
             }
         }
-
         private void btnErase_Click(object sender, RoutedEventArgs e)
         {
             CleanText();
@@ -430,15 +429,21 @@ namespace sisgesoriadao
             txtBuscar.Text = "";
             txtBuscar.Focus();
         }
-
         private void btnCopy_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAPortapapeles(dgvDatos);
         }
-
         private void btnCopy2_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAPortapapeles(dgvEmpleados);
+        }
+        private void btnExcel_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvDatos);
+        }
+        private void btnExcel2_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvEmpleados);
         }
     }
 }

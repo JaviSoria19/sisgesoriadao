@@ -220,15 +220,21 @@ namespace sisgesoriadao
 
             }
         }
-
         private void btnCopy_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAPortapapeles(dgvDatos);
         }
-
         private void btnCopy2_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAPortapapeles(dgvDetalle);
+        }
+        private void btnExcel_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvDatos);
+        }
+        private void btnExcel2_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvDetalle);
         }
     }
 }

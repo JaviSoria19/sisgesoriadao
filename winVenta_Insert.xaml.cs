@@ -146,6 +146,8 @@ namespace sisgesoriadao
                                 stackpanelCustomerFound.Visibility = Visibility.Visible;
                                 stackpanelCustomerForm.Visibility = Visibility.Collapsed;
                                 stackpanelCustomerButtons.Visibility = Visibility.Collapsed;
+                                btnAddCustomer.IsEnabled = true;
+                                btnEditCustomer.IsEnabled = true;
                             }
                         }
                         catch (Exception)
@@ -513,6 +515,7 @@ namespace sisgesoriadao
                         acbtxtNameCustomer.Text = cliente.Nombre.Trim();
                         lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
                         lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
+                        btnEditCustomer.IsEnabled = true;
                     }
                     else
                     {

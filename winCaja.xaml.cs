@@ -327,7 +327,6 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
-
         private void btnCopy_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAPortapapeles(dgvDatos);
@@ -335,6 +334,14 @@ namespace sisgesoriadao
         private void btnCopy2_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAPortapapeles(dgvVentasPendientes);
+        }
+        private void btnExcel_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvDatos);
+        }
+        private void btnExcel2_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvVentasPendientes);
         }
     }
 }
