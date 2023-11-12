@@ -242,5 +242,9 @@ namespace sisgesoriadao
             return !_regex.IsMatch(text);
         }
         //------------------------------------------------------><---------------------------------------------
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPortapapeles(dgvDatos);
+        }
     }
 }

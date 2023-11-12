@@ -49,11 +49,14 @@
                 </Button>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                <Button x:Name="btnPrintPDF" Content="GENERAR PDF" Click="btnPrintPDF_Click" IsEnabled="False" Background="White" Foreground="Black" BorderBrush="Black"/>
-            </StackPanel>
 
             <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
+                    <Button x:Name="btnPrintPDF" Content="GENERAR PDF" Click="btnPrintPDF_Click" IsEnabled="False" Background="White" Foreground="Black" BorderBrush="Black"/>
+                    <Button x:Name="btnCopy" ToolTip="EXPORTAR TABLA AL PORTAPAPELES" Margin="15,0,0,0" Click="btnCopy_Click" Background="White" Foreground="Black" BorderBrush="Black">
+                        <materialDesign:PackIcon Kind="ContentCopy" Width="50"/>
+                    </Button>
+                </StackPanel>
                 <Border BorderBrush="Gray" BorderThickness="2">
                     <DataGrid x:Name="dgvDatos" AutoGenerateColumns="False"
                   HorizontalAlignment="Left" VerticalAlignment="Top" GridLinesVisibility="Horizontal"

@@ -54,6 +54,12 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPortapapeles(dgvDatos);
+        }
+
         private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)

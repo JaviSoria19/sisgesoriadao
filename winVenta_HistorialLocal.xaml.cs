@@ -219,5 +219,9 @@ namespace sisgesoriadao
                 }
             }
         }
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPortapapeles(dgvDatos);
+        }
     }
 }

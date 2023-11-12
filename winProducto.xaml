@@ -91,6 +91,11 @@
                     <TextBlock x:Name="txtTotalProductosVentaUSD" Text="T. Venta USD: " Margin="0,0,30,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
                     <TextBlock x:Name="txtTotalProductosVentaBOB" Text="T. Venta BOB: " Margin="0,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
+                    <Button x:Name="btnCopy" ToolTip="EXPORTAR TABLA AL PORTAPAPELES" Margin="0,0,0,0" Click="btnCopy_Click" Background="White" Foreground="Black" BorderBrush="Black">
+                        <materialDesign:PackIcon Kind="ContentCopy" Width="50"/>
+                    </Button>
+                </StackPanel>
                 <Border BorderBrush="Gray" BorderThickness="2">
                     <DataGrid x:Name="dgvDatos"
                   HorizontalAlignment="Left" VerticalAlignment="Top"

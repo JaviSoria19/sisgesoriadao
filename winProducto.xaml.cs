@@ -483,6 +483,11 @@ namespace sisgesoriadao
             txtBuscar.Focus();
         }
 
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPortapapeles(dgvDatos);
+        }
+
         public void labelDanger(Label label)
         {
             label.Foreground = new SolidColorBrush(Colors.Black);

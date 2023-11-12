@@ -53,6 +53,11 @@
 
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
                 <Label x:Name="lblInfo" Content="" Foreground="Blue" Background="Transparent" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
+                    <Button x:Name="btnCopy" ToolTip="EXPORTAR TABLA AL PORTAPAPELES" Margin="0,0,0,0" Click="btnCopy_Click" Background="White" Foreground="Black" BorderBrush="Black">
+                        <materialDesign:PackIcon Kind="ContentCopy" Width="50"/>
+                    </Button>
+                </StackPanel>
                 <Border BorderBrush="Gray" BorderThickness="2">
                     <DataGrid x:Name="dgvDatos"
                   HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -66,6 +71,11 @@
 
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
                 <TextBlock Text="DETALLE DE TRANSFERENCIA:" FontWeight="Bold" FontSize="16" Margin="0,20,0,10" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
+                    <Button x:Name="btnCopy2" ToolTip="EXPORTAR TABLA AL PORTAPAPELES" Margin="0,0,0,0" Click="btnCopy2_Click" Background="White" Foreground="Black" BorderBrush="Black">
+                        <materialDesign:PackIcon Kind="ContentCopy" Width="50"/>
+                    </Button>
+                </StackPanel>
                 <Border BorderBrush="Gray" BorderThickness="2">
                     <DataGrid x:Name="dgvDetalle"
                   HorizontalAlignment="Left" VerticalAlignment="Top" GridLinesVisibility="Horizontal"

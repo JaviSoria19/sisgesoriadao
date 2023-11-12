@@ -327,5 +327,14 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPortapapeles(dgvDatos);
+        }
+        private void btnCopy2_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPortapapeles(dgvVentasPendientes);
+        }
     }
 }

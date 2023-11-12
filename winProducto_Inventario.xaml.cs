@@ -239,6 +239,12 @@ namespace sisgesoriadao
             winProducto_Historial winProducto_Historial = new winProducto_Historial();
             winProducto_Historial.Show();
         }
+
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPortapapeles(dgvDatos);
+        }
+
         void SelectLike()
         {
             try

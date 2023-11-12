@@ -321,5 +321,10 @@ namespace sisgesoriadao
             txtBuscar.Text = "";
             txtBuscar.Focus();
         }
+
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPortapapeles(dgvDatos);
+        }
     }
 }

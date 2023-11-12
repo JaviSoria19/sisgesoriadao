@@ -1,10 +1,14 @@
-﻿namespace sisgesoriadao.Model
+﻿using System.Data;
+using System.Windows;
+using System.Windows.Controls;
+
+namespace sisgesoriadao.Model
 {
     public static class Session
     {
         //Cadena de conexión requerida para llamar a la base de datos.
         public static string CadenaConexionBdD { get; set; } = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
-        public static string VersionApp { get; set; } = "v. 1.6.1";
+        public static string VersionApp { get; set; } = "v. 1.6.2";
         //Atributo indispensable para manejar la totalidad del sistema.
         public static byte IdUsuario { get; set; }
         //Atributo de referencia para dar a conocer al usuario que ha iniciado sesión correctamente.
@@ -48,6 +52,59 @@
                     return "DATE_FORMAT(" + MySqlAtributoFecha + " + INTERVAL " + IntervaloHora + " HOUR,'%Y/%m/%d %T')";
                 default:
                     return MySqlAtributoFecha;
+            }
+        }
+        public static void ExportarAPortapapeles(DataGrid dataGrid)
+        {
+            string portapapeles = "";
+            if (dataGrid.Items.Count > 0)
+            {
+                int columnasConTexto = 0;
+                int columnaOculta = -1;
+                foreach (var item in dataGrid.Columns)
+                {
+                    if (item.Header != null)
+                    {
+                        if (item.Visibility != Visibility.Collapsed)
+                        {
+                            portapapeles += item.Header + ",";
+                        }
+                        else
+                        {
+                            columnaOculta = item.DisplayIndex;
+                        }
+                        columnasConTexto++;
+                    }
+                }
+                portapapeles = portapapeles.Remove(portapapeles.Length - 1, 1);
+                foreach (DataRowView row in dataGrid.Items)
+                {
+                    portapapeles += "\n";
+                    for (int i = 0; i < columnasConTexto; i++)
+                    {
+                        if (row[i] != (row[i] as Button))
+                        {
+                            if (i != columnaOculta)
+                            {
+                                if (row[i].ToString().Contains("\n"))
+                                {
+                                    portapapeles += row[i].ToString().Replace("\n", "") + ",";
+                                }
+                                else
+                                {
+                                    portapapeles += row[i].ToString() + ",";
+                                }
+                            }
+                        }
+                    }
+                    portapapeles = portapapeles.Remove(portapapeles.Length - 1, 1);
+                }
+                Clipboard.SetText(portapapeles);
+                MessageBox.Show("¡Se han copiado " + dataGrid.Items.Count + " registros al portapapeles!");
+            }
+            else
+            {
+                MessageBox.Show("¡Para exportar al portapapeles debe haber por lo menos 1 registro!");
             }
         }
     }
