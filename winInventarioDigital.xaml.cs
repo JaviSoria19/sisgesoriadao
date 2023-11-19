@@ -336,7 +336,14 @@ namespace sisgesoriadao
         {
             Session.ExportarAExcel(dgvDatos);
         }
-
+        private void btnPDF_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvDatosVerificados, "PRODUCTOS_VERIFICADOS");
+        }
+        private void btnPDF2_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvDatos, "PRODUCTOS_PENDIENTES");
+        }
         private void dgvDatosVerificados_Loaded(object sender, RoutedEventArgs e)
         {
             DataGridTextColumn columna1 = new DataGridTextColumn

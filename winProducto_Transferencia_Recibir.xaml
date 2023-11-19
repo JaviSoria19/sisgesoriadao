@@ -49,6 +49,17 @@
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
                 <TextBlock Text="PRODUCTOS PENDIENTES PARA CONFIRMAR:" FontWeight="Bold" Margin="10"/>
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
+                    <Button x:Name="btnCopy" ToolTip="EXPORTAR TABLA AL PORTAPAPELES" Margin="0,0,0,0" Click="btnCopy_Click" Background="White" Foreground="Black" BorderBrush="Black">
+                        <materialDesign:PackIcon Kind="ContentCopy" Width="50"/>
+                    </Button>
+                    <Button x:Name="btnExcel" ToolTip="EXPORTAR TABLA A EXCEL" Margin="15,0,0,0" Click="btnExcel_Click" Background="DarkGreen" Foreground="White" BorderBrush="DarkGreen">
+                        <materialDesign:PackIcon Kind="MicrosoftExcel" Width="50"/>
+                    </Button>
+                    <Button x:Name="btnPDF" ToolTip="EXPORTAR TABLA A PDF" Margin="15,0,0,0" Click="btnPDF_Click" Background="Red" Foreground="White" BorderBrush="Red">
+                        <materialDesign:PackIcon Kind="FilePdfBox" Width="50"/>
+                    </Button>
+                </StackPanel>
                 <Border BorderBrush="Gray" BorderThickness="2">
                     <DataGrid x:Name="dgvDatos"
                   HorizontalAlignment="Left" VerticalAlignment="Top"

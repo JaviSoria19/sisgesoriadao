@@ -343,5 +343,13 @@ namespace sisgesoriadao
         {
             Session.ExportarAExcel(dgvVentasPendientes);
         }
+        private void btnPDF_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvDatos, "PAGOS_POR_VENTAS");
+        }
+        private void btnPDF2_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvVentasPendientes, "VENTAS_PENDIENTES");
+        }
     }
 }

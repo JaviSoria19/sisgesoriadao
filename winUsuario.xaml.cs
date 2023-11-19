@@ -445,5 +445,13 @@ namespace sisgesoriadao
         {
             Session.ExportarAExcel(dgvEmpleados);
         }
+        private void btnPDF_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvDatos, "USUARIOS");
+        }
+        private void btnPDF2_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvEmpleados, "EMPLEADOS_SIN_USUARIO");
+        }
     }
 }

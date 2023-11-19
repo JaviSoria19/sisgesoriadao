@@ -135,5 +135,10 @@ namespace sisgesoriadao
         {
             Session.ExportarAExcel(dgvDatos);
         }
+
+        private void btnPDF_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvDatos, "VENTAS_ELIMINADAS");
+        }
     }
 }

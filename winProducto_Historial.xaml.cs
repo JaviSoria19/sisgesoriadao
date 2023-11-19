@@ -1,6 +1,7 @@
 ﻿using sisgesoriadao.Implementation;
 using sisgesoriadao.Model;
 using System;
+using System.Data;
 using System.Windows;
 using System.Windows.Input;
 namespace sisgesoriadao
@@ -66,6 +67,8 @@ namespace sisgesoriadao
                 if (n > 0)
                 {
                     lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implProducto.SelectProductHistory(txtBuscar.Text).Rows.Count;
+                    DataRowView d = (DataRowView)dgvDatos.Items[0];
+                    Session.Producto_Historial_CodigoSublote = d.Row.ItemArray[0].ToString();
                 }
                 else
                 {
@@ -93,6 +96,10 @@ namespace sisgesoriadao
         private void btnExcel_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAExcel(dgvDatos);
+        }
+        private void btnPDF_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvDatos, "HISTORIAL_" + Session.Producto_Historial_CodigoSublote);
         }
     }
 }

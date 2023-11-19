@@ -62,6 +62,12 @@ namespace sisgesoriadao
         {
             Session.ExportarAExcel(dgvDatos);
         }
+
+        private void btnPDF_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvDatos, "SALDOS_PENDIENTES");
+        }
+
         private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)

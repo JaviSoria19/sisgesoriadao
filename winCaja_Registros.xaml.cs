@@ -364,6 +364,16 @@ namespace sisgesoriadao
         {
             Session.ExportarAExcel(dgvDetalles);
         }
+        private void btnPDF_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvDatos, "REGISTROS_CAJAS");
+        }
+
+        private void btnPDF2_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvDetalles, "CAJA_DETALLE");
+        }
+
         private void SelectLike(string tipoCajas, string idUsuarios)
         {
             try

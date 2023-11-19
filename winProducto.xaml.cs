@@ -490,6 +490,12 @@ namespace sisgesoriadao
         {
             Session.ExportarAExcel(dgvDatos);
         }
+
+        private void btnPDF_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvDatos, "REPORTE_VALORADO");
+        }
+
         public void labelDanger(Label label)
         {
             label.Foreground = new SolidColorBrush(Colors.Black);

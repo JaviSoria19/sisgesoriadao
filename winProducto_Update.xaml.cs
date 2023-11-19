@@ -466,5 +466,10 @@ namespace sisgesoriadao
         {
             Session.ExportarAExcel(dgvProductos);
         }
+
+        private void btnPDF_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvProductos, "LOTE_PRODUCTOS");
+        }
     }
 }

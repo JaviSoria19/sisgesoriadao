@@ -1,4 +1,8 @@
-﻿using System.Data;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System;
+using System.Data;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -8,7 +12,7 @@ namespace sisgesoriadao.Model
     {
         //Cadena de conexión requerida para llamar a la base de datos.
         public static string CadenaConexionBdD { get; set; } = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
-        public static string VersionApp { get; set; } = "v. 1.7";
+        public static string VersionApp { get; set; } = "v. 1.7.1";
         //Atributo indispensable para manejar la totalidad del sistema.
         public static byte IdUsuario { get; set; }
         //Atributo de referencia para dar a conocer al usuario que ha iniciado sesión correctamente.
@@ -70,7 +74,7 @@ namespace sisgesoriadao.Model
                         /*SI LA COLUMNA NO ESTÁ OCULTA, SE COPIARÁ, CASO CONTRARIO SE GUARDARÁ EL ÍNDICE PARA NO COPIAR LOS DATOS DE ESA COLUMNA*/
                         if (item.Visibility != Visibility.Collapsed)
                         {
-                            portapapeles += item.Header + ",";
+                            portapapeles += item.Header.ToString().ToUpper() + ",";
                         }
                         else
                         {
@@ -135,7 +139,7 @@ namespace sisgesoriadao.Model
                         if (item.Visibility != Visibility.Collapsed)
                         {
                             IndiceColumna++;
-                            excel.Cells[1, IndiceColumna] = item.Header;
+                            excel.Cells[1, IndiceColumna] = item.Header.ToString().ToUpper();
                         }
                         else
                         {
@@ -180,6 +184,107 @@ namespace sisgesoriadao.Model
             else
             {
                 MessageBox.Show("¡Para exportar a Excel debe haber por lo menos 1 registro!");
+            }
+        }
+        public static void ExportarAPDF(DataGrid dataGrid, string titulo)
+        {
+            if (dataGrid.Items.Count > 0)
+            {
+                Microsoft.Win32.SaveFileDialog guardar = new Microsoft.Win32.SaveFileDialog();
+                guardar.FileName = titulo + "_" + DateTime.Now.ToString("yyyy_MM_dd__HH_mm") + ".pdf";
+                guardar.Filter = "PDF(*.pdf)|*.pdf";
+                if (guardar.ShowDialog() == true)
+                {
+                    try
+                    {
+                        int columnasConTexto = 0;
+                        int columnaOculta = -1;
+                        /*ITERACION DE ENCABEZADOS*/
+                        foreach (var item in dataGrid.Columns)
+                        {
+                            /*SI EL ENCABEZADO NO ESTÁ VACIO, SE COPIARÁ*/
+                            if (item.Header != null)
+                            {
+                                if (item.Visibility != Visibility.Collapsed)
+                                {
+                                    columnasConTexto++;
+                                }
+                                else
+                                {
+                                    columnaOculta = item.DisplayIndex;
+                                }
+                            }
+                        }
+                        Document document = new Document(PageSize.A4, 25, 15, 15, 15);
+                        PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(guardar.FileName, FileMode.Create));
+                        document.Open();
+                        Font font5 = FontFactory.GetFont(FontFactory.HELVETICA, 5);
+                        Font boldFont = FontFactory.GetFont(FontFactory.HELVETICA, 5, Font.BOLD);
+                        PdfPTable table = new PdfPTable(columnasConTexto);
+                        Array floatArray = Array.CreateInstance(typeof(float), columnasConTexto);
+                        //float[] widths = new float[] { };
+                        for (int i = 0; i < columnasConTexto; i++)
+                            floatArray.SetValue(4f, i);
+                        table.SetWidths((float[])floatArray);
+                        table.WidthPercentage = 100;
+                        PdfPCell cell = new PdfPCell(new Phrase("Products"));
+                        cell.Colspan = columnasConTexto;
+
+                        /*ITERACION DE ENCABEZADOS*/
+                        foreach (var item in dataGrid.Columns)
+                        {
+                            /*SI EL ENCABEZADO NO ESTÁ VACIO, SE COPIARÁ*/
+                            if (item.Header != null)
+                            {
+                                /*SI LA COLUMNA NO ESTÁ OCULTA, SE COPIARÁ, CASO CONTRARIO SE GUARDARÁ EL ÍNDICE PARA NO COPIAR LOS DATOS DE ESA COLUMNA*/
+                                if (item.Visibility != Visibility.Collapsed)
+                                {
+                                    table.AddCell(new Phrase(item.Header.ToString().ToUpper(), boldFont));
+                                }
+                            }
+                        }
+                        if (columnaOculta != -1)
+                        {
+                            columnasConTexto++;
+                        }
+                        /*ITERACION DE DATOS DE LA TABLA*/
+                        foreach (DataRowView row in dataGrid.Items)
+                        {
+                            /*RECORRIDO DE CADA COLUMNA DE 1 SOLA FILA*/
+                            for (int i = 0; i < columnasConTexto; i++)
+                            {
+                                /*SI LA COLUMNA ITERADA NO ES UN BOTÓN, CONTINUAR*/
+                                if (row[i] != (row[i] as Button))
+                                {
+                                    /*SI EL INDICE ITERADO NO ES IGUAL AL INDICE DE LA COLUMNA OCULTA, COPIAR*/
+                                    if (i != columnaOculta)
+                                    {
+                                        /*SI CONTIENE SALTOS DE LINEA, LIMPIARLOS Y COPIARLO, CASO CONTRARIO SOLO COPIARLO*/
+                                        if (row[i].ToString().Contains("\n"))
+                                        {
+                                            table.AddCell(new Phrase(row[i].ToString().Replace("\n", ""), font5));
+                                        }
+                                        else
+                                        {
+                                            table.AddCell(new Phrase(row[i].ToString(), font5));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        document.Add(table);
+                        document.Close();
+                        MessageBox.Show("¡Se ha exportado " + dataGrid.Items.Count + " registros a PDF!");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("¡Para exportar al portapapeles debe haber por lo menos 1 registro!");
             }
         }
     }

@@ -51,6 +51,9 @@
                     <Button x:Name="btnExcel" ToolTip="EXPORTAR TABLA A EXCEL" Margin="15,0,0,0" Click="btnExcel_Click" Background="DarkGreen" Foreground="White" BorderBrush="DarkGreen">
                         <materialDesign:PackIcon Kind="MicrosoftExcel" Width="50"/>
                     </Button>
+                    <Button x:Name="btnPDF" ToolTip="EXPORTAR TABLA A PDF" Margin="15,0,0,0" Click="btnPDF_Click" Background="Red" Foreground="White" BorderBrush="Red">
+                        <materialDesign:PackIcon Kind="FilePdfBox" Width="50"/>
+                    </Button>
                 </StackPanel>
                 <Border BorderBrush="Gray" BorderThickness="2">
                     <DataGrid x:Name="dgvDatos"
@@ -70,6 +73,9 @@
                     </Button>
                     <Button x:Name="btnExcel2" ToolTip="EXPORTAR TABLA A EXCEL" Margin="15,0,0,0" Click="btnExcel2_Click" Background="DarkGreen" Foreground="White" BorderBrush="DarkGreen">
                         <materialDesign:PackIcon Kind="MicrosoftExcel" Width="50"/>
+                    </Button>
+                    <Button x:Name="btnPDF2" ToolTip="EXPORTAR TABLA A PDF" Margin="15,0,0,0" Click="btnPDF2_Click" Background="Red" Foreground="White" BorderBrush="Red">
+                        <materialDesign:PackIcon Kind="FilePdfBox" Width="50"/>
                     </Button>
                 </StackPanel>
                 <Border BorderBrush="Gray" BorderThickness="2">

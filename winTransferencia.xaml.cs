@@ -236,5 +236,14 @@ namespace sisgesoriadao
         {
             Session.ExportarAExcel(dgvDetalle);
         }
+        private void btnPDF_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvDatos, "TRANSFERENCIAS_HISTORIAL");
+        }
+
+        private void btnPDF2_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvDetalle,"TRANSFERENCIA_DETALLE");
+        }
     }
 }
