@@ -856,5 +856,32 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public DataTable SelectLikeReporteVentasGlobalesCantidad(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo)
+        {
+            string query = @"SELECT S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCategoria AS Categoria, P.nombreProducto AS Producto, COUNT(P.idProducto) AS Ventas, (SELECT COUNT(idProducto) FROM Producto WHERE nombreProducto = P.nombreProducto AND estado IN (1,3) AND idSucursal = P.idSucursal) AS Disponibilidad FROM Venta V
+                            INNER JOIN Sucursal S ON S.idSucursal = V.idSucursal
+                            INNER JOIN Usuario U ON U.idUsuario = V.idUsuario
+                            INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN Producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
+                            WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto)
+                            AND V.estado = 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
+                            AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
+                            GROUP BY P.nombreProducto, S.idSucursal
+                            ORDER BY 4 ASC, 1 ASC, 2 ASC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@FechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", fechaFin.ToString("yyyy-MM-dd") + " 23:59:59");
+            command.Parameters.AddWithValue("@productocodigoproducto", "%" + productoOCodigo + "%");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

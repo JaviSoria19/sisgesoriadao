@@ -165,7 +165,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable Select()
         {
-            string query = @"SELECT u.idUsuario AS 'ID U', u.idEmpleado AS 'ID E' , CONCAT(e.nombres,' ', e.primerApellido,' ',IF(e.segundoApellido='-','',IFNULL(e.segundoApellido,''))) AS Empleado, u.nombreUsuario AS 'Usuario', IF(u.rol=1, 'ADMIN', IF(u.rol=2,'VENDEDOR','TERCER ROL')) AS Rol , u.pin AS Pin, u.fechaRegistro as 'Fecha de Registro', IFNULL(u.fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM Usuario AS u
+            string query = @"SELECT u.idUsuario AS 'ID U', u.idEmpleado AS 'ID E' , CONCAT(e.nombres,' ', e.primerApellido,' ',IF(e.segundoApellido='-','',IFNULL(e.segundoApellido,''))) AS Empleado, u.nombreUsuario AS 'Usuario', IF(u.rol=1, 'ADMIN', IF(u.rol=2,'VENDEDOR','TERCER ROL')) AS Rol , u.pin AS Pin, " + Session.FormatoFechaMySql("u.fechaRegistro") + @" as 'Fecha de Registro', IFNULL(" + Session.FormatoFechaMySql("u.fechaActualizacion") + @",'-') AS 'Fecha de Actualizacion' FROM Usuario AS u
                                 INNER JOIN Empleado AS e ON u.idEmpleado = e.idEmpleado
                                 WHERE u.estado = 1 ORDER BY 5,3 ASC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -182,7 +182,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT u.idUsuario AS 'ID U', u.idEmpleado AS 'ID E' , CONCAT(e.nombres,' ', e.primerApellido,' ',IFNULL(e.segundoApellido,'')) AS Empleado, u.nombreUsuario AS 'Usuario', IF(u.rol=1, 'ADMIN', IF(u.rol=2,'VENDEDOR','TERCER ROL')) AS Rol , u.pin AS Pin, u.fechaRegistro as 'Fecha de Registro', IFNULL(u.fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM Usuario AS u
+            string query = @"SELECT u.idUsuario AS 'ID U', u.idEmpleado AS 'ID E' , CONCAT(e.nombres,' ', e.primerApellido,' ',IFNULL(e.segundoApellido,'')) AS Empleado, u.nombreUsuario AS 'Usuario', IF(u.rol=1, 'ADMIN', IF(u.rol=2,'VENDEDOR','TERCER ROL')) AS Rol , u.pin AS Pin, " + Session.FormatoFechaMySql("u.fechaRegistro") + @" as 'Fecha de Registro', IFNULL(" + Session.FormatoFechaMySql("u.fechaActualizacion") + @",'-') as 'Fecha de Actualizacion' FROM Usuario AS u
                                 INNER JOIN Empleado AS e ON u.idEmpleado = e.idEmpleado
                                 WHERE (e.nombres LIKE @search OR e.primerApellido LIKE @search OR e.segundoApellido LIKE @search OR u.nombreUsuario LIKE @search) 
                                 AND u.estado = 1 AND u.fechaRegistro BETWEEN @FechaInicio AND @FechaFin

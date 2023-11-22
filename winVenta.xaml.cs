@@ -231,22 +231,6 @@ namespace sisgesoriadao
                 }
             }
         }
-
-        private void btnCopy_Click(object sender, RoutedEventArgs e)
-        {
-            Session.ExportarAPortapapeles(dgvDatos);
-        }
-
-        private void btnExcel_Click(object sender, RoutedEventArgs e)
-        {
-            Session.ExportarAExcel(dgvDatos);
-        }
-
-        private void btnPDF_Click(object sender, RoutedEventArgs e)
-        {
-            Session.ExportarAPDF(dgvDatos, "VENTAS_GLOBAL");
-        }
-
         void cbxGetGroupConcatUsuarios()
         {
             try
@@ -287,6 +271,25 @@ namespace sisgesoriadao
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPortapapeles(dgvDatos);
+        }
+        private void btnSalesQuantity_Click(object sender, RoutedEventArgs e)
+        {
+            winVenta_Cantidad winVenta_Cantidad = new winVenta_Cantidad();
+            winVenta_Cantidad.Show();
+            Close();
+        }
+        private void btnExcel_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvDatos);
+        }
+
+        private void btnPDF_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvDatos, "VENTAS_GLOBAL");
         }
         public class ComboboxItem
         {

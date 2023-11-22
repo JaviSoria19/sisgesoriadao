@@ -722,6 +722,10 @@ namespace sisgesoriadao
         }
         private void btnDeleteSale_Click(object sender, RoutedEventArgs e)
         {
+            deleteSale();
+        }
+        void deleteSale()
+        {
             if (MessageBox.Show("ATENCIÓN: ¿ESTÁ SEGUR@ DE ELIMINAR LA VENTA?\nSi es que si, justifiquelo debajo de esta ventana en el cuadro de OBSERVACIONES, esta acción hará que todos los productos involucrados retornen al SISTEMA.", "ELIMINAR VENTA", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 if (txtObservacionVenta.Text != "-")
@@ -1121,6 +1125,14 @@ namespace sisgesoriadao
         {
             MessageBox.Show("¡Se ha copiado la descripción de los Productos e IMEI's o S/N en el portapapeles!");
             Clipboard.SetText(clipboardTexto);
+        }
+
+        private void txtObservacionVenta_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                deleteSale();
+            }
         }
 
         public class DataGridRowDetalleHelper

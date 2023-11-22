@@ -289,14 +289,10 @@ namespace sisgesoriadao
                         productosVentaTotalBOB += double.Parse(item[10].ToString());
                     }
                 }
-                productosCostoTotalUSD = Math.Round(productosCostoTotalUSD, 2);
-                productosCostoTotalBOB = Math.Round(productosCostoTotalBOB, 2);
-                productosVentaTotalUSD = Math.Round(productosVentaTotalUSD, 2);
-                productosVentaTotalBOB = Math.Round(productosVentaTotalBOB, 2);
-                txtTotalProductosCostoUSD.Text = "Total Costo $us.: " + productosCostoTotalUSD.ToString();
-                txtTotalProductosCostoBOB.Text = "Total Costo Bs.: " + productosCostoTotalBOB.ToString();
-                txtTotalProductosVentaUSD.Text = "Total Venta $us.: " + productosVentaTotalUSD.ToString();
-                txtTotalProductosVentaBOB.Text = "Total Venta Bs.: " + productosVentaTotalBOB.ToString();
+                txtTotalProductosCostoUSD.Text = "Total Costo $us.: " + Math.Round(productosCostoTotalUSD, 2);
+                txtTotalProductosCostoBOB.Text = "Total Costo Bs.: " + Math.Round(productosCostoTotalBOB, 2);
+                txtTotalProductosVentaUSD.Text = "Total Venta $us.: " + Math.Round(productosVentaTotalUSD, 2);
+                txtTotalProductosVentaBOB.Text = "Total Venta Bs.: " + Math.Round(productosVentaTotalBOB, 2);
             }
             catch (Exception ex)
             {
@@ -309,6 +305,8 @@ namespace sisgesoriadao
             {
                 productosCostoTotalUSD = 0;
                 productosCostoTotalBOB = 0;
+                productosVentaTotalUSD = 0;
+                productosVentaTotalBOB = 0;
                 dgvDatos.ItemsSource = null;
                 dgvDatos.ItemsSource = implProducto.SelectLikeReporteValorado((cbxSucursal.SelectedItem as ComboboxItem).Valor, txtBuscar.Text.Trim(), dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date).DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
@@ -319,10 +317,14 @@ namespace sisgesoriadao
                     {
                         productosCostoTotalUSD += double.Parse(item[7].ToString());
                         productosCostoTotalBOB += double.Parse(item[8].ToString());
+                        productosVentaTotalUSD += double.Parse(item[9].ToString());
+                        productosVentaTotalBOB += double.Parse(item[10].ToString());
                     }
                 }
-                txtTotalProductosCostoUSD.Text = "Total Costo $us.: " + productosCostoTotalUSD.ToString();
-                txtTotalProductosCostoBOB.Text = "Total Costo Bs.: " + productosCostoTotalBOB.ToString();
+                txtTotalProductosCostoUSD.Text = "Total Costo $us.: " + Math.Round(productosCostoTotalUSD, 2);
+                txtTotalProductosCostoBOB.Text = "Total Costo Bs.: " + Math.Round(productosCostoTotalBOB, 2);
+                txtTotalProductosVentaUSD.Text = "Total Venta $us.: " + Math.Round(productosVentaTotalUSD, 2);
+                txtTotalProductosVentaBOB.Text = "Total Venta Bs.: " + Math.Round(productosVentaTotalBOB, 2);
             }
             catch (Exception ex)
             {

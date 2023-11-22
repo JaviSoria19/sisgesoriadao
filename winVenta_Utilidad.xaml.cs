@@ -62,9 +62,9 @@ namespace sisgesoriadao
                     totalVenta += double.Parse(item[10].ToString());
                     totalUtilidad += double.Parse(item[11].ToString());
                 }
-                txtTotalCosto.Text = "Total P. Costo: $us. " + totalCosto.ToString();
-                txtTotalVenta.Text = "Total P. Venta: $us. " + totalVenta.ToString();
-                txtTotalUtilidad.Text = "Total Utilidad: $us. " + totalUtilidad.ToString();
+                txtTotalCosto.Text = "Total P. Costo: $us. " + Math.Round(totalCosto, 2);
+                txtTotalVenta.Text = "Total P. Venta: $us. " + Math.Round(totalVenta, 2);
+                txtTotalUtilidad.Text = "Total Utilidad: $us. " + Math.Round(totalUtilidad, 2);
             }
             catch (Exception ex)
             {

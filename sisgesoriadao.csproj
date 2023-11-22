@@ -265,6 +265,9 @@
     <Compile Include="winVenta.xaml.cs">
       <DependentUpon>winVenta.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winVenta_Cantidad.xaml.cs">
+      <DependentUpon>winVenta_Cantidad.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winVenta_Detalle.xaml.cs">
       <DependentUpon>winVenta_Detalle.xaml</DependentUpon>
     </Compile>
@@ -442,6 +445,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winVenta.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winVenta_Cantidad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

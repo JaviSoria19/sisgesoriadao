@@ -39,6 +39,7 @@ namespace sisgesoriadao
             {
                 txtBuscar.Text = Session.Producto_Historial_CodigoSublote;
                 Select();
+                Session.Producto_Historial_CodigoSublote = null;
             }
         }
         private void txtBuscar_KeyDown(object sender, KeyEventArgs e)

@@ -42,14 +42,15 @@
             
             <StackPanel Orientation="Vertical" Margin="10">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,30">
-                    <Button x:Name="btnSaveAndPDF" Content="IMPRIMIR" ToolTip="IMPRIMIR DETALLE DE VENTA" Click="btnSaveAndPDF_Click" IsEnabled="True" VerticalAlignment="Center" Background="White" Foreground="Black" BorderBrush="Black"/>
-                    <Button x:Name="btnDeleteSale" Content="ELIMINAR VENTA" Margin="10,0" ToolTip="ELIMINAR VENTA" Click="btnDeleteSale_Click" IsEnabled="False" VerticalAlignment="Center" Background="Red" Foreground="White" BorderBrush="Red"/>
+                    <Button x:Name="btnSaveAndPDF" Margin="10,0" Content="IMPRIMIR" ToolTip="IMPRIMIR DETALLE DE VENTA" Click="btnSaveAndPDF_Click" IsEnabled="True" VerticalAlignment="Center" Background="White" Foreground="Black" BorderBrush="Black"/>
+                    
                     <Button x:Name="btnCopy" ToolTip="COPIAR IMEIS O S/N's AL PORTAPAPELES" Click="btnCopy_Click" Background="White" Foreground="Black" BorderBrush="Black">
                         <materialDesign:PackIcon Kind="ContentCopy" Width="50"/>
                     </Button>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Label Content="OBSERVACIONES: " VerticalAlignment="Center" Margin="20,0,0,0"/>
-                        <TextBox x:Name="txtObservacionVenta" TextWrapping="Wrap" MinWidth="120" MaxWidth="300" MaxLength="99" IsEnabled="True" VerticalAlignment="Center"/>
+                        <TextBox x:Name="txtObservacionVenta" TextWrapping="Wrap" MinWidth="120" MaxWidth="300" MaxLength="99" IsEnabled="True" VerticalAlignment="Center" KeyDown="txtObservacionVenta_KeyDown"/>
+                        <Button x:Name="btnDeleteSale" Content="ELIMINAR VENTA" Margin="10,0" ToolTip="ELIMINAR VENTA" Click="btnDeleteSale_Click" IsEnabled="False" VerticalAlignment="Center" Background="Red" Foreground="White" BorderBrush="Red"/>
                     </StackPanel>
                 </StackPanel>
                 <TextBlock Text="DETALLE CLIENTE" FontWeight="Bold" FontSize="20"/>

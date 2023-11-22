@@ -97,7 +97,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            string query = @"SELECT idProductoComun AS ID, nombreProductoComun AS 'Nombre Producto', precioMinimo AS 'Precio Minimo', precioSugerido AS 'Precio Sugerido', fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') AS 'Fecha de Actualizacion' 
+            string query = @"SELECT idProductoComun AS ID, nombreProductoComun AS 'Nombre Producto', precioMinimo AS 'Precio Minimo', precioSugerido AS 'Precio Sugerido', " + Session.FormatoFechaMySql("fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(" + Session.FormatoFechaMySql("fechaActualizacion") + @",'-') AS 'Fecha de Actualizacion' 
                             FROM Producto_Comun WHERE estado = 1 ORDER BY 2 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@SessionSucursal", Session.Sucursal_IdSucursal);
@@ -114,7 +114,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT idProductoComun AS ID, nombreProductoComun AS 'Nombre Producto', precioMinimo AS 'Precio Minimo', precioSugerido AS 'Precio Sugerido', fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') AS 'Fecha de Actualizacion' 
+            string query = @"SELECT idProductoComun AS ID, nombreProductoComun AS 'Nombre Producto', precioMinimo AS 'Precio Minimo', precioSugerido AS 'Precio Sugerido', " + Session.FormatoFechaMySql("fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(" + Session.FormatoFechaMySql("fechaActualizacion") + @",'-') AS 'Fecha de Actualizacion' 
                             FROM Producto_Comun 
                             WHERE (nombreProductoComun LIKE @search OR precioMinimo LIKE @search OR precioSugerido LIKE @search) 
                             AND estado = 1 AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin

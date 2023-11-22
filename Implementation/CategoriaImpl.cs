@@ -93,7 +93,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable Select()
         {
-            string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.garantia AS Garantia,C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM Categoria AS C
+            string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.garantia AS Garantia, " + Session.FormatoFechaMySql("C.fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(" + Session.FormatoFechaMySql("C.fechaActualizacion") + @",'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM Categoria AS C
                                 INNER JOIN Usuario AS U ON C.idUsuario = U.idUsuario
                                 WHERE C.estado = 1 ORDER BY 3 DESC, 2 ASC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -123,7 +123,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.garantia AS Garantia, C.fechaRegistro AS 'Fecha de Registro', IFNULL(C.fechaActualizacion,'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM Categoria AS C
+            string query = @"SELECT C.idCategoria AS ID, C.nombreCategoria AS Categoria, C.garantia AS Garantia, " + Session.FormatoFechaMySql("C.fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(" + Session.FormatoFechaMySql("C.fechaActualizacion") + @",'-') AS 'Fecha de Actualizacion', U.nombreUsuario AS Usuario FROM Categoria AS C
                                 INNER JOIN Usuario AS U ON C.idUsuario = U.idUsuario
                                 WHERE (C.nombreCategoria LIKE @search OR C.garantia LIKE @search) 
                                 AND C.estado = 1 AND C.fechaRegistro BETWEEN @FechaInicio AND @FechaFin

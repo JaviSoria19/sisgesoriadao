@@ -1,25 +1,46 @@
-﻿using sisgesoriadao.Implementation;
-using sisgesoriadao.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data;//ADO.NET
 using System.Linq;
+using sisgesoriadao.Implementation;
+using sisgesoriadao.Model;
+using System.Data;//ADO.NET
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
 namespace sisgesoriadao
 {
     /// <summary>
-    /// Lógica de interacción para winVenta_Perdida.xaml
+    /// Lógica de interacción para winVenta_Cantidad.xaml
     /// </summary>
-    public partial class winVenta_Perdida : Window
+    public partial class winVenta_Cantidad : Window
     {
         VentaImpl implVenta;
         SucursalImpl implSucursal;
         CategoriaImpl implCategoria;
         UsuarioImpl implUsuario;
-        double totalCosto = 0, totalVenta = 0, totalUtilidad = 0;
-        public winVenta_Perdida()
+        public winVenta_Cantidad()
         {
             InitializeComponent();
+            WindowState = WindowState.Maximized;
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtBlockWelcome.Text = Session.NombreUsuario;
+            cbxGetGroupConcatSucursal();
+            cbxGetSucursalFromDatabase();
+            cbxGetGroupConcatCategoria();
+            cbxGetCategoriaFromDatabase();
+            cbxGetGroupConcatUsuarios();
+            cbxGetUsuarioFromDatabase();
+            txtBuscar_Producto_o_Codigo.Focus();
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
@@ -31,40 +52,44 @@ namespace sisgesoriadao
         }
         private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
         {
-            dtpFechaFin.SelectedDate = DateTime.Today;
-            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
+            dtpFechaFin.SelectedDate = DateTime.Now;
+            dtpFechaInicio.SelectedDate = DateTime.Now;
         }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void btnErase_Click(object sender, RoutedEventArgs e)
         {
-            txtBlockWelcome.Text = Session.NombreUsuario;
-            cbxGetGroupConcatSucursal();
-            cbxGetSucursalFromDatabase();
-            cbxGetGroupConcatCategoria();
-            cbxGetCategoriaFromDatabase();
-            cbxGetGroupConcatUsuarios();
-            cbxGetUsuarioFromDatabase();
+            CleanText();
         }
-        private void SelectLike()
+        private void txtBuscar_Producto_o_Codigo_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SelectLike();
+            }
+            if (e.Key == Key.Escape)
+            {
+                CleanText();
+            }
+        }
+        void CleanText()
+        {
+            txtBuscar_Producto_o_Codigo.Text = "";
+            txtBuscar_Producto_o_Codigo.Focus();
+        }
+        void SelectLike()
         {
             try
             {
                 implVenta = new VentaImpl();
                 dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implVenta.SelectLikeReportePerdidas(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor).DefaultView;
-                dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implVenta.SelectLikeReportePerdidas(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor).Rows.Count;
-                totalCosto = 0;
-                totalVenta = 0;
-                totalUtilidad = 0;
+                dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasGlobalesCantidad(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor, txtBuscar_Producto_o_Codigo.Text.Trim()).DefaultView;
+                //dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implVenta.SelectLikeReporteVentasGlobalesCantidad(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor, txtBuscar_Producto_o_Codigo.Text.Trim()).Rows.Count;
+                int totalCantidad = 0;
                 foreach (DataRowView item in dgvDatos.Items)
                 {
-                    totalCosto += double.Parse(item[9].ToString());
-                    totalVenta += double.Parse(item[10].ToString());
-                    totalUtilidad += double.Parse(item[11].ToString());
+                    totalCantidad += int.Parse(item[4].ToString());
                 }
-                txtTotalCosto.Text = "Total P. Costo: $us. " + Math.Round(totalCosto, 2);
-                txtTotalVenta.Text = "Total P. Venta: $us. " + Math.Round(totalVenta, 2);
-                txtTotalUtilidad.Text = "Total Pérdida: $us. " + Math.Round(totalUtilidad, 2);
+                txtTotalCantidad.Text = "TOTAL DE PRODUCTOS VENDIDOS: " + totalCantidad;
             }
             catch (Exception ex)
             {
@@ -169,19 +194,6 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
-        private void btnCopy_Click(object sender, RoutedEventArgs e)
-        {
-            Session.ExportarAPortapapeles(dgvDatos);
-        }
-        private void btnExcel_Click(object sender, RoutedEventArgs e)
-        {
-            Session.ExportarAExcel(dgvDatos);
-        }
-        private void btnPDF_Click(object sender, RoutedEventArgs e)
-        {
-            Session.ExportarAPDF(dgvDatos, "REPORTE_PERDIDAS");
-        }
-
         void cbxGetUsuarioFromDatabase()
         {
             try
@@ -206,6 +218,20 @@ namespace sisgesoriadao
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPortapapeles(dgvDatos);
+        }
+
+        private void btnExcel_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvDatos);
+        }
+
+        private void btnPDF_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvDatos, "VENTAS_CANTIDADES");
         }
         public class ComboboxItem
         {

@@ -65,7 +65,7 @@ namespace sisgesoriadao.Implementation
         public Sucursal Get(byte Id)
         {
             Sucursal s = null;
-            string query = @"SELECT idSucursal, nombreSucursal, direccion, correo, telefono, estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM Sucursal 
+            string query = @"SELECT idSucursal, nombreSucursal, direccion, correo, telefono, estado, " + Session.FormatoFechaMySql("fechaRegistro") + @", IFNULL(fechaActualizacion,'-') FROM Sucursal 
                             WHERE idSucursal=@idSucursal";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idSucursal", Id);
@@ -95,7 +95,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable Select()
         {
-            string query = @"SELECT idSucursal as ID, nombreSucursal as Sucursal, direccion AS Direccion, correo AS Correo, telefono AS Telefono,fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion'
+            string query = @"SELECT idSucursal as ID, nombreSucursal as Sucursal, direccion AS Direccion, correo AS Correo, telefono AS Telefono, " + Session.FormatoFechaMySql("fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(" + Session.FormatoFechaMySql("fechaActualizacion") + @",'-') as 'Fecha de Actualizacion'
                                 FROM Sucursal WHERE estado = 1 ORDER BY 2 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             try
@@ -125,7 +125,7 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLike(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin)
         {
             string query = @"SELECT idSucursal as ID, nombreSucursal as Sucursal, direccion AS Direccion, correo AS Correo, telefono AS Telefono,
-                                fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') AS 'Fecha de Actualizacion' FROM Sucursal
+                                " + Session.FormatoFechaMySql("fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(" + Session.FormatoFechaMySql("fechaActualizacion") + @",'-') AS 'Fecha de Actualizacion' FROM Sucursal
                                 WHERE (nombreSucursal LIKE @search OR direccion LIKE @search OR correo LIKE @search OR telefono LIKE @search) 
                                 AND estado = 1 AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                                 ORDER BY 5 DESC";

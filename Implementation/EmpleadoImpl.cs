@@ -94,7 +94,7 @@ namespace sisgesoriadao.Implementation
         public DataTable Select()
         {
             string query = @"SELECT idEmpleado as ID, nombres as Nombres, CONCAT(primerApellido,' ',IF(segundoApellido='-','',IFNULL(segundoApellido,''))) AS Apellidos,
-                            numeroCelular AS Celular, numeroCI AS Carnet, fechaRegistro AS 'Fecha de Registro', IFNULL(fechaActualizacion,'-') as 'Fecha de Actualizacion' FROM Empleado WHERE estado IN (1,2) ORDER BY 6 DESC";
+                            numeroCelular AS Celular, numeroCI AS Carnet, " + Session.FormatoFechaMySql("fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(" + Session.FormatoFechaMySql("fechaActualizacion") + @",'-') as 'Fecha de Actualizacion' FROM Empleado WHERE estado IN (1,2) ORDER BY 6 DESC";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
