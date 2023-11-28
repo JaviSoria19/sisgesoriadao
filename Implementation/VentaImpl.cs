@@ -209,7 +209,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN Usuario U ON V.idUsuario = U.idUsuario
                             INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
                             INNER JOIN Producto P ON DV.idProducto = P.idProducto
-                            WHERE V.saldoUSD > 1 AND V.idSucursal = @SessionIdSucursal AND V.estado = 1
+                            WHERE (V.saldoUSD > 0 AND V.saldoBOB > 0) AND V.idSucursal = @SessionIdSucursal AND V.estado = 1
                             GROUP BY V.idVenta ORDER BY 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
@@ -234,7 +234,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
                             INNER JOIN Producto P ON P.idProducto = DV.idProducto
                             INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
-                            WHERE V.estado = 1 AND V.saldoUSD < 10 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
+                            WHERE V.estado = 1 AND (V.saldoUSD <= 0 OR V.saldoBOB <= 0) AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY P.idProducto
                             ORDER BY 1 DESC";
@@ -283,7 +283,7 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLikeReporteVentasLocales(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI)
         {
             string query = @"SELECT V.idVenta AS 'ID', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, CL.nombre AS Cliente, V.idVenta AS Venta, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS TotalUSD, IF(V.saldoUSD < 1, 0, V.saldoUSD) AS SaldoUSD FROM Venta V
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS TotalUSD, IF(V.saldoUSD <= 0 || V.saldoBOB <= 0, 0, V.saldoUSD) AS SaldoUSD FROM Venta V
                             INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
                             INNER JOIN Producto P ON P.idProducto = DV.idProducto
@@ -312,7 +312,7 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLikeReporteVentasLocalesByID(int idVenta)
         {
             string query = @"SELECT V.idVenta AS 'ID', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, CL.nombre AS Cliente, V.idVenta AS 'Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM Venta V
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD <= 0 || V.saldoBOB <= 0, 0, V.saldoUSD) AS 'Saldo USD' FROM Venta V
                             INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
                             INNER JOIN Producto P ON P.idProducto = DV.idProducto
@@ -614,7 +614,7 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLikeReporteVentasLocalesDELETED(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI)
         {
             string query = @"SELECT V.idVenta AS 'ID', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, CL.nombre AS Cliente, V.idVenta AS 'Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM Venta V
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD <= 0 || V.saldoBOB <= 0, 0, V.saldoUSD) AS 'Saldo USD' FROM Venta V
                             INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
                             INNER JOIN Producto P ON P.idProducto = DV.idProducto
@@ -643,7 +643,7 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLikeReporteVentasLocalesByIDDELETED(int idVenta)
         {
             string query = @"SELECT V.idVenta AS 'ID', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, CL.nombre AS Cliente, V.idVenta AS 'Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD < 1, 0, V.saldoUSD) AS 'Saldo USD' FROM Venta V
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD <= 0 || V.saldoBOB <= 0, 0, V.saldoUSD) AS 'Saldo USD' FROM Venta V
                             INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
                             INNER JOIN Producto P ON P.idProducto = DV.idProducto
@@ -668,7 +668,7 @@ namespace sisgesoriadao.Implementation
         {
             string query = @"SELECT V.idCliente AS ID, C.nombre AS Nombre, C.numeroCelular AS Celular, SUM(V.saldoUSD) AS 'Saldo Total', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS 'Fecha' FROM Venta V
                                 INNER JOIN Cliente C ON C.idCliente = V.idCliente
-                                WHERE V.saldoUSD > 10 AND V.estado = 1 AND V.idSucursal = @SessionIdSucursal
+                                WHERE (V.saldoUSD > 0 AND V.saldoBOB > 0) AND V.estado = 1 AND V.idSucursal = @SessionIdSucursal
                                 GROUP BY V.idCliente
                                 ORDER BY V.fechaRegistro ASC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -686,11 +686,11 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectAllSalesWithPendingBalanceByCustomers()
         {
-            string query = "SELECT V.idVenta, U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT('- ',P.nombreProducto SEPARATOR ' \n'),')') AS Detalle, saldoUSD AS 'Saldo $us', saldoBOB AS 'Saldo Bs', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS 'Fecha' FROM Venta V
+            string query = "SELECT V.idVenta, U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT('- ',P.nombreProducto SEPARATOR ' \n'),')') AS Detalle, saldoUSD AS SaldoUSD, saldoBOB AS SaldoBOB, " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS 'Fecha' FROM Venta V
                             INNER JOIN Usuario U ON V.idUsuario = U.idUsuario
                             INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
                             INNER JOIN Producto P ON DV.idProducto = P.idProducto
-                            WHERE V.saldoUSD > 1 AND V.idSucursal = @SessionIdSucursal AND V.estado = 1 AND V.idCliente = @SessionIdCliente
+                            WHERE (V.saldoUSD > 0 AND V.saldoBOB > 0) AND V.idSucursal = @SessionIdSucursal AND V.estado = 1 AND V.idCliente = @SessionIdCliente
                             GROUP BY V.idVenta ORDER BY 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
@@ -840,7 +840,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
                             INNER JOIN Producto P ON P.idProducto = DV.idProducto
                             INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
-                            WHERE DV.precioUSD < P.costoUSD AND V.estado = 1 AND V.saldoUSD < 10 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
+                            WHERE DV.precioUSD < P.costoUSD AND V.estado = 1 AND (V.saldoUSD <= 0 OR V.saldoBOB <= 0) AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY P.idProducto
                             ORDER BY 1 DESC";

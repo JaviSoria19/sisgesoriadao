@@ -57,14 +57,16 @@ namespace sisgesoriadao
             cbxGetCategoriaFromDatabase();
             cbxGetGroupConcatCondicion();
             cbxGetCondicionFromDatabase();
-
             cbxDisponibilidad.Items.Add(new ComboboxItem("TODOS", "0,1,2"));
             cbxDisponibilidad.Items.Add(new ComboboxItem("DISPONIBLES", "1"));
             cbxDisponibilidad.Items.Add(new ComboboxItem("VENDIDOS", "2"));
             cbxDisponibilidad.Items.Add(new ComboboxItem("ELIMINADOS", "0"));
             cbxDisponibilidad.SelectedIndex = 1;
-
             txtBuscar.Focus();
+            if (Session.Rol != 1)
+            {
+                dgvDatos.Columns[12].Visibility = Visibility.Collapsed;
+            }
         }
         void cbxGetGroupConcatSucursal()
         {
@@ -239,6 +241,14 @@ namespace sisgesoriadao
             winProducto_Historial winProducto_Historial = new winProducto_Historial();
             winProducto_Historial.Show();
         }
+        private void btndgvModificar(object sender, RoutedEventArgs e)
+        {
+            string codigo = (dgvDatos.SelectedItem as DataRowView)[4].ToString();
+            Clipboard.SetText(codigo);
+            Session.Producto_Historial_CodigoSublote = codigo;
+            winProducto_Update winProducto_Update = new winProducto_Update();
+            winProducto_Update.Show();
+        }
         private void btnCopy_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAPortapapeles(dgvDatos);
@@ -252,7 +262,6 @@ namespace sisgesoriadao
         {
             Session.ExportarAPDF(dgvDatos, "INVENTARIO");
         }
-
         void SelectLike()
         {
             try

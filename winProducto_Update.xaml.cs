@@ -31,6 +31,12 @@ namespace sisgesoriadao
             cbxGetCategoriaFromDatabase();
             cbxGetCondicionFromDatabase();
             txtBuscar.Focus();
+            if (Session.Producto_Historial_CodigoSublote != null)
+            {
+                txtBuscar.Text = Session.Producto_Historial_CodigoSublote;
+                Select();
+                Session.Producto_Historial_CodigoSublote = null;
+            }
         }
         void cbxGetCategoriaFromDatabase()
         {
