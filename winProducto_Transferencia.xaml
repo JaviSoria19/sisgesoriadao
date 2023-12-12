@@ -52,13 +52,21 @@
                         <materialDesign:PackIcon Kind="PackageVariantAdd" Width="30" Height="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Button>
                 </StackPanel>
-                <DataGrid x:Name="dgvProductos" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" HorizontalAlignment="Center" IsReadOnly="True" SelectionChanged="dgvProductos_SelectionChanged">
+                <DataGrid x:Name="dgvProductos" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" HorizontalAlignment="Center" IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Nro." Binding="{Binding Numero}"/>
                         <DataGridTextColumn Header="Código" Binding="{Binding CodigoSublote}"/>
                         <DataGridTextColumn Header="Producto" Binding="{Binding NombreProducto}"/>
                         <DataGridTextColumn Header="S/N o IMEI" Binding="{Binding Identificador}"/>
                         <DataGridTextColumn Header="Obs." Binding="{Binding Observaciones}"/>
+                        
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Click="btndgvRemoverProducto">REMOVER</Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
                 <Button x:Name="btnSave" Content="GUARDAR" Margin="0,30,0,0" Click="btnSave_Click" Width="100"/>

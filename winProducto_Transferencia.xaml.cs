@@ -93,10 +93,6 @@ namespace sisgesoriadao
                 CleanText();
             }
         }
-        private void dgvProductos_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            removeFromDataGridandList(dgvProductos.SelectedIndex);
-        }
         void GetProductoFromDB()
         {
             if (string.IsNullOrEmpty(txtCodigoSublote.Text) != true)
@@ -315,6 +311,11 @@ namespace sisgesoriadao
         {
             txtCodigoSublote.Text = "";
             txtCodigoSublote.Focus();
+        }
+
+        private void btndgvRemoverProducto(object sender, RoutedEventArgs e)
+        {
+            removeFromDataGridandList(dgvProductos.SelectedIndex);
         }
     }
 }
