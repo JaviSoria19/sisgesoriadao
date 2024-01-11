@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;//ADO.NET
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,6 +35,7 @@ namespace sisgesoriadao
             txtBlockWelcome.Text = Session.NombreUsuario;
             SelectDetalle();
             getSale_Info();
+            acbxGetClientesFromDatabase();
         }
         private void getSale_Info()
         {
@@ -89,7 +91,7 @@ namespace sisgesoriadao
                     dt = implCotizacion.SelectDetails2(Session.IdCotizacion);
                     idCotizacion = int.Parse(dt.Rows[0][0].ToString());
                     txtIDVenta.Text = "Nro.: " + idCotizacion.ToString("D5");
-                    txtNombreCliente.Text = dt.Rows[0][5].ToString();
+                    acbtxtNombreCliente.Text = dt.Rows[0][5].ToString();
                     txtTelefono.Text = dt.Rows[0][10].ToString();
                     txtNit.Text = dt.Rows[0][7].ToString();
                     txtNombreEmpresa.Text = dt.Rows[0][6].ToString();
@@ -327,12 +329,12 @@ namespace sisgesoriadao
             {
                 txtCorreo.Text = "-";
             }
-            if (string.IsNullOrEmpty(txtNombreCliente.Text) != true && string.IsNullOrEmpty(txtNit.Text) != true && string.IsNullOrEmpty(txtTelefono.Text) != true)
+            if (string.IsNullOrEmpty(acbtxtNombreCliente.Text) != true && string.IsNullOrEmpty(txtNit.Text) != true && string.IsNullOrEmpty(txtTelefono.Text) != true)
             {
                 cotizacion = new Cotizacion
                 {
                     IdCotizacion = idCotizacion,
-                    NombreCliente = txtNombreCliente.Text.Trim(),
+                    NombreCliente = acbtxtNombreCliente.Text.Trim(),
                     NombreEmpresa = txtNombreEmpresa.Text.Trim(),
                     Nit = txtNit.Text.Trim(),
                     Direccion = txtDireccion.Text.Trim(),
@@ -395,6 +397,77 @@ namespace sisgesoriadao
                     MessageBox.Show("LA COTIZACIÓN HA SIDO ELIMINADA CON ÉXITO.");
                     this.Close();
                 }
+            }
+        }
+        private void acbtxtNameCustomer_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (acbtxtNombreCliente.SelectedItem != null)
+            {
+                if (e.Key == Key.Enter)
+                {
+                    try
+                    {
+                        implCotizacion = new CotizacionImpl();
+                        cotizacion = implCotizacion.Get((acbtxtNombreCliente.SelectedItem as ComboboxItem).Valor);
+                        if (cotizacion != null)
+                        {
+                            acbtxtNombreCliente.Text = cotizacion.NombreCliente.Trim();
+                            txtTelefono.Text = cotizacion.Telefono.Trim();
+                            txtNit.Text = cotizacion.Nit.Trim();
+                            txtNombreEmpresa.Text = cotizacion.NombreEmpresa.Trim();
+                            txtDireccion.Text = cotizacion.Direccion.Trim();
+                            txtCorreo.Text = cotizacion.Correo.Trim();
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                }
+            }
+            if (e.Key == Key.Escape)
+            {
+                acbtxtNombreCliente.Text = "";
+            }
+        }
+        void acbxGetClientesFromDatabase()
+        {
+            try
+            {
+                List<ComboboxItem> listcomboboxCliente = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implCotizacion = new CotizacionImpl();
+                dataTable = implCotizacion.SelectQuotationCustomerNamesForAutoCompleteBox();
+                listcomboboxCliente = (from DataRow dr in dataTable.Rows
+                                       select new ComboboxItem()
+                                       {
+                                           Valor = Convert.ToInt32(dr["idCotizacion"]),
+                                           Texto = dr["nombreCliente"].ToString()
+                                       }).ToList();
+                acbtxtNombreCliente.ItemsSource = listcomboboxCliente;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        public class ComboboxItem
+        {
+            public string Texto { get; set; }
+            public int Valor { get; set; }
+            public override string ToString()
+            {
+                return Texto;
+            }
+            public ComboboxItem(string texto, int valor)
+            {
+                Texto = texto;
+                Valor = valor;
+            }
+            public ComboboxItem()
+            {
+
             }
         }
     }

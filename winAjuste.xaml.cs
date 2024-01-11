@@ -1,4 +1,5 @@
-﻿using sisgesoriadao.Implementation;
+﻿using MaterialDesignThemes.Wpf;
+using sisgesoriadao.Implementation;
 using sisgesoriadao.Model;
 using System;
 using System.Text.RegularExpressions;
@@ -20,10 +21,12 @@ namespace sisgesoriadao
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtCambioDolar.Text) != true && string.IsNullOrEmpty(txtLimiteDescuento.Text) != true)
+            if (string.IsNullOrEmpty(txtCambioDolar.Text) != true && string.IsNullOrEmpty(txtLimiteDescuento.Text) != true && string.IsNullOrEmpty(txtIntervaloHora.Text) != true)
             {
                 ajuste.CambioDolar = double.Parse(txtCambioDolar.Text.Trim());
                 ajuste.LimiteDescuento = byte.Parse(txtLimiteDescuento.Text.Trim());
+                ajuste.IntervaloHora = byte.Parse(txtIntervaloHora.Text.Trim());
+                ajuste.TemaPredeterminado = (cbxTheme.SelectedItem as ComboboxItem).Valor;
                 implAjuste = new AjusteImpl();
                 try
                 {
@@ -32,6 +35,16 @@ namespace sisgesoriadao
                     {
                         Session.Ajuste_Cambio_Dolar = ajuste.CambioDolar;
                         Session.Ajuste_Limite_Descuento = ajuste.LimiteDescuento;
+                        Session.IntervaloHora = ajuste.IntervaloHora;
+                        Session.TemaPredeterminado = ajuste.TemaPredeterminado;
+                        if (ajuste.TemaPredeterminado == 1)
+                        {
+                            darkMode(true);
+                        }
+                        else
+                        {
+                            darkMode(false);
+                        }
                         MessageBox.Show("¡AJUSTES MODIFICADOS EXITOSAMENTE!");
                         this.Close();
                     }
@@ -52,6 +65,8 @@ namespace sisgesoriadao
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            cbxTheme.Items.Add(new ComboboxItem("TEMA CLARO", 0));
+            cbxTheme.Items.Add(new ComboboxItem("TEMA OSCURO", 1));
             GetSettings();
         }
         private void txtCambioDolar_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -61,6 +76,14 @@ namespace sisgesoriadao
         private void txtLimiteDescuento_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !IsTextAllowed2(e.Text);
+        }
+        private readonly PaletteHelper _paletteHelper = new PaletteHelper();
+        private void darkMode(bool vof)
+        {
+            ITheme theme = _paletteHelper.GetTheme();
+            IBaseTheme baseTheme = vof ? new MaterialDesignDarkTheme() : (IBaseTheme)new MaterialDesignLightTheme();
+            theme.SetBaseTheme(baseTheme);
+            _paletteHelper.SetTheme(theme);
         }
         void GetSettings()
         {
@@ -72,6 +95,8 @@ namespace sisgesoriadao
                 {
                     txtCambioDolar.Text = ajuste.CambioDolar.ToString().Trim();
                     txtLimiteDescuento.Text = ajuste.LimiteDescuento.ToString().Trim();
+                    txtIntervaloHora.Text = ajuste.IntervaloHora.ToString().Trim();
+                    cbxTheme.SelectedIndex = ajuste.TemaPredeterminado;
                 }
             }
             catch (Exception ex)
@@ -94,5 +119,24 @@ namespace sisgesoriadao
             return !_regex2.IsMatch(text);
         }
         //------------------------------------------------------><---------------------------------------------
+        public class ComboboxItem
+        {
+            public string Texto { get; set; }
+            public byte Valor { get; set; }
+
+            public override string ToString()
+            {
+                return Texto;
+            }
+            public ComboboxItem(string texto, byte valor)
+            {
+                Texto = texto;
+                Valor = valor;
+            }
+            public ComboboxItem()
+            {
+
+            }
+        }
     }
 }

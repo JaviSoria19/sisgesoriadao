@@ -51,8 +51,7 @@
             <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
                 <Label Content="CLIENTE:" FontWeight="Bold"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <TextBox x:Name="txtNombreCliente" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="60" IsEnabled="True" KeyDown="txtClear_KeyDown"/>
-
+                <controls:AutoCompleteBox x:Name="acbtxtNombreCliente" Margin="5,0,20,0" MinWidth="150" IsEnabled="True" FilterMode="Contains" KeyDown="acbtxtNameCustomer_KeyDown" FontSize="18"/>
                 <Label Content="NIT/C.I.:" FontWeight="Bold"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtNit" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="20" IsEnabled="True" KeyDown="txtClear_KeyDown"/>
