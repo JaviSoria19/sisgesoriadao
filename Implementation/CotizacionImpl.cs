@@ -370,5 +370,20 @@ namespace sisgesoriadao.Implementation
                 connection.Close();
             }
         }
+
+        public DataTable SelectQuotationCustomerNamesForAutoCompleteBox()
+        {
+            string query = @"SELECT idCotizacion, nombreCliente FROM Cotizacion WHERE estado = 1 GROUP BY nombreCliente";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

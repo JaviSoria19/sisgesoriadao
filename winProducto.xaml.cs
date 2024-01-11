@@ -530,9 +530,16 @@ namespace sisgesoriadao
                 if (MessageBox.Show("Está seguro de imprimir la etiqueta con el código de producto: " + producto.CodigoSublote + "?", "Imprimir etiqueta", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     var label = DYMO.Label.Framework.Label.Open("LabelWriterCodigoQRProducto.label");
-                    label.SetObjectText("lblCodigoSublote", producto.CodigoSublote);
-                    label.SetObjectText("lblCodigoQR", producto.CodigoSublote);
-                    label.Print("DYMO LabelWriter 450 Turbo");
+                    try
+                    {
+                        label.SetObjectText("lblCodigoSublote", producto.CodigoSublote);
+                        label.SetObjectText("lblCodigoQR", producto.CodigoSublote);
+                        label.Print("DYMO LabelWriter 450 Turbo");
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        MessageBox.Show(ex.Message + "\nATENCIÓN: NO SE PUDO IMPRIMIR LA ETIQUETA PORQUE USTED NO CUENTA CON LA MAQUINA ETIQUETADORA DYMO LabelWriter 450 Turbo");
+                    }
                 }
             }
             else

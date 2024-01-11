@@ -12,6 +12,7 @@ namespace sisgesoriadao.Interfaces
         Cotizacion Get(int id);
         DataTable SelectDetails(int idCotizacion);
         DataTable SelectDetails2(int idCotizacion);
+        DataTable SelectQuotationCustomerNamesForAutoCompleteBox();
         Cotizacion GetLastFromBranch();
         byte GetEstado(int idCotizacion);
     }

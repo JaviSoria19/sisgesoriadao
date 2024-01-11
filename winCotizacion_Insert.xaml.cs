@@ -31,9 +31,10 @@ namespace sisgesoriadao
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             acbxGetProductosFromDatabase();
+            acbxGetClientesFromDatabase();
             txtBlockWelcome.Text = Session.NombreUsuario;
             txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
-            txtNombreCliente.Focus();
+            acbtxtNombreCliente.Focus();
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
@@ -53,11 +54,11 @@ namespace sisgesoriadao
             {
                 txtCorreo.Text = "-";
             }
-            if (string.IsNullOrEmpty(txtNombreCliente.Text) != true && string.IsNullOrEmpty(txtNit.Text) != true && string.IsNullOrEmpty(txtTelefono.Text) != true)
+            if (string.IsNullOrEmpty(acbtxtNombreCliente.Text) != true && string.IsNullOrEmpty(txtNit.Text) != true && string.IsNullOrEmpty(txtTelefono.Text) != true)
             {
                 cotizacion = new Cotizacion(Session.IdUsuario,
                     Session.Sucursal_IdSucursal,
-                    txtNombreCliente.Text.Trim(),
+                    acbtxtNombreCliente.Text.Trim(),
                     txtNombreEmpresa.Text.Trim(),
                     txtNit.Text.Trim(),
                     txtDireccion.Text.Trim(),
@@ -373,6 +374,59 @@ namespace sisgesoriadao
                 {
                     listaHelper.RemoveAt(dgvProductos.SelectedIndex);
                 }
+            }
+        }
+        void acbxGetClientesFromDatabase()
+        {
+            try
+            {
+                List<ComboboxItem> listcomboboxCliente = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implCotizacion = new CotizacionImpl();
+                dataTable = implCotizacion.SelectQuotationCustomerNamesForAutoCompleteBox();
+                listcomboboxCliente = (from DataRow dr in dataTable.Rows
+                                       select new ComboboxItem()
+                                       {
+                                           Valor = Convert.ToInt32(dr["idCotizacion"]),
+                                           Texto = dr["nombreCliente"].ToString()
+                                       }).ToList();
+                acbtxtNombreCliente.ItemsSource = listcomboboxCliente;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void acbtxtNameCustomer_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (acbtxtNombreCliente.SelectedItem != null)
+            {
+                if (e.Key == Key.Enter)
+                {
+                    try
+                    {
+                        implCotizacion = new CotizacionImpl();
+                        cotizacion = implCotizacion.Get((acbtxtNombreCliente.SelectedItem as ComboboxItem).Valor);
+                        if (cotizacion != null)
+                        {
+                            acbtxtNombreCliente.Text = cotizacion.NombreCliente.Trim();
+                            txtTelefono.Text = cotizacion.Telefono.Trim();
+                            txtNit.Text = cotizacion.Nit.Trim();
+                            txtNombreEmpresa.Text = cotizacion.NombreEmpresa.Trim();
+                            txtDireccion.Text = cotizacion.Direccion.Trim();
+                            txtCorreo.Text = cotizacion.Correo.Trim();
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                }
+            }
+            if (e.Key == Key.Escape)
+            {
+                acbtxtNombreCliente.Text = "";
             }
         }
         public class ComboboxItem

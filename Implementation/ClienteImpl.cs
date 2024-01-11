@@ -153,10 +153,9 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
-
         public DataTable SelectCustomerNamesForComboBox()
         {
-            string query = @"SELECT idCliente, nombre FROM Cliente";
+            string query = @"SELECT idCliente, nombre FROM Cliente WHERE estado = 1";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -168,7 +167,6 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
-
         public Cliente GetFromSale(int idVenta)
         {
             Cliente c = null;
