@@ -62,8 +62,9 @@ namespace sisgesoriadao
                     if (mensaje == "LOTE REGISTRADO EXITOSAMENTE.")
                     {
                         loteRegistrado = true;
+                        MessageBox.Show(mensaje);
                         PrintCodigoSublote(listaproductos);
-                        MessageBox.Show(mensaje + "\n IMPRIMIENDO LAS ETIQUETAS...");
+                        
                         //insertar código para imprimir etiquetas DYMO
                         this.Close();
                     }
@@ -362,11 +363,18 @@ namespace sisgesoriadao
         public void PrintCodigoSublote(List<Producto> ListaProductos)
         {
             var label = Label.Open("LabelWriterCodigoQRProducto.label");
-            foreach (var item in ListaProductos)
+            try
             {
-                label.SetObjectText("lblCodigoSublote", item.CodigoSublote);
-                label.SetObjectText("lblCodigoQR", item.CodigoSublote);
-                label.Print("DYMO LabelWriter 450 Turbo");
+                foreach (var item in ListaProductos)
+                {
+                    label.SetObjectText("lblCodigoSublote", item.CodigoSublote);
+                    label.SetObjectText("lblCodigoQR", item.CodigoSublote);
+                    label.Print("DYMO LabelWriter 450 Turbo");
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message + "\nATENCIÓN: NO SE PUDO IMPRIMIR LAS ETIQUETAS PORQUE USTED NO CUENTA CON LA MAQUINA ETIQUETADORA DYMO LabelWriter 450 Turbo");
             }
         }
         public class DataGridRowDetalleHelper

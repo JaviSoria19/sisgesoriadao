@@ -357,15 +357,23 @@ namespace sisgesoriadao
             if (listaHelper.Count > 0)
             {
                 var label = DYMO.Label.Framework.Label.Open("LabelWriterCodigoQRProducto.label");
-                foreach (var item in listaHelper)
+                try
                 {
-                    if (item.Estado == "Disponible")
+                    foreach (var item in listaHelper)
                     {
-                        label.SetObjectText("lblCodigoSublote", item.CodigoSublote);
-                        label.SetObjectText("lblCodigoQR", item.CodigoSublote);
-                        label.Print("DYMO LabelWriter 450 Turbo");
+                        if (item.Estado == "Disponible")
+                        {
+                            label.SetObjectText("lblCodigoSublote", item.CodigoSublote);
+                            label.SetObjectText("lblCodigoQR", item.CodigoSublote);
+                            label.Print("DYMO LabelWriter 450 Turbo");
+                        }
                     }
                 }
+                catch (InvalidOperationException ex)
+                {
+                    MessageBox.Show(ex.Message + "\nATENCIÓN: NO SE PUDO IMPRIMIR LAS ETIQUETAS PORQUE USTED NO CUENTA CON LA MAQUINA ETIQUETADORA DYMO LabelWriter 450 Turbo");
+                }
+                
             }
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)

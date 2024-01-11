@@ -50,7 +50,7 @@ namespace sisgesoriadao.Implementation
                     command.ExecuteNonQuery();
 
                     command.CommandText = @"INSERT INTO Historial (idProducto,detalle) VALUES
-                                ((SELECT MAX(idProducto) FROM Producto),'PRODUCTO INGRESADO POR EL USUARIO: " + Session.NombreUsuario + ", EN SUCURSAL: " + Session.Sucursal_NombreSucursal + "')";
+                                ((SELECT MAX(idProducto) FROM Producto),'PRODUCTO REGISTRADO CON EL IDENTIFICADOR: " + Producto.Identificador + " INGRESADO POR EL USUARIO: " + Session.NombreUsuario + ", EN SUCURSAL: " + Session.Sucursal_NombreSucursal + "')";
                     command.ExecuteNonQuery();
                 }
                 //command.CommandText = "Insert into mytable (id, desc) VALUES (101, 'Description')";
@@ -886,7 +886,7 @@ namespace sisgesoriadao.Implementation
                     command.Parameters.AddWithValue("@idProducto", Producto.IdProducto);
                     command.ExecuteNonQuery();
                     command.CommandText = @"INSERT INTO Historial (idProducto,detalle) VALUES
-                                (@idProductoTwice,'EL LOTE AL QUE PERTENECE ESTE PRODUCTO FUE ACTUALIZADO POR EL USUARIO: " + Session.NombreUsuario + "')";
+                                (@idProductoTwice,'EL LOTE AL QUE PERTENECE ESTE PRODUCTO CON IDENTIFICADOR: " + Producto.Identificador + " FUE ACTUALIZADO POR EL USUARIO: " + Session.NombreUsuario + "')";
                     command.Parameters.AddWithValue("@idProductoTwice", Producto.IdProducto);
                     command.ExecuteNonQuery();
                 }
