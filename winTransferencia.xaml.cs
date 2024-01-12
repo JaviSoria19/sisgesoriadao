@@ -243,7 +243,7 @@ namespace sisgesoriadao
 
         private void btnPDF2_Click(object sender, RoutedEventArgs e)
         {
-            Session.ExportarAPDF(dgvDetalle,"TRANSFERENCIA_DETALLE");
+            Session.ExportarAPDF(dgvDetalle, "TRANSFERENCIA_DETALLE");
         }
     }
 }

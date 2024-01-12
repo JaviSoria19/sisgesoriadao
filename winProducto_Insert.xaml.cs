@@ -64,7 +64,7 @@ namespace sisgesoriadao
                         loteRegistrado = true;
                         MessageBox.Show(mensaje);
                         PrintCodigoSublote(listaproductos);
-                        
+
                         //insertar código para imprimir etiquetas DYMO
                         this.Close();
                     }

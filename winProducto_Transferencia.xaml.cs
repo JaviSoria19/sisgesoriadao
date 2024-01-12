@@ -9,7 +9,6 @@ using System.Data;//ADO.NET
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 namespace sisgesoriadao
 {

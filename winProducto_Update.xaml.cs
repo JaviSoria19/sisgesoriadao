@@ -373,7 +373,7 @@ namespace sisgesoriadao
                 {
                     MessageBox.Show(ex.Message + "\nATENCIÓN: NO SE PUDO IMPRIMIR LAS ETIQUETAS PORQUE USTED NO CUENTA CON LA MAQUINA ETIQUETADORA DYMO LabelWriter 450 Turbo");
                 }
-                
+
             }
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)

@@ -3,7 +3,6 @@ using sisgesoriadao.Model;
 using System;
 using System.Data;//ADO.NET
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace sisgesoriadao
