@@ -31,8 +31,19 @@
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <TextBlock Text="SELECCIONE UN REGISTRO PARA VER EL DETALLE:" FontSize="19" FontWeight="Bold"/>
             </StackPanel>
-            
+
             <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                    <Label Content="Tipo:" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="cbxPaymentMethod" IsEnabled="True" Margin="0,0,20,0" VerticalAlignment="Center"/>
+                    <Label Content="Monto ($.):" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPagoUSD_KeyUp" KeyDown="txtPagoUSD_KeyDown" VerticalAlignment="Center"/>
+                    <Label Content="Monto (Bs.):" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtPagoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPagoBOB_KeyUp" KeyDown="txtPagoBOB_KeyDown" VerticalAlignment="Center"/>
+                    <Button x:Name="btnAddPaymentMethod" ToolTip="PAGAR UNA O MÁS VENTAS." Click="btnAddPaymentMethod_Click" IsEnabled="True" Background="LimeGreen" BorderBrush="LimeGreen">
+                        <materialDesign:PackIcon Kind="CreditCardAdd"/>
+                    </Button>
+                </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
                     <Button x:Name="btnCopy" ToolTip="EXPORTAR TABLA AL PORTAPAPELES" Margin="0,0,0,0" Click="btnCopy_Click" Background="White" Foreground="Black" BorderBrush="Black">
                         <materialDesign:PackIcon Kind="ContentCopy" Width="50"/>
