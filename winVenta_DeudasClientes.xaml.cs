@@ -177,6 +177,8 @@ namespace sisgesoriadao
                         }
                         MessageBox.Show(mensaje, "RESULTADO DE LA OPERACIÓN", MessageBoxButton.OK, MessageBoxImage.Information);
                         SelectVentasConSaldoPendiente();
+                        txtPagoBOB.Text = "";
+                        txtPagoUSD.Text = "";
                     }
                 }
                 else

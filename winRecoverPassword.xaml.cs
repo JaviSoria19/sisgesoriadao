@@ -20,6 +20,10 @@ namespace sisgesoriadao
         }
         private void btnSend_Click(object sender, RoutedEventArgs e)
         {
+            sendUserAndPin();
+        }
+        void sendUserAndPin()
+        {
             if (txtUserName.Text != null && txtPin.Password != null)
             {
                 try
@@ -35,6 +39,7 @@ namespace sisgesoriadao
                         txtPassword.IsEnabled = true;
                         txtRePassword.IsEnabled = true;
                         btnConfirmPassword.IsEnabled = true;
+                        txtPassword.Focus();
                     }
                     else
                     {
@@ -56,6 +61,10 @@ namespace sisgesoriadao
             this.Close();
         }
         private void btnConfirmPassword_Click(object sender, RoutedEventArgs e)
+        {
+            confirmPassword();
+        }
+        void confirmPassword()
         {
             if (txtPassword.Password != txtRePassword.Password)
             {
@@ -88,6 +97,38 @@ namespace sisgesoriadao
 
             currentContainer.Text = currentContainer.Text.ToUpper();
             currentContainer.SelectionStart = caretPosition++;
+        }
+
+        private void txtPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                txtRePassword.Focus();
+            }
+        }
+
+        private void txtRePassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                confirmPassword();
+            }
+        }
+
+        private void txtPin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                sendUserAndPin();
+            }
+        }
+
+        private void txtUserName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                txtPin.Focus();
+            }
         }
     }
 }
