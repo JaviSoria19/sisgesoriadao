@@ -277,11 +277,10 @@ namespace sisgesoriadao
                                     if (categoria != null)
                                     {
                                         AddProductAndWarrantyToListAndDataGrid(producto, categoria);
-
                                         labelClear(lblSearchProductInfo);
                                         lblSearchProductInfo.Content = "";
-
                                         txtSearchProduct.Text = "";
+                                        lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
                                     }
                                 }
                                 catch (Exception ex)
@@ -489,16 +488,34 @@ namespace sisgesoriadao
         {
             if (string.IsNullOrEmpty(txtPagoUSD.Text) != true)
             {
-                double costoBOB = Math.Round(double.Parse(txtPagoUSD.Text) * Session.Ajuste_Cambio_Dolar, 2);
-                txtPagoBOB.Text = costoBOB.ToString();
+                try
+                {
+                    double costoBOB = Math.Round(double.Parse(txtPagoUSD.Text) * Session.Ajuste_Cambio_Dolar, 2);
+                    txtPagoBOB.Text = costoBOB.ToString();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    txtPagoBOB.Text = "";
+                    txtPagoUSD.Text = "";
+                }
             }
         }
         private void txtPagoBOB_KeyUp(object sender, KeyEventArgs e)
         {
             if (string.IsNullOrEmpty(txtPagoBOB.Text) != true)
             {
-                double costoUSD = Math.Round(double.Parse(txtPagoBOB.Text) / Session.Ajuste_Cambio_Dolar, 2);
-                txtPagoUSD.Text = costoUSD.ToString();
+                try
+                {
+                    double costoUSD = Math.Round(double.Parse(txtPagoBOB.Text) / Session.Ajuste_Cambio_Dolar, 2);
+                    txtPagoUSD.Text = costoUSD.ToString();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    txtPagoUSD.Text = "";
+                    txtPagoBOB.Text = "";
+                }
             }
         }
         void SearchByPhoneorCI()
@@ -771,7 +788,6 @@ namespace sisgesoriadao
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                throw;
             }
         }
 
@@ -792,6 +808,7 @@ namespace sisgesoriadao
                     txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
 
                     listaHelper.RemoveAt(dgvProductos.SelectedIndex);
+                    lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
                 }
             }
         }
@@ -837,9 +854,16 @@ namespace sisgesoriadao
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + "\nDebido a la excepción presentada, se cerrará esta ventana para evitar errores.");
-                ventaRegistrada = true;
-                this.Close();
+                MessageBox.Show(ex.Message);
+                (dgvProductos.SelectedItem as DataGridRowDetalleHelper).descuentoPorcentaje = filaSeleccionada.descuentoPorcentaje;
+                (dgvProductos.SelectedItem as DataGridRowDetalleHelper).descuentoUSD = filaSeleccionada.descuentoUSD;
+                (dgvProductos.SelectedItem as DataGridRowDetalleHelper).descuentoBOB = filaSeleccionada.descuentoBOB;
+                (dgvProductos.SelectedItem as DataGridRowDetalleHelper).totalproductoUSD = filaSeleccionada.totalproductoUSD;
+                (dgvProductos.SelectedItem as DataGridRowDetalleHelper).totalproductoBOB = filaSeleccionada.totalproductoBOB;
+                (dgvProductos.SelectedItem as DataGridRowDetalleHelper).garantia = filaSeleccionada.garantia;
+                SumarTotalySaldo(dgvProductos.SelectedIndex);
+                dgvProductos.ItemsSource = null;
+                dgvProductos.ItemsSource = listaHelper;
             }
         }
         private void ModificarFilaPorDescuentoPorcentaje(int i, TextBox n, DataGridRowDetalleHelper fila)

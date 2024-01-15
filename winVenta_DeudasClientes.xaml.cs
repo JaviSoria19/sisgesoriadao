@@ -19,6 +19,7 @@ namespace sisgesoriadao
         public winVenta_DeudasClientes()
         {
             InitializeComponent();
+            WindowState = WindowState.Maximized;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

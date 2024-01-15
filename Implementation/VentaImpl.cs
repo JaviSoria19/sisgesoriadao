@@ -686,10 +686,11 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectAllSalesWithPendingBalanceByCustomers()
         {
-            string query = "SELECT V.idVenta, U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT('- ',P.nombreProducto SEPARATOR ' \n'),')') AS Detalle, saldoUSD AS SaldoUSD, saldoBOB AS SaldoBOB, " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS 'Fecha' FROM Venta V
+            string query = "SELECT V.idVenta, U.nombreUsuario AS Usuario, CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT(DISTINCT '- ', P.codigoSublote, ' ', P.nombreProducto SEPARATOR ' \n'),')') AS Detalle, saldoUSD AS SaldoUSD, saldoBOB AS SaldoBOB, IFNULL(GROUP_CONCAT(DISTINCT '- ', MP.montoUSD, ' $us. el ', " + Session.FormatoFechaMySql("MP.fechaRegistro") + @" SEPARATOR ' \n'), '-') AS Pagos, " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS 'Fecha' FROM Venta V
                             INNER JOIN Usuario U ON V.idUsuario = U.idUsuario
                             INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
                             INNER JOIN Producto P ON DV.idProducto = P.idProducto
+                            LEFT JOIN Metodo_pago MP ON V.idVenta = MP.idVenta
                             WHERE (V.saldoUSD > 0 AND V.saldoBOB > 0) AND V.idSucursal = @SessionIdSucursal AND V.estado = 1 AND V.idCliente = @SessionIdCliente
                             GROUP BY V.idVenta ORDER BY 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);

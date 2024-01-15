@@ -1,6 +1,9 @@
 ﻿using sisgesoriadao.Implementation;
 using sisgesoriadao.Model;
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -18,21 +21,25 @@ namespace sisgesoriadao
         {
             InitializeComponent();
         }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            cbxGetUsuarioFromDatabase();
+        }
         private void btnSend_Click(object sender, RoutedEventArgs e)
         {
             sendUserAndPin();
         }
         void sendUserAndPin()
         {
-            if (txtUserName.Text != null && txtPin.Password != null)
+            if (cbxUsuario.Text != null && txtPin.Password != null)
             {
                 try
                 {
                     implUsuario = new UsuarioImpl();
-                    usuario = implUsuario.SelectRecoverPasswordWithPin(txtUserName.Text, txtPin.Password);
+                    usuario = implUsuario.SelectRecoverPasswordWithPin(cbxUsuario.Text, txtPin.Password);
                     if (usuario != null)
                     {
-                        txtUserName.IsEnabled = false;
+                        cbxUsuario.IsEnabled = false;
                         txtPin.IsEnabled = false;
                         lblInfo.Content = "ESTADO: USUARIO ENCONTRADO, INGRESE Y CONFIRME SU NUEVA CONTRASEÑA.";
                         lblInfo.Foreground = new SolidColorBrush(Colors.SpringGreen);
@@ -98,7 +105,6 @@ namespace sisgesoriadao
             currentContainer.Text = currentContainer.Text.ToUpper();
             currentContainer.SelectionStart = caretPosition++;
         }
-
         private void txtPassword_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -106,7 +112,6 @@ namespace sisgesoriadao
                 txtRePassword.Focus();
             }
         }
-
         private void txtRePassword_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -114,7 +119,6 @@ namespace sisgesoriadao
                 confirmPassword();
             }
         }
-
         private void txtPin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -122,12 +126,40 @@ namespace sisgesoriadao
                 sendUserAndPin();
             }
         }
-
-        private void txtUserName_KeyDown(object sender, KeyEventArgs e)
+        void cbxGetUsuarioFromDatabase()
         {
-            if (e.Key == Key.Enter)
+            try
             {
-                txtPin.Focus();
+                List<ComboboxItem> listcomboboxUsuario = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implUsuario = new UsuarioImpl();
+                dataTable = implUsuario.SelectForComboBox();
+                listcomboboxUsuario = (from DataRow dr in dataTable.Rows
+                                       select new ComboboxItem()
+                                       {
+                                           Texto = dr["nombreUsuario"].ToString()
+                                       }).ToList();
+                foreach (var item in listcomboboxUsuario)
+                {
+                    cbxUsuario.Items.Add(item);
+                }
+                cbxUsuario.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        public class ComboboxItem
+        {
+            public string Texto { get; set; }
+            public override string ToString()
+            {
+                return Texto;
+            }
+            public ComboboxItem()
+            {
+
             }
         }
     }
