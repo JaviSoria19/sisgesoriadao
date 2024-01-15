@@ -690,7 +690,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN Usuario U ON V.idUsuario = U.idUsuario
                             INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
                             INNER JOIN Producto P ON DV.idProducto = P.idProducto
-                            LEFT JOIN Metodo_pago MP ON V.idVenta = MP.idVenta
+                            LEFT JOIN Metodo_Pago MP ON V.idVenta = MP.idVenta
                             WHERE (V.saldoUSD > 0 AND V.saldoBOB > 0) AND V.idSucursal = @SessionIdSucursal AND V.estado = 1 AND V.idCliente = @SessionIdCliente
                             GROUP BY V.idVenta ORDER BY 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);

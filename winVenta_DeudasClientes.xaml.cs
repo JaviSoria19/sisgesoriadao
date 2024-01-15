@@ -209,16 +209,34 @@ namespace sisgesoriadao
         {
             if (string.IsNullOrEmpty(txtPagoUSD.Text) != true)
             {
-                double costoBOB = Math.Round(double.Parse(txtPagoUSD.Text) * Session.Ajuste_Cambio_Dolar, 2);
-                txtPagoBOB.Text = costoBOB.ToString();
+                try
+                {
+                    double costoBOB = Math.Round(double.Parse(txtPagoUSD.Text) * Session.Ajuste_Cambio_Dolar, 2);
+                    txtPagoBOB.Text = costoBOB.ToString();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    txtPagoBOB.Text = "";
+                    txtPagoUSD.Text = "";
+                }
             }
         }
         private void txtPagoBOB_KeyUp(object sender, KeyEventArgs e)
         {
             if (string.IsNullOrEmpty(txtPagoBOB.Text) != true)
             {
-                double costoUSD = Math.Round(double.Parse(txtPagoBOB.Text) / Session.Ajuste_Cambio_Dolar, 2);
-                txtPagoUSD.Text = costoUSD.ToString();
+                try
+                {
+                    double costoUSD = Math.Round(double.Parse(txtPagoBOB.Text) / Session.Ajuste_Cambio_Dolar, 2);
+                    txtPagoUSD.Text = costoUSD.ToString();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    txtPagoBOB.Text = "";
+                    txtPagoUSD.Text = "";
+                }
             }
         }
 
