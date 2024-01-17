@@ -270,48 +270,57 @@ namespace sisgesoriadao
                         {
                             if (producto.IdSucursal == Session.Sucursal_IdSucursal)
                             {
-                                try
+                                if (Session.VerificarProductoEnCola(producto, "VENTA PENDIENTE") == false)
                                 {
-                                    implCategoria = new CategoriaImpl();
-                                    categoria = implCategoria.Get(producto.IdCategoria);
-                                    if (categoria != null)
+                                    try
                                     {
-                                        AddProductAndWarrantyToListAndDataGrid(producto, categoria);
-                                        labelClear(lblSearchProductInfo);
-                                        lblSearchProductInfo.Content = "";
-                                        txtSearchProduct.Text = "";
-                                        lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
+                                        implCategoria = new CategoriaImpl();
+                                        categoria = implCategoria.Get(producto.IdCategoria);
+                                        if (categoria != null)
+                                        {
+                                            AddProductAndWarrantyToListAndDataGrid(producto, categoria);
+                                            labelClear(lblSearchProductInfo);
+                                            lblSearchProductInfo.Content = "";
+                                            txtSearchProduct.Text = "";
+                                            lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        MessageBox.Show(ex.Message);
                                     }
                                 }
-                                catch (Exception ex)
+                                else
                                 {
-                                    MessageBox.Show(ex.Message);
-                                    throw;
+                                    Session.Mensaje_ProductoEnCola(producto);
+                                    labelClear(lblSearchProductInfo);
+                                    lblSearchProductInfo.Content = "";
+                                    txtSearchProduct.Text = "";
                                 }
                             }
                             else
                             {
                                 labelWarning(lblSearchProductInfo);
-                                lblSearchProductInfo.Content = "EL PRODUCTO " + producto.CodigoSublote + " ESTÁ DISPONIBLE PERO NO SE ENCUENTRA EN ESTA SUCURSAL, POR FAVOR REALICE LA TRANSFERENCIA CORRESPONDIENTE.";
+                                lblSearchProductInfo.Content = "EL PRODUCTO CON EL CÓDIGO " + producto.CodigoSublote + " ESTÁ DISPONIBLE PERO NO SE ENCUENTRA EN ESTA SUCURSAL, POR FAVOR REALICE LA TRANSFERENCIA CORRESPONDIENTE.";
                                 txtSearchProduct.Text = "";
                             }
                         }
                         else if (producto.Estado == 2)
                         {
                             labelWarning(lblSearchProductInfo);
-                            lblSearchProductInfo.Content = "EL PRODUCTO " + producto.CodigoSublote + " YA FUE VENDIDO Y NO SE ENCUENTRA EN SISTEMA.";
+                            lblSearchProductInfo.Content = "EL PRODUCTO CON EL CÓDIGO " + producto.CodigoSublote + " YA FUE VENDIDO Y NO SE ENCUENTRA DISPONIBLE.";
                             txtSearchProduct.Text = "";
                         }
                         else if (producto.Estado == 3)
                         {
                             labelWarning(lblSearchProductInfo);
-                            lblSearchProductInfo.Content = "EL PRODUCTO " + producto.CodigoSublote + " ESTÁ EN ESPERA PARA SER CONFIRMADO EN UNA SUCURSAL.";
+                            lblSearchProductInfo.Content = "EL PRODUCTO CON EL CÓDIGO " + producto.CodigoSublote + " ESTÁ EN ESPERA PARA SER CONFIRMADO Y RECIBIDO EN UNA SUCURSAL.";
                             txtSearchProduct.Text = "";
                         }
                         else
                         {
                             labelDanger(lblSearchProductInfo);
-                            lblSearchProductInfo.Content = "EL PRODUCTO " + producto.CodigoSublote + " FUE ELIMINADO DEL SISTEMA.";
+                            lblSearchProductInfo.Content = "EL PRODUCTO CON EL CÓDIGO " + producto.CodigoSublote + " FUE ELIMINADO DEL SISTEMA Y NO ESTÁ DISPONIBLE.";
                             txtSearchProduct.Text = "";
                         }
                     }
@@ -774,6 +783,10 @@ namespace sisgesoriadao
                     e.Cancel = true;
                 }
             }
+            foreach (var item in listaHelper)
+            {
+                Session.RemoverProductoEnCola(item.codigoSublote);
+            }
         }
         void imprimirVenta()
         {
@@ -807,6 +820,7 @@ namespace sisgesoriadao
                     venta_saldoBOB = Math.Round(venta_TotalBOB - venta_pagoTotalBOB, 2);
                     txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
 
+                    Session.RemoverProductoEnCola(listaHelper[dgvProductos.SelectedIndex].codigoSublote);
                     listaHelper.RemoveAt(dgvProductos.SelectedIndex);
                     lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
                 }

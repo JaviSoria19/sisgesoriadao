@@ -41,7 +41,7 @@ namespace sisgesoriadao
                     string mensaje = implProducto.UpdateBranchMovementTransaction(listaProductos, (cbxSucursal.SelectedItem as ComboboxItem).Valor, cbxSucursal.Text);
                     if (mensaje == "PRODUCTOS TRANSFERIDOS EXITOSAMENTE.")
                     {
-                        MessageBox.Show(mensaje);
+                        MessageBox.Show(mensaje, "RESULTADO DE LA OPERACIÓN", MessageBoxButton.OK, MessageBoxImage.Information);
                         try
                         {
                             int idTransferencia = implProducto.GetLastMovementFromBranch();
@@ -54,19 +54,19 @@ namespace sisgesoriadao
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message);
+                            MessageBox.Show(ex.Message, "RESULTADO DE LA OPERACIÓN", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         this.Close();
                     }
                     else
                     {
-                        MessageBox.Show(mensaje);
+                        MessageBox.Show(mensaje, "RESULTADO DE LA OPERACIÓN", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
             }
             else
             {
-                MessageBox.Show("¡Debe ingresar como mínimo 1 producto al lote!");
+                MessageBox.Show("¡Debe ingresar como mínimo 1 producto al lote!", "OPERACIÓN NO VÁLIDA", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
         private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -108,24 +108,31 @@ namespace sisgesoriadao
                             {
                                 if (producto.Estado == 1)
                                 {
-                                    addToDataGrid_andList(producto);
+                                    if (Session.VerificarProductoEnCola(producto, "TRANSFERENCIA PENDIENTE") == false)
+                                    {
+                                        addToDataGrid_andList(producto);
+                                    }
+                                    else
+                                    {
+                                        Session.Mensaje_ProductoEnCola(producto);
+                                    }
                                 }
                                 else if (producto.Estado == 0)//P. Eliminado
                                 {
-                                    MessageBox.Show("Lo siento, este producto ha sido ELIMINADO y no está disponible para transferencia");
+                                    MessageBox.Show("Lo siento, este producto ha sido ELIMINADO y no está disponible para transferencia", "PRODUCTO ELIMINADO", MessageBoxButton.OK, MessageBoxImage.Information);
                                 }
                                 else if (producto.Estado == 2)//P. Vendido
                                 {
-                                    MessageBox.Show("Lo siento, este producto ya ha sido VENDIDO y no está disponible para transferencia");
+                                    MessageBox.Show("Lo siento, este producto ya ha sido VENDIDO y no está disponible para transferencia", "PRODUCTO VENDIDO", MessageBoxButton.OK, MessageBoxImage.Information);
                                 }
                                 else if (producto.Estado == 3)//P. En espera
                                 {
-                                    MessageBox.Show("Este producto está actualmente en espera de ser aceptado en otra sucursal, por favor espere hasta que esté disponible de nuevo.");
+                                    MessageBox.Show("Este producto está actualmente en espera de ser aceptado en otra sucursal, por favor espere hasta que esté disponible de nuevo.", "PRODUCTO EN ESPERA DE CONFIRMACIÓN", MessageBoxButton.OK, MessageBoxImage.Information);
                                 }
                             }
                             else
                             {
-                                MessageBox.Show("Lo siento, el producto con el código " + producto.CodigoSublote + " se encuentra actualmente en otra sucursal y no está disponible para transferencia en este momento. Por favor, intente de nuevo más tarde o consulte con la sucursal correspondiente.\nSugerencia: Revise el historial del producto para saber la sucursal específica.");
+                                MessageBox.Show("Lo siento, el producto con el código " + producto.CodigoSublote + " se encuentra actualmente en otra sucursal y no está disponible para transferencia en este momento. Por favor, intente de nuevo más tarde o consulte con la sucursal correspondiente.\nSugerencia: Revise el historial del producto para saber la sucursal específica.", "PRODUCTO EN OTRA SUCURSAL", MessageBoxButton.OK, MessageBoxImage.Information);
                             }
                         }
                     }
@@ -137,12 +144,12 @@ namespace sisgesoriadao
                 }
                 else
                 {
-                    MessageBox.Show("¡No puede seleccionar la misma sucursal en la que usted se encuentra!");
+                    MessageBox.Show("¡No puede seleccionar la misma sucursal en la que usted se encuentra!", "OPERACIÓN NO VÁLIDA", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             else
             {
-                MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
+                MessageBox.Show("Por favor rellene los campos obligatorios. (*)", "DATOS INCOMPLETOS", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
         void addToDataGrid_andList(Producto producto)
@@ -152,7 +159,7 @@ namespace sisgesoriadao
             {
                 if (producto.CodigoSublote == listaProductos[i].CodigoSublote)
                 {
-                    MessageBox.Show("¡El producto ingresado ya se encuentra en la tabla!");
+                    MessageBox.Show("¡El producto ingresado ya se encuentra en la tabla!", "RESULTADO DE LA OPERACIÓN", MessageBoxButton.OK, MessageBoxImage.Information);
                     validoParaInsercion = false;
                     break;
                 }
@@ -314,7 +321,16 @@ namespace sisgesoriadao
 
         private void btndgvRemoverProducto(object sender, RoutedEventArgs e)
         {
+            Session.RemoverProductoEnCola((dgvProductos.SelectedItem as DataGridRowDetalleHelper).CodigoSublote);
             removeFromDataGridandList(dgvProductos.SelectedIndex);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            foreach (var item in listaProductos)
+            {
+                Session.RemoverProductoEnCola(item.CodigoSublote);
+            }
         }
     }
 }

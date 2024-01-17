@@ -1,6 +1,7 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Windows;
@@ -12,7 +13,7 @@ namespace sisgesoriadao.Model
     {
         //Cadena de conexión requerida para llamar a la base de datos.
         public static string CadenaConexionBdD { get; set; } = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
-        public static string VersionApp { get; set; } = "v. 1.7.5";
+        public static string VersionApp { get; set; } = "v. 1.7.6";
         //Atributo indispensable para manejar la totalidad del sistema.
         public static byte IdUsuario { get; set; }
         //Atributo de referencia para dar a conocer al usuario que ha iniciado sesión correctamente.
@@ -28,16 +29,63 @@ namespace sisgesoriadao.Model
         //Atributos requeridos para regular el tipo de cambio y el límite de descuento de productos debajo del costo establecido.
         public static double Ajuste_Cambio_Dolar { get; set; }
         public static byte Ajuste_Limite_Descuento { get; set; }
+        public static byte Caja_Operacion = 0;
+        public static byte NumeroFormatoFecha { get; set; } = 2;
+        public static byte IntervaloHora { get; set; } = 0;
+        public static byte TemaPredeterminado { get; set; } = 0;
         public static int IdVentaDetalle { get; set; } = 0;
         public static int IdCliente { get; set; } = 0;
         public static int IdCaja { get; set; } = 0;
         public static int IdCotizacion { get; set; } = 0;
         public static string Producto_Historial_CodigoSublote { get; set; } = null;
-        public static byte Caja_Operacion = 0;
-        public static byte NumeroFormatoFecha { get; set; } = 2;
-        public static byte IntervaloHora { get; set; } = 0;
-        public static byte TemaPredeterminado { get; set; } = 0;
-
+        public static List<ProductoEnCola> Lista_CodigosDeProductosEnCola { get; set; } = new List<ProductoEnCola>();
+        public static bool VerificarProductoEnCola(Producto producto, string operacion)
+        {
+            bool productoEnCola = false;
+            /*Si el producto si está en cola, se devuelve verdadero.*/
+            foreach (var item in Lista_CodigosDeProductosEnCola)
+            {
+                if (producto.CodigoSublote == item.CodigoSublote)
+                {
+                    productoEnCola = true;
+                    break;
+                }
+            }
+            /*Si el producto no está en cola, se añade a la lista.*/
+            if (!productoEnCola)
+            {
+                Lista_CodigosDeProductosEnCola.Add(new ProductoEnCola
+                {
+                    CodigoSublote = producto.CodigoSublote,
+                    NombreProducto = producto.NombreProducto,
+                    Operacion = operacion
+                });
+            }
+            return productoEnCola;
+        }
+        public static void RemoverProductoEnCola(string codigoSublote)
+        {
+            foreach (var item in Lista_CodigosDeProductosEnCola)
+            {
+                if (codigoSublote == item.CodigoSublote)
+                {
+                    Lista_CodigosDeProductosEnCola.Remove(item);
+                    break;
+                }
+            }
+        }
+        public static void Mensaje_ProductoEnCola(Producto producto)
+        {
+            foreach (var item in Lista_CodigosDeProductosEnCola)
+            {
+                if (producto.CodigoSublote == item.CodigoSublote)
+                {
+                    MessageBox.Show("ATENCIÓN: EL PRODUCTO CON CÓDIGO " + item.CodigoSublote + " " + item.NombreProducto +
+                    " NO SE PUEDE AGREGAR EN ESTE MOMENTO PORQUE SE ENCUENTRA EN COLA PARA: " + item.Operacion
+                    , "PRODUCTO EN COLA", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+        }
         public static string FormatoFechaMySql(string MySqlAtributoFecha)
         {
             switch (NumeroFormatoFecha)
@@ -191,9 +239,11 @@ namespace sisgesoriadao.Model
         {
             if (dataGrid.Items.Count > 0)
             {
-                Microsoft.Win32.SaveFileDialog guardar = new Microsoft.Win32.SaveFileDialog();
-                guardar.FileName = titulo + "_" + DateTime.Now.ToString("yyyy_MM_dd__HH_mm") + ".pdf";
-                guardar.Filter = "PDF(*.pdf)|*.pdf";
+                Microsoft.Win32.SaveFileDialog guardar = new Microsoft.Win32.SaveFileDialog
+                {
+                    FileName = titulo + "_" + DateTime.Now.ToString("yyyy_MM_dd__HH_mm") + ".pdf",
+                    Filter = "PDF(*.pdf)|*.pdf"
+                };
                 if (guardar.ShowDialog() == true)
                 {
                     try
@@ -228,8 +278,10 @@ namespace sisgesoriadao.Model
                             floatArray.SetValue(4f, i);
                         table.SetWidths((float[])floatArray);
                         table.WidthPercentage = 100;
-                        PdfPCell cell = new PdfPCell(new Phrase("Products"));
-                        cell.Colspan = columnasConTexto;
+                        PdfPCell cell = new PdfPCell(new Phrase("Products"))
+                        {
+                            Colspan = columnasConTexto
+                        };
 
                         /*ITERACION DE ENCABEZADOS*/
                         foreach (var item in dataGrid.Columns)

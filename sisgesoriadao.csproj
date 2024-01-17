@@ -156,6 +156,7 @@
     <Compile Include="Model\MetodoPago.cs" />
     <Compile Include="Model\Producto.cs" />
     <Compile Include="Model\ProductoComun.cs" />
+    <Compile Include="Model\ProductoEnCola.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Sucursal.cs" />
     <Compile Include="Model\Usuario.cs" />

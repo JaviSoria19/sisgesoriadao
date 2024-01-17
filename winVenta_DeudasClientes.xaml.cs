@@ -128,10 +128,9 @@ namespace sisgesoriadao
         {
             if (string.IsNullOrEmpty(txtPagoUSD.Text) != true && string.IsNullOrEmpty(txtPagoBOB.Text) != true)
             {
-                double pagoUSD = 0, pagoBOB = 0;
                 byte metodoPago;
-                pagoUSD = double.Parse(txtPagoUSD.Text.ToString().Trim());
-                pagoBOB = double.Parse(txtPagoBOB.Text.ToString().Trim());
+                double pagoUSD = double.Parse(txtPagoUSD.Text.ToString().Trim());
+                double pagoBOB = double.Parse(txtPagoBOB.Text.ToString().Trim());
                 metodoPago = byte.Parse((cbxPaymentMethod.SelectedItem as ComboboxItem).Valor.ToString());
                 if (pagoUSD <= SaldoUSD || pagoBOB <= SaldoBOB)
                 {
