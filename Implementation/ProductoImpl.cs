@@ -350,10 +350,10 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
-        public string GetCodeFormatToInsertProducts(int IdLote)
+        public string GetCodeFormatToInsertProducts(int IdLote, byte Suma)
         {
             string codigoSublote = null;
-            string query = @"SELECT CONCAT(L.codigoLote, L.idLote,'-',COUNT(S.idSublote)) AS Codigo FROM Lote AS L
+            string query = @"SELECT CONCAT(L.codigoLote, L.idLote,'-',COUNT(S.idSublote) + " + 0 + @") AS Codigo FROM Lote AS L
                                 INNER JOIN Sublote AS S ON L.idLote = S.idLote 
                                 WHERE L.idLote = @idLote";
             MySqlCommand command = CreateBasicCommand(query);

@@ -8,7 +8,7 @@ namespace sisgesoriadao.Interfaces
     {
         Producto Get(int Id);
         Producto GetByCode(string CadenaBusqueda);
-        String GetCodeFormatToInsertProducts(int IdLote);
+        String GetCodeFormatToInsertProducts(int IdLote, byte Suma);
         int GetSubBatchToInsertProducts(int IdLote);
         DataTable SelectProductHistory(string CadenaBusqueda);
         DataTable SelectLikeReporteValorado(string idSucursal, string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin);

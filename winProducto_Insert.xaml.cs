@@ -57,26 +57,56 @@ namespace sisgesoriadao
 
                 if (MessageBox.Show("¿Está seguro de haber ingresado todos los datos correctamente? \n Cantidad de productos ingresados al lote: " + listaproductos.Count + ". \n Presione SI para continuar.", "Confirmar lote", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    implProducto = new ProductoImpl();
-                    string mensaje = implProducto.InsertTransaction(listaproductos, (cbxLote.SelectedItem as ComboboxItem).Valor);
-                    if (mensaje == "LOTE REGISTRADO EXITOSAMENTE.")
-                    {
-                        loteRegistrado = true;
-                        MessageBox.Show(mensaje);
-                        PrintCodigoSublote(listaproductos);
-
-                        //insertar código para imprimir etiquetas DYMO
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show(mensaje);
-                    }
+                    VerifyIfBatchAlreadyExists();
                 }
             }
             else
             {
                 MessageBox.Show("¡Debe ingresar como mínimo 1 producto al lote!");
+            }
+        }
+        private void VerifyIfBatchAlreadyExists()
+        {
+            implProducto = new ProductoImpl();
+            DataTable dt = implProducto.SelectBatchOfProductsToUpdate(listaproductos[0].CodigoSublote);
+            byte i = 1;
+            bool batchExists = false;
+            while (dt.Rows.Count > 0)
+            {
+                batchExists = true;
+                contador = 1;
+                GetCodigoSubLoteFromDatabase(i);
+                GetIDSubLoteFromDatabase();
+                foreach (var item in listaproductos)
+                {
+                    item.CodigoSublote = codigoSublote + "-" + contador;
+                    item.IdSublote = idSublote;
+                    contador++;
+                }
+                i++;
+                dt = implProducto.SelectBatchOfProductsToUpdate(listaproductos[0].CodigoSublote);
+            }
+            string mensaje = implProducto.InsertTransaction(listaproductos, (cbxLote.SelectedItem as ComboboxItem).Valor);
+            if (mensaje == "LOTE REGISTRADO EXITOSAMENTE.")
+            {
+                if (batchExists)
+                {
+                    loteRegistrado = true;
+                    MessageBox.Show(mensaje + "\nSE HA DETECTADO UN SUB-LOTE DE PRODUCTOS YA EXISTENTE CON EL CÓDIGO DE SUB-LOTE, POR ENDE EL CÓDIGO DE SUBLOTE DE TODOS LOS PRODUCTOS INGRESADOS HA SIDO ACTUALIZADO PARA EVITAR CÓDIGOS DE SUB-LOTE DUPLICADOS.");
+                    PrintCodigoSublote(listaproductos);
+                    Close();
+                }
+                else
+                {
+                    loteRegistrado = true;
+                    MessageBox.Show(mensaje);
+                    PrintCodigoSublote(listaproductos);
+                    Close();
+                }
+            }
+            else
+            {
+                MessageBox.Show(mensaje);
             }
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -87,7 +117,7 @@ namespace sisgesoriadao
             cbxGetLoteFromDatabase();
             cbxGetCondicionFromDatabase();
             cbxGetNombreProductoFromDatabase();
-            GetCodigoSubLoteFromDatabase();
+            GetCodigoSubLoteFromDatabase(0);
             GetIDSubLoteFromDatabase();
             txtSucursal.Text = "Sucursal: " + Session.Sucursal_NombreSucursal;
             txtObservaciones.Text = "-";
@@ -96,7 +126,7 @@ namespace sisgesoriadao
         {
             if (contador == 1)
             {
-                GetCodigoSubLoteFromDatabase();
+                GetCodigoSubLoteFromDatabase(0);
                 GetIDSubLoteFromDatabase();
             }
         }
@@ -309,12 +339,12 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
-        void GetCodigoSubLoteFromDatabase()
+        void GetCodigoSubLoteFromDatabase(byte Suma)
         {
             try
             {
                 implProducto = new ProductoImpl();
-                codigoSublote = implProducto.GetCodeFormatToInsertProducts((cbxLote.SelectedItem as ComboboxItem).Valor);
+                codigoSublote = implProducto.GetCodeFormatToInsertProducts((cbxLote.SelectedItem as ComboboxItem).Valor, Suma);
                 txtCodigoSublote.Text = codigoSublote + "-" + contador;
             }
             catch (Exception ex)
