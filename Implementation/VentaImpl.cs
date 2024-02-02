@@ -884,5 +884,31 @@ namespace sisgesoriadao.Implementation
                 throw;
             }
         }
+
+        public DataTable SelectLikePaymentMethodsByCustomers(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo)
+        {
+            string query = @"SELECT MP.idVenta AS 'ID', CONCAT('Venta: ',V.idVenta,' (',GROUP_CONCAT(DISTINCT '- ', P.codigoSublote, ' ', P.nombreProducto SEPARATOR ' \n'),')') AS Detalle, MP.montoUSD AS MontoUSD, MP.montoBOB AS MontoBOB, IF(MP.Tipo = 1, 'EFECTIVO',IF(MP.Tipo = 2, 'TRANSFERENCIA BANCARIA', 'TARJETA')) AS Tipo, " + Session.FormatoFechaMySql("MP.fechaRegistro") + @" AS FechaRegistro FROM Metodo_Pago MP
+                            INNER JOIN Venta V ON V.idVenta = MP.idVenta
+                            INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
+                            INNER JOIN Producto P ON DV.idProducto = P.idProducto
+                            WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto) 
+                            AND V.idSucursal = @SessionIdSucursal AND V.idCliente = @SessionIdCliente AND MP.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
+                            GROUP BY MP.idMetodoPago
+                            ORDER BY MP.fechaRegistro DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@FechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", fechaFin.ToString("yyyy-MM-dd") + " 23:59:59");
+            command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
+            command.Parameters.AddWithValue("@SessionIdCliente", Session.IdCliente);
+            command.Parameters.AddWithValue("@productocodigoproducto", "%" + productoOCodigo + "%");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

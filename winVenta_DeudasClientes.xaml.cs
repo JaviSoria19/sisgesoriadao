@@ -16,6 +16,7 @@ namespace sisgesoriadao
     {
         VentaImpl implVenta;
         double SaldoUSD = 0, SaldoBOB = 0;
+        int idCliente = Session.IdCliente;
         public winVenta_DeudasClientes()
         {
             InitializeComponent();
@@ -261,6 +262,14 @@ namespace sisgesoriadao
                 (sender as TextBox).Text = "";
             }
         }
+
+        private void btnPaymentMethodHistory_Click(object sender, RoutedEventArgs e)
+        {
+            Session.IdCliente = idCliente;
+            winVenta_HistorialPagosCliente winVenta_HistorialPagosCliente = new winVenta_HistorialPagosCliente();
+            winVenta_HistorialPagosCliente.Show();
+        }
+
         public class ComboboxItem
         {
             public string Texto { get; set; }

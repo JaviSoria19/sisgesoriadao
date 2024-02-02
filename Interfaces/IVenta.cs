@@ -32,5 +32,6 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectAllSalesWithPendingBalanceByCustomers();
         string UpdateSaleProductsTransaction(Venta venta, List<Producto> ListaProductos, List<double> ListaDescuentosPorcentaje, List<byte> ListaGarantias);
         string DeleteAfterSaleProductTransaction(Venta venta, int IdProducto);
+        DataTable SelectLikePaymentMethodsByCustomers(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo);
     }
 }

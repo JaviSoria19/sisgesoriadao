@@ -1,4 +1,4 @@
-﻿<Window x:Class="sisgesoriadao.winVenta_DeudasClientes"
+﻿<Window x:Class="sisgesoriadao.winVenta_HistorialPagosCliente"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
      TextElement.FontWeight="Regular"
@@ -13,7 +13,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
-        Title="Sistema de Ventas - Saldos pendientes" Height="720" Width="1280"
+        Title="Sistema de Ventas - Historial de pagos (Cliente)" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
     <ScrollViewer>
         <StackPanel Orientation="Vertical">
@@ -24,27 +24,23 @@
                 <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
                 <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
-                <materialDesign:PackIcon Kind="CartOutline" Width="25" Height="25" VerticalAlignment="Center"/>
-                <TextBlock Text="SALDOS PENDIENTES" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
-            </StackPanel>
-
-            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                <TextBlock Text="SELECCIONE UN REGISTRO PARA VER EL DETALLE:" FontSize="19" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="CreditCard" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="HISTORIAL DE PAGOS DEL CLIENTE" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">
-                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                    <Label Content="Tipo:" VerticalAlignment="Center"/>
-                    <ComboBox x:Name="cbxPaymentMethod" IsEnabled="True" Margin="0,0,20,0" VerticalAlignment="Center"/>
-                    <Label Content="Monto ($.):" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPagoUSD_KeyUp" KeyDown="txtPagoUSD_KeyDown" VerticalAlignment="Center"/>
-                    <Label Content="Monto (Bs.):" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtPagoBOB" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyUp="txtPagoBOB_KeyUp" KeyDown="txtPagoBOB_KeyDown" VerticalAlignment="Center"/>
-                    <Button x:Name="btnAddPaymentMethod" ToolTip="PAGAR UNA O MÁS VENTAS." Click="btnAddPaymentMethod_Click" IsEnabled="True" Background="LimeGreen" BorderBrush="LimeGreen">
-                        <materialDesign:PackIcon Kind="CreditCardAdd"/>
+                <StackPanel Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
+                    <Label Content="Desde:" VerticalAlignment="Center"/>
+                    <DatePicker x:Name="dtpFechaInicio" Margin="0,0,20,0"/>
+                    <Label Content="Hasta:" VerticalAlignment="Center"/>
+                    <DatePicker x:Name="dtpFechaFin" Loaded="dtpFechaFin_Loaded" Margin="0,0,20,0"/>
+                    <Label Content="Producto o Código:" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtBuscar_Producto_o_Codigo" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="50" Height="22" KeyDown="txtBuscar_Producto_o_Codigo_KeyDown"/>
+                    <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
+                        <materialDesign:PackIcon Kind="Search"/>
                     </Button>
-                    <Button x:Name="btnPaymentMethodHistory" Content="HISTORIAL DE PAGOS" Click="btnPaymentMethodHistory_Click" Margin="20,0,0,0" IsEnabled="True" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue"/>
                 </StackPanel>
+
                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
                     <Button x:Name="btnCopy" ToolTip="EXPORTAR TABLA AL PORTAPAPELES" Margin="0,0,0,0" Click="btnCopy_Click" Background="White" Foreground="Black" BorderBrush="Black">
                         <materialDesign:PackIcon Kind="ContentCopy" Width="50"/>
@@ -56,6 +52,7 @@
                         <materialDesign:PackIcon Kind="FilePdfBox" Width="50"/>
                     </Button>
                 </StackPanel>
+
                 <Border BorderBrush="Gray" BorderThickness="2">
                     <DataGrid x:Name="dgvDatos" AutoGenerateColumns="False"
                   HorizontalAlignment="Left" VerticalAlignment="Top" GridLinesVisibility="Horizontal"
@@ -63,12 +60,11 @@
                   CanUserResizeRows="False" CanUserResizeColumns="False" MaxHeight="726" MaxWidth="1880" Loaded="dgvDatos_Loaded">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Nro. Venta" Binding="{Binding ID}" IsReadOnly="True" Visibility="Collapsed"/>
-                            <DataGridTextColumn Header="Usuario" Binding="{Binding Usuario}" IsReadOnly="True" Visibility="Visible"/>
                             <DataGridTextColumn Header="Detalle de Venta" Binding="{Binding Detalle}" IsReadOnly="True" Visibility="Visible"/>
-                            <DataGridTextColumn Header="Saldo $us." Binding="{Binding SaldoUSD}" IsReadOnly="True" Visibility="Visible"/>
-                            <DataGridTextColumn Header="Saldo Bs." Binding="{Binding SaldoBOB}" IsReadOnly="True" Visibility="Visible"/>
-                            <DataGridTextColumn Header="Pagos" Binding="{Binding Pagos}" IsReadOnly="True" Visibility="Visible"/>
-                            <DataGridTextColumn Header="Fecha de Registro" Binding="{Binding Fecha}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Pago $us." Binding="{Binding MontoUSD}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Pago Bs." Binding="{Binding MontoBOB}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Fecha de Registro" Binding="{Binding FechaRegistro}" IsReadOnly="True" Visibility="Visible"/>
                             <DataGridTemplateColumn>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
