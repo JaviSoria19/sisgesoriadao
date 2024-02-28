@@ -36,6 +36,9 @@
                     <DatePicker x:Name="dtpFechaFin" Loaded="dtpFechaFin_Loaded" Margin="0,0,20,0"/>
                     <Label Content="Producto o Código:" VerticalAlignment="Center"/>
                     <TextBox x:Name="txtBuscar_Producto_o_Codigo" TextWrapping="Wrap" Margin="0,0,20,0" Width="150" MaxLength="50" Height="22" KeyDown="txtBuscar_Producto_o_Codigo_KeyDown"/>
+                    <Button x:Name="btnErase" ToolTip="LIMPIAR BÚSQUEDA" Click="btnErase_Click" Margin="0,0,10,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
+                        <materialDesign:PackIcon Kind="Clear"/>
+                    </Button>
                     <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>

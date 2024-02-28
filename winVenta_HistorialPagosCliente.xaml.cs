@@ -96,7 +96,6 @@ namespace sisgesoriadao
                 }
             }
         }
-
         private void txtBuscar_Producto_o_Codigo_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -105,11 +104,18 @@ namespace sisgesoriadao
             }
             if (e.Key == Key.Escape)
             {
-                (sender as TextBox).Text = "";
-                (sender as TextBox).Focus();
+                CleanText();
             }
         }
-
+        void CleanText()
+        {
+            txtBuscar_Producto_o_Codigo.Text = "";
+            txtBuscar_Producto_o_Codigo.Focus();
+        }
+        private void btnErase_Click(object sender, RoutedEventArgs e)
+        {
+            CleanText();
+        }
         private void btndgvImprimir(object sender, RoutedEventArgs e)
         {
             if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)
