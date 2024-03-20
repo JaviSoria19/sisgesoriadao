@@ -129,64 +129,71 @@ namespace sisgesoriadao
         {
             if (string.IsNullOrEmpty(txtPagoUSD.Text) != true && string.IsNullOrEmpty(txtPagoBOB.Text) != true)
             {
-                byte metodoPago;
-                double pagoUSD = double.Parse(txtPagoUSD.Text.ToString().Trim());
-                double pagoBOB = double.Parse(txtPagoBOB.Text.ToString().Trim());
-                metodoPago = byte.Parse((cbxPaymentMethod.SelectedItem as ComboboxItem).Valor.ToString());
-                if (pagoUSD <= SaldoUSD || pagoBOB <= SaldoBOB)
+                if (double.Parse(txtPagoUSD.Text) != 0 || double.Parse(txtPagoBOB.Text) != 0)
                 {
-                    if (MessageBox.Show("Está a punto de saldar una o más ventas con saldo pendiente. ¿Está seguro de que desea continuar con el pago?", "REGISTRAR PAGOS Y ACTUALIZAR VENTAS", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    byte metodoPago;
+                    double pagoUSD = double.Parse(txtPagoUSD.Text.ToString().Trim());
+                    double pagoBOB = double.Parse(txtPagoBOB.Text.ToString().Trim());
+                    metodoPago = byte.Parse((cbxPaymentMethod.SelectedItem as ComboboxItem).Valor.ToString());
+                    if (pagoUSD <= SaldoUSD || pagoBOB <= SaldoBOB)
                     {
-                        List<int> listaIDVentas = new List<int>();
-                        List<double> listaSaldosUSD = new List<double>();
-                        foreach (DataRowView row in dgvDatos.Items)
+                        if (MessageBox.Show("Está a punto de saldar una o más ventas con saldo pendiente. ¿Está seguro de que desea continuar con el pago?", "REGISTRAR PAGOS Y ACTUALIZAR VENTAS", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
-                            listaIDVentas.Add(int.Parse(row[0].ToString()));
-                            listaSaldosUSD.Add(double.Parse(row[3].ToString()));
-                        }
-                        string mensaje = "";
-                        int i = 0;
-                        while (pagoUSD > 0)
-                        {
-                            if (pagoUSD >= listaSaldosUSD[i])
+                            List<int> listaIDVentas = new List<int>();
+                            List<double> listaSaldosUSD = new List<double>();
+                            foreach (DataRowView row in dgvDatos.Items)
                             {
-                                string insert = implVenta.InsertPaymentMethodTransaction(listaIDVentas[i], pagoUSD, Math.Round(pagoUSD * Session.Ajuste_Cambio_Dolar, 2), metodoPago);
-                                if (insert == "INSERTMETODOPAGO_EXITOSO")
+                                listaIDVentas.Add(int.Parse(row[0].ToString()));
+                                listaSaldosUSD.Add(double.Parse(row[3].ToString()));
+                            }
+                            string mensaje = "";
+                            int i = 0;
+                            while (pagoUSD > 0)
+                            {
+                                if (pagoUSD >= listaSaldosUSD[i])
                                 {
-                                    mensaje += "¡Pago EXITOSO en la venta #" + listaIDVentas[i] + "!\n";
+                                    string insert = implVenta.InsertPaymentMethodTransaction(listaIDVentas[i], pagoUSD, Math.Round(pagoUSD * Session.Ajuste_Cambio_Dolar, 2), metodoPago);
+                                    if (insert == "INSERTMETODOPAGO_EXITOSO")
+                                    {
+                                        mensaje += "¡Pago EXITOSO en la venta #" + listaIDVentas[i] + "!\n";
+                                    }
+                                    else
+                                    {
+                                        mensaje += insert + "\n";
+                                    }
                                 }
                                 else
                                 {
-                                    mensaje += insert + "\n";
+                                    string insert = implVenta.InsertPaymentMethodTransaction(listaIDVentas[i], pagoUSD, Math.Round(pagoUSD * Session.Ajuste_Cambio_Dolar, 2), metodoPago);
+                                    if (insert == "INSERTMETODOPAGO_EXITOSO")
+                                    {
+                                        mensaje += "Se pagó PARCIALMENTE la venta #" + listaIDVentas[i] + "\n";
+                                    }
+                                    else
+                                    {
+                                        mensaje += insert + "\n";
+                                    }
                                 }
+                                pagoUSD -= listaSaldosUSD[i];
+                                pagoUSD = Math.Round(pagoUSD, 2);
+                                i++;
                             }
-                            else
-                            {
-                                string insert = implVenta.InsertPaymentMethodTransaction(listaIDVentas[i], pagoUSD, Math.Round(pagoUSD * Session.Ajuste_Cambio_Dolar, 2), metodoPago);
-                                if (insert == "INSERTMETODOPAGO_EXITOSO")
-                                {
-                                    mensaje += "Se pagó PARCIALMENTE la venta #" + listaIDVentas[i] + "\n";
-                                }
-                                else
-                                {
-                                    mensaje += insert + "\n";
-                                }
-                            }
-                            pagoUSD -= listaSaldosUSD[i];
-                            pagoUSD = Math.Round(pagoUSD, 2);
-                            i++;
+                            MessageBox.Show(mensaje, "RESULTADO DE LA OPERACIÓN", MessageBoxButton.OK, MessageBoxImage.Information);
+                            SelectVentasConSaldoPendiente();
+                            txtPagoBOB.Text = "";
+                            txtPagoUSD.Text = "";
                         }
-                        MessageBox.Show(mensaje, "RESULTADO DE LA OPERACIÓN", MessageBoxButton.OK, MessageBoxImage.Information);
-                        SelectVentasConSaldoPendiente();
-                        txtPagoBOB.Text = "";
-                        txtPagoUSD.Text = "";
+                    }
+                    else
+                    {
+                        MessageBox.Show("ATENCIÓN, LOS MONTOS INGRESADOS NO SON VÁLIDOS PORQUE SUPERAN EL SALDO TOTAL DE LA(S) VENTA(S) \n" +
+                            "MONTOS INGRESADOS: " + pagoUSD + " $. | " + pagoBOB + " Bs.\n" +
+                            "SALDO TOTAL:" + SaldoUSD + " $. | " + SaldoBOB + " Bs.", "RESULTADO DE LA OPERACIÓN", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                 }
                 else
                 {
-                    MessageBox.Show("ATENCIÓN, LOS MONTOS INGRESADOS NO SON VÁLIDOS PORQUE SUPERAN EL SALDO TOTAL DE LA(S) VENTA(S) \n" +
-                        "MONTOS INGRESADOS: " + pagoUSD + " $. | " + pagoBOB + " Bs.\n" +
-                        "SALDO TOTAL:" + SaldoUSD + " $. | " + SaldoBOB + " Bs.", "RESULTADO DE LA OPERACIÓN", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("No puede ingresar CERO como método de pago!.");
                 }
             }
             else

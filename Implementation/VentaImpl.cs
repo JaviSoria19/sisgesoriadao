@@ -265,7 +265,7 @@ namespace sisgesoriadao.Implementation
                             AND V.estado = 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY P.idProducto
-                            ORDER BY 1 DESC";
+                            ORDER BY 4 DESC, 6 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@FechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
             command.Parameters.AddWithValue("@FechaFin", fechaFin.ToString("yyyy-MM-dd") + " 23:59:59");

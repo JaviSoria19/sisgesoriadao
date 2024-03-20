@@ -595,87 +595,93 @@ namespace sisgesoriadao
         {
             if (string.IsNullOrEmpty(txtPagoUSD.Text) != true && string.IsNullOrEmpty(txtPagoBOB.Text) != true)
             {
-                if (MessageBox.Show("¿Está seguro de REGISTRAR un nuevo pago de esta venta?", "REGISTRAR PAGO Y ACTUALIZAR VENTA", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (double.Parse(txtPagoUSD.Text) != 0 || double.Parse(txtPagoBOB.Text) != 0)
                 {
-                    if (usuario_modifico_precio == true)
+                    if (MessageBox.Show("¿Está seguro de REGISTRAR un nuevo pago de esta venta?", "REGISTRAR PAGO Y ACTUALIZAR VENTA", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
-                        List<byte> listaGarantias = new List<byte>();
-                        List<double> listaDescuentosPorcentaje = new List<double>();
-                        List<Producto> listaProductos = new List<Producto>();
-                        listaGarantias.Clear();
-                        listaDescuentosPorcentaje.Clear();
-                        listaProductos.Clear();
-                        foreach (var item in listaHelper)
+                        if (usuario_modifico_precio == true)
                         {
-                            listaGarantias.Add(item.garantia);
-                            listaDescuentosPorcentaje.Add(item.descuentoPorcentaje);
-                            listaProductos.Add(new Producto
+                            List<byte> listaGarantias = new List<byte>();
+                            List<double> listaDescuentosPorcentaje = new List<double>();
+                            List<Producto> listaProductos = new List<Producto>();
+                            listaGarantias.Clear();
+                            listaDescuentosPorcentaje.Clear();
+                            listaProductos.Clear();
+                            foreach (var item in listaHelper)
                             {
-                                IdProducto = item.idProducto,
-                                PrecioVentaUSD = item.totalproductoUSD,
-                                PrecioVentaBOB = item.totalproductoBOB,
-                            });
-                        }
-                        Venta venta = new Venta();
-                        venta.IdVenta = idVenta;
-                        venta.TotalUSD = venta_TotalUSD;
-                        venta.TotalBOB = venta_TotalBOB;
-                        venta.SaldoUSD = venta_saldoUSD;
-                        venta.SaldoBOB = venta_saldoBOB;
-                        try
-                        {
-                            string update = implVenta.UpdateSaleProductsTransaction(venta, listaProductos, listaDescuentosPorcentaje, listaGarantias);
-                            if (update == "UPDATEPRODUCTOS_EXITOSO")
-                            {
-                                double pagoUSD, pagoBOB;
-                                byte metodoPago;
-                                pagoUSD = double.Parse(txtPagoUSD.Text);
-                                pagoBOB = double.Parse(txtPagoBOB.Text);
-                                metodoPago = byte.Parse((cbxPaymentMethod.SelectedItem as ComboboxItem).Valor.ToString());
-                                string insert = implVenta.InsertPaymentMethodTransaction(idVenta, pagoUSD, pagoBOB, metodoPago);
-                                if (insert == "INSERTMETODOPAGO_EXITOSO")
+                                listaGarantias.Add(item.garantia);
+                                listaDescuentosPorcentaje.Add(item.descuentoPorcentaje);
+                                listaProductos.Add(new Producto
                                 {
-                                    MessageBox.Show("METODO DE PAGO REGISTRADO CON ÉXITO Y PRODUCTOS MODIFICADOS CORRECTAMENTE");
-                                    getSale_Products();
-                                    SelectMetodosPago();
-                                    imprimirVenta();
+                                    IdProducto = item.idProducto,
+                                    PrecioVentaUSD = item.totalproductoUSD,
+                                    PrecioVentaBOB = item.totalproductoBOB,
+                                });
+                            }
+                            Venta venta = new Venta();
+                            venta.IdVenta = idVenta;
+                            venta.TotalUSD = venta_TotalUSD;
+                            venta.TotalBOB = venta_TotalBOB;
+                            venta.SaldoUSD = venta_saldoUSD;
+                            venta.SaldoBOB = venta_saldoBOB;
+                            try
+                            {
+                                string update = implVenta.UpdateSaleProductsTransaction(venta, listaProductos, listaDescuentosPorcentaje, listaGarantias);
+                                if (update == "UPDATEPRODUCTOS_EXITOSO")
+                                {
+                                    double pagoUSD, pagoBOB;
+                                    byte metodoPago;
+                                    pagoUSD = double.Parse(txtPagoUSD.Text);
+                                    pagoBOB = double.Parse(txtPagoBOB.Text);
+                                    metodoPago = byte.Parse((cbxPaymentMethod.SelectedItem as ComboboxItem).Valor.ToString());
+                                    string insert = implVenta.InsertPaymentMethodTransaction(idVenta, pagoUSD, pagoBOB, metodoPago);
+                                    if (insert == "INSERTMETODOPAGO_EXITOSO")
+                                    {
+                                        MessageBox.Show("METODO DE PAGO REGISTRADO CON ÉXITO Y PRODUCTOS MODIFICADOS CORRECTAMENTE");
+                                        getSale_Products();
+                                        SelectMetodosPago();
+                                        imprimirVenta();
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show(insert);
+                                    }
                                 }
                                 else
                                 {
-                                    MessageBox.Show(insert);
+                                    MessageBox.Show(update);
                                 }
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                MessageBox.Show(update);
+                                MessageBox.Show(ex.Message);
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
-                    }
-                    else
-                    {
-                        double pagoUSD, pagoBOB;
-                        byte metodoPago;
-                        pagoUSD = double.Parse(txtPagoUSD.Text);
-                        pagoBOB = double.Parse(txtPagoBOB.Text);
-                        metodoPago = byte.Parse((cbxPaymentMethod.SelectedItem as ComboboxItem).Valor.ToString());
-                        string insert = implVenta.InsertPaymentMethodTransaction(idVenta, pagoUSD, pagoBOB, metodoPago);
-                        if (insert == "INSERTMETODOPAGO_EXITOSO")
-                        {
-                            MessageBox.Show("METODO DE PAGO REGISTRADO CON ÉXITO");
-                            getSale_Products();
-                            SelectMetodosPago();
-                            imprimirVenta();
                         }
                         else
                         {
-                            MessageBox.Show(insert);
+                            double pagoUSD, pagoBOB;
+                            byte metodoPago;
+                            pagoUSD = double.Parse(txtPagoUSD.Text);
+                            pagoBOB = double.Parse(txtPagoBOB.Text);
+                            metodoPago = byte.Parse((cbxPaymentMethod.SelectedItem as ComboboxItem).Valor.ToString());
+                            string insert = implVenta.InsertPaymentMethodTransaction(idVenta, pagoUSD, pagoBOB, metodoPago);
+                            if (insert == "INSERTMETODOPAGO_EXITOSO")
+                            {
+                                MessageBox.Show("METODO DE PAGO REGISTRADO CON ÉXITO");
+                                getSale_Products();
+                                SelectMetodosPago();
+                                imprimirVenta();
+                            }
+                            else
+                            {
+                                MessageBox.Show(insert);
+                            }
                         }
                     }
-
+                }
+                else
+                {
+                    MessageBox.Show("No puede ingresar CERO como método de pago!.");
                 }
             }
             else

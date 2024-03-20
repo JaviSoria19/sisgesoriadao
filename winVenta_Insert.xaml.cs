@@ -665,33 +665,40 @@ namespace sisgesoriadao
         {
             if (string.IsNullOrEmpty(txtPagoUSD.Text) != true && string.IsNullOrEmpty(txtPagoBOB.Text) != true)
             {
-                //Añadiendo métodos de pago a la tabla y a la lista.
-                dgvMetodosPago.Items.Add(new MetodoPagoDataGridView
+                if (double.Parse(txtPagoUSD.Text) != 0 || double.Parse(txtPagoBOB.Text) != 0)
                 {
-                    montoUSD = double.Parse(txtPagoUSD.Text),
-                    montoBOB = double.Parse(txtPagoBOB.Text),
-                    tipo = (cbxPaymentMethod.SelectedItem as ComboboxItem).Texto.ToString()
-                });
-                listaMetodoPagos.Add(new MetodoPago(
-                    double.Parse(txtPagoUSD.Text),
-                    double.Parse(txtPagoBOB.Text),
-                    byte.Parse((cbxPaymentMethod.SelectedItem as ComboboxItem).Valor.ToString())
-                    ));
+                    //Añadiendo métodos de pago a la tabla y a la lista.
+                    dgvMetodosPago.Items.Add(new MetodoPagoDataGridView
+                    {
+                        montoUSD = double.Parse(txtPagoUSD.Text),
+                        montoBOB = double.Parse(txtPagoBOB.Text),
+                        tipo = (cbxPaymentMethod.SelectedItem as ComboboxItem).Texto.ToString()
+                    });
+                    listaMetodoPagos.Add(new MetodoPago(
+                        double.Parse(txtPagoUSD.Text),
+                        double.Parse(txtPagoBOB.Text),
+                        byte.Parse((cbxPaymentMethod.SelectedItem as ComboboxItem).Valor.ToString())
+                        ));
 
-                //Actualizando las cifras de la venta.
-                venta_pagoTotalUSD += double.Parse(txtPagoUSD.Text);
-                txtVentaTotalPagoUSD.Text = venta_pagoTotalUSD.ToString();
-                venta_pagoTotalBOB += double.Parse(txtPagoBOB.Text);
-                txtVentaTotalPagoBOB.Text = venta_pagoTotalBOB.ToString();
+                    //Actualizando las cifras de la venta.
+                    venta_pagoTotalUSD += double.Parse(txtPagoUSD.Text);
+                    txtVentaTotalPagoUSD.Text = venta_pagoTotalUSD.ToString();
+                    venta_pagoTotalBOB += double.Parse(txtPagoBOB.Text);
+                    txtVentaTotalPagoBOB.Text = venta_pagoTotalBOB.ToString();
 
-                venta_saldoUSD = Math.Round(venta_TotalUSD - venta_pagoTotalUSD, 2);
-                txtVentaTotalSaldoUSD.Text = venta_saldoUSD.ToString();
-                venta_saldoBOB = Math.Round(venta_TotalBOB - venta_pagoTotalBOB, 2);
-                txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
+                    venta_saldoUSD = Math.Round(venta_TotalUSD - venta_pagoTotalUSD, 2);
+                    txtVentaTotalSaldoUSD.Text = venta_saldoUSD.ToString();
+                    venta_saldoBOB = Math.Round(venta_TotalBOB - venta_pagoTotalBOB, 2);
+                    txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
 
-                //Vaciando los txt del método de pago de dólar y boliviano.
-                txtPagoUSD.Text = "";
-                txtPagoBOB.Text = "";
+                    //Vaciando los txt del método de pago de dólar y boliviano.
+                    txtPagoUSD.Text = "";
+                    txtPagoBOB.Text = "";
+                }
+                else
+                {
+                    MessageBox.Show("No puede ingresar CERO como método de pago!.");
+                }
             }
             else
             {

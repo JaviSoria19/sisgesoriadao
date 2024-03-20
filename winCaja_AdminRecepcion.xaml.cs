@@ -75,6 +75,11 @@ namespace sisgesoriadao
         {
             try
             {
+                cajastotalUSD = 0;
+                cajastotalBOB = 0;
+                txtCajasTotalUSD.Text = "Total $us.: " + cajastotalUSD.ToString();
+                txtCajasTotalBOB.Text = "Total Bs.: " + cajastotalBOB.ToString();
+
                 implCaja = new CajaImpl();
                 dgvDatos.ItemsSource = null;
                 dgvDatos.ItemsSource = implCaja.Select().DefaultView;

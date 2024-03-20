@@ -394,7 +394,7 @@ namespace sisgesoriadao
             DataGridTextColumn columna10 = new DataGridTextColumn
             {
                 Header = "Precio USD",
-                Binding = new Binding("Precio USD")
+                Binding = new Binding("PrecioUSD")
             };
             dgvDatosVerificados.Columns.Add(columna1);
             dgvDatosVerificados.Columns.Add(columna2);
