@@ -40,7 +40,9 @@ namespace sisgesoriadao.Implementation
         {
             string query = @"UPDATE Ajustes SET 
                 cambio_dolar=@cambio_dolar, limite_descuento=@limite_descuento, intervalo_hora=@intervalo_hora, tema_predeterminado=@tema_predeterminado,
-                fechaActualizacion = CURRENT_TIMESTAMP WHERE idAjustes = 1";
+                fechaActualizacion = CURRENT_TIMESTAMP WHERE idAjustes = 1;
+                UPDATE Producto SET costoBOB = costoUSD * (SELECT cambio_dolar FROM Ajustes LIMIT 1) , precioVentaBOB = precioVentaUSD * (SELECT cambio_dolar FROM Ajustes LIMIT 1)
+                WHERE estado = 1;";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@cambio_dolar", a.CambioDolar);
             command.Parameters.AddWithValue("@limite_descuento", a.LimiteDescuento);

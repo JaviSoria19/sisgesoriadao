@@ -11,6 +11,7 @@ namespace sisgesoriadao
     public partial class winMainSeller : Window
     {
         VentaImpl implVenta;
+        AjusteImpl implAjuste;
         public winMainSeller()
         {
             InitializeComponent();
@@ -111,8 +112,8 @@ namespace sisgesoriadao
         }
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
             LoadInfoFromDB();
+            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
         }
         void LoadInfoFromDB()
         {
@@ -139,6 +140,15 @@ namespace sisgesoriadao
                 implVenta = new VentaImpl();
                 var (mUSD, mBOB) = implVenta.GetCashAmounts();
                 infoCashAmount.Text = "EFECTIVO EN CAJA: " + mUSD.ToString() + " USD. | " + mBOB.ToString() + " BS.";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            try
+            {
+                implAjuste = new AjusteImpl();
+                implAjuste.Get();
             }
             catch (Exception ex)
             {
