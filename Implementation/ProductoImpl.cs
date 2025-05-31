@@ -646,10 +646,11 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectMovementsHistory()
         {
-            string query = @"SELECT T.idTransferencia AS ID, S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino', COUNT(DT.idProducto) AS 'Productos transferidos', " + Session.FormatoFechaMySql("T.fechaRegistro") + @" AS 'Fecha de Registro' FROM Transferencia AS T
+            string query = @"SELECT T.idTransferencia AS ID, S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino', COUNT(DT.idProducto) AS 'Productos transferidos', GROUP_CONCAT(DISTINCT '- ', P.codigoSublote, ' ', P.nombreProducto, ' ', P.identificador SEPARATOR '\n') AS 'Detalle', " + Session.FormatoFechaMySql("T.fechaRegistro") + @" AS 'Fecha de Registro' FROM Transferencia AS T
                         INNER JOIN Sucursal S1 ON S1.idSucursal = T.SucursalOrigen
                         INNER JOIN Sucursal S2 ON S2.idSucursal = T.SucursalDestino
                         INNER JOIN Detalle_Transferencia AS DT ON DT.idTransferencia = T.idTransferencia
+                        INNER JOIN Producto AS P ON P.idProducto = DT.idProducto
                         GROUP BY T.idTransferencia
                         ORDER BY 1 DESC
                         LIMIT 200";
@@ -666,10 +667,11 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectLikeMovementsHistory(string SucursalOrigen, string SucursalDestino, DateTime FechaInicio, DateTime FechaFin)
         {
-            string query = @"SELECT T.idTransferencia AS ID, S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino', COUNT(DT.idProducto) AS 'Productos transferidos', " + Session.FormatoFechaMySql("T.fechaRegistro") + @" AS 'Fecha de Registro' FROM Transferencia AS T
+            string query = @"SELECT T.idTransferencia AS ID, S1.nombreSucursal AS 'Sucursal Origen', S2.nombreSucursal AS 'Sucursal Destino', COUNT(DT.idProducto) AS 'Productos transferidos', GROUP_CONCAT(DISTINCT '- ', P.codigoSublote, ' ', P.nombreProducto, ' ', P.identificador SEPARATOR '\n') AS 'Detalle', " + Session.FormatoFechaMySql("T.fechaRegistro") + @" AS 'Fecha de Registro' FROM Transferencia AS T
                         INNER JOIN Sucursal S1 ON S1.idSucursal = T.SucursalOrigen
                         INNER JOIN Sucursal S2 ON S2.idSucursal = T.SucursalDestino
                         INNER JOIN Detalle_Transferencia AS DT ON DT.idTransferencia = T.idTransferencia
+                        INNER JOIN Producto AS P ON P.idProducto = DT.idProducto
                         WHERE S1.nombreSucursal LIKE @origen AND S2.nombreSucursal LIKE @destino
                         AND T.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                         GROUP BY T.idTransferencia

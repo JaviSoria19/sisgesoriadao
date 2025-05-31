@@ -48,27 +48,6 @@ namespace sisgesoriadao
         {
             Select();
         }
-        private void dgvDatos_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (dgvDatos.SelectedItem != null && dgvDatos.Items.Count > 0)
-            {
-                try
-                {
-                    DataRowView d = (DataRowView)dgvDatos.SelectedItem;
-                    idTransferencia = int.Parse(d.Row.ItemArray[0].ToString());
-                    SelectDetails(idTransferencia);
-                    if (idTransferencia != 0)
-                    {
-                        btnPrintPDF.IsEnabled = true;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    throw;
-                }
-            }
-        }
         private void Select()
         {
             try
@@ -98,20 +77,6 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
-        private void SelectDetails(int idTransferencia)
-        {
-            try
-            {
-                dgvDetalle.ItemsSource = null;
-                dgvDetalle.ItemsSource = implProducto.SelectMovementsHistory_Details(idTransferencia).DefaultView;
-                dgvDetalle.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridViewDetalles.Content = "NÚMERO DE REGISTROS: " + implProducto.SelectMovementsHistory_Details(idTransferencia).Rows.Count;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
             Select();
@@ -119,60 +84,6 @@ namespace sisgesoriadao
             cbxSucursalDestino.SelectedIndex = 0;
             dtpFechaFin.SelectedDate = DateTime.Today;
             dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
-        }
-        private void btnPrintPDF_Click(object sender, RoutedEventArgs e)
-        {
-            DataRowView d = (DataRowView)dgvDetalle.Items[0];
-            DateTime fechaRegistro = DateTime.Parse(d.Row.ItemArray[6].ToString());
-
-            Microsoft.Win32.SaveFileDialog guardar = new Microsoft.Win32.SaveFileDialog();
-            guardar.FileName = "Transferencia_" + fechaRegistro.ToString("yyyy_MM_dd__HH_mm") + ".pdf";
-            guardar.Filter = "PDF(*.pdf)|*.pdf";
-
-            string paginahtml_texto = Properties.Resources.PlantillaReporteTransferencia.ToString();
-            paginahtml_texto = paginahtml_texto.Replace("@NOMBRESUCURSAL", Session.Sucursal_NombreSucursal);
-            paginahtml_texto = paginahtml_texto.Replace("@FECHAREGISTRO", fechaRegistro.ToString("dd/MM/yyyy HH:mm"));
-            paginahtml_texto = paginahtml_texto.Replace("@FECHAIMPRESION", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
-            paginahtml_texto = paginahtml_texto.Replace("@USUARIO", Session.NombreUsuario);
-            string filas = string.Empty;
-            foreach (DataRowView item in dgvDetalle.Items)
-            {
-                filas += "<tr>";
-                filas += "<td>" + pdf_contador + "</td>";
-                filas += "<td>" + item[1].ToString() + "</td>";
-                filas += "<td>" + item[2].ToString() + "</td>";
-                filas += "<td>" + item[3].ToString() + "</td>";
-                filas += "<td>" + item[4].ToString() + "</td>";
-                filas += "<td>" + item[5].ToString() + "</td>";
-                filas += "</tr>";
-                pdf_contador++;
-            }
-            paginahtml_texto = paginahtml_texto.Replace("@FILAS", filas);
-
-
-            if (guardar.ShowDialog() == true)
-            {
-                try
-                {
-                    using (FileStream stream = new FileStream(guardar.FileName, FileMode.Create))
-                    {
-                        Document pdfDoc = new Document(PageSize.A4, 25, 25, 25, 25);
-                        PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
-                        pdfDoc.Open();
-                        pdfDoc.Add(new Phrase(""));
-                        using (StringReader sr = new StringReader(paginahtml_texto))
-                        {
-                            XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
-                        }
-                        pdfDoc.Close();
-                        stream.Close();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
         }
         void cbxSelectSucursalFromDatabase()
         {
@@ -224,26 +135,13 @@ namespace sisgesoriadao
         {
             Session.ExportarAPortapapeles(dgvDatos);
         }
-        private void btnCopy2_Click(object sender, RoutedEventArgs e)
-        {
-            Session.ExportarAPortapapeles(dgvDetalle);
-        }
         private void btnExcel_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAExcel(dgvDatos);
         }
-        private void btnExcel2_Click(object sender, RoutedEventArgs e)
-        {
-            Session.ExportarAExcel(dgvDetalle);
-        }
         private void btnPDF_Click(object sender, RoutedEventArgs e)
         {
             Session.ExportarAPDF(dgvDatos, "TRANSFERENCIAS_HISTORIAL");
-        }
-
-        private void btnPDF2_Click(object sender, RoutedEventArgs e)
-        {
-            Session.ExportarAPDF(dgvDetalle, "TRANSFERENCIA_DETALLE");
         }
     }
 }
