@@ -701,30 +701,92 @@ namespace sisgesoriadao
                 {
                     if (MessageBox.Show("Está realmente segur@ de eliminar este pago de la venta?", "ELIMINAR PAGO Y ACTUALIZAR VENTA", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
-                        try
+                        if (usuario_modifico_precio == true)
                         {
-                            DataRowView d = (DataRowView)dgvMetodosPago.SelectedItem;
-                            int id = int.Parse(d.Row.ItemArray[0].ToString());
-                            double montoUSD, montoBOB;
-                            montoUSD = double.Parse(d.Row.ItemArray[1].ToString());
-                            montoBOB = double.Parse(d.Row.ItemArray[2].ToString());
-                            string insert = implVenta.DeletePaymentMethodTransaction(idVenta, id, montoUSD, montoBOB);
-                            if (insert == "DELETEMETODOPAGO_EXITOSO")
+                            List<byte> listaGarantias = new List<byte>();
+                            List<double> listaDescuentosPorcentaje = new List<double>();
+                            List<Producto> listaProductos = new List<Producto>();
+                            listaGarantias.Clear();
+                            listaDescuentosPorcentaje.Clear();
+                            listaProductos.Clear();
+                            foreach (var item in listaHelper)
                             {
-                                MessageBox.Show("METODO DE PAGO ELIMINADO CON ÉXITO.");
-                                getSale_Products();
-                                SelectMetodosPago();
-                                imprimirVenta();
+                                listaGarantias.Add(item.garantia);
+                                listaDescuentosPorcentaje.Add(item.descuentoPorcentaje);
+                                listaProductos.Add(new Producto
+                                {
+                                    IdProducto = item.idProducto,
+                                    PrecioVentaUSD = item.totalproductoUSD,
+                                    PrecioVentaBOB = item.totalproductoBOB,
+                                });
+                            }
+                            Venta venta = new Venta();
+                            venta.IdVenta = idVenta;
+                            venta.TotalUSD = venta_TotalUSD;
+                            venta.TotalBOB = venta_TotalBOB;
+                            venta.SaldoUSD = venta_saldoUSD;
+                            venta.SaldoBOB = venta_saldoBOB;
+                            string update = implVenta.UpdateSaleProductsTransaction(venta, listaProductos, listaDescuentosPorcentaje, listaGarantias);
+                            if (update == "UPDATEPRODUCTOS_EXITOSO")
+                            {
+                                try
+                                {
+                                    DataRowView d = (DataRowView)dgvMetodosPago.SelectedItem;
+                                    int id = int.Parse(d.Row.ItemArray[0].ToString());
+                                    double montoUSD, montoBOB;
+                                    montoUSD = double.Parse(d.Row.ItemArray[1].ToString());
+                                    montoBOB = double.Parse(d.Row.ItemArray[2].ToString());
+                                    string insert = implVenta.DeletePaymentMethodTransaction(idVenta, id, montoUSD, montoBOB);
+                                    if (insert == "DELETEMETODOPAGO_EXITOSO")
+                                    {
+                                        MessageBox.Show("METODO DE PAGO ELIMINADO CON ÉXITO Y PRODUCTOS MODIFICADOS CORRECTAMENTE");
+                                        getSale_Products();
+                                        SelectMetodosPago();
+                                        imprimirVenta();
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show(insert);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show(ex.Message);
+                                    throw;
+                                }
                             }
                             else
                             {
-                                MessageBox.Show(insert);
+                                MessageBox.Show(update);
                             }
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            MessageBox.Show(ex.Message);
-                            throw;
+                            try
+                            {
+                                DataRowView d = (DataRowView)dgvMetodosPago.SelectedItem;
+                                int id = int.Parse(d.Row.ItemArray[0].ToString());
+                                double montoUSD, montoBOB;
+                                montoUSD = double.Parse(d.Row.ItemArray[1].ToString());
+                                montoBOB = double.Parse(d.Row.ItemArray[2].ToString());
+                                string insert = implVenta.DeletePaymentMethodTransaction(idVenta, id, montoUSD, montoBOB);
+                                if (insert == "DELETEMETODOPAGO_EXITOSO")
+                                {
+                                    MessageBox.Show("METODO DE PAGO ELIMINADO CON ÉXITO.");
+                                    getSale_Products();
+                                    SelectMetodosPago();
+                                    imprimirVenta();
+                                }
+                                else
+                                {
+                                    MessageBox.Show(insert);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                                throw;
+                            }
                         }
                     }
                     dgvMetodosPago.SelectedItem = null;
