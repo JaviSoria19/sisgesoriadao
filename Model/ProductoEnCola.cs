@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace sisgesoriadao.Model
+﻿namespace sisgesoriadao.Model
 {
     public class ProductoEnCola
     {

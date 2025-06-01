@@ -1,11 +1,8 @@
 ﻿using sisgesoriadao.Implementation;
 using sisgesoriadao.Model;
 using System;
-using System.Collections.Generic;
 using System.Data;//ADO.NET
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 namespace sisgesoriadao
 {
@@ -76,7 +73,7 @@ namespace sisgesoriadao
         }
         private void btnPDF_Click(object sender, RoutedEventArgs e)
         {
-            Session.ExportarAPDF(dgvDatos,"HISTORIAL_DE_PAGOS_CLIENTE");
+            Session.ExportarAPDF(dgvDatos, "HISTORIAL_DE_PAGOS_CLIENTE");
         }
         private void btndgvModificar(object sender, RoutedEventArgs e)
         {
