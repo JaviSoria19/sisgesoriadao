@@ -14,8 +14,6 @@ namespace sisgesoriadao
     public partial class winTransferencia : Window
     {
         ProductoImpl implProducto;
-        int idTransferencia = 0;
-        int pdf_contador = 1;
         SucursalImpl implSucursal;
         public winTransferencia()
         {

@@ -43,6 +43,48 @@ namespace sisgesoriadao
 
         private ObservableCollection<DataGridRowDetalleHelper> listaHelper = new ObservableCollection<DataGridRowDetalleHelper>();
 
+        public class DataGridRowDetalleHelper
+        {
+            public int idProducto { get; set; }
+            public string codigoSublote { get; set; }
+            public string nombreProducto { get; set; }
+            public string identificador { get; set; }
+            public double precioUSD { get; set; }
+            public double precioBOB { get; set; }
+            public double descuentoPorcentaje { get; set; }
+            public double descuentoUSD { get; set; }
+            public double descuentoBOB { get; set; }
+            public double totalproductoUSD { get; set; }
+            public double totalproductoBOB { get; set; }
+            public byte garantia { get; set; }
+            public double costoUSD { get; set; }
+        }
+        public class MetodoPagoDataGridView
+        {
+            public double montoUSD { get; set; }
+            public double montoBOB { get; set; }
+            public string tipo { get; set; }
+        }
+        public class ComboboxItem
+        {
+            public string Texto { get; set; }
+            public int Valor { get; set; }
+
+            public override string ToString()
+            {
+                return Texto;
+            }
+            public ComboboxItem(string texto, byte valor)
+            {
+                Texto = texto;
+                Valor = valor;
+            }
+            public ComboboxItem()
+            {
+
+            }
+        }
+
         public winVenta_Insert()
         {
             InitializeComponent();
@@ -85,85 +127,115 @@ namespace sisgesoriadao
         }
         private void btnSaveNewCustomer_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtRegister_Nombre.Text) == false && string.IsNullOrEmpty(txtRegister_NumeroCelular.Text) == false && string.IsNullOrEmpty(txtRegister_NumeroCI.Text) == false)
-            {
-                switch (operacion)
-                {
-                    //insert
-                    case 1:
-                        cliente = new Cliente(txtRegister_Nombre.Text.Trim(), txtRegister_NumeroCelular.Text.Trim(), txtRegister_NumeroCI.Text.Trim());
-                        implCliente = new ClienteImpl();
-                        try
-                        {
-                            int n = implCliente.Insert(cliente);
-                            if (n > 0)
-                            {
-                                stackpanelCustomerFound.Visibility = Visibility.Visible;
-                                stackpanelCustomerForm.Visibility = Visibility.Collapsed;
-                                stackpanelCustomerButtons.Visibility = Visibility.Collapsed;
-                                try
-                                {
-                                    implCliente = new ClienteImpl();
-                                    cliente = implCliente.GetByCIorCelular(txtRegister_NumeroCI.Text.Trim());
-                                    if (cliente != null)
-                                    {
-                                        acbtxtNameCustomer.Text = cliente.Nombre.Trim();
-                                        lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
-                                        lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
-                                        DisableCustomerButtons();
-                                        acbxGetClientesFromDatabase();
-                                        btnEditCustomer.IsEnabled = true;
-                                    }
-                                }
-                                catch (Exception)
-                                {
-
-                                    throw;
-                                }
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
-                        }
-                        break;
-                    //UPDATE
-                    case 2:
-                        cliente.Nombre = txtRegister_Nombre.Text.Trim();
-                        cliente.NumeroCelular = txtRegister_NumeroCelular.Text.Trim();
-                        cliente.NumeroCI = txtRegister_NumeroCI.Text.Trim();
-                        implCliente = new ClienteImpl();
-                        try
-                        {
-                            int n = implCliente.Update(cliente);
-                            if (n > 0)
-                            {
-                                acbtxtNameCustomer.Text = cliente.Nombre.Trim();
-                                lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
-                                lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
-                                DisableCustomerButtons();
-                                acbxGetClientesFromDatabase();
-                                stackpanelCustomerFound.Visibility = Visibility.Visible;
-                                stackpanelCustomerForm.Visibility = Visibility.Collapsed;
-                                stackpanelCustomerButtons.Visibility = Visibility.Collapsed;
-                                btnAddCustomer.IsEnabled = true;
-                                btnEditCustomer.IsEnabled = true;
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
+            if (!CamposClienteValidos())
             {
                 MessageBox.Show("Por favor rellene los campos obligatorios. (*)");
+                return;
+            }
+
+            implCliente = new ClienteImpl();
+
+            switch (operacion)
+            {
+                case 1:
+                    InsertarNuevoCliente();
+                    break;
+                case 2:
+                    EditarClienteExistente();
+                    break;
+                default:
+                    break;
             }
         }
+
+        private bool CamposClienteValidos()
+        {
+            return !string.IsNullOrWhiteSpace(txtRegister_Nombre.Text)
+                && !string.IsNullOrWhiteSpace(txtRegister_NumeroCelular.Text)
+                && !string.IsNullOrWhiteSpace(txtRegister_NumeroCI.Text);
+        }
+
+        private void InsertarNuevoCliente()
+        {
+            cliente = new Cliente(
+                txtRegister_Nombre.Text.Trim(),
+                txtRegister_NumeroCelular.Text.Trim(),
+                txtRegister_NumeroCI.Text.Trim()
+            );
+
+            try
+            {
+                int resultado = implCliente.Insert(cliente);
+                if (resultado > 0)
+                {
+                    MostrarPanelClienteEncontrado();
+                    BuscarYMostrarClientePorCI(txtRegister_NumeroCI.Text.Trim());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Transacción no completada; comuníquese con el Administrador de Sistemas, error: \n" + ex.Message);
+            }
+        }
+
+        private void EditarClienteExistente()
+        {
+            cliente.Nombre = txtRegister_Nombre.Text.Trim();
+            cliente.NumeroCelular = txtRegister_NumeroCelular.Text.Trim();
+            cliente.NumeroCI = txtRegister_NumeroCI.Text.Trim();
+
+            try
+            {
+                int resultado = implCliente.Update(cliente);
+                if (resultado > 0)
+                {
+                    MostrarDatosClienteEnPantalla();
+                    MostrarPanelClienteEncontrado();
+                    btnAddCustomer.IsEnabled = true;
+                    btnEditCustomer.IsEnabled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Transacción no completada; comuníquese con el Administrador de Sistemas, error: \n" + ex.Message);
+            }
+        }
+
+        private void MostrarPanelClienteEncontrado()
+        {
+            stackpanelCustomerFound.Visibility = Visibility.Visible;
+            stackpanelCustomerForm.Visibility = Visibility.Collapsed;
+            stackpanelCustomerButtons.Visibility = Visibility.Collapsed;
+        }
+
+        private void BuscarYMostrarClientePorCI(string numeroCI)
+        {
+            try
+            {
+                implCliente = new ClienteImpl();
+                cliente = implCliente.GetByCIorCelular(numeroCI);
+
+                if (cliente != null)
+                {
+                    MostrarDatosClienteEnPantalla();
+                    DisableCustomerButtons();
+                    acbxGetClientesFromDatabase();
+                    btnEditCustomer.IsEnabled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Transacción no completada; comuníquese con el Administrador de Sistemas, error: \n" + ex.Message);
+            }
+        }
+
+        private void MostrarDatosClienteEnPantalla()
+        {
+            acbtxtNameCustomer.Text = cliente.Nombre.Trim();
+            lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
+            lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
+        }
+
         private void btnCancelNewCustomer_Click(object sender, RoutedEventArgs e)
         {
             stackpanelCustomerFound.Visibility = Visibility.Visible;
@@ -258,225 +330,218 @@ namespace sisgesoriadao
         }
         void SearchProductByCode()
         {
-            if (string.IsNullOrEmpty(txtSearchProduct.Text) == false)
+            string codigo = txtSearchProduct.Text?.Trim();
+            if (string.IsNullOrWhiteSpace(codigo))
+                return;
+
+            try
             {
-                try
+                implProducto = new ProductoImpl();
+                producto = implProducto.GetByCode(codigo);
+
+                if (producto == null)
                 {
-                    implProducto = new ProductoImpl();
-                    producto = implProducto.GetByCode(txtSearchProduct.Text);
-                    if (producto != null)
-                    {
-                        if (producto.Estado == 1)
-                        {
-                            if (producto.IdSucursal == Session.Sucursal_IdSucursal)
-                            {
-                                if (Session.VerificarProductoEnCola(producto, "VENTA PENDIENTE") == false)
-                                {
-                                    try
-                                    {
-                                        implCategoria = new CategoriaImpl();
-                                        categoria = implCategoria.Get(producto.IdCategoria);
-                                        if (categoria != null)
-                                        {
-                                            AddProductAndWarrantyToListAndDataGrid(producto, categoria);
-                                            labelClear(lblSearchProductInfo);
-                                            lblSearchProductInfo.Content = "";
-                                            txtSearchProduct.Text = "";
-                                            lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        MessageBox.Show(ex.Message);
-                                    }
-                                }
-                                else
-                                {
-                                    Session.Mensaje_ProductoEnCola(producto);
-                                    labelClear(lblSearchProductInfo);
-                                    lblSearchProductInfo.Content = "";
-                                    txtSearchProduct.Text = "";
-                                }
-                            }
-                            else
-                            {
-                                labelWarning(lblSearchProductInfo);
-                                lblSearchProductInfo.Content = "EL PRODUCTO CON EL CÓDIGO " + producto.CodigoSublote + " ESTÁ DISPONIBLE PERO NO SE ENCUENTRA EN ESTA SUCURSAL, POR FAVOR REALICE LA TRANSFERENCIA CORRESPONDIENTE.";
-                                txtSearchProduct.Text = "";
-                            }
-                        }
-                        else if (producto.Estado == 2)
-                        {
-                            labelWarning(lblSearchProductInfo);
-                            lblSearchProductInfo.Content = "EL PRODUCTO CON EL CÓDIGO " + producto.CodigoSublote + " YA FUE VENDIDO Y NO SE ENCUENTRA DISPONIBLE.";
-                            txtSearchProduct.Text = "";
-                        }
-                        else if (producto.Estado == 3)
-                        {
-                            labelWarning(lblSearchProductInfo);
-                            lblSearchProductInfo.Content = "EL PRODUCTO CON EL CÓDIGO " + producto.CodigoSublote + " ESTÁ EN ESPERA PARA SER CONFIRMADO Y RECIBIDO EN UNA SUCURSAL.";
-                            txtSearchProduct.Text = "";
-                        }
-                        else
-                        {
-                            labelDanger(lblSearchProductInfo);
-                            lblSearchProductInfo.Content = "EL PRODUCTO CON EL CÓDIGO " + producto.CodigoSublote + " FUE ELIMINADO DEL SISTEMA Y NO ESTÁ DISPONIBLE.";
-                            txtSearchProduct.Text = "";
-                        }
-                    }
-                    else
-                    {
-                        labelWarning(lblSearchProductInfo);
-                        lblSearchProductInfo.Content = "PRODUCTO NO ENCONTRADO.";
-                    }
+                    MostrarMensajeProducto("PRODUCTO NO ENCONTRADO.", MessageType.Warning);
+                    return;
                 }
-                catch (Exception ex)
+
+                if (producto.Estado != 1)
                 {
-                    MessageBox.Show(ex.Message);
-                    throw;
+                    MostrarMensajeEstadoProducto(producto);
+                    return;
+                }
+
+                if (producto.IdSucursal != Session.Sucursal_IdSucursal)
+                {
+                    MostrarMensajeProducto($"EL PRODUCTO CON EL CÓDIGO {producto.CodigoSublote} ESTÁ DISPONIBLE PERO NO SE ENCUENTRA EN ESTA SUCURSAL, POR FAVOR REALICE LA TRANSFERENCIA CORRESPONDIENTE.", MessageType.Warning);
+                    return;
+                }
+
+                if (Session.VerificarProductoEnCola(producto, "VENTA PENDIENTE"))
+                {
+                    Session.Mensaje_ProductoEnCola(producto);
+                    LimpiarCampoBusquedaProducto();
+                    return;
+                }
+
+                implCategoria = new CategoriaImpl();
+                categoria = implCategoria.Get(producto.IdCategoria);
+
+                if (categoria != null)
+                {
+                    AddProductAndWarrantyToListAndDataGrid(producto, categoria);
+                    LimpiarCampoBusquedaProducto();
+                    lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
                 }
             }
-        }
-        void AddProductAndWarrantyToListAndDataGrid(Producto producto, Categoria categoria)
-        {
-            bool validoParaInsercion = true;
-            for (int i = 0; i < listaHelper.Count; i++)
+            catch (Exception ex)
             {
-                if (producto.CodigoSublote == listaHelper[i].codigoSublote)
-                {
-                    MessageBox.Show("¡El producto ingresado ya se encuentra en la tabla!");
-                    validoParaInsercion = false;
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        enum MessageType { Success, Warning, Danger }
+
+        void MostrarMensajeProducto(string mensaje, MessageType tipo)
+        {
+            switch (tipo)
+            {
+                case MessageType.Warning:
+                    labelWarning(lblSearchProductInfo);
                     break;
-                }
+                case MessageType.Danger:
+                    labelDanger(lblSearchProductInfo);
+                    break;
+                default:
+                    labelClear(lblSearchProductInfo);
+                    break;
             }
-            if (validoParaInsercion == true)
-            {
-                listaHelper.Add(new DataGridRowDetalleHelper
-                {
-                    idProducto = producto.IdProducto,
-                    codigoSublote = producto.CodigoSublote,
-                    nombreProducto = producto.NombreProducto,
-                    identificador = producto.Identificador,
-                    precioUSD = producto.PrecioVentaUSD,
-                    precioBOB = producto.PrecioVentaBOB,
-                    descuentoPorcentaje = 0,
-                    descuentoUSD = 0,
-                    descuentoBOB = 0,
-                    totalproductoUSD = producto.PrecioVentaUSD,
-                    totalproductoBOB = producto.PrecioVentaBOB,
-                    garantia = categoria.Garantia,
-                    costoUSD = producto.CostoUSD
-                });
 
-                venta_TotalUSD += producto.PrecioVentaUSD;
-                txtVentaTotalVentaUSD.Text = venta_TotalUSD.ToString();
-                venta_TotalBOB += producto.PrecioVentaBOB;
-                txtVentaTotalVentaBOB.Text = venta_TotalBOB.ToString();
-
-                venta_saldoUSD = Math.Round(venta_TotalUSD - venta_pagoTotalUSD, 2);
-                txtVentaTotalSaldoUSD.Text = venta_saldoUSD.ToString();
-                venta_saldoBOB = Math.Round(venta_TotalBOB - venta_pagoTotalBOB, 2);
-                txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
-            }
+            lblSearchProductInfo.Content = mensaje;
+            txtSearchProduct.Text = "";
         }
-        private void btnSaveAndPDF_Click(object sender, RoutedEventArgs e)
+
+        void MostrarMensajeEstadoProducto(Producto producto)
         {
-            if (cliente != null)
+            string mensaje = string.Empty;
+
+            if (producto.Estado == 2)
             {
-                if (listaHelper.Count > 0)
-                {
-                    if (listaMetodoPagos.Count > 0)
-                    {
-                        if (venta_saldoBOB > 1 || venta_saldoUSD > 1)
-                        {
-                            if (MessageBox.Show("ATENCIÓN: El saldo de la venta en USD o Bs. es mayor a cero.\n¿Desea registrar la venta con saldo pendiente?", "REGISTRAR VENTA CON SALDO", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                            {
-                                ExportarVariablesAListas();
-                                venta = new Venta(cliente.IdCliente, Session.IdUsuario, Session.Sucursal_IdSucursal, venta_TotalUSD, venta_TotalBOB, venta_saldoUSD, venta_saldoBOB, txtObservacionVenta.Text);
-                                implVenta = new VentaImpl();
-                                try
-                                {
-                                    string mensaje = implVenta.InsertTransaction(venta, listaProductos, listaDescuentosPorcentaje, listaGarantias, listaMetodoPagos, cliente);
-                                    if (mensaje == "VENTA_EXITOSA")
-                                    {
-                                        MessageBox.Show("VENTA CON SALDO MAYOR A CERO REGISTRADA EXITOSAMENTE.");
-                                        imprimirVenta();
-                                        //PDF
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show(mensaje);
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    MessageBox.Show(ex.Message);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            ExportarVariablesAListas();
-                            venta = new Venta(cliente.IdCliente, Session.IdUsuario, Session.Sucursal_IdSucursal, venta_TotalUSD, venta_TotalBOB, venta_saldoUSD, venta_saldoBOB, txtObservacionVenta.Text);
-                            implVenta = new VentaImpl();
-                            try
-                            {
-                                string mensaje = implVenta.InsertTransaction(venta, listaProductos, listaDescuentosPorcentaje, listaGarantias, listaMetodoPagos, cliente);
-                                if (mensaje == "VENTA_EXITOSA")
-                                {
-                                    MessageBox.Show("VENTA REGISTRADA EXITOSAMENTE.");
-                                    imprimirVenta();
-                                    //PDF
-                                }
-                                else
-                                {
-                                    MessageBox.Show(mensaje);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show(ex.Message);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (MessageBox.Show("ATENCIÓN: No ha insertado ningún método de pago.\n¿Desea registrar la venta con saldo pendiente?", "REGISTRAR VENTA CON SALDO", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                        {
-                            ExportarVariablesAListas();
-                            venta = new Venta(cliente.IdCliente, Session.IdUsuario, Session.Sucursal_IdSucursal, venta_TotalUSD, venta_TotalBOB, venta_saldoUSD, venta_saldoBOB, txtObservacionVenta.Text);
-                            implVenta = new VentaImpl();
-                            try
-                            {
-                                string mensaje = implVenta.InsertTransaction(venta, listaProductos, listaDescuentosPorcentaje, listaGarantias, listaMetodoPagos, cliente);
-                                if (mensaje == "VENTA_EXITOSA")
-                                {
-                                    MessageBox.Show("VENTA CON SALDO PENDIENTE REGISTRADA EXITOSAMENTE.");
-                                    imprimirVenta();
-                                    //PDF
-                                }
-                                else
-                                {
-                                    MessageBox.Show(mensaje);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show(ex.Message);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("¡No puede registrar la venta sin uno o más productos!");
-                }
+                mensaje = $"EL PRODUCTO CON EL CÓDIGO {producto.CodigoSublote} YA FUE VENDIDO Y NO SE ENCUENTRA DISPONIBLE.";
+            }
+            else if (producto.Estado == 3)
+            {
+                mensaje = $"EL PRODUCTO CON EL CÓDIGO {producto.CodigoSublote} ESTÁ EN ESPERA PARA SER CONFIRMADO Y RECIBIDO EN UNA SUCURSAL.";
             }
             else
             {
-                MessageBox.Show("¡No puede registrar la venta sin un cliente!");
+                mensaje = $"EL PRODUCTO CON EL CÓDIGO {producto.CodigoSublote} FUE ELIMINADO DEL SISTEMA Y NO ESTÁ DISPONIBLE.";
+            }
+
+            MostrarMensajeProducto(mensaje, MessageType.Danger);
+        }
+
+        void LimpiarCampoBusquedaProducto()
+        {
+            labelClear(lblSearchProductInfo);
+            lblSearchProductInfo.Content = "";
+            txtSearchProduct.Text = "";
+        }
+
+        void AddProductAndWarrantyToListAndDataGrid(Producto producto, Categoria categoria)
+        {
+            // Verifica si el producto ya está en la lista usando LINQ para mayor claridad
+            bool productoYaExiste = listaHelper.Any(item => item.codigoSublote == producto.CodigoSublote);
+
+            if (productoYaExiste)
+            {
+                MessageBox.Show("¡El producto ingresado ya se encuentra en la tabla!");
+                return;
+            }
+
+            // Agrega el producto a la lista
+            listaHelper.Add(new DataGridRowDetalleHelper
+            {
+                idProducto = producto.IdProducto,
+                codigoSublote = producto.CodigoSublote,
+                nombreProducto = producto.NombreProducto,
+                identificador = producto.Identificador,
+                precioUSD = producto.PrecioVentaUSD,
+                precioBOB = producto.PrecioVentaBOB,
+                descuentoPorcentaje = 0,
+                descuentoUSD = 0,
+                descuentoBOB = 0,
+                totalproductoUSD = producto.PrecioVentaUSD,
+                totalproductoBOB = producto.PrecioVentaBOB,
+                garantia = categoria.Garantia,
+                costoUSD = producto.CostoUSD
+            });
+
+            // Actualiza los totales y saldos
+            venta_TotalUSD += producto.PrecioVentaUSD;
+            txtVentaTotalVentaUSD.Text = venta_TotalUSD.ToString();
+            venta_TotalBOB += producto.PrecioVentaBOB;
+            txtVentaTotalVentaBOB.Text = venta_TotalBOB.ToString();
+
+            venta_saldoUSD = Math.Round(venta_TotalUSD - venta_pagoTotalUSD, 2);
+            txtVentaTotalSaldoUSD.Text = venta_saldoUSD.ToString();
+            venta_saldoBOB = Math.Round(venta_TotalBOB - venta_pagoTotalBOB, 2);
+            txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
+        }
+        private void btnSaveAndPDF_Click(object sender, RoutedEventArgs e)
+        {
+            if (!ValidarVenta())
+                return;
+
+            if (listaMetodoPagos.Count == 0)
+            {
+                if (!Confirmar("ATENCIÓN: No ha insertado ningún método de pago.\n¿Desea registrar la venta con saldo pendiente?"))
+                    return;
+            }
+            else if (venta_saldoBOB > 1 || venta_saldoUSD > 1)
+            {
+                if (!Confirmar("ATENCIÓN: El saldo de la venta en USD o Bs. es mayor a cero.\n¿Desea registrar la venta con saldo pendiente?"))
+                    return;
+            }
+
+            ExportarVariablesAListas();
+            venta = new Venta(cliente.IdCliente, Session.IdUsuario, Session.Sucursal_IdSucursal,
+                              venta_TotalUSD, venta_TotalBOB, venta_saldoUSD, venta_saldoBOB, txtObservacionVenta.Text);
+            implVenta = new VentaImpl();
+
+            try
+            {
+                string mensaje = implVenta.InsertTransaction(venta, listaProductos, listaDescuentosPorcentaje, listaGarantias, listaMetodoPagos, cliente);
+                if (mensaje == "VENTA_EXITOSA")
+                {
+                    MessageBox.Show(ObtenerMensajeExito(), "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                    imprimirVenta();
+                }
+                else
+                {
+                    MessageBox.Show(mensaje);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
+
+        private bool ValidarVenta()
+        {
+            if (cliente == null)
+            {
+                MessageBox.Show("¡No puede registrar la venta sin un cliente!");
+                return false;
+            }
+
+            if (listaHelper.Count == 0)
+            {
+                MessageBox.Show("¡No puede registrar la venta sin uno o más productos!");
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool Confirmar(string mensaje)
+        {
+            return MessageBox.Show(mensaje, "REGISTRAR VENTA CON SALDO", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
+        }
+
+        private string ObtenerMensajeExito()
+        {
+            if (listaMetodoPagos.Count == 0)
+                return "VENTA CON SALDO PENDIENTE REGISTRADA EXITOSAMENTE.";
+
+            if (venta_saldoBOB > 1 || venta_saldoUSD > 1)
+                return "VENTA CON SALDO MAYOR A CERO REGISTRADA EXITOSAMENTE.";
+
+            return "VENTA REGISTRADA EXITOSAMENTE.";
+        }
+
+
         private void ExportarVariablesAListas()
         {
             listaDescuentosPorcentaje.Clear();
@@ -560,7 +625,6 @@ namespace sisgesoriadao
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
-                    throw;
                 }
             }
         }
@@ -733,47 +797,7 @@ namespace sisgesoriadao
                 }
             }
         }
-        public class DataGridRowDetalleHelper
-        {
-            public int idProducto { get; set; }
-            public string codigoSublote { get; set; }
-            public string nombreProducto { get; set; }
-            public string identificador { get; set; }
-            public double precioUSD { get; set; }
-            public double precioBOB { get; set; }
-            public double descuentoPorcentaje { get; set; }
-            public double descuentoUSD { get; set; }
-            public double descuentoBOB { get; set; }
-            public double totalproductoUSD { get; set; }
-            public double totalproductoBOB { get; set; }
-            public byte garantia { get; set; }
-            public double costoUSD { get; set; }
-        }
-        public class MetodoPagoDataGridView
-        {
-            public double montoUSD { get; set; }
-            public double montoBOB { get; set; }
-            public string tipo { get; set; }
-        }
-        public class ComboboxItem
-        {
-            public string Texto { get; set; }
-            public int Valor { get; set; }
-
-            public override string ToString()
-            {
-                return Texto;
-            }
-            public ComboboxItem(string texto, byte valor)
-            {
-                Texto = texto;
-                Valor = valor;
-            }
-            public ComboboxItem()
-            {
-
-            }
-        }
+        
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (listaHelper.Count > 0 && ventaRegistrada == false)
@@ -837,177 +861,139 @@ namespace sisgesoriadao
         {
             dgvProductos.ItemsSource = listaHelper;
         }
+        enum ColumnaEditable
+        {
+            DescuentoPorcentaje = 6,
+            DescuentoUSD = 7,
+            DescuentoBOB = 8,
+            TotalUSD = 9,
+            TotalBOB = 10,
+            Garantia = 11
+        }
+
         private void dgvProductos_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            int indexSeleccionado = e.Column.DisplayIndex;
-            DataGridRowDetalleHelper filaSeleccionada = e.Row.Item as DataGridRowDetalleHelper;
-            TextBox valorNuevo = e.EditingElement as TextBox;  // Assumes columns are all TextBoxes
+            int columna = e.Column.DisplayIndex;
+            int filaIndex = dgvProductos.SelectedIndex;
+            if (filaIndex < 0 || !(e.Row.Item is DataGridRowDetalleHelper fila))
+                return;
+
+            if (!(e.EditingElement is TextBox textbox) || !double.TryParse(textbox.Text, out double nuevoValor))
+                return;
+
             try
             {
-                RestarTotalySaldo(dgvProductos.SelectedIndex);
-                if (indexSeleccionado == 6)
-                {
-                    ModificarFilaPorDescuentoPorcentaje(dgvProductos.SelectedIndex, valorNuevo, filaSeleccionada);
-                }
-                else if (indexSeleccionado == 7)
-                {
-                    ModificarFilaPorDescuentoUSD(dgvProductos.SelectedIndex, valorNuevo, filaSeleccionada);
-                }
-                else if (indexSeleccionado == 8)
-                {
-                    ModificarFilaPorDescuentoBOB(dgvProductos.SelectedIndex, valorNuevo, filaSeleccionada);
-                }
-                else if (indexSeleccionado == 9)
-                {
-                    ModificarFilaPorTotalUSD(dgvProductos.SelectedIndex, valorNuevo, filaSeleccionada);
-                }
-                else if (indexSeleccionado == 10)
-                {
-                    ModificarFilaPorTotalBOB(dgvProductos.SelectedIndex, valorNuevo, filaSeleccionada);
-                }
-                else if (indexSeleccionado == 11)
-                {
-                    ModificarGarantia(dgvProductos.SelectedIndex, valorNuevo, filaSeleccionada);
-                }
-                SumarTotalySaldo(dgvProductos.SelectedIndex);
-                dgvProductos.ItemsSource = null;
-                dgvProductos.ItemsSource = listaHelper;
+                RestarTotalySaldo(filaIndex);
+                ProcesarEdicionDeCelda((ColumnaEditable)columna, filaIndex, nuevoValor, fila);
+                SumarTotalySaldo(filaIndex);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                (dgvProductos.SelectedItem as DataGridRowDetalleHelper).descuentoPorcentaje = filaSeleccionada.descuentoPorcentaje;
-                (dgvProductos.SelectedItem as DataGridRowDetalleHelper).descuentoUSD = filaSeleccionada.descuentoUSD;
-                (dgvProductos.SelectedItem as DataGridRowDetalleHelper).descuentoBOB = filaSeleccionada.descuentoBOB;
-                (dgvProductos.SelectedItem as DataGridRowDetalleHelper).totalproductoUSD = filaSeleccionada.totalproductoUSD;
-                (dgvProductos.SelectedItem as DataGridRowDetalleHelper).totalproductoBOB = filaSeleccionada.totalproductoBOB;
-                (dgvProductos.SelectedItem as DataGridRowDetalleHelper).garantia = filaSeleccionada.garantia;
-                SumarTotalySaldo(dgvProductos.SelectedIndex);
-                dgvProductos.ItemsSource = null;
-                dgvProductos.ItemsSource = listaHelper;
+                RestaurarValoresAnteriores(filaIndex, fila);
             }
+
+            dgvProductos.ItemsSource = null;
+            dgvProductos.ItemsSource = listaHelper;
         }
-        private void ModificarFilaPorDescuentoPorcentaje(int i, TextBox n, DataGridRowDetalleHelper fila)
+
+        private void ProcesarEdicionDeCelda(ColumnaEditable columna, int i, double valor, DataGridRowDetalleHelper fila)
         {
             double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2);
             double pago = 0;
-            pago = Math.Round(fila.precioUSD * (1 - double.Parse(n.Text.ToString()) / 100), 2);
-            if (pago >= limite)
-            {
-                //Asignación del porcentaje de descuento.
-                listaHelper[i].descuentoPorcentaje = double.Parse(n.Text.ToString());
-                //Asignación del costo total del producto con descuento.
-                listaHelper[i].totalproductoUSD = Math.Round(fila.precioUSD * (1 - listaHelper[i].descuentoPorcentaje / 100), 2);
-                listaHelper[i].totalproductoBOB = Math.Round(fila.precioBOB * (1 - listaHelper[i].descuentoPorcentaje / 100), 2);
-                //Asignación del efectivo reducido del costo total del producto.
-                listaHelper[i].descuentoUSD = Math.Round(fila.precioUSD - listaHelper[i].totalproductoUSD, 2);
-                listaHelper[i].descuentoBOB = Math.Round(fila.precioBOB - listaHelper[i].totalproductoBOB, 2);
-            }
-            else
-            {
-                MessageBox.Show("ATENCIÓN: ESTIMAD@ USUARI@, NO ESTÁ PERMITIDO REBAJAR EL PRECIO POR DEBAJO DEL LÍMITE ESTABLECIDO: " + Session.Ajuste_Limite_Descuento + "% MENOS DEL PRECIO DE VENTA. \n" +
-                        "PRODUCTO: " + fila.codigoSublote + " " + fila.nombreProducto + "\n" +
-                        "PRECIO MÍNIMO POR DEBAJO DEL PRECIO DE VENTA: " + limite.ToString() + " USD. \n" +
-                        "PRECIO INGRESADO: " + pago.ToString() + " USD.");
-            }
-        }
-        private void ModificarFilaPorDescuentoUSD(int i, TextBox n, DataGridRowDetalleHelper fila)
-        {
-            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2); ;
-            double pago = 0;
-            pago = Math.Round(fila.precioUSD - double.Parse(n.Text.ToString()), 2);
-            if (pago >= limite)
-            {
-                //Asignación del descuento USD.
-                listaHelper[i].descuentoUSD = double.Parse(n.Text.ToString());
-                //Asignación del descuento en relación con el total.
-                listaHelper[i].totalproductoUSD = Math.Round(fila.precioUSD - listaHelper[i].descuentoUSD, 2);
-                listaHelper[i].descuentoPorcentaje = Math.Round(listaHelper[i].descuentoUSD / fila.precioUSD * 100, 2);
 
-                listaHelper[i].totalproductoBOB = Math.Round(fila.precioBOB * (1 - listaHelper[i].descuentoPorcentaje / 100), 2);
-                listaHelper[i].descuentoBOB = Math.Round(fila.precioBOB - listaHelper[i].totalproductoBOB, 2);
-            }
-            else
+            switch (columna)
             {
-                MessageBox.Show("ATENCIÓN: ESTIMAD@ USUARI@, NO ESTÁ PERMITIDO REBAJAR EL PRECIO POR DEBAJO DEL LÍMITE ESTABLECIDO: " + Session.Ajuste_Limite_Descuento + "% MENOS DEL PRECIO DE VENTA. \n" +
-                        "PRODUCTO: " + fila.codigoSublote + " " + fila.nombreProducto + "\n" +
-                        "PRECIO MÍNIMO POR DEBAJO DEL PRECIO DE VENTA: " + limite.ToString() + " USD. \n" +
-                        "PRECIO INGRESADO: " + pago.ToString() + " USD.");
-            }
-        }
-        private void ModificarFilaPorDescuentoBOB(int i, TextBox n, DataGridRowDetalleHelper fila)
-        {
-            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2); ;
-            double pago = 0;
-            pago = Math.Round(fila.precioUSD * (1 - Math.Round(double.Parse(n.Text.ToString()) / fila.precioBOB * 100, 2) / 100), 2);
-            if (pago >= limite)
-            {
-                //Asignación del descuento BOB.
-                listaHelper[i].descuentoBOB = double.Parse(n.Text.ToString());
-                //Asignación del descuento en relación con el total.
-                listaHelper[i].totalproductoBOB = Math.Round(fila.precioBOB - listaHelper[i].descuentoBOB, 2);
-                listaHelper[i].descuentoPorcentaje = Math.Round(listaHelper[i].descuentoBOB / fila.precioBOB * 100, 2);
+                case ColumnaEditable.DescuentoPorcentaje:
+                    pago = Math.Round(fila.precioUSD * (1 - valor / 100), 2);
+                    if (!ValidarLimite(pago, limite, fila)) return;
 
-                listaHelper[i].totalproductoUSD = Math.Round(fila.precioUSD * (1 - listaHelper[i].descuentoPorcentaje / 100), 2);
-                listaHelper[i].descuentoUSD = Math.Round(fila.precioUSD - listaHelper[i].totalproductoUSD, 2);
-            }
-            else
-            {
-                MessageBox.Show("ATENCIÓN: ESTIMAD@ USUARI@, NO ESTÁ PERMITIDO REBAJAR EL PRECIO POR DEBAJO DEL LÍMITE ESTABLECIDO: " + Session.Ajuste_Limite_Descuento + "% MENOS DEL PRECIO DE VENTA. \n" +
-                        "PRODUCTO: " + fila.codigoSublote + " " + fila.nombreProducto + "\n" +
-                        "PRECIO MÍNIMO POR DEBAJO DEL PRECIO DE VENTA: " + limite.ToString() + " USD. \n" +
-                        "PRECIO INGRESADO: " + pago.ToString() + " USD.");
-            }
-        }
-        private void ModificarFilaPorTotalUSD(int i, TextBox n, DataGridRowDetalleHelper fila)
-        {
-            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2); ;
-            double pago = 0;
-            pago = Math.Round(double.Parse(n.Text.ToString()), 2);
-            if (pago >= limite)
-            {
-                //Asignación del total USD.
-                listaHelper[i].totalproductoUSD = double.Parse(n.Text.ToString());
+                    listaHelper[i].descuentoPorcentaje = valor;
+                    listaHelper[i].totalproductoUSD = pago;
+                    listaHelper[i].totalproductoBOB = Math.Round(fila.precioBOB * (1 - valor / 100), 2);
+                    listaHelper[i].descuentoUSD = Math.Round(fila.precioUSD - pago, 2);
+                    listaHelper[i].descuentoBOB = Math.Round(fila.precioBOB - listaHelper[i].totalproductoBOB, 2);
+                    break;
 
-                listaHelper[i].descuentoPorcentaje = Math.Round(100 - listaHelper[i].totalproductoUSD / fila.precioUSD * 100, 2);
-                listaHelper[i].descuentoUSD = Math.Round(fila.precioUSD - listaHelper[i].totalproductoUSD, 2);
-                listaHelper[i].totalproductoBOB = Math.Round(fila.precioBOB * (1 - listaHelper[i].descuentoPorcentaje / 100), 2);
-                listaHelper[i].descuentoBOB = Math.Round(fila.precioBOB - listaHelper[i].totalproductoBOB, 2);
-            }
-            else
-            {
-                MessageBox.Show("ATENCIÓN: ESTIMAD@ USUARI@, NO ESTÁ PERMITIDO REBAJAR EL PRECIO POR DEBAJO DEL LÍMITE ESTABLECIDO: " + Session.Ajuste_Limite_Descuento + "% MENOS DEL PRECIO DE VENTA. \n" +
-                        "PRODUCTO: " + fila.codigoSublote + " " + fila.nombreProducto + "\n" +
-                        "PRECIO MÍNIMO POR DEBAJO DEL PRECIO DE VENTA: " + limite.ToString() + " USD. \n" +
-                        "PRECIO INGRESADO: " + pago.ToString() + " USD.");
-            }
-        }
-        private void ModificarFilaPorTotalBOB(int i, TextBox n, DataGridRowDetalleHelper fila)
-        {
-            double limite = Math.Round(fila.costoUSD / 100 * (100 - Session.Ajuste_Limite_Descuento), 2); ;
-            double pago = 0;
-            pago = Math.Round(fila.precioUSD * (1 - Math.Round(100 - double.Parse(n.Text.ToString()) / fila.precioBOB * 100, 2) / 100), 2);
-            if (pago >= limite)
-            {
-                //Asignación del total USD.
-                listaHelper[i].totalproductoBOB = double.Parse(n.Text.ToString());
+                case ColumnaEditable.DescuentoUSD:
+                    pago = Math.Round(fila.precioUSD - valor, 2);
+                    if (!ValidarLimite(pago, limite, fila)) return;
 
-                listaHelper[i].descuentoPorcentaje = Math.Round(100 - listaHelper[i].totalproductoBOB / fila.precioBOB * 100, 2);
-                listaHelper[i].descuentoBOB = Math.Round(fila.precioBOB - listaHelper[i].totalproductoBOB, 2);
-                listaHelper[i].totalproductoUSD = Math.Round(fila.precioUSD * (1 - listaHelper[i].descuentoPorcentaje / 100), 2);
-                listaHelper[i].descuentoUSD = Math.Round(fila.precioUSD - listaHelper[i].totalproductoUSD, 2);
-            }
-            else
-            {
-                MessageBox.Show("ATENCIÓN: ESTIMAD@ USUARI@, NO ESTÁ PERMITIDO REBAJAR EL PRECIO POR DEBAJO DEL LÍMITE ESTABLECIDO: " + Session.Ajuste_Limite_Descuento + "% MENOS DEL PRECIO DE VENTA. \n" +
-                        "PRODUCTO: " + fila.codigoSublote + " " + fila.nombreProducto + "\n" +
-                        "PRECIO MÍNIMO POR DEBAJO DEL PRECIO DE VENTA: " + limite.ToString() + " USD. \n" +
-                        "PRECIO INGRESADO: " + pago.ToString() + " USD.");
+                    listaHelper[i].descuentoUSD = valor;
+                    listaHelper[i].totalproductoUSD = pago;
+                    listaHelper[i].descuentoPorcentaje = Math.Round(valor / fila.precioUSD * 100, 2);
+                    listaHelper[i].totalproductoBOB = Math.Round(fila.precioBOB * (1 - listaHelper[i].descuentoPorcentaje / 100), 2);
+                    listaHelper[i].descuentoBOB = Math.Round(fila.precioBOB - listaHelper[i].totalproductoBOB, 2);
+                    break;
+
+                case ColumnaEditable.DescuentoBOB:
+                    double porcentaje = Math.Round(valor / fila.precioBOB * 100, 2);
+                    pago = Math.Round(fila.precioUSD * (1 - porcentaje / 100), 2);
+                    if (!ValidarLimite(pago, limite, fila)) return;
+
+                    listaHelper[i].descuentoBOB = valor;
+                    listaHelper[i].descuentoPorcentaje = porcentaje;
+                    listaHelper[i].totalproductoBOB = Math.Round(fila.precioBOB - valor, 2);
+                    listaHelper[i].totalproductoUSD = Math.Round(fila.precioUSD * (1 - porcentaje / 100), 2);
+                    listaHelper[i].descuentoUSD = Math.Round(fila.precioUSD - listaHelper[i].totalproductoUSD, 2);
+                    break;
+
+                case ColumnaEditable.TotalUSD:
+                    pago = valor;
+                    if (!ValidarLimite(pago, limite, fila)) return;
+
+                    listaHelper[i].totalproductoUSD = valor;
+                    listaHelper[i].descuentoPorcentaje = Math.Round(100 - valor / fila.precioUSD * 100, 2);
+                    listaHelper[i].descuentoUSD = Math.Round(fila.precioUSD - valor, 2);
+                    listaHelper[i].totalproductoBOB = Math.Round(fila.precioBOB * (1 - listaHelper[i].descuentoPorcentaje / 100), 2);
+                    listaHelper[i].descuentoBOB = Math.Round(fila.precioBOB - listaHelper[i].totalproductoBOB, 2);
+                    break;
+
+                case ColumnaEditable.TotalBOB:
+                    double porcentajeBOB = Math.Round(100 - valor / fila.precioBOB * 100, 2);
+                    pago = Math.Round(fila.precioUSD * (1 - porcentajeBOB / 100), 2);
+                    if (!ValidarLimite(pago, limite, fila)) return;
+
+                    listaHelper[i].totalproductoBOB = valor;
+                    listaHelper[i].descuentoPorcentaje = porcentajeBOB;
+                    listaHelper[i].descuentoBOB = Math.Round(fila.precioBOB - valor, 2);
+                    listaHelper[i].totalproductoUSD = Math.Round(fila.precioUSD * (1 - porcentajeBOB / 100), 2);
+                    listaHelper[i].descuentoUSD = Math.Round(fila.precioUSD - listaHelper[i].totalproductoUSD, 2);
+                    break;
+
+                case ColumnaEditable.Garantia:
+                    byte garantia = (byte)valor;
+                    if (garantia <= 60)
+                        listaHelper[i].garantia = garantia;
+                    else
+                        MessageBox.Show("La garantía no puede superar los 60 meses.");
+                    break;
             }
         }
-        private void ModificarGarantia(int i, TextBox n, DataGridRowDetalleHelper fila)
+
+        private bool ValidarLimite(double pago, double limite, DataGridRowDetalleHelper fila)
         {
-            listaHelper[i].garantia = byte.Parse(n.Text.ToString());
+            if (pago < limite)
+            {
+                MessageBox.Show($"ATENCIÓN: ESTIMAD@ USUARI@, NO ESTÁ PERMITIDO REBAJAR EL PRECIO POR DEBAJO DEL LÍMITE ESTABLECIDO: {Session.Ajuste_Limite_Descuento}% MENOS DEL PRECIO DE VENTA.\n" +
+                                $"PRODUCTO: {fila.codigoSublote} {fila.nombreProducto}\n" +
+                                $"PRECIO MÍNIMO PERMITIDO: {limite} USD\n" +
+                                $"PRECIO INGRESADO: {pago} USD.");
+                return false;
+            }
+            return true;
+        }
+
+        private void RestaurarValoresAnteriores(int i, DataGridRowDetalleHelper filaAnterior)
+        {
+            var actual = listaHelper[i];
+            actual.descuentoPorcentaje = filaAnterior.descuentoPorcentaje;
+            actual.descuentoUSD = filaAnterior.descuentoUSD;
+            actual.descuentoBOB = filaAnterior.descuentoBOB;
+            actual.totalproductoUSD = filaAnterior.totalproductoUSD;
+            actual.totalproductoBOB = filaAnterior.totalproductoBOB;
+            actual.garantia = filaAnterior.garantia;
+            SumarTotalySaldo(i);
         }
         private void RestarTotalySaldo(int i)
         {
@@ -1016,6 +1002,7 @@ namespace sisgesoriadao
             venta_saldoUSD -= listaHelper[i].totalproductoUSD;
             venta_saldoBOB -= listaHelper[i].totalproductoBOB;
         }
+
         private void SumarTotalySaldo(int i)
         {
             venta_TotalUSD += listaHelper[i].totalproductoUSD;
@@ -1023,6 +1010,11 @@ namespace sisgesoriadao
             venta_saldoUSD += listaHelper[i].totalproductoUSD;
             venta_saldoBOB += listaHelper[i].totalproductoBOB;
 
+            ActualizarTotalesYTextbox();
+        }
+
+        private void ActualizarTotalesYTextbox()
+        {
             venta_TotalUSD = Math.Round(venta_TotalUSD, 2);
             venta_TotalBOB = Math.Round(venta_TotalBOB, 2);
             venta_saldoUSD = Math.Round(venta_saldoUSD, 2);
@@ -1033,6 +1025,7 @@ namespace sisgesoriadao
             txtVentaTotalSaldoUSD.Text = venta_saldoUSD.ToString();
             txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
         }
+
         private void txtPagoBOB_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter && string.IsNullOrEmpty(txtPagoBOB.Text) != true)
