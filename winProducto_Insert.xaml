@@ -55,6 +55,8 @@
                 <ComboBox x:Name="cbxCategoria" IsEnabled="True"/>
                 <Label Content="CONDICION:" Margin="15,0,0,0"/>
                 <ComboBox x:Name="cbxCondicion" IsEnabled="True"/>
+                <Label Content="PROVEEDOR:" Margin="15,0,0,0"/>
+                <controls:AutoCompleteBox x:Name="acbtxtNombreProveedor" Margin="0,0,0,0" MinWidth="200" IsEnabled="True" FilterMode="Contains"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
@@ -63,7 +65,7 @@
                 <TextBox x:Name="txtCodigoSublote" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="55" MaxLength="50" IsEnabled="False"/>
                 <Label Content="NOMBRE:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
-                <controls:AutoCompleteBox x:Name="acbtxtNombreProducto" Margin="0,0,20,0" MinWidth="120" IsEnabled="True" FilterMode="Contains"/>
+                <controls:AutoCompleteBox x:Name="acbtxtNombreProducto" Margin="0,0,20,0" MinWidth="150" IsEnabled="True" FilterMode="Contains"/>
                 <Label Content="S/N o IMEI:"/>
                 <Label Content="*" Foreground="Red" FontWeight="Bold"/>
                 <TextBox x:Name="txtIdentificador" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="120" MaxLength="30" IsEnabled="True" KeyDown="txtIdentificador_KeyDown"/>
@@ -112,6 +114,35 @@
                         <DataGridTextColumn Header="Obs." Binding="{Binding Observaciones}" MaxWidth="100"/>
                     </DataGrid.Columns>
                 </DataGrid>
+                <TextBlock Text="PAGO(S) DE SUBLOTE" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" Margin="0,20,0,00"/>
+                <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
+                    <Label Content="Monto ($.):"/>
+                    <TextBox x:Name="txtPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" Width="80" MaxLength="8" IsEnabled="True" PreviewTextInput="txtPrecio_PreviewTextInput" KeyDown="txtPagoUSD_KeyDown"/>
+                    <Button x:Name="btnAddPayment" ToolTip="AÑADIR MÉTODO DE PAGO" Click="btnAddPayment_Click" Margin="0,0,0,0" IsEnabled="True" Background="LimeGreen" BorderBrush="LimeGreen">
+                        <materialDesign:PackIcon Kind="CreditCardAdd"/>
+                    </Button>
+                </StackPanel>
+                <DataGrid x:Name="dgvPagosSublote" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True" Margin="15"
+          HorizontalAlignment="Center">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Monto ($.)" Binding="{Binding montoUSD}" IsReadOnly="True"/>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Click="btndgvRemoverPagoSublote">REMOVER</Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
+                    <Label Content="Total Sublote: ($.)"/>
+                    <TextBox x:Name="txtTotalSubloteUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
+                    <Label Content="Total Pagos: ($.)"/>
+                    <TextBox x:Name="txtTotalPagosUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
+                    <Label Content="Saldo: ($.)"/>
+                    <TextBox x:Name="txtSaldoUSD" TextWrapping="Wrap" Margin="0,0,0,0" MinWidth="60" IsEnabled="False" FontWeight="Bold"/>
+                </StackPanel>
                 <Button x:Name="btnSave" Content="GUARDAR" Margin="0,30,0,0" Click="btnSave_Click" Width="100"/>
             </StackPanel>
         </StackPanel>

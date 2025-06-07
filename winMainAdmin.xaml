@@ -176,6 +176,12 @@
                                 <TextBlock Text="HISTORIAL" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                                 <TextBlock Text="DE PRODUCTO" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                             </StackPanel>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                <Button x:Name="btnSub_batches" Width="100" Height="100" Click="btnSub_batches_Click" Background="{DynamicResource MaterialDesignPaper}" Foreground="{DynamicResource MaterialDesignBody}" BorderBrush="{DynamicResource MaterialDesignBody}">
+                                    <materialDesign:PackIcon Kind="PackageVariant" Width="80" Height="80" HorizontalAlignment="Center"/>
+                                </Button>
+                                <TextBlock Text="SUBLOTES" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                            </StackPanel>
                         </WrapPanel>
 
                         <TextBlock Text="GESTIONAR INFORMACIÓN" FontSize="19" HorizontalAlignment="Center" FontWeight="Bold" Margin="10"/>

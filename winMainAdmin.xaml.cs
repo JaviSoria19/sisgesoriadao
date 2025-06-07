@@ -161,6 +161,11 @@ namespace sisgesoriadao
             winProductoComun winProductoComun = new winProductoComun();
             winProductoComun.Show();
         }
+        private void btnSub_batches_Click(object sender, RoutedEventArgs e)
+        {
+            winProducto_Sublotes winProducto_Sublotes = new winProducto_Sublotes();
+            winProducto_Sublotes.Show();
+        }
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             LoadInfoFromDB();

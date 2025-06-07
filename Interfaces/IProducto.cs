@@ -27,7 +27,8 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectLikeBatch(string CadenaBusqueda, DateTime FechaInicio, DateTime FechaFin);
         DataTable SelectBatchForComboBox();
         //TRANSFERENCIAS
-        string InsertTransaction(List<Producto> ListaProductos, int idLote);
+        string InsertTransaction(List<Producto> ListaProductos, int idLote, string nombreProveedor, List<Double> PagosSublote);
+        DataTable SelectProviderNamesForComboBox();
         string UpdateBranchMovementTransaction(List<Producto> ListaProductos, byte idSucursalDestino, string nombreSucursalDestino);
         DataTable SelectPendingProducts();
         int UpdatePendingProduct(int IdProducto);
@@ -38,5 +39,10 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectProductsFromSale(int IdVenta);
         DataTable SelectBatchOfProductsToUpdate(string CadenaBusqueda);
         string UpdateBatchOfProductsTransaction(List<Producto> ListaProductos);
+
+        DataTable SelectSubBatchPendings(string NombreProveedor);
+
+        int InsertPaymentSubBatch(PagoSublote pagoSublote);
+        int DeleteLastPaymentSubBatch(PagoSublote pagoSublote);
     }
 }

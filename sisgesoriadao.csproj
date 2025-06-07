@@ -155,6 +155,7 @@
     <Compile Include="Model\Cotizacion.cs" />
     <Compile Include="Model\Lote.cs" />
     <Compile Include="Model\MetodoPago.cs" />
+    <Compile Include="Model\PagoSublote.cs" />
     <Compile Include="Model\Producto.cs" />
     <Compile Include="Model\ProductoComun.cs" />
     <Compile Include="Model\ProductoEnCola.cs" />
@@ -242,6 +243,9 @@
     </Compile>
     <Compile Include="winProducto_Lote.xaml.cs">
       <DependentUpon>winProducto_Lote.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="winProducto_Sublotes.xaml.cs">
+      <DependentUpon>winProducto_Sublotes.xaml</DependentUpon>
     </Compile>
     <Compile Include="winProducto_Transferencia.xaml.cs">
       <DependentUpon>winProducto_Transferencia.xaml</DependentUpon>
@@ -418,6 +422,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="winProducto_Lote.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winProducto_Sublotes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

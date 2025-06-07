@@ -8,7 +8,7 @@ namespace sisgesoriadao.Implementation
 {
     public class ProductoImpl : DataBase, IProducto
     {
-        public string InsertTransaction(List<Producto> ListaProductos, int idLote)
+        public string InsertTransaction(List<Producto> ListaProductos, int idLote, string nombreProveedor, List<Double> PagosSublote)
         {
             MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
             connection.Open();
@@ -21,8 +21,10 @@ namespace sisgesoriadao.Implementation
             command.Transaction = myTrans;
             try
             {
-                //AÑADIENDO NUEVO SUBLOTE PARA EL SIGUIENTE LOTE.
-                command.CommandText = @"INSERT INTO Sublote (idLote) VALUES (@idLote);";
+                //ACTUALIZA EL NOMBRE DEL PROVEEDOR DEL SUBLOTE EXISTENTE Y AÑADE UN NUEVO SUBLOTE PARA EL SIGUIENTE LOTE DE PRODUCTOS.
+                command.CommandText = @"UPDATE Sublote SET nombreProveedor = @nombreProveedor WHERE idSublote = (SELECT idSublote FROM (SELECT idSublote FROM Sublote ORDER BY idSublote DESC LIMIT 1) AS ultimo);
+                                        INSERT INTO Sublote (idLote) VALUES (@idLote);";
+                command.Parameters.AddWithValue("@nombreProveedor", nombreProveedor);
                 command.Parameters.AddWithValue("@idLote", idLote);
                 command.ExecuteNonQuery();
                 foreach (var Producto in ListaProductos)
@@ -51,6 +53,18 @@ namespace sisgesoriadao.Implementation
 
                     command.CommandText = @"INSERT INTO Historial (idProducto,detalle) VALUES
                                 ((SELECT MAX(idProducto) FROM Producto),'PRODUCTO REGISTRADO CON EL IDENTIFICADOR: " + Producto.Identificador + " INGRESADO POR EL USUARIO: " + Session.NombreUsuario + ", EN SUCURSAL: " + Session.Sucursal_NombreSucursal + "')";
+                    command.ExecuteNonQuery();
+                }
+
+                //REGISTRO DE LOS PAGOS DEL SUBLOTE.
+                foreach (var Pago in PagosSublote)
+                {
+                    //LIMPIEZA DE PARÁMETROS YA UTILIZADOS EN EL CICLO ANTERIOR PARA PROSEGUIR, CASO CONTRARIO LANZA ERROR.
+                    command.Parameters.Clear();
+                    //REGISTRO DEL PAGO DEL SUBLOTE.
+                    command.CommandText = @"INSERT INTO Pago_Sublote (idSublote, montoUSD) VALUES 
+                                ((SELECT MAX(idSublote) - 1 FROM Sublote),@montoUSD)";
+                    command.Parameters.AddWithValue("@montoUSD", Pago);
                     command.ExecuteNonQuery();
                 }
                 //command.CommandText = "Insert into mytable (id, desc) VALUES (101, 'Description')";
@@ -538,6 +552,21 @@ namespace sisgesoriadao.Implementation
             }
         }
 
+        public DataTable SelectProviderNamesForComboBox()
+        {
+            string query = @"SELECT nombreProveedor FROM Sublote GROUP BY 1";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public string UpdateBranchMovementTransaction(List<Producto> ListaProductos, byte IdSucursalDestino, string SucursalDestino)
         {
             MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
@@ -913,6 +942,72 @@ namespace sisgesoriadao.Implementation
             finally
             {
                 connection.Close();
+            }
+        }
+
+        public DataTable SelectSubBatchPendings(string NombreProveedor)
+        {
+            string query = @"SELECT S.idSublote AS ID, 
+                            SUBSTRING(P.codigoSublote, 1, LENGTH(P.codigoSublote) - 2) AS Sublote,
+                            S.nombreProveedor AS NombreProveedor,
+                            GROUP_CONCAT(DISTINCT CONCAT('• ', P.codigoSublote, ' ', P.nombreProducto, ' (', P.costoUSD, '$.)') SEPARATOR '\n') AS DetalleProductos,
+                            IFNULL((
+                                SELECT GROUP_CONCAT(CONCAT('• ', montoUSD, ' $us. el ', " + Session.FormatoFechaMySql("fechaRegistro") + @") SEPARATOR ' \n')
+                                FROM Pago_Sublote
+                                WHERE idSublote = S.idSublote
+                            ), '-') AS Pagos,
+                            (SELECT SUM(costoUSD) FROM Producto WHERE idSublote = S.idSublote) AS TotalUSD,
+                            (SELECT SUM(costoUSD) FROM Producto WHERE idSublote = S.idSublote) - 
+                            (SELECT IFNULL(SUM(montoUSD), 0) FROM Pago_Sublote WHERE idSublote = S.idSublote) AS Saldo,
+                            " + Session.FormatoFechaMySql("S.fechaRegistro") + @" AS FechaRegistro
+                            FROM Sublote AS S
+                            INNER JOIN Producto AS P ON S.idSublote = P.idSublote
+                            INNER JOIN Lote AS L ON S.idLote = L.idLote
+                            WHERE S.nombreProveedor LIKE @nombreProveedor
+                            GROUP BY S.idSublote
+                            ORDER BY S.idSublote DESC, P.codigoSublote ASC
+                            LIMIT 200";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@nombreProveedor", "%" + NombreProveedor + "%");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public int InsertPaymentSubBatch(PagoSublote p)
+        {
+            string query = @"INSERT INTO Pago_Sublote (idSublote, montoUSD) VALUES (@idSublote, @montoUSD)";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idSublote", p.idSublote);
+            command.Parameters.AddWithValue("@montoUSD", p.MontoUSD);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public int DeleteLastPaymentSubBatch(PagoSublote p)
+        {
+            string query = @"DELETE FROM Pago_Sublote WHERE idPagoSublote = (SELECT idPagoSublote FROM (SELECT idPagoSublote FROM Pago_Sublote WHERE idSublote = @idSublote ORDER BY idPagoSublote DESC LIMIT 1) AS temp)";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idSublote", p.idSublote);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

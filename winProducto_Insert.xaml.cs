@@ -21,15 +21,25 @@ namespace sisgesoriadao
         ProductoImpl implProducto;
         CondicionImpl implCondicion;
         List<Producto> listaproductos = new List<Producto>();
+        List<Double> listaPagosSublote = new List<Double>();
         int contador = 1;
         string codigoSublote;
         int idSublote = 0;
+        double sublote_TotalPagosUSD = 0.00;
+        double totalProductosSubloteUSD = 0.00;
 
         private ObservableCollection<DataGridRowDetalleHelper> listaHelper = new ObservableCollection<DataGridRowDetalleHelper>();
         bool loteRegistrado = false;
+
+        public class PagoDataGridView
+        {
+            public double montoUSD { get; set; }
+        }
+
         public winProducto_Insert()
         {
             InitializeComponent();
+            WindowState = WindowState.Maximized;
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
@@ -46,6 +56,11 @@ namespace sisgesoriadao
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            if(string.IsNullOrEmpty(acbtxtNombreProveedor.Text))
+            {
+                MessageBox.Show("¡Debe seleccionar un proveedor para registrar el lote de productos!");
+                return;
+            }
             if (listaHelper.Count > 0)
             {
                 listaproductos.Clear();
@@ -86,7 +101,7 @@ namespace sisgesoriadao
                 i++;
                 dt = implProducto.SelectBatchOfProductsToUpdate(listaproductos[0].CodigoSublote);
             }
-            string mensaje = implProducto.InsertTransaction(listaproductos, (cbxLote.SelectedItem as ComboboxItem).Valor);
+            string mensaje = implProducto.InsertTransaction(listaproductos, (cbxLote.SelectedItem as ComboboxItem).Valor, acbtxtNombreProveedor.Text, listaPagosSublote);
             if (mensaje == "LOTE REGISTRADO EXITOSAMENTE.")
             {
                 if (batchExists)
@@ -117,10 +132,14 @@ namespace sisgesoriadao
             cbxGetLoteFromDatabase();
             cbxGetCondicionFromDatabase();
             cbxGetNombreProductoFromDatabase();
+            cbxGetNombreProovedorFromDatabase();
             GetCodigoSubLoteFromDatabase(0);
             GetIDSubLoteFromDatabase();
             txtSucursal.Text = "Sucursal: " + Session.Sucursal_NombreSucursal;
             txtObservaciones.Text = "-";
+            txtTotalSubloteUSD.Text = "0.00";
+            txtTotalPagosUSD.Text = "0.00";
+            txtSaldoUSD.Text = "0.00";
         }
         private void cbxLote_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -212,6 +231,10 @@ namespace sisgesoriadao
                     txtIdentificador.Text = "";
                     txtIdentificador.Focus();
 
+                    totalProductosSubloteUSD += double.Parse(txtCostoUSD.Text);
+                    txtTotalSubloteUSD.Text = totalProductosSubloteUSD.ToString();
+                    txtSaldoUSD.Text = (totalProductosSubloteUSD - sublote_TotalPagosUSD).ToString();
+
                     if (contador != 1)
                     {
                         cbxLote.IsEnabled = false;
@@ -233,6 +256,10 @@ namespace sisgesoriadao
         {
             if (dgvProductos.Items.IsEmpty != true)
             {
+                totalProductosSubloteUSD -= listaHelper[contador - 2].CostoUSD;
+                txtTotalSubloteUSD.Text = totalProductosSubloteUSD.ToString();
+                txtSaldoUSD.Text = (totalProductosSubloteUSD - sublote_TotalPagosUSD).ToString();
+
                 listaHelper.RemoveAt(contador - 2);
                 contador--;
                 txtCodigoSublote.Text = codigoSublote + "-" + contador;
@@ -314,6 +341,28 @@ namespace sisgesoriadao
                 MessageBox.Show(ex.Message);
             }
         }
+
+        void cbxGetNombreProovedorFromDatabase()
+        {
+            try
+            {
+                List<ComboboxItem> listcomboboxNombreProveedor = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implProducto = new ProductoImpl();
+                dataTable = implProducto.SelectProviderNamesForComboBox();
+                listcomboboxNombreProveedor = (from DataRow dr in dataTable.Rows
+                                              select new ComboboxItem()
+                                              {
+                                                  Texto = dr["nombreProveedor"].ToString()
+                                              }).ToList();
+                acbtxtNombreProveedor.ItemsSource = listcomboboxNombreProveedor;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
         void cbxGetLoteFromDatabase()
         {
             try
@@ -587,6 +636,76 @@ namespace sisgesoriadao
                 {
                     // If user doesn't want to close, cancel closure
                     e.Cancel = true;
+                }
+            }
+        }
+        private void btnAddPayment_Click(object sender, RoutedEventArgs e)
+        {
+            addPaymentToDataGridandList();
+        }
+
+        private void txtPagoUSD_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && string.IsNullOrEmpty(txtPagoUSD.Text) != true)
+            {
+                addPaymentToDataGridandList();
+            }
+            if (e.Key == Key.Escape)
+            {
+                (sender as TextBox).Text = "";
+            }
+        }
+
+        void addPaymentToDataGridandList()
+        {
+            if (string.IsNullOrEmpty(txtPagoUSD.Text) != true)
+            {
+                if (double.Parse(txtPagoUSD.Text) != 0)
+                {
+                    //Añadiendo métodos de pago a la tabla y a la lista.
+                    dgvPagosSublote.Items.Add(new PagoDataGridView
+                    {
+                        montoUSD = double.Parse(txtPagoUSD.Text)
+                    });
+                    listaPagosSublote.Add(double.Parse(txtPagoUSD.Text));
+
+                    //Actualizando las cifras de la venta.
+                    sublote_TotalPagosUSD += double.Parse(txtPagoUSD.Text);
+                    txtTotalPagosUSD.Text = sublote_TotalPagosUSD.ToString();
+                    txtSaldoUSD.Text = (totalProductosSubloteUSD - sublote_TotalPagosUSD).ToString();
+                    //Vaciando los txt del método de pago de dólar.
+                    txtPagoUSD.Text = "";
+                }
+                else
+                {
+                    MessageBox.Show("No puede ingresar CERO como método de pago!.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Por favor rellene los montos para realizar el pago.");
+            }
+        }
+
+        private void btndgvRemoverPagoSublote(object sender, RoutedEventArgs e)
+        {
+            removeFromDGVPayment(dgvPagosSublote.SelectedIndex);
+        }
+
+        void removeFromDGVPayment(int posicion)
+        {
+            if (dgvPagosSublote.SelectedItem != null && dgvPagosSublote.Items.Count > 0)
+            {
+                if (dgvPagosSublote.Items.IsEmpty != true && listaPagosSublote != null)
+                {
+                    if (MessageBox.Show("Está realmente segur@ de remover este page de sublote?", "Remover pago de sublote", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        sublote_TotalPagosUSD -= listaPagosSublote[posicion];
+                        txtTotalPagosUSD.Text = sublote_TotalPagosUSD.ToString();
+                        txtSaldoUSD.Text = (totalProductosSubloteUSD - sublote_TotalPagosUSD).ToString();
+                        dgvPagosSublote.Items.RemoveAt(posicion);
+                        listaPagosSublote.RemoveAt(posicion);
+                    }
                 }
             }
         }

@@ -1,0 +1,90 @@
+﻿<Window x:Class="sisgesoriadao.winProducto_Sublotes"
+         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+TextElement.FontWeight="Regular"
+TextElement.FontSize="13"
+TextOptions.TextFormattingMode="Ideal"
+TextOptions.TextRenderingMode="Auto"
+Background="{DynamicResource MaterialDesignPaper}"
+FontFamily="{DynamicResource MaterialDesignFont}"
+   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+   xmlns:local="clr-namespace:sisgesoriadao"
+   xmlns:controls="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
+   mc:Ignorable="d"
+   Title="Sistema de Ventas - Gestión de Sublotes" Height="720" Width="1280"
+   WindowStartupLocation="CenterScreen" MaxHeight="1080" MaxWidth="1920" Loaded="Window_Loaded">
+
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Button x:Name="btnReturn" ToolTip="VOLVER A INICIO" Margin="0,0,20,0" Click="btnReturn_Click">
+                    <materialDesign:PackIcon Kind="ArrowLeftBold"/>
+                </Button>
+                <materialDesign:PackIcon Kind="PersonBox" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtBlockWelcome" Text="USUARIO" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="/" Margin="10,0,10,0" FontSize="23" VerticalAlignment="Center" FontWeight="Bold"/>
+                <materialDesign:PackIcon Kind="PackageVariant" Width="25" Height="25" VerticalAlignment="Center"/>
+                <TextBlock Text="GESTIÓN DE SUBLOTES" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <TextBlock Text="SELECCIONE UN REGISTRO PARA INGRESAR EL PAGO O ELIMINAR EL ÚLTIMO PAGO:" FontSize="19" FontWeight="Bold"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                    <Label Content="PROVEEDOR:" Margin="0,0,0,0" VerticalAlignment="Center"/>
+                    <controls:AutoCompleteBox x:Name="acbtxtNombreProveedor" Margin="0,0,20,0" MinWidth="200" IsEnabled="True" FilterMode="Contains" KeyDown="acbtxtNombreProveedor_KeyDown" VerticalAlignment="Center" Height="25"/>
+                    <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
+                        <materialDesign:PackIcon Kind="Search"/>
+                    </Button>
+                    <Label Content="Monto ($.):" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyDown="txtPagoUSD_KeyDown" VerticalAlignment="Center"/>
+                    <Button x:Name="btnAddPayment" ToolTip="SALDAR SUBLOTE." Click="btnAddPayment_Click" IsEnabled="False" Background="LimeGreen" BorderBrush="LimeGreen">
+                        <materialDesign:PackIcon Kind="CreditCardAdd"/>
+                    </Button>
+                </StackPanel>
+                <Label x:Name="lblSeleccion" Content="-" Margin="0,0,0,0" VerticalAlignment="Center" FontWeight="Bold" HorizontalAlignment="Center" FontSize="20"/>
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
+                    <Button x:Name="btnCopy" ToolTip="EXPORTAR TABLA AL PORTAPAPELES" Margin="0,0,0,0" Click="btnCopy_Click" Background="White" Foreground="Black" BorderBrush="Black">
+                        <materialDesign:PackIcon Kind="ContentCopy" Width="50"/>
+                    </Button>
+                    <Button x:Name="btnExcel" ToolTip="EXPORTAR TABLA A EXCEL" Margin="15,0,0,0" Click="btnExcel_Click" Background="DarkGreen" Foreground="White" BorderBrush="DarkGreen">
+                        <materialDesign:PackIcon Kind="MicrosoftExcel" Width="50"/>
+                    </Button>
+                    <Button x:Name="btnPDF" ToolTip="EXPORTAR TABLA A PDF" Margin="15,0,0,0" Click="btnPDF_Click" Background="Red" Foreground="White" BorderBrush="Red">
+                        <materialDesign:PackIcon Kind="FilePdfBox" Width="50"/>
+                    </Button>
+                </StackPanel>
+                <Border BorderBrush="Gray" BorderThickness="2">
+                    <DataGrid x:Name="dgvDatos" AutoGenerateColumns="False"
+  HorizontalAlignment="Left" VerticalAlignment="Top" GridLinesVisibility="Horizontal"
+  CanUserAddRows="False" IsReadOnly="True" 
+  CanUserResizeRows="False" CanUserResizeColumns="False" MaxHeight="726" MaxWidth="1880" Loaded="dgvDatos_Loaded" SelectionChanged="dgvDatos_SelectionChanged">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding ID}" IsReadOnly="True" Visibility="Collapsed"/>
+                            <DataGridTextColumn Header="Sublote" Binding="{Binding Sublote}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Proveedor" Binding="{Binding NombreProveedor}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Detalle de Productos" Binding="{Binding DetalleProductos}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Pagos" Binding="{Binding Pagos}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Total $." Binding="{Binding TotalUSD}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Saldo $." Binding="{Binding Saldo}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="F. Registro" Binding="{Binding FechaRegistro}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button ToolTip="ELIMINAR ÚLTIMO PAGO" Click="btndgvEliminarUltimoPago_Click" Background="Red" Foreground="White" BorderBrush="Red">
+                                            <materialDesign:PackIcon Kind="CreditCardMinus" Width="50"/>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+                <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
