@@ -84,6 +84,13 @@ namespace sisgesoriadao
             if(pagos == "-")
             {
                 MessageBox.Show("No se puede eliminar el último pago, ya que no existe un pago registrado para este sublote.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                dgvDatos.SelectedItem = null;
+                txtPagoUSD.IsEnabled = false;
+                btnAddPayment.IsEnabled = false;
+                labelClear(lblSeleccion);
+                txtNombreProveedor.IsEnabled = false;
+                btnSave.IsEnabled = false;
+                btnCancel.IsEnabled = false;
                 return;
             }
             if(MessageBox.Show("Está realmente segur@ de eliminar el último pago de sublote?", "Eliminar", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
@@ -94,6 +101,13 @@ namespace sisgesoriadao
                     if (implProducto.DeleteLastPaymentSubBatch(new PagoSublote(id, 0, DateTime.Now)) > 0)
                     {
                         MessageBox.Show("Se ha eliminado el último pago del sublote correctamente.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                        dgvDatos.SelectedItem = null;
+                        txtPagoUSD.IsEnabled = false;
+                        btnAddPayment.IsEnabled = false;
+                        labelClear(lblSeleccion);
+                        txtNombreProveedor.IsEnabled = false;
+                        btnSave.IsEnabled = false;
+                        btnCancel.IsEnabled = false;
                     }
                 }
                 catch (Exception ex)
@@ -134,10 +148,15 @@ namespace sisgesoriadao
                 DataRowView d = (DataRowView)dgvDatos.SelectedItem;
                 int id = int.Parse(d.Row.ItemArray[0].ToString());
                 string sublote = d.Row.ItemArray[1].ToString();
+                string nombreProveedor = d.Row.ItemArray[2].ToString();
                 lblSeleccion.Content = "Se ha seleccionado el Sublote " + sublote;
                 labelSuccess(lblSeleccion);
                 txtPagoUSD.IsEnabled = true;
                 btnAddPayment.IsEnabled = true;
+                txtNombreProveedor.Text = nombreProveedor;
+                txtNombreProveedor.IsEnabled = true;
+                btnSave.IsEnabled = true;
+                btnCancel.IsEnabled = true;
             }
         }
 
@@ -251,6 +270,64 @@ namespace sisgesoriadao
             label.Foreground = new SolidColorBrush(Colors.Transparent);
             label.Background = new SolidColorBrush(Colors.Transparent);
             label.Content = "";
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgvDatos.SelectedItem == null)
+            {
+                MessageBox.Show("Por favor, seleccione un sublote para guardar los cambios.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+            if (string.IsNullOrEmpty(txtNombreProveedor.Text))
+            {
+                MessageBox.Show("Por favor, ingrese un nombre de proveedor.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+            try
+            {
+                implProducto = new ProductoImpl();
+                DataRowView d = (DataRowView)dgvDatos.SelectedItem;
+                int idSublote = int.Parse(d.Row.ItemArray[0].ToString());
+                string nombreProveedor = txtNombreProveedor.Text.Trim();
+
+                if (implProducto.UpdateProviderSubBatch(nombreProveedor, idSublote) > 0)
+                {
+                    MessageBox.Show("Nombre de proveedor actualizado correctamente.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                    btnSave.IsEnabled = false;
+                    txtNombreProveedor.IsEnabled = false;
+                    btnCancel.IsEnabled = false;
+                    SelectSublotes(acbtxtNombreProveedor.Text);
+                    txtNombreProveedor.Text = "";
+                    cbxGetNombreProovedorFromDatabase();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            dgvDatos.SelectedItem = null;
+            btnSave.IsEnabled = false;
+            txtNombreProveedor.IsEnabled = false;
+            btnCancel.IsEnabled = false;
+            lblSeleccion.Content = "";
+            labelClear(lblSeleccion);
+            txtPagoUSD.IsEnabled = false;
+            btnAddPayment.IsEnabled = false;
+        }
+
+        private void TextBoxUppercase(object sender, KeyEventArgs e)
+        {
+            TextBox currentContainer = ((TextBox)sender);
+            int caretPosition = currentContainer.SelectionStart;
+
+            currentContainer.Text = currentContainer.Text.ToUpper();
+            currentContainer.SelectionStart = caretPosition++;
         }
     }
 }

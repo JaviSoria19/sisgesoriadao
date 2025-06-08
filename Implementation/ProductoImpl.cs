@@ -1010,5 +1010,21 @@ namespace sisgesoriadao.Implementation
                 throw ex;
             }
         }
+
+        public int UpdateProviderSubBatch(string NombreProveedor, int IdSublote)
+        {
+            string query = @"UPDATE Sublote SET nombreProveedor = @nombreProveedor WHERE idSublote = @idSublote";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@nombreProveedor", NombreProveedor);
+            command.Parameters.AddWithValue("@idSublote", IdSublote);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

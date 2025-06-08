@@ -45,6 +45,13 @@ FontFamily="{DynamicResource MaterialDesignFont}"
                         <materialDesign:PackIcon Kind="CreditCardAdd"/>
                     </Button>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                    <Label Content="PROVEEDOR:" VerticalAlignment="Center"/>
+                    <Label Content="*" Foreground="Red" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtNombreProveedor" TextWrapping="Wrap" Margin="0,0,20,0" Width="200" KeyUp="TextBoxUppercase" MaxLength="100" IsEnabled="False" VerticalAlignment="Center"/>
+                    <Button x:Name="btnSave" Content="GUARDAR" Margin="5" IsEnabled="False" Click="btnSave_Click"/>
+                    <Button x:Name="btnCancel" Content="CANCELAR" Margin="5" IsEnabled="False" Click="btnCancel_Click"/>
+                </StackPanel>
                 <Label x:Name="lblSeleccion" Content="-" Margin="0,0,0,0" VerticalAlignment="Center" FontWeight="Bold" HorizontalAlignment="Center" FontSize="20"/>
                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
                     <Button x:Name="btnCopy" ToolTip="EXPORTAR TABLA AL PORTAPAPELES" Margin="0,0,0,0" Click="btnCopy_Click" Background="White" Foreground="Black" BorderBrush="Black">
