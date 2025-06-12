@@ -12,7 +12,7 @@ namespace sisgesoriadao.Model
     public static class Session
     {
         //Cadena de conexión requerida para llamar a la base de datos.
-        public static string CadenaConexionBdD { get; set; } = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
+        public static string CadenaConexionBdD { get; set; } = "server=162.144.4.18;database=planetc5_bdventacelular;uid=planetc5_root;pwd=thejockeydeath1;port=3306";
         public static string VersionApp { get; set; } = "v. 1.8 pt.1";
         //Atributo indispensable para manejar la totalidad del sistema.
         public static byte IdUsuario { get; set; }

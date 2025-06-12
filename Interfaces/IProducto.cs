@@ -40,7 +40,7 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectBatchOfProductsToUpdate(string CadenaBusqueda);
         string UpdateBatchOfProductsTransaction(List<Producto> ListaProductos);
 
-        DataTable SelectSubBatchPendings(string NombreProveedor);
+        DataTable SelectSubBatchPendings(string NombreProveedor, double Saldo);
 
         int InsertPaymentSubBatch(PagoSublote pagoSublote);
         int DeleteLastPaymentSubBatch(PagoSublote pagoSublote);

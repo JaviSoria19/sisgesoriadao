@@ -945,12 +945,12 @@ namespace sisgesoriadao.Implementation
             }
         }
 
-        public DataTable SelectSubBatchPendings(string NombreProveedor)
+        public DataTable SelectSubBatchPendings(string NombreProveedor, double Saldo)
         {
             string query = @"SELECT S.idSublote AS ID, 
                             SUBSTRING(P.codigoSublote, 1, LENGTH(P.codigoSublote) - 2) AS Sublote,
                             S.nombreProveedor AS NombreProveedor,
-                            GROUP_CONCAT(DISTINCT CONCAT('• ', P.codigoSublote, ' ', P.nombreProducto, ' (', P.costoUSD, '$.)') SEPARATOR '\n') AS DetalleProductos,
+                            GROUP_CONCAT(DISTINCT CONCAT('• ', P.codigoSublote, ' ', P.nombreProducto, ' (', P.costoUSD, '$.)') ORDER BY P.idProducto SEPARATOR '\n') AS DetalleProductos,
                             IFNULL((
                                 SELECT GROUP_CONCAT(CONCAT('• ', montoUSD, ' $us. el ', " + Session.FormatoFechaMySql("fechaRegistro") + @") SEPARATOR ' \n')
                                 FROM Pago_Sublote
@@ -965,10 +965,12 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN Lote AS L ON S.idLote = L.idLote
                             WHERE S.nombreProveedor LIKE @nombreProveedor
                             GROUP BY S.idSublote
-                            ORDER BY S.idSublote DESC, P.codigoSublote ASC
+                            HAVING Saldo >= @saldoMinimo
+                            ORDER BY S.idSublote DESC
                             LIMIT 200";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@nombreProveedor", "%" + NombreProveedor + "%");
+            command.Parameters.AddWithValue("@saldoMinimo", Saldo);
             try
             {
                 return ExecuteDataTableCommand(command);

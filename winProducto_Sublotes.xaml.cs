@@ -114,21 +114,21 @@ namespace sisgesoriadao
                 {
                     MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                SelectSublotes(acbtxtNombreProveedor.Text);
+                SelectSublotes(acbtxtNombreProveedor.Text, 0.01);
             }
         }
 
         private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
         {
-            SelectSublotes("");
+            SelectSublotes("", 0.01);
         }
-        private void SelectSublotes(string nombreProveedor)
+        private void SelectSublotes(string nombreProveedor, double saldo)
         {
             try
             {
                 implProducto = new ProductoImpl();
                 dgvDatos.ItemsSource = null;
-                dgvDatos.ItemsSource = implProducto.SelectSubBatchPendings(nombreProveedor).DefaultView;
+                dgvDatos.ItemsSource = implProducto.SelectSubBatchPendings(nombreProveedor, saldo).DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRows.Content = "Registros: " + dgvDatos.Items.Count;
 
@@ -210,7 +210,7 @@ namespace sisgesoriadao
                     MessageBox.Show("Pago registrado correctamente.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                     labelSuccess(lblSeleccion);
                     txtPagoUSD.Text = "";
-                    SelectSublotes(acbtxtNombreProveedor.Text);
+                    SelectSublotes(acbtxtNombreProveedor.Text, 0.01);
                     dgvDatos.SelectedItem = null;
                     txtPagoUSD.IsEnabled = false;
                     btnAddPayment.IsEnabled = false;
@@ -242,14 +242,14 @@ namespace sisgesoriadao
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            SelectSublotes(acbtxtNombreProveedor.Text);
+            SelectSublotes(acbtxtNombreProveedor.Text, 0);
         }
 
         private void acbtxtNombreProveedor_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                SelectSublotes(acbtxtNombreProveedor.Text);
+                SelectSublotes(acbtxtNombreProveedor.Text, 0);
                 txtPagoUSD.IsEnabled = false;
                 btnAddPayment.IsEnabled = false;
             }
@@ -274,6 +274,44 @@ namespace sisgesoriadao
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            UpdateProviderSubBatch();
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            dgvDatos.SelectedItem = null;
+            btnSave.IsEnabled = false;
+            txtNombreProveedor.IsEnabled = false;
+            btnCancel.IsEnabled = false;
+            lblSeleccion.Content = "";
+            labelClear(lblSeleccion);
+            txtPagoUSD.IsEnabled = false;
+            btnAddPayment.IsEnabled = false;
+        }
+
+        private void TextBoxUppercase(object sender, KeyEventArgs e)
+        {
+            TextBox currentContainer = ((TextBox)sender);
+            int caretPosition = currentContainer.SelectionStart;
+
+            currentContainer.Text = currentContainer.Text.ToUpper();
+            currentContainer.SelectionStart = caretPosition++;
+        }
+
+        private void txtNombreProveedor_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                UpdateProviderSubBatch();
+            }
+            if (e.Key == Key.Escape)
+            {
+                txtNombreProveedor.Text = "";
+            }
+        }
+
+        void UpdateProviderSubBatch()
+        {
             if (dgvDatos.SelectedItem == null)
             {
                 MessageBox.Show("Por favor, seleccione un sublote para guardar los cambios.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -297,37 +335,19 @@ namespace sisgesoriadao
                     btnSave.IsEnabled = false;
                     txtNombreProveedor.IsEnabled = false;
                     btnCancel.IsEnabled = false;
-                    SelectSublotes(acbtxtNombreProveedor.Text);
+                    SelectSublotes(acbtxtNombreProveedor.Text, 0.01);
                     txtNombreProveedor.Text = "";
                     cbxGetNombreProovedorFromDatabase();
 
+                    dgvDatos.SelectedItem = null;
+                    txtPagoUSD.IsEnabled = false;
+                    btnAddPayment.IsEnabled = false;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            dgvDatos.SelectedItem = null;
-            btnSave.IsEnabled = false;
-            txtNombreProveedor.IsEnabled = false;
-            btnCancel.IsEnabled = false;
-            lblSeleccion.Content = "";
-            labelClear(lblSeleccion);
-            txtPagoUSD.IsEnabled = false;
-            btnAddPayment.IsEnabled = false;
-        }
-
-        private void TextBoxUppercase(object sender, KeyEventArgs e)
-        {
-            TextBox currentContainer = ((TextBox)sender);
-            int caretPosition = currentContainer.SelectionStart;
-
-            currentContainer.Text = currentContainer.Text.ToUpper();
-            currentContainer.SelectionStart = caretPosition++;
         }
     }
 }

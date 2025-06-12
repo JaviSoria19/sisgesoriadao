@@ -34,7 +34,7 @@ FontFamily="{DynamicResource MaterialDesignFont}"
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                    <Label Content="PROVEEDOR:" Margin="0,0,0,0" VerticalAlignment="Center"/>
+                    <Label Content="BUSCAR PROVEEDOR:" Margin="0,0,0,0" VerticalAlignment="Center"/>
                     <controls:AutoCompleteBox x:Name="acbtxtNombreProveedor" Margin="0,0,20,0" MinWidth="200" IsEnabled="True" FilterMode="Contains" KeyDown="acbtxtNombreProveedor_KeyDown" VerticalAlignment="Center" Height="25"/>
                     <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                         <materialDesign:PackIcon Kind="Search"/>
@@ -46,9 +46,9 @@ FontFamily="{DynamicResource MaterialDesignFont}"
                     </Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                    <Label Content="PROVEEDOR:" VerticalAlignment="Center"/>
+                    <Label Content="EDITAR PROVEEDOR:" VerticalAlignment="Center"/>
                     <Label Content="*" Foreground="Red" FontWeight="Bold" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtNombreProveedor" TextWrapping="Wrap" Margin="0,0,20,0" Width="200" KeyUp="TextBoxUppercase" MaxLength="100" IsEnabled="False" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtNombreProveedor" TextWrapping="Wrap" Margin="0,0,20,0" Width="200" KeyUp="TextBoxUppercase" KeyDown="txtNombreProveedor_KeyDown" MaxLength="100" IsEnabled="False" VerticalAlignment="Center"/>
                     <Button x:Name="btnSave" Content="GUARDAR" Margin="5" IsEnabled="False" Click="btnSave_Click"/>
                     <Button x:Name="btnCancel" Content="CANCELAR" Margin="5" IsEnabled="False" Click="btnCancel_Click"/>
                 </StackPanel>
