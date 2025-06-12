@@ -8,7 +8,6 @@
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
         mc:Ignorable="d"
         Title="Sistema de Ventas - Registrar Venta"
-        SizeToContent="WidthAndHeight"
         MinWidth="1024" MinHeight="600"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded" Closing="Window_Closing"
