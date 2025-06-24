@@ -214,6 +214,9 @@ namespace sisgesoriadao
                     dgvDatos.SelectedItem = null;
                     txtPagoUSD.IsEnabled = false;
                     btnAddPayment.IsEnabled = false;
+                    txtNombreProveedor.IsEnabled = false;
+                    btnSave.IsEnabled = false;
+                    btnCancel.IsEnabled = false;
                 }
             }
             catch (Exception ex)
