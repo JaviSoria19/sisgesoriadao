@@ -36,6 +36,8 @@ FontFamily="{DynamicResource MaterialDesignFont}"
                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                     <Label Content="BUSCAR PROVEEDOR:" Margin="0,0,0,0" VerticalAlignment="Center"/>
                     <controls:AutoCompleteBox x:Name="acbtxtNombreProveedor" Margin="0,0,20,0" MinWidth="200" IsEnabled="True" FilterMode="Contains" KeyDown="acbtxtNombreProveedor_KeyDown" VerticalAlignment="Center" Height="25"/>
+                    <Label Content="Mostrar lotes sin deuda ($.):" VerticalAlignment="Center"/>
+                    <ToggleButton x:Name="tglMostrarLotesSinDeuda" Style="{StaticResource MaterialDesignSwitchToggleButton}" ToolTip="Mostrar lotes sin deuda." IsEnabled="True" Margin="0,0,20,0" IsChecked="False"/>
                     <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>
@@ -53,6 +55,7 @@ FontFamily="{DynamicResource MaterialDesignFont}"
                     <Button x:Name="btnCancel" Content="CANCELAR" Margin="5" IsEnabled="False" Click="btnCancel_Click"/>
                 </StackPanel>
                 <Label x:Name="lblSeleccion" Content="-" Margin="0,0,0,0" VerticalAlignment="Center" FontWeight="Bold" HorizontalAlignment="Center" FontSize="20"/>
+                <Label x:Name="lblSaldoBusqueda" Content="" Margin="0,0,0,0" VerticalAlignment="Center" FontWeight="Bold" HorizontalAlignment="Center" FontSize="20"/>
                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
                     <Button x:Name="btnCopy" ToolTip="EXPORTAR TABLA AL PORTAPAPELES" Margin="0,0,0,0" Click="btnCopy_Click" Background="White" Foreground="Black" BorderBrush="Black">
                         <materialDesign:PackIcon Kind="ContentCopy" Width="50"/>

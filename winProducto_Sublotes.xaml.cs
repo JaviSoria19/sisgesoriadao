@@ -128,6 +128,9 @@ namespace sisgesoriadao
             {
                 implProducto = new ProductoImpl();
                 dgvDatos.ItemsSource = null;
+
+                saldo = tglMostrarLotesSinDeuda.IsChecked == true ? 0 : saldo;
+
                 dgvDatos.ItemsSource = implProducto.SelectSubBatchPendings(nombreProveedor, saldo).DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRows.Content = "Registros: " + dgvDatos.Items.Count;
@@ -135,6 +138,16 @@ namespace sisgesoriadao
                 labelClear(lblSeleccion);
                 txtPagoUSD.IsEnabled = false;
                 btnAddPayment.IsEnabled = false;
+                txtNombreProveedor.IsEnabled = false;
+                btnSave.IsEnabled = false;
+                btnCancel.IsEnabled = false;
+
+                double dgvSaldoTotal = 0;
+                foreach (DataRowView row in dgvDatos.Items)
+                {
+                    dgvSaldoTotal += double.Parse(row.Row.ItemArray[6].ToString());
+                }
+                lblSaldoBusqueda.Content = "Saldo total de la búsqueda en $us.: " + dgvSaldoTotal.ToString();
             }
             catch (Exception ex)
             {
@@ -245,14 +258,14 @@ namespace sisgesoriadao
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            SelectSublotes(acbtxtNombreProveedor.Text, 0);
+            SelectSublotes(acbtxtNombreProveedor.Text, 0.01);
         }
 
         private void acbtxtNombreProveedor_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                SelectSublotes(acbtxtNombreProveedor.Text, 0);
+                SelectSublotes(acbtxtNombreProveedor.Text, 0.01);
                 txtPagoUSD.IsEnabled = false;
                 btnAddPayment.IsEnabled = false;
             }
