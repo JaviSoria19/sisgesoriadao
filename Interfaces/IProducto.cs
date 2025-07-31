@@ -45,5 +45,7 @@ namespace sisgesoriadao.Interfaces
         int InsertPaymentSubBatch(PagoSublote pagoSublote);
         int DeleteLastPaymentSubBatch(PagoSublote pagoSublote);
         int UpdateProviderSubBatch(string NombreProveedor, int IdSublote);
+
+        DataTable SelectPendingsGroupByProvider();
     }
 }

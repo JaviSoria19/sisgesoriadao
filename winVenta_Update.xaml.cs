@@ -21,6 +21,8 @@ namespace sisgesoriadao
         ClienteImpl implCliente;
         Cliente cliente;
         ProductoImpl implProducto;
+        EmpleadoImpl implEmpleado;
+        byte IdEmpleado = 0;
         double venta_TotalUSD = 0;
         double venta_TotalBOB = 0;
         double venta_pagoTotalUSD = 0;
@@ -37,10 +39,38 @@ namespace sisgesoriadao
         double auxTotalProductoBOB = 0, auxTotalProductoUSD = 0;
         string clipboardTexto = "";
         bool usuario_modifico_precio = false;
+
+        int empleado_SelectionChanged_trigger = 0;
         public winVenta_Update()
         {
             InitializeComponent();
             WindowState = WindowState.Maximized;
+        }
+        void cbxGetEmpleadoFromDatabase()
+        {
+            try
+            {
+                List<ComboboxItem> listcomboboxEmpleado = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implEmpleado = new EmpleadoImpl();
+                dataTable = implEmpleado.SelectForComboBox();
+                listcomboboxEmpleado = (from DataRow dr in dataTable.Rows
+                                        select new ComboboxItem()
+                                        {
+                                            Valor = Convert.ToByte(dr["idEmpleado"]),
+                                            Texto = dr["empleado"].ToString()
+                                        }).ToList();
+                foreach (var item in listcomboboxEmpleado)
+                {
+                    cbxEmployees.Items.Add(item);
+                }
+
+                cbxEmployees.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
@@ -222,6 +252,17 @@ namespace sisgesoriadao
 
                 txtObservacionVenta.IsEnabled = false;
             }
+
+            cbxGetEmpleadoFromDatabase();
+            getSale_EmployeeId();
+            foreach (ComboboxItem item in cbxEmployees.Items)
+            {
+                if (item.Valor == IdEmpleado)
+                {
+                    cbxEmployees.SelectedItem = item;
+                    break;
+                }
+            }
         }
         private void getSale_Info()
         {
@@ -260,6 +301,20 @@ namespace sisgesoriadao
                     lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
                     lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                throw;
+            }
+        }
+
+        private void getSale_EmployeeId()
+        {
+            try
+            {
+                implVenta = new VentaImpl();
+                IdEmpleado = implVenta.GetEmpleado(idVenta);
             }
             catch (Exception ex)
             {
@@ -1227,6 +1282,27 @@ namespace sisgesoriadao
             {
                 deleteSale();
             }
+        }
+
+        private void cbxEmployees_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (empleado_SelectionChanged_trigger > 1)
+            {
+                if (MessageBox.Show("¿Desea cambiar el Empleado que realizó ésta venta?", "CAMBIAR EMPLEADO", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    implVenta = new VentaImpl();
+                    int resultado = implVenta.UpdateSaleEmployee(byte.Parse((cbxEmployees.SelectedItem as ComboboxItem).Valor.ToString()), idVenta);
+                    if (resultado > 0)
+                    {
+                        MessageBox.Show("EMPLEADO CAMBIADO CON ÉXITO.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("ERROR AL CAMBIAR EL EMPLEADO DE LA VENTA, INTENTE NUEVAMENTE.");
+                    }
+                }
+            }
+            empleado_SelectionChanged_trigger++;
         }
 
         public class DataGridRowDetalleHelper

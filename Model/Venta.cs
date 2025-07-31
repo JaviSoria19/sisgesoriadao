@@ -8,6 +8,7 @@ namespace sisgesoriadao.Model
         public int IdCliente { get; set; }
         public byte IdUsuario { get; set; }
         public byte IdSucursal { get; set; }
+        public byte IdEmpleado { get; set; }
         public double TotalUSD { get; set; }
         public double TotalBOB { get; set; }
         public double SaldoUSD { get; set; }
@@ -32,13 +33,14 @@ namespace sisgesoriadao.Model
         /// <param name="estado"></param>
         /// <param name="fechaRegistro"></param>
         /// <param name="fechaActualizacion"></param>
-        public Venta(int idVenta, int idCliente, byte idUsuario, byte idSucursal, double totalUSD, double totalBOB, double saldoUSD, double saldoBOB, string observaciones, byte estado, DateTime fechaRegistro, string fechaActualizacion)
+        public Venta(int idVenta, int idCliente, byte idUsuario, byte idSucursal, byte idEmpleado, double totalUSD, double totalBOB, double saldoUSD, double saldoBOB, string observaciones, byte estado, DateTime fechaRegistro, string fechaActualizacion)
             : base(estado, fechaRegistro, fechaActualizacion)
         {
             IdVenta = idVenta;
             IdCliente = idCliente;
             IdUsuario = idUsuario;
             IdSucursal = idSucursal;
+            IdEmpleado = idEmpleado;
             TotalUSD = totalUSD;
             TotalBOB = totalBOB;
             SaldoUSD = saldoUSD;
@@ -55,11 +57,12 @@ namespace sisgesoriadao.Model
         /// <param name="totalBOB"></param>
         /// <param name="saldo"></param>
         /// <param name="observaciones"></param>
-        public Venta(int idCliente, byte idUsuario, byte idSucursal, double totalUSD, double totalBOB, double saldoUSD, double saldoBOB, string observaciones)
+        public Venta(int idCliente, byte idUsuario, byte idSucursal, byte idEmpleado, double totalUSD, double totalBOB, double saldoUSD, double saldoBOB, string observaciones)
         {
             IdCliente = idCliente;
             IdUsuario = idUsuario;
             IdSucursal = idSucursal;
+            IdEmpleado = idEmpleado;
             TotalUSD = totalUSD;
             TotalBOB = totalBOB;
             SaldoUSD = saldoUSD;

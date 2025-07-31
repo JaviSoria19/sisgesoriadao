@@ -22,11 +22,12 @@ namespace sisgesoriadao.Implementation
             try
             {
                 //REGISTRO DE LA VENTA.
-                command.CommandText = @"INSERT INTO Venta (idCliente,idUsuario,idSucursal,totalUSD,totalBOB,saldoUSD,saldoBOB,observaciones) 
-                            VALUES(@idCliente,@idUsuario,@idSucursal,@totalUSD,@totalBOB,@saldoUSD,@saldoBOB,@observaciones)";
+                command.CommandText = @"INSERT INTO Venta (idCliente,idUsuario,idSucursal,idEmpleado,totalUSD,totalBOB,saldoUSD,saldoBOB,observaciones) 
+                            VALUES(@idCliente,@idUsuario,@idSucursal,@idEmpleado,@totalUSD,@totalBOB,@saldoUSD,@saldoBOB,@observaciones)";
                 command.Parameters.AddWithValue("@idCliente", Venta.IdCliente);
                 command.Parameters.AddWithValue("@idUsuario", Venta.IdUsuario);
                 command.Parameters.AddWithValue("@idSucursal", Venta.IdSucursal);
+                command.Parameters.AddWithValue("@idEmpleado", Venta.IdEmpleado);
                 command.Parameters.AddWithValue("@totalUSD", Venta.TotalUSD);
                 command.Parameters.AddWithValue("@totalBOB", Venta.TotalBOB);
                 command.Parameters.AddWithValue("@saldoUSD", Venta.SaldoUSD);
@@ -255,12 +256,15 @@ namespace sisgesoriadao.Implementation
         {
             string query = @"SELECT " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, 
                             V.idVenta AS ID, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS PrecioUSD, DV.precioBOB AS PrecioBOB FROM Venta V
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS PrecioUSD, DV.precioBOB AS PrecioBOB,
+                            CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado
+                            FROM Venta V
                             INNER JOIN Sucursal S ON S.idSucursal = V.idSucursal
                             INNER JOIN Usuario U ON U.idUsuario = V.idUsuario
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
                             INNER JOIN Producto P ON P.idProducto = DV.idProducto
                             INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
+                            INNER JOIN Empleado E ON E.idEmpleado = V.idEmpleado
                             WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto)
                             AND V.estado = 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
@@ -283,11 +287,13 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLikeReporteVentasLocales(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI)
         {
             string query = @"SELECT V.idVenta AS 'ID', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, CL.nombre AS Cliente, V.idVenta AS Venta, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS TotalUSD, IF(V.saldoUSD <= 0 || V.saldoBOB <= 0, 0, V.saldoUSD) AS SaldoUSD FROM Venta V
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS TotalUSD, IF(V.saldoUSD <= 0 || V.saldoBOB <= 0, 0, V.saldoUSD) AS SaldoUSD, CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado
+                            FROM Venta V
                             INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
                             INNER JOIN Producto P ON P.idProducto = DV.idProducto
                             INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
+                            INNER JOIN Empleado E ON E.idEmpleado = V.idEmpleado
                             WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto OR CL.nombre LIKE @clienteoci OR CL.numeroCI LIKE @clienteoci)
                             AND V.estado = 1 AND V.idSucursal = @SessionSucursal
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
@@ -312,11 +318,13 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLikeReporteVentasLocalesByID(int idVenta)
         {
             string query = @"SELECT V.idVenta AS 'ID', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, CL.nombre AS Cliente, V.idVenta AS 'Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD <= 0 || V.saldoBOB <= 0, 0, V.saldoUSD) AS 'Saldo USD' FROM Venta V
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD <= 0 || V.saldoBOB <= 0, 0, V.saldoUSD) AS 'Saldo USD', CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado
+                            FROM Venta V
                             INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
                             INNER JOIN Producto P ON P.idProducto = DV.idProducto
                             INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
+                            INNER JOIN Empleado E ON E.idEmpleado = V.idEmpleado
                             WHERE V.estado = 1 AND V.idSucursal = @SessionSucursal AND V.idVenta = @idVenta
                             GROUP BY P.idProducto
                             ORDER BY 1 DESC";
@@ -553,6 +561,43 @@ namespace sisgesoriadao.Implementation
                 throw ex;
             }
             return estado;
+        }
+
+        public byte GetEmpleado(int IdVenta)
+        {
+            byte idEmpleado = 0;
+            string query = @"SELECT idEmpleado FROM Venta WHERE idVenta = @idVenta";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idVenta", IdVenta);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    idEmpleado = byte.Parse(dt.Rows[0][0].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return idEmpleado;
+        }
+        public int UpdateSaleEmployee(byte IdEmpleado, int IdVenta)
+        {
+            string query = @"UPDATE Venta SET idEmpleado = @idEmpleado WHERE idVenta = @idVenta";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idEmpleado", IdEmpleado);
+            command.Parameters.AddWithValue("@idVenta", IdVenta);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
         public string DeleteSaleTransaction(int IdVenta, string Observacion, List<int> ListaIDProductos)
         {

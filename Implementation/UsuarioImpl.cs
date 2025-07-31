@@ -10,7 +10,7 @@ namespace sisgesoriadao.Implementation
         public Usuario Login(string nombreUsuario, string contrasenha)
         {
             Usuario session = null;
-            string query = @"SELECT idUsuario, nombreUsuario, rol FROM Usuario 
+            string query = @"SELECT idUsuario, nombreUsuario, rol, idEmpleado FROM Usuario 
                             WHERE nombreUsuario=@nombreUsuario AND contrasenha=MD5(@contrasenha) AND estado=1";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@nombreUsuario", nombreUsuario);
@@ -25,6 +25,7 @@ namespace sisgesoriadao.Implementation
                     Session.IdUsuario = session.IdUsuario;
                     Session.NombreUsuario = session.NombreUsuario;
                     Session.Rol = session.Rol;
+                    Session.IdEmpleado = byte.Parse(dt.Rows[0][3].ToString());
                 }
             }
             catch (Exception ex)

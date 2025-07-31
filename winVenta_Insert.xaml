@@ -50,7 +50,9 @@
                 <!-- Observaciones -->
                 <WrapPanel Margin="10">
                     <Label Content="OBSERVACIONES:" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtObservacionVenta" TextWrapping="Wrap" Width="300" MaxLength="99"/>
+                    <TextBox x:Name="txtObservacionVenta" TextWrapping="Wrap" Width="300" MaxLength="99" Margin="0,0,20,0"/>
+                    <Label Content="EMPLEADO:" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="cbxEmployees" IsEnabled="True"/>
                 </WrapPanel>
 
                 <TextBlock Text="DETALLE CLIENTE" FontWeight="Bold" FontSize="20"/>

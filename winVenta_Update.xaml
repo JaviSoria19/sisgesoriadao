@@ -51,6 +51,8 @@
                         <Label Content="OBSERVACIONES: " VerticalAlignment="Center" Margin="20,0,0,0"/>
                         <TextBox x:Name="txtObservacionVenta" TextWrapping="Wrap" MinWidth="120" MaxWidth="300" MaxLength="99" IsEnabled="True" VerticalAlignment="Center" KeyDown="txtObservacionVenta_KeyDown"/>
                         <Button x:Name="btnDeleteSale" Content="ELIMINAR VENTA" Margin="10,0" ToolTip="ELIMINAR VENTA" Click="btnDeleteSale_Click" IsEnabled="False" VerticalAlignment="Center" Background="Red" Foreground="White" BorderBrush="Red"/>
+                        <Label Content="EMPLEADO:" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="cbxEmployees" IsEnabled="True" SelectionChanged="cbxEmployees_SelectionChanged"/>
                     </StackPanel>
                 </StackPanel>
                 <TextBlock Text="DETALLE CLIENTE" FontWeight="Bold" FontSize="20"/>

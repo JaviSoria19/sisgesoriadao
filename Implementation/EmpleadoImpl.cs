@@ -158,5 +158,20 @@ namespace sisgesoriadao.Implementation
                 throw ex;
             }
         }
+
+        public DataTable SelectForComboBox()
+        {
+            string query = @"SELECT idEmpleado, CONCAT(nombres, ' ', primerApellido, ' ', IF(segundoApellido='-','',IFNULL(segundoApellido,''))) AS empleado FROM Empleado WHERE estado IN (1,2) ORDER BY 2 ASC";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
+

@@ -1028,5 +1028,23 @@ namespace sisgesoriadao.Implementation
                 throw ex;
             }
         }
+
+        public DataTable SelectPendingsGroupByProvider()
+        {
+            string query = @"SELECT S.nombreProveedor AS Proveedor, SUM(PP.TotalCostoUSD) AS TotalCostoUSD, SUM(PP.TotalPagosUSD) AS TotalPagosUSD, SUM(PP.TotalCostoUSD - PP.TotalPagosUSD) AS Saldo
+                            FROM sublote AS S
+                            LEFT JOIN ( SELECT idSublote, SUM(costoUSD) AS TotalCostoUSD, 0 AS TotalPagosUSD FROM Producto GROUP BY idSublote UNION ALL SELECT idSublote, 0 AS TotalCostoUSD, SUM(montoUSD) AS TotalPagosUSD FROM Pago_Sublote GROUP BY idSublote ) AS PP ON PP.idSublote = S.idSublote
+                            GROUP BY S.nombreProveedor
+                            ORDER BY 1";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

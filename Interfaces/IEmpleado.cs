@@ -8,5 +8,6 @@ namespace sisgesoriadao.Interfaces
         Empleado Get(byte Id);
         DataTable SelectEmployeesWithoutUsers();
         int UpdateCreatedUser(Empleado e);
+        DataTable SelectForComboBox();
     }
 }

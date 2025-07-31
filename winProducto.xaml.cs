@@ -534,11 +534,11 @@ namespace sisgesoriadao
                     {
                         label.SetObjectText("lblCodigoSublote", producto.CodigoSublote);
                         label.SetObjectText("lblCodigoQR", producto.CodigoSublote);
-                        label.Print("DYMO LabelWriter 450 Turbo");
+                        label.Print(Session.ModeloDeEtiquetadoraDYMO);
                     }
                     catch (InvalidOperationException ex)
                     {
-                        MessageBox.Show(ex.Message + "\nATENCIÓN: NO SE PUDO IMPRIMIR LA ETIQUETA PORQUE USTED NO CUENTA CON LA MAQUINA ETIQUETADORA DYMO LabelWriter 450 Turbo");
+                        MessageBox.Show(ex.Message + "\nATENCIÓN: NO SE PUDO IMPRIMIR LA ETIQUETA PORQUE USTED NO CUENTA CON LA MAQUINA ETIQUETADORA " + Session.ModeloDeEtiquetadoraDYMO);
                     }
                 }
             }

@@ -75,6 +75,7 @@
                             <DataGridTextColumn Header="Fecha" Binding="{Binding Fecha}" IsReadOnly="True" Visibility="Visible"/>
                             <DataGridTextColumn Header="Sucursal" Binding="{Binding Sucursal}" IsReadOnly="True" Visibility="Visible"/>
                             <DataGridTextColumn Header="Usuario" Binding="{Binding Usuario}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Empleado" Binding="{Binding Empleado}" IsReadOnly="True" Visibility="Visible"/>
                             <DataGridTextColumn Header="Nro. Venta" Binding="{Binding ID}" IsReadOnly="True" Visibility="Visible"/>
                             <DataGridTextColumn Header="Codigo" Binding="{Binding Codigo}" IsReadOnly="True" Visibility="Visible"/>
                             <DataGridTextColumn Header="Producto" Binding="{Binding Producto}" IsReadOnly="True" Visibility="Visible"/>

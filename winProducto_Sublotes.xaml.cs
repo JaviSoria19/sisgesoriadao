@@ -255,7 +255,20 @@ namespace sisgesoriadao
         {
             Session.ExportarAPDF(dgvDatos, "HISTORIAL_DE_PAGOS_CLIENTE");
         }
+        private void btnCopy2_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPortapapeles(dgvProveedores);
+        }
 
+        private void btnExcel2_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAExcel(dgvProveedores);
+        }
+
+        private void btnPDF2_Click(object sender, RoutedEventArgs e)
+        {
+            Session.ExportarAPDF(dgvProveedores, "SALDOS_PENDIENTES_PROVEEDORES");
+        }
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             SelectSublotes(acbtxtNombreProveedor.Text, 0.01);
@@ -363,6 +376,45 @@ namespace sisgesoriadao
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void dgvProveedores_Loaded(object sender, RoutedEventArgs e)
+        {
+            SelectProveedores();
+        }
+
+        private void SelectProveedores()
+        {
+            try
+            {
+                implProducto = new ProductoImpl();
+                dgvProveedores.ItemsSource = null;
+                dgvProveedores.ItemsSource = implProducto.SelectPendingsGroupByProvider().DefaultView;
+                dgvProveedores.Columns[1].Visibility = Visibility.Collapsed;
+                dgvProveedores.Columns[2].Visibility = Visibility.Collapsed;
+                lblDataGridRows2.Content = "Registros: " + dgvProveedores.Items.Count;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void dgvProveedores_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgvProveedores.SelectedItem != null && dgvProveedores.Items.Count > 0)
+            {
+                DataRowView d = (DataRowView)dgvProveedores.SelectedItem;
+                string nombreProveedor = d.Row.ItemArray[0].ToString();
+                double saldo = 0.01;
+
+                saldo = tglMostrarLotesSinDeuda.IsChecked == true ? 0 : saldo;
+
+                SelectSublotes(nombreProveedor, saldo);
+                lblSeleccion.Content = "Se ha seleccionado el Proveedor: " + nombreProveedor;
+                labelSuccess(lblSeleccion);
+                dgvProveedores.SelectedItem = null;
             }
         }
     }

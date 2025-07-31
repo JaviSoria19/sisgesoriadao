@@ -24,6 +24,7 @@ namespace sisgesoriadao
         Producto producto;
         CategoriaImpl implCategoria;
         Categoria categoria;
+        EmpleadoImpl implEmpleado;
 
         double venta_TotalUSD = 0;
         double venta_TotalBOB = 0;
@@ -89,6 +90,32 @@ namespace sisgesoriadao
         {
             InitializeComponent();
             WindowState = WindowState.Maximized;
+        }
+        void cbxGetEmpleadoFromDatabase()
+        {
+            try
+            {
+                List<ComboboxItem> listcomboboxEmpleado = new List<ComboboxItem>();
+                DataTable dataTable = new DataTable();
+                implEmpleado = new EmpleadoImpl();
+                dataTable = implEmpleado.SelectForComboBox();
+                listcomboboxEmpleado = (from DataRow dr in dataTable.Rows
+                                         select new ComboboxItem()
+                                         {
+                                             Valor = Convert.ToByte(dr["idEmpleado"]),
+                                             Texto = dr["empleado"].ToString()
+                                         }).ToList();
+                foreach (var item in listcomboboxEmpleado)
+                {
+                    cbxEmployees.Items.Add(item);
+                }
+
+                cbxEmployees.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
@@ -276,6 +303,17 @@ namespace sisgesoriadao
             txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
 
             txtObservacionVenta.Text = "-";
+
+            cbxGetEmpleadoFromDatabase();
+
+            foreach (var item in cbxEmployees.Items)
+            {
+                if (item is ComboboxItem comboboxItem && comboboxItem.Valor == Session.IdEmpleado)
+                {
+                    cbxEmployees.SelectedItem = item;
+                    break;
+                }
+            }
         }
         private void TextBoxUppercase(object sender, KeyEventArgs e)
         {
@@ -485,7 +523,7 @@ namespace sisgesoriadao
             }
 
             ExportarVariablesAListas();
-            venta = new Venta(cliente.IdCliente, Session.IdUsuario, Session.Sucursal_IdSucursal,
+            venta = new Venta(cliente.IdCliente, Session.IdUsuario, Session.Sucursal_IdSucursal, byte.Parse((cbxEmployees.SelectedItem as ComboboxItem).Valor.ToString()),
                               venta_TotalUSD, venta_TotalBOB, venta_saldoUSD, venta_saldoBOB, txtObservacionVenta.Text);
             implVenta = new VentaImpl();
 

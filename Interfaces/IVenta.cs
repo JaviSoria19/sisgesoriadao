@@ -27,11 +27,13 @@ namespace sisgesoriadao.Interfaces
         string InsertPaymentMethodTransaction(int IdVenta, double PagoUSD, double PagoBOB, byte MetodoPago);
         string DeletePaymentMethodTransaction(int IdVenta, int IdMetodoPago, double MontoUSD, double MontoBOB);
         byte GetEstado(int IdVenta);
+        byte GetEmpleado(int IdVenta);
         string DeleteSaleTransaction(int IdVenta, string Observacion, List<int> ListaIDProductos);
         DataTable SelectSalesWithPendingBalanceByCustomers();
         DataTable SelectAllSalesWithPendingBalanceByCustomers();
         string UpdateSaleProductsTransaction(Venta venta, List<Producto> ListaProductos, List<double> ListaDescuentosPorcentaje, List<byte> ListaGarantias);
         string DeleteAfterSaleProductTransaction(Venta venta, int IdProducto);
         DataTable SelectLikePaymentMethodsByCustomers(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo);
+        int UpdateSaleEmployee(byte IdEmpleado, int IdVenta);
     }
 }

@@ -13,13 +13,15 @@ namespace sisgesoriadao.Model
     {
         //Cadena de conexión requerida para llamar a la base de datos.
         public static string CadenaConexionBdD { get; set; } = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
-        public static string VersionApp { get; set; } = "v. 1.8.2";
+        public static string VersionApp { get; set; } = "v. 1.8.3";
         //Atributo indispensable para manejar la totalidad del sistema.
         public static byte IdUsuario { get; set; }
         //Atributo de referencia para dar a conocer al usuario que ha iniciado sesión correctamente.
         public static string NombreUsuario { get; set; }
         //Atributo requerido para los permisos del usuario
         public static byte Rol { get; set; }
+        //Atributo requerido para seleccionar el empleado que está realizando la venta.
+        public static byte IdEmpleado { get; set; }
         //Atributos requeridos meramente para realizar la(s) venta(s) y también para desplegarlo en la interfaz del usuario.
         public static byte Sucursal_IdSucursal { get; set; }
         public static string Sucursal_NombreSucursal { get; set; }
@@ -39,6 +41,10 @@ namespace sisgesoriadao.Model
         public static int IdCotizacion { get; set; } = 0;
         public static string Producto_Historial_CodigoSublote { get; set; } = null;
         public static List<ProductoEnCola> Lista_CodigosDeProductosEnCola { get; set; } = new List<ProductoEnCola>();
+
+        // Victor = "DYMO LabelWriter 450 Turbo"
+        // Jose Luis = "DYMO LabelWriter 450"
+        public static string ModeloDeEtiquetadoraDYMO { get; set; } = "DYMO LabelWriter 450 Turbo";
         public static bool VerificarProductoEnCola(Producto producto, string operacion)
         {
             bool productoEnCola = false;
