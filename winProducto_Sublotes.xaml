@@ -29,9 +29,11 @@ FontFamily="{DynamicResource MaterialDesignFont}"
                 <materialDesign:PackIcon Kind="PackageVariant" Width="25" Height="25" VerticalAlignment="Center"/>
                 <TextBlock Text="GESTIÓN DE SUBLOTES" Margin="5,0,0,0" FontSize="19" VerticalAlignment="Center" FontWeight="Bold"/>
             </StackPanel>
+            
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <TextBlock Text="SELECCIONE UN REGISTRO PARA INGRESAR EL PAGO O ELIMINAR EL ÚLTIMO PAGO:" FontSize="19" FontWeight="Bold"/>
             </StackPanel>
+
             <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                     <Label Content="BUSCAR PROVEEDOR:" Margin="0,0,0,0" VerticalAlignment="Center"/>
@@ -41,18 +43,22 @@ FontFamily="{DynamicResource MaterialDesignFont}"
                     <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Margin="0,0,20,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                         <materialDesign:PackIcon Kind="Search"/>
                     </Button>
-                    <Label Content="Monto ($.):" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyDown="txtPagoUSD_KeyDown" VerticalAlignment="Center"/>
-                    <Button x:Name="btnAddPayment" ToolTip="SALDAR SUBLOTE." Click="btnAddPayment_Click" IsEnabled="False" Background="LimeGreen" BorderBrush="LimeGreen">
-                        <materialDesign:PackIcon Kind="CreditCardAdd"/>
-                    </Button>
                 </StackPanel>
+                
                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                     <Label Content="EDITAR PROVEEDOR:" VerticalAlignment="Center"/>
                     <Label Content="*" Foreground="Red" FontWeight="Bold" VerticalAlignment="Center"/>
                     <TextBox x:Name="txtNombreProveedor" TextWrapping="Wrap" Margin="0,0,20,0" Width="200" KeyUp="TextBoxUppercase" KeyDown="txtNombreProveedor_KeyDown" MaxLength="100" IsEnabled="False" VerticalAlignment="Center"/>
                     <Button x:Name="btnSave" Content="GUARDAR" Margin="5" IsEnabled="False" Click="btnSave_Click"/>
                     <Button x:Name="btnCancel" Content="CANCELAR" Margin="5" IsEnabled="False" Click="btnCancel_Click"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                    <Label Content="Pago individual ($.):" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtPagoUSD" TextWrapping="Wrap" Margin="0,0,20,0" MinWidth="60" MaxLength="8" IsEnabled="False" PreviewTextInput="txtPrecio_PreviewTextInput" KeyDown="txtPagoUSD_KeyDown" VerticalAlignment="Center"/>
+                    <Button x:Name="btnAddPayment" ToolTip="SALDAR SUBLOTE." Click="btnAddPayment_Click" IsEnabled="False" Background="LimeGreen" BorderBrush="LimeGreen">
+                        <materialDesign:PackIcon Kind="CreditCardAdd"/>
+                    </Button>
                 </StackPanel>
                 <Label x:Name="lblSeleccion" Content="-" Margin="0,0,0,0" VerticalAlignment="Center" FontWeight="Bold" HorizontalAlignment="Center" FontSize="20"/>
                 <Label x:Name="lblSaldoBusqueda" Content="" Margin="0,0,0,0" VerticalAlignment="Center" FontWeight="Bold" HorizontalAlignment="Center" FontSize="20"/>
@@ -120,6 +126,7 @@ FontFamily="{DynamicResource MaterialDesignFont}"
                     </DataGrid>
                 </Border>
                 <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
+                <Button x:Name="btnPayAll" Content="PAGAR TODO" Margin="5" IsEnabled="False" Click="btnPayAll_Click" HorizontalAlignment="Left" Background="LimeGreen" BorderBrush="LimeGreen"/>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

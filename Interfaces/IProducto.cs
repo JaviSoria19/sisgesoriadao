@@ -47,5 +47,7 @@ namespace sisgesoriadao.Interfaces
         int UpdateProviderSubBatch(string NombreProveedor, int IdSublote);
 
         DataTable SelectPendingsGroupByProvider();
+
+        string AddPaymentsAllSubBatchesTransaction(List<int> listaIDSublotes, List<double> listaSaldosUSD);
     }
 }

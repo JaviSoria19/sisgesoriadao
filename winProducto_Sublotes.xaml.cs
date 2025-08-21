@@ -81,7 +81,7 @@ namespace sisgesoriadao
             DataRowView d = (DataRowView)dgvDatos.SelectedItem;
             int id = int.Parse(d.Row.ItemArray[0].ToString());
             string pagos = d.Row.ItemArray[4].ToString();
-            if(pagos == "-")
+            if (pagos == "-")
             {
                 MessageBox.Show("No se puede eliminar el último pago, ya que no existe un pago registrado para este sublote.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                 dgvDatos.SelectedItem = null;
@@ -93,7 +93,7 @@ namespace sisgesoriadao
                 btnCancel.IsEnabled = false;
                 return;
             }
-            if(MessageBox.Show("Está realmente segur@ de eliminar el último pago de sublote?", "Eliminar", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Está realmente segur@ de eliminar el último pago de sublote?", "Eliminar", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 try
                 {
@@ -129,7 +129,7 @@ namespace sisgesoriadao
                 implProducto = new ProductoImpl();
                 dgvDatos.ItemsSource = null;
 
-                saldo = tglMostrarLotesSinDeuda.IsChecked == true ? 0 : saldo;
+                saldo = tglMostrarLotesSinDeuda.IsChecked == true ? -10000 : saldo;
 
                 dgvDatos.ItemsSource = implProducto.SelectSubBatchPendings(nombreProveedor, saldo).DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
@@ -148,6 +148,15 @@ namespace sisgesoriadao
                     dgvSaldoTotal += double.Parse(row.Row.ItemArray[6].ToString());
                 }
                 lblSaldoBusqueda.Content = "Saldo total de la búsqueda en $us.: " + dgvSaldoTotal.ToString();
+
+                if (dgvDatos.Items.Count > 0)
+                {
+                    btnPayAll.IsEnabled = true;
+                }
+                else
+                {
+                    btnPayAll.IsEnabled = false;
+                }
             }
             catch (Exception ex)
             {
@@ -162,7 +171,8 @@ namespace sisgesoriadao
                 int id = int.Parse(d.Row.ItemArray[0].ToString());
                 string sublote = d.Row.ItemArray[1].ToString();
                 string nombreProveedor = d.Row.ItemArray[2].ToString();
-                lblSeleccion.Content = "Se ha seleccionado el Sublote " + sublote;
+                double saldo = double.Parse(d.Row.ItemArray[6].ToString());
+                lblSeleccion.Content = "Se ha seleccionado el Sublote " + sublote + " de " + nombreProveedor + " con un saldo de $us.: " + saldo;
                 labelSuccess(lblSeleccion);
                 txtPagoUSD.IsEnabled = true;
                 btnAddPayment.IsEnabled = true;
@@ -170,6 +180,7 @@ namespace sisgesoriadao
                 txtNombreProveedor.IsEnabled = true;
                 btnSave.IsEnabled = true;
                 btnCancel.IsEnabled = true;
+                txtPagoUSD.Focus();
             }
         }
 
@@ -217,7 +228,7 @@ namespace sisgesoriadao
                 int id = int.Parse(d.Row.ItemArray[0].ToString());
                 double pagoUSD = double.Parse(txtPagoUSD.Text);
                 PagoSublote pagoSublote = new PagoSublote(id, pagoUSD, DateTime.Now);
-                
+
                 if (implProducto.InsertPaymentSubBatch(pagoSublote) > 0)
                 {
                     MessageBox.Show("Pago registrado correctamente.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -329,7 +340,7 @@ namespace sisgesoriadao
 
         private void txtNombreProveedor_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
             {
                 UpdateProviderSubBatch();
             }
@@ -415,6 +426,71 @@ namespace sisgesoriadao
                 lblSeleccion.Content = "Se ha seleccionado el Proveedor: " + nombreProveedor;
                 labelSuccess(lblSeleccion);
                 dgvProveedores.SelectedItem = null;
+                acbtxtNombreProveedor.Text = nombreProveedor;
+            }
+        }
+
+        private void btnPayAll_Click(object sender, RoutedEventArgs e)
+        {
+
+            addPayments();
+        }
+
+        void addPayments()
+        {
+            if (dgvDatos.Items.Count == 0)
+            {
+                MessageBox.Show("No hay sublotes para pagar.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+            if (string.IsNullOrEmpty(acbtxtNombreProveedor.Text))
+            {
+                MessageBox.Show("Por favor, seleccione un proveedor.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+            List<int> listaIDSublotes = new List<int>();
+            List<double> listaSaldosUSD = new List<double>();
+
+            foreach (DataRowView row in dgvDatos.Items)
+            {
+                int idSublote = int.Parse(row.Row.ItemArray[0].ToString());
+                double saldoUSD = double.Parse(row.Row.ItemArray[6].ToString());
+                if (saldoUSD > 0)
+                {
+                    listaIDSublotes.Add(idSublote);
+                    listaSaldosUSD.Add(saldoUSD);
+                }
+            }
+
+            if (listaIDSublotes.Count() == 0)
+            {
+                MessageBox.Show("No hay sublotes con saldo pendiente para pagar.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (MessageBox.Show("Está realmente segur@ de pagar todos los sublotes del proveedor " + acbtxtNombreProveedor.Text + " por un monto total de $us.: " + listaSaldosUSD.Sum() + "?", "Pagar todo", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                try
+                {
+
+                    implProducto = new ProductoImpl();
+                    if (implProducto.AddPaymentsAllSubBatchesTransaction(listaIDSublotes, listaSaldosUSD) == "PAGOS REGISTRADOS EXITOSAMENTE.")
+                    {
+                        MessageBox.Show("Se han registrado los pagos correctamente.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                        dgvDatos.SelectedItem = null;
+                        txtPagoUSD.IsEnabled = false;
+                        btnAddPayment.IsEnabled = false;
+                        labelClear(lblSeleccion);
+                        txtNombreProveedor.IsEnabled = false;
+                        btnSave.IsEnabled = false;
+                        btnCancel.IsEnabled = false;
+                        SelectSublotes(acbtxtNombreProveedor.Text, 0.01);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }

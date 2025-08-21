@@ -963,13 +963,13 @@ namespace sisgesoriadao.Implementation
                             FROM Sublote AS S
                             INNER JOIN Producto AS P ON S.idSublote = P.idSublote
                             INNER JOIN Lote AS L ON S.idLote = L.idLote
-                            WHERE S.nombreProveedor LIKE @nombreProveedor
+                            WHERE S.nombreProveedor = @nombreProveedor
                             GROUP BY S.idSublote
                             HAVING Saldo >= @saldoMinimo
                             ORDER BY S.idSublote DESC
                             LIMIT 200";
             MySqlCommand command = CreateBasicCommand(query);
-            command.Parameters.AddWithValue("@nombreProveedor", "%" + NombreProveedor + "%");
+            command.Parameters.AddWithValue("@nombreProveedor", NombreProveedor);
             command.Parameters.AddWithValue("@saldoMinimo", Saldo);
             try
             {
@@ -1032,7 +1032,7 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectPendingsGroupByProvider()
         {
             string query = @"SELECT S.nombreProveedor AS Proveedor, SUM(PP.TotalCostoUSD) AS TotalCostoUSD, SUM(PP.TotalPagosUSD) AS TotalPagosUSD, SUM(PP.TotalCostoUSD - PP.TotalPagosUSD) AS Saldo
-                            FROM sublote AS S
+                            FROM Sublote AS S
                             LEFT JOIN ( SELECT idSublote, SUM(costoUSD) AS TotalCostoUSD, 0 AS TotalPagosUSD FROM Producto GROUP BY idSublote UNION ALL SELECT idSublote, 0 AS TotalCostoUSD, SUM(montoUSD) AS TotalPagosUSD FROM Pago_Sublote GROUP BY idSublote ) AS PP ON PP.idSublote = S.idSublote
                             GROUP BY S.nombreProveedor
                             ORDER BY 1";
@@ -1044,6 +1044,51 @@ namespace sisgesoriadao.Implementation
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        public string AddPaymentsAllSubBatchesTransaction(List<int> listaIDSublotes, List<double> listaSaldosUSD)
+        {
+            MySqlConnection connection = new MySqlConnection(Session.CadenaConexionBdD);
+            connection.Open();
+            MySqlCommand command = connection.CreateCommand();
+            MySqlTransaction myTrans;
+            myTrans = connection.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            command.Connection = connection;
+            command.Transaction = myTrans;
+            try
+            {
+                for (int i = 0; i < listaIDSublotes.Count; i++)
+                {
+                    command.Parameters.Clear();
+                    command.CommandText = @"INSERT INTO Pago_Sublote (idSublote, montoUSD) VALUES (@idSublote, @montoUSD)";
+                    command.Parameters.AddWithValue("@idSublote", listaIDSublotes[i]);
+                    command.Parameters.AddWithValue("@montoUSD", listaSaldosUSD[i]);
+                    command.ExecuteNonQuery();
+                }
+                myTrans.Commit();
+                return "PAGOS REGISTRADOS EXITOSAMENTE.";
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (MySqlException ex)
+                {
+                    if (myTrans.Connection != null)
+                    {
+                        return "Una excepción del tipo " + ex.GetType() + " se encontró mientras se estaba intentando revertir la transacción.";
+                    }
+                }
+                return e.Message;
+            }
+            finally
+            {
+                connection.Close();
             }
         }
     }
