@@ -284,6 +284,35 @@ namespace sisgesoriadao.Implementation
             }
         }
 
+        public DataTable SelectLikeReporteVentasGlobalesGroupByEmpleados(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo)
+        {
+            string query = @"SELECT CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado, COUNT(V.idVenta) AS Cantidad
+                            FROM Venta V
+                            INNER JOIN Sucursal S ON S.idSucursal = V.idSucursal
+                            INNER JOIN Usuario U ON U.idUsuario = V.idUsuario
+                            INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN Producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
+                            INNER JOIN Empleado E ON E.idEmpleado = V.idEmpleado
+                            WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto)
+                            AND V.estado = 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
+                            AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
+                            GROUP BY E.idEmpleado
+                            ORDER BY 1 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@FechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", fechaFin.ToString("yyyy-MM-dd") + " 23:59:59");
+            command.Parameters.AddWithValue("@productocodigoproducto", "%" + productoOCodigo + "%");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public DataTable SelectLikeReporteVentasLocales(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI)
         {
             string query = @"SELECT V.idVenta AS 'ID', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, CL.nombre AS Cliente, V.idVenta AS Venta, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
@@ -315,10 +344,40 @@ namespace sisgesoriadao.Implementation
             }
         }
 
+        public DataTable SelectLikeReporteVentasLocalesGroupByEmpleados(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI)
+        {
+            string query = @"SELECT CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado, COUNT(V.idVenta) AS Cantidad
+                            FROM Venta V
+                            INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
+                            INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
+                            INNER JOIN Producto P ON P.idProducto = DV.idProducto
+                            INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
+                            INNER JOIN Empleado E ON E.idEmpleado = V.idEmpleado
+                            WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto OR CL.nombre LIKE @clienteoci OR CL.numeroCI LIKE @clienteoci)
+                            AND V.estado = 1 AND V.idSucursal = @SessionSucursal
+                            AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
+                            GROUP BY E.idEmpleado
+                            ORDER BY 1 DESC";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@SessionSucursal", Session.Sucursal_IdSucursal);
+            command.Parameters.AddWithValue("@productocodigoproducto", "%" + productoOCodigo + "%");
+            command.Parameters.AddWithValue("@clienteoci", "%" + clienteoCI + "%");
+            command.Parameters.AddWithValue("@FechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@FechaFin", fechaFin.ToString("yyyy-MM-dd") + " 23:59:59");
+            try
+            {
+                return ExecuteDataTableCommand(command);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public DataTable SelectLikeReporteVentasLocalesByID(int idVenta)
         {
             string query = @"SELECT V.idVenta AS 'ID', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, CL.nombre AS Cliente, V.idVenta AS 'Venta', P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS 'Total USD', IF(V.saldoUSD <= 0 || V.saldoBOB <= 0, 0, V.saldoUSD) AS 'Saldo USD', CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS TotalUSD, IF(V.saldoUSD <= 0 || V.saldoBOB <= 0, 0, V.saldoUSD) AS SaldoUSD, CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado
                             FROM Venta V
                             INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta

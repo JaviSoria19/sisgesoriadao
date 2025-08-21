@@ -52,7 +52,7 @@
                 <Button x:Name="btnDeletedSales" Content="VENTAS ELIMINADAS" Margin="10,0" ToolTip="ELIMINAR VENTA" Click="btnDeletedSales_Click" IsEnabled="True" VerticalAlignment="Center" Background="SteelBlue" BorderBrush="SteelBlue"/>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock Text="SELECCIONE UN REGISTRO PARA VER EL DETALLE:" FontSize="19" FontWeight="Bold"/>
             </StackPanel>
             
@@ -108,7 +108,24 @@
                 </Border>
                 <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
             </StackPanel>
-            
+
+            <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">
+                <TextBlock Text="CANTIDAD TOTAL DE VENTAS, AGRUPADO POR EMPLEADO:" FontSize="19" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                    <Border BorderBrush="Gray" BorderThickness="2" HorizontalAlignment="Center">
+                        <DataGrid x:Name="dgvCantidad" AutoGenerateColumns="False"
+                            HorizontalAlignment="Center" GridLinesVisibility="Horizontal"
+                            CanUserAddRows="False" IsReadOnly="True" 
+                            CanUserResizeRows="False" CanUserResizeColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Empleado" Binding="{Binding Empleado}" IsReadOnly="True" Visibility="Visible"/>
+                                <DataGridTextColumn Header="Cantidad" Binding="{Binding Cantidad}" IsReadOnly="True" Visibility="Visible"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                    <Label x:Name="lblDataGridRowsCantidad" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
+                </StackPanel>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </Window>

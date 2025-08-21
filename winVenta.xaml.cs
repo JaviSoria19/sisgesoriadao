@@ -59,9 +59,12 @@ namespace sisgesoriadao
             {
                 implVenta = new VentaImpl();
                 dgvDatos.ItemsSource = null;
+                dgvCantidad.ItemsSource = null;
                 dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasGlobales(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor, txtBuscar_Producto_o_Codigo.Text.Trim()).DefaultView;
+                dgvCantidad.ItemsSource = implVenta.SelectLikeReporteVentasGlobalesGroupByEmpleados(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor, txtBuscar_Producto_o_Codigo.Text.Trim()).DefaultView;
                 //dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
-                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + implVenta.SelectLikeReporteVentasGlobales(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, (cbxSucursal.SelectedItem as ComboboxItem).Valor, (cbxCategoria.SelectedItem as ComboboxItem).Valor, (cbxUsuario.SelectedItem as ComboboxItem).Valor, txtBuscar_Producto_o_Codigo.Text.Trim()).Rows.Count;
+                lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + dgvDatos.Items.Count;
+                lblDataGridRowsCantidad.Content = "REGISTROS ENCONTRADOS: " + dgvCantidad.Items.Count;
                 totalUSD = 0;
                 totalBOB = 0;
                 foreach (DataRowView item in dgvDatos.Items)

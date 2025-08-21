@@ -45,6 +45,7 @@ namespace sisgesoriadao
         private void btnSearchByID_Click(object sender, RoutedEventArgs e)
         {
             SelectLikeByID();
+            dgvCantidad.ItemsSource = null;
         }
         private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
         {
@@ -98,22 +99,27 @@ namespace sisgesoriadao
             {
                 implVenta = new VentaImpl();
                 dgvDatos.ItemsSource = null;
+                dgvCantidad.ItemsSource = null;
                 if (string.IsNullOrEmpty(txtBuscar_Producto_o_Codigo.Text.Trim()) == false && string.IsNullOrEmpty(txtBuscar_Cliente_o_CI.Text.Trim()) == true)
                 {
                     cadenaAuxiliar = txtBuscar_Producto_o_Codigo.Text.Trim();
                     dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasLocales(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, txtBuscar_Producto_o_Codigo.Text.Trim(), cadenaAuxiliar).DefaultView;
+                    dgvCantidad.ItemsSource = implVenta.SelectLikeReporteVentasLocalesGroupByEmpleados(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, txtBuscar_Producto_o_Codigo.Text.Trim(), cadenaAuxiliar).DefaultView;
                 }
                 else if (string.IsNullOrEmpty(txtBuscar_Producto_o_Codigo.Text.Trim()) == true && string.IsNullOrEmpty(txtBuscar_Cliente_o_CI.Text.Trim()) == false)
                 {
                     cadenaAuxiliar = txtBuscar_Cliente_o_CI.Text.Trim();
                     dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasLocales(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, cadenaAuxiliar, txtBuscar_Cliente_o_CI.Text.Trim()).DefaultView;
+                    dgvCantidad.ItemsSource = implVenta.SelectLikeReporteVentasLocalesGroupByEmpleados(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, cadenaAuxiliar, txtBuscar_Cliente_o_CI.Text.Trim()).DefaultView;
                 }
                 else
                 {
                     dgvDatos.ItemsSource = implVenta.SelectLikeReporteVentasLocales(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, txtBuscar_Producto_o_Codigo.Text.Trim(), txtBuscar_Cliente_o_CI.Text.Trim()).DefaultView;
+                    dgvCantidad.ItemsSource = implVenta.SelectLikeReporteVentasLocalesGroupByEmpleados(dtpFechaInicio.SelectedDate.Value.Date, dtpFechaFin.SelectedDate.Value.Date, txtBuscar_Producto_o_Codigo.Text.Trim(), txtBuscar_Cliente_o_CI.Text.Trim()).DefaultView;
                 }
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRows.Content = "REGISTROS ENCONTRADOS: " + dgvDatos.Items.Count;
+                lblDataGridRowsCantidad.Content = "REGISTROS ENCONTRADOS: " + dgvCantidad.Items.Count;
             }
             catch (Exception ex)
             {

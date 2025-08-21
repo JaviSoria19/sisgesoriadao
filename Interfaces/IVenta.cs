@@ -20,6 +20,8 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectLikeReporteVentasLocalesByID(int idVenta);
         DataTable SelectLikeReporteVentasLocalesDELETED(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI);
         DataTable SelectLikeReporteVentasLocalesByIDDELETED(int idVenta);
+        DataTable SelectLikeReporteVentasLocalesGroupByEmpleados(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI);
+        DataTable SelectLikeReporteVentasGlobalesGroupByEmpleados(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo);
         DataTable SelectSaleDetails1();
         DataTable SelectSaleDetails2();
         int GetIDAfterInsert();
