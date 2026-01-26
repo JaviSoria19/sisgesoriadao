@@ -246,13 +246,13 @@
 
                         <StackPanel HorizontalAlignment="Center">
                             <materialDesign:Card Margin="5" UniformCornerRadius="10" Background="Orange">
-                                <TextBlock x:Name="infoTotalSalesFromToday" FontSize="20" Text="HOY SE HAN CONCRETADO - VENTAS." Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
+                                <TextBlock x:Name="infoTotalSalesFromToday" FontSize="20" Text="HOY SE HAN CONCRETADO - VENTAS." Margin="30" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black"/>
                             </materialDesign:Card>
                             <materialDesign:Card Margin="5" UniformCornerRadius="10" Background="Gold">
-                                <TextBlock x:Name="infoTotalProductsFromToday" FontSize="20" Text="PRODUCTOS VENDIDOS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
+                                <TextBlock x:Name="infoTotalProductsFromToday" FontSize="20" Text="PRODUCTOS VENDIDOS DE HOY: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black"/>
                             </materialDesign:Card>
                             <materialDesign:Card Margin="5" UniformCornerRadius="10" Background="LimeGreen">
-                                <TextBlock x:Name="infoCashAmount" FontSize="20" Text="EFECTIVO EN CAJA: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap"/>
+                                <TextBlock x:Name="infoCashAmount" FontSize="20" Text="EFECTIVO EN CAJA: -" Margin="30" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black"/>
                             </materialDesign:Card>
                         </StackPanel>
                     </StackPanel>
@@ -279,6 +279,7 @@
                                 />
                             </Border>
                             <Label x:Name="lblDataGridRows" Content="Registros:" Foreground="Black" Background="LightGray" Margin="0,5,0,10" HorizontalAlignment="Left"/>
+                            <TextBlock x:Name="txtTotalSaldoUSD" Text="Total $.: " Margin="0,0,0,0" FontSize="19" FontWeight="Bold"/>
                         </StackPanel>
                     </Grid>
                 </Grid>

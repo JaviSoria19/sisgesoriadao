@@ -10,5 +10,6 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectCustomerNamesForComboBox();
         Cliente GetFromSale(int idVenta);
         int UpdateSaleCustomer(Cliente c, int idVenta);
+        Cliente GetLastRegisteredCustomer();
     }
 }

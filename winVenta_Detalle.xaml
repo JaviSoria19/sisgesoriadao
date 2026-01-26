@@ -52,7 +52,7 @@
                                Margin="110,0,0,0"/>
                         
                         <StackPanel Margin="10" Orientation="Vertical" VerticalAlignment="Center">
-                            <TextBlock Text="BOLETA DE GARANTIA" 
+                            <TextBlock x:Name="txtTitulo" Text="BOLETA DE GARANTIA" 
                                    Margin="100,0,70,0" FontWeight="Bold" FontSize="40"/>
                             <TextBlock x:Name="txtIdVenta" Text="Nro.: NRO_VENTA"
                                    Margin="100,0,70,0" FontWeight="Bold" FontSize="25" HorizontalAlignment="Center"/>
@@ -80,9 +80,9 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="0*"/>
+                                <ColumnDefinition Width="0*"/>
+                                <ColumnDefinition Width="0*"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                         
@@ -90,10 +90,10 @@
                         <TextBlock Grid.Column="1" Text="DETALLE" FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
                         <TextBlock Grid.Column="2" Text="GARANTIA" FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
                         <TextBlock Grid.Column="3" Text="CANTIDAD" FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
-                        <TextBlock Grid.Column="4" Text="PRECIO Bs." FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
-                        <TextBlock Grid.Column="5" Text="DESC. %" FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
-                        <TextBlock Grid.Column="6" Text="DESC. Bs." FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
-                        <TextBlock Grid.Column="7" Text="TOTAL Bs." FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
+                        <TextBlock Grid.Column="4" Text="PRECIO Bs." FontSize="15" FontWeight="DemiBold" TextAlignment="Center" Visibility="Hidden"/>
+                        <TextBlock Grid.Column="5" Text="DESC. %" FontSize="15" FontWeight="DemiBold" TextAlignment="Center" Visibility="Hidden"/>
+                        <TextBlock Grid.Column="6" Text="DESC. Bs." FontSize="15" FontWeight="DemiBold" TextAlignment="Center" Visibility="Hidden"/>
+                        <TextBlock Grid.Column="7" x:Name="thTotal" Text="TOTAL Bs." FontSize="15" FontWeight="DemiBold" TextAlignment="Center"/>
                         </Grid>
                         
                         <Rectangle Fill="Black" Height="1" Margin="20,5"/>
@@ -104,9 +104,9 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="0*"/>
+                                <ColumnDefinition Width="0*"/>
+                                <ColumnDefinition Width="0*"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
 
@@ -114,9 +114,9 @@
                             <TextBlock x:Name="txtProducto_Detalle" Grid.Column="1" Text="0" FontSize="15" TextWrapping="Wrap"/>
                             <TextBlock x:Name="txtProducto_Garantia" Grid.Column="2" Text="0" FontSize="15" TextAlignment="Center"/>
                             <TextBlock x:Name="txtProducto_Cantidad" Grid.Column="3" Text="1" FontSize="15" TextAlignment="Center"/>
-                            <TextBlock x:Name="txtProducto_Precio" Grid.Column="4" Text="0" FontSize="15" TextAlignment="Center"/>
-                            <TextBlock x:Name="txtProducto_DescuentoPorcentaje" Grid.Column="5" Text="0" FontSize="15" TextAlignment="Center"/>
-                            <TextBlock x:Name="txtProducto_DescuentoBOB" Grid.Column="6" Text="0" FontSize="15" TextAlignment="Center"/>
+                            <TextBlock x:Name="txtProducto_Precio" Grid.Column="4" Text="0" FontSize="15" TextAlignment="Center" Visibility="Hidden"/>
+                            <TextBlock x:Name="txtProducto_DescuentoPorcentaje" Grid.Column="5" Text="0" FontSize="15" TextAlignment="Center" Visibility="Hidden"/>
+                            <TextBlock x:Name="txtProducto_DescuentoBOB" Grid.Column="6" Text="0" FontSize="15" TextAlignment="Center" Visibility="Hidden"/>
                             <TextBlock x:Name="txtProducto_TotalBOB" Grid.Column="7" Text="0" FontSize="15" TextAlignment="Center"/>
                         </Grid>
 
@@ -136,7 +136,7 @@
                                     <TextBlock Text="Conformidad Cliente" FontSize="15" HorizontalAlignment="Center" Margin="50,0"/>
                                 </StackPanel>
                                 <StackPanel Width="250" MinHeight="90">
-                                    <TextBlock Text="PAGOS (Bs.)" FontWeight="DemiBold" FontSize="15" HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="txtSubtituloPagos" Text="PAGOS (Bs.)" FontWeight="DemiBold" FontSize="15" HorizontalAlignment="Center"/>
                                     <TextBlock x:Name="txtPagos" Text="1/1/2000  0" FontSize="15" HorizontalAlignment="Center"/>
                                 </StackPanel>
                                 <StackPanel Margin="90,0" VerticalAlignment="Top" Background="LightGray">

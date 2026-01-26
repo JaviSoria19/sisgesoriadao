@@ -9,6 +9,7 @@ namespace sisgesoriadao.Model
         public byte IdUsuario { get; set; }
         public byte IdSucursal { get; set; }
         public byte IdEmpleado { get; set; }
+        public byte EsVentaPorMayor { get; set; }
         public double TotalUSD { get; set; }
         public double TotalBOB { get; set; }
         public double SaldoUSD { get; set; }
@@ -19,6 +20,7 @@ namespace sisgesoriadao.Model
         {
 
         }
+        
         /// <summary>
         /// GET & UPDATE
         /// </summary>
@@ -26,14 +28,17 @@ namespace sisgesoriadao.Model
         /// <param name="idCliente"></param>
         /// <param name="idUsuario"></param>
         /// <param name="idSucursal"></param>
+        /// <param name="idEmpleado"></param>
+        /// <param name="esVentaPorMayor"></param>
         /// <param name="totalUSD"></param>
         /// <param name="totalBOB"></param>
-        /// <param name="saldo"></param>
+        /// <param name="saldoUSD"></param>
+        /// <param name="saldoBOB"></param>
         /// <param name="observaciones"></param>
         /// <param name="estado"></param>
         /// <param name="fechaRegistro"></param>
         /// <param name="fechaActualizacion"></param>
-        public Venta(int idVenta, int idCliente, byte idUsuario, byte idSucursal, byte idEmpleado, double totalUSD, double totalBOB, double saldoUSD, double saldoBOB, string observaciones, byte estado, DateTime fechaRegistro, string fechaActualizacion)
+        public Venta(int idVenta, int idCliente, byte idUsuario, byte idSucursal, byte idEmpleado, byte esVentaPorMayor,  double totalUSD, double totalBOB, double saldoUSD, double saldoBOB, string observaciones, byte estado, DateTime fechaRegistro, string fechaActualizacion)
             : base(estado, fechaRegistro, fechaActualizacion)
         {
             IdVenta = idVenta;
@@ -41,6 +46,7 @@ namespace sisgesoriadao.Model
             IdUsuario = idUsuario;
             IdSucursal = idSucursal;
             IdEmpleado = idEmpleado;
+            EsVentaPorMayor = esVentaPorMayor;
             TotalUSD = totalUSD;
             TotalBOB = totalBOB;
             SaldoUSD = saldoUSD;
@@ -57,12 +63,13 @@ namespace sisgesoriadao.Model
         /// <param name="totalBOB"></param>
         /// <param name="saldo"></param>
         /// <param name="observaciones"></param>
-        public Venta(int idCliente, byte idUsuario, byte idSucursal, byte idEmpleado, double totalUSD, double totalBOB, double saldoUSD, double saldoBOB, string observaciones)
+        public Venta(int idCliente, byte idUsuario, byte idSucursal, byte idEmpleado, byte esVentaPorMayor, double totalUSD, double totalBOB, double saldoUSD, double saldoBOB, string observaciones)
         {
             IdCliente = idCliente;
             IdUsuario = idUsuario;
             IdSucursal = idSucursal;
             IdEmpleado = idEmpleado;
+            EsVentaPorMayor = esVentaPorMayor;
             TotalUSD = totalUSD;
             TotalBOB = totalBOB;
             SaldoUSD = saldoUSD;

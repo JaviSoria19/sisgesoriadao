@@ -38,17 +38,22 @@
                 <Button x:Name="btnErase" ToolTip="LIMPIAR BÚSQUEDA" Click="btnErase_Click" Margin="0,0,10,0" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                     <materialDesign:PackIcon Kind="Clear"/>
                 </Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
                 <Label Content="SUCURSAL:" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 <ComboBox x:Name="cbxSucursal" IsEnabled="True" Margin="0,0,20,0"/>
                 <Label Content="CATEGORIA:" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 <ComboBox x:Name="cbxCategoria" IsEnabled="True" Margin="0,0,20,0"/>
                 <Label Content="USUARIO:" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 <ComboBox x:Name="cbxUsuario" IsEnabled="True" Margin="0,0,20,0"/>
+                <Label Content="TIPO DE VENTA:" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                <ComboBox x:Name="cbxTipoVenta" IsEnabled="True" Margin="0,0,20,0"/>
                 <Button x:Name="btnSearch" ToolTip="BUSCAR REGISTROS" Click="btnSearch_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue">
                     <materialDesign:PackIcon Kind="Search"/>
                 </Button>
             </StackPanel>
-
+            
             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
                 <Button x:Name="btnSalesQuantity" Content="REPORTE VENTAS CANTIDAD" Click="btnSalesQuantity_Click" Margin="5" IsEnabled="True" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue"/>
             </StackPanel>

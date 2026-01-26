@@ -23,6 +23,7 @@ namespace sisgesoriadao
         ProductoImpl implProducto;
         EmpleadoImpl implEmpleado;
         byte IdEmpleado = 0;
+        byte esVentaPorMayor = 0;
         double venta_TotalUSD = 0;
         double venta_TotalBOB = 0;
         double venta_pagoTotalUSD = 0;
@@ -130,7 +131,7 @@ namespace sisgesoriadao
                                     try
                                     {
                                         implCliente = new ClienteImpl();
-                                        cliente = implCliente.GetByCIorCelular(txtRegister_NumeroCI.Text.Trim());
+                                        cliente = implCliente.GetLastRegisteredCustomer();
                                         if (cliente != null)
                                         {
                                             DisableCustomerButtons();
@@ -349,6 +350,13 @@ namespace sisgesoriadao
                 foreach (DataRow item in dt.Rows)
                 {
                     ListaIDProductos.Add(int.Parse(item[24].ToString()));
+                }
+
+                byte esVentaPorMayor = byte.Parse(dt.Rows[0][25].ToString());
+
+                if(esVentaPorMayor == 1)
+                {
+                    tglWholesale.IsChecked = true;
                 }
             }
             catch (Exception ex)
@@ -1303,6 +1311,30 @@ namespace sisgesoriadao
                 }
             }
             empleado_SelectionChanged_trigger++;
+        }
+
+        private void tglWholesale_Click(object sender, RoutedEventArgs e)
+        {
+            if (tglWholesale.IsChecked == true)
+            {
+                esVentaPorMayor = 1;
+            }
+            else
+            {
+                esVentaPorMayor = 0;
+            }
+
+            int resultado = implVenta.UpdateSaleIsWholesale(esVentaPorMayor, idVenta);
+
+            if (resultado > 0)
+            {
+                MessageBox.Show("LA VENTA HA SIDO MARCADA COMO" + (esVentaPorMayor == 1 ? " VENTA POR MAYOR." : " VENTA NORMAL."));
+                imprimirVenta();
+            }
+            else
+            {
+                MessageBox.Show("ERROR AL CAMBIAR EL TIPO DE VENTA, INTENTE NUEVAMENTE.");
+            }
         }
 
         public class DataGridRowDetalleHelper

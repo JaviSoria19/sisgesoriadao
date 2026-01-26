@@ -22,12 +22,13 @@ namespace sisgesoriadao.Implementation
             try
             {
                 //REGISTRO DE LA VENTA.
-                command.CommandText = @"INSERT INTO Venta (idCliente,idUsuario,idSucursal,idEmpleado,totalUSD,totalBOB,saldoUSD,saldoBOB,observaciones) 
-                            VALUES(@idCliente,@idUsuario,@idSucursal,@idEmpleado,@totalUSD,@totalBOB,@saldoUSD,@saldoBOB,@observaciones)";
+                command.CommandText = @"INSERT INTO Venta (idCliente,idUsuario,idSucursal,idEmpleado,esVentaPorMayor,totalUSD,totalBOB,saldoUSD,saldoBOB,observaciones) 
+                            VALUES(@idCliente,@idUsuario,@idSucursal,@idEmpleado,@esVentaPorMayor,@totalUSD,@totalBOB,@saldoUSD,@saldoBOB,@observaciones)";
                 command.Parameters.AddWithValue("@idCliente", Venta.IdCliente);
                 command.Parameters.AddWithValue("@idUsuario", Venta.IdUsuario);
                 command.Parameters.AddWithValue("@idSucursal", Venta.IdSucursal);
                 command.Parameters.AddWithValue("@idEmpleado", Venta.IdEmpleado);
+                command.Parameters.AddWithValue("@esVentaPorMayor", Venta.EsVentaPorMayor);
                 command.Parameters.AddWithValue("@totalUSD", Venta.TotalUSD);
                 command.Parameters.AddWithValue("@totalBOB", Venta.TotalBOB);
                 command.Parameters.AddWithValue("@saldoUSD", Venta.SaldoUSD);
@@ -127,7 +128,7 @@ namespace sisgesoriadao.Implementation
 
         public string GetTodaySales(DateTime FechaHoy)
         {
-            string numeroVentasdelDia = null;
+            string numeroVentasdelDia = "0";
             string query = @"SELECT COUNT(idVenta) FROM Venta WHERE idSucursal = @SessionIdSucursal AND estado = 1
                                 AND fechaRegistro BETWEEN @FechaInicio AND @FechaFin";
             MySqlCommand command = CreateBasicCommand(query);
@@ -179,7 +180,7 @@ namespace sisgesoriadao.Implementation
 
         public string GetTodayProducts(DateTime FechaHoy)
         {
-            string numeroProductosdelDia = null;
+            string numeroProductosdelDia = "0";
             string query = @"SELECT COUNT(DV.idProducto) FROM Venta V
                             INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
                             WHERE V.idSucursal = @SessionIdSucursal AND V.estado = 1
@@ -252,7 +253,7 @@ namespace sisgesoriadao.Implementation
             }
         }
 
-        public DataTable SelectLikeReporteVentasGlobales(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo)
+        public DataTable SelectLikeReporteVentasGlobales(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo, string esVentaPorMayor)
         {
             string query = @"SELECT " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, 
                             V.idVenta AS ID, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
@@ -266,7 +267,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
                             INNER JOIN Empleado E ON E.idEmpleado = V.idEmpleado
                             WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto)
-                            AND V.estado = 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
+                            AND V.estado = 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + ") AND V.esVentaPorMayor IN (" + esVentaPorMayor  + @")
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY P.idProducto
                             ORDER BY 4 DESC, 6 ASC";
@@ -284,7 +285,7 @@ namespace sisgesoriadao.Implementation
             }
         }
 
-        public DataTable SelectLikeReporteVentasGlobalesGroupByEmpleados(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo)
+        public DataTable SelectLikeReporteVentasGlobalesGroupByEmpleados(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo, string esVentaPorMayor)
         {
             string query = @"SELECT CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado, COUNT(V.idVenta) AS Cantidad
                             FROM Venta V
@@ -295,7 +296,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
                             INNER JOIN Empleado E ON E.idEmpleado = V.idEmpleado
                             WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto)
-                            AND V.estado = 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
+                            AND V.estado = 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + ") AND V.esVentaPorMayor IN (" + esVentaPorMayor + @")
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY E.idEmpleado
                             ORDER BY 1 DESC";
@@ -408,7 +409,8 @@ namespace sisgesoriadao.Implementation
                 U.nombreUsuario AS Usuario, E.numeroCelular AS 'Celular Usuario',
                 CONCAT(P.codigoSublote,' ',P.nombreProducto) AS Producto, P.identificador AS Detalle, DV.garantia AS Garantia, DV.cantidad AS Cantidad, P.precioVentaBOB AS Precio, DV.descuento AS 'Descuento Porcentaje', (P.precioVentaBOB - DV.precioBOB) AS 'Descuento Bs', DV.precioBOB AS 'Total Producto',
                 V.totalBOB AS Total, V.saldoBOB AS Saldo, V.observaciones AS Observaciones, " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha,
-                V.totalUSD AS Total2, V.saldoUSD AS Saldo2, P.idProducto AS IDProducto
+                V.totalUSD AS Total2, V.saldoUSD AS Saldo2, P.idProducto AS IDProducto,
+                V.esVentaPorMayor AS esVentaPorMayor, DV.precioUSD AS precioUSD
                 FROM Venta V
                 INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
                 INNER JOIN Usuario U ON U.idUsuario = V.idUsuario
@@ -431,8 +433,8 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectSaleDetails2()
         {
-            string query = @"SELECT montoBOB AS 'Monto Bs', " + Session.FormatoFechaMySql("fechaRegistro") + @" AS Fecha FROM Metodo_Pago
-                WHERE idVenta = @idVenta";
+            string query = @"SELECT montoBOB AS 'Monto Bs', montoUSD AS 'Monto USD', " + Session.FormatoFechaMySql("fechaRegistro") + @" AS Fecha
+                FROM Metodo_Pago WHERE idVenta = @idVenta";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idVenta", Session.IdVentaDetalle);
             try
@@ -647,6 +649,23 @@ namespace sisgesoriadao.Implementation
             string query = @"UPDATE Venta SET idEmpleado = @idEmpleado WHERE idVenta = @idVenta";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idEmpleado", IdEmpleado);
+            command.Parameters.AddWithValue("@idVenta", IdVenta);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public int UpdateSaleIsWholesale(byte EsVentaPorMayor, int IdVenta)
+        {
+            string query = @"UPDATE Venta SET esVentaPorMayor = @esVentaPorMayor WHERE idVenta = @idVenta";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@esVentaPorMayor", EsVentaPorMayor);
             command.Parameters.AddWithValue("@idVenta", IdVenta);
             try
             {
@@ -962,7 +981,7 @@ namespace sisgesoriadao.Implementation
             }
         }
 
-        public DataTable SelectLikeReporteVentasGlobalesCantidad(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo)
+        public DataTable SelectLikeReporteVentasGlobalesCantidad(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo, string esVentaPorMayor)
         {
             string query = @"SELECT S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, C.nombreCategoria AS Categoria, P.nombreProducto AS Producto, COUNT(P.idProducto) AS Ventas, (SELECT COUNT(idProducto) FROM Producto WHERE nombreProducto = P.nombreProducto AND estado IN (1,3) AND idSucursal = P.idSucursal) AS Disponibilidad FROM Venta V
                             INNER JOIN Sucursal S ON S.idSucursal = V.idSucursal
@@ -971,7 +990,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN Producto P ON P.idProducto = DV.idProducto
                             INNER JOIN Categoria C ON C.idCategoria = P.idCategoria
                             WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto)
-                            AND V.estado = 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + @")
+                            AND V.estado = 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + ") AND V.esVentaPorMayor IN (" + esVentaPorMayor + @")
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
                             GROUP BY P.nombreProducto, S.idSucursal
                             ORDER BY 4 ASC, 1 ASC, 2 ASC";

@@ -27,6 +27,8 @@ namespace sisgesoriadao.Implementation
                     Session.Ajuste_Limite_Descuento = a.LimiteDescuento;
                     Session.IntervaloHora = a.IntervaloHora;
                     Session.TemaPredeterminado = a.TemaPredeterminado;
+
+                    Session.ObtenerPrimeraEtiquetadoraDYMO();
                 }
             }
             catch (Exception ex)

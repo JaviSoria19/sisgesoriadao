@@ -119,6 +119,35 @@ namespace sisgesoriadao.Implementation
             }
             return c;
         }
+
+        public Cliente GetLastRegisteredCustomer()
+        {
+            Cliente c = null;
+            string query = @"SELECT idCliente, nombre, numeroCelular, numeroCI , estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM Cliente 
+                                WHERE idCliente = (SELECT MAX(idCliente) FROM Cliente WHERE estado = 1);";
+            MySqlCommand command = CreateBasicCommand(query);
+            try
+            {
+                DataTable dt = ExecuteDataTableCommand(command);
+                if (dt.Rows.Count > 0)
+                {
+                    c = new Cliente(int.Parse(dt.Rows[0][0].ToString()),   /*idCliente*/
+                        dt.Rows[0][1].ToString(),                           /*nombre*/
+                        dt.Rows[0][2].ToString(),                           /*numeroCelular*/
+                        dt.Rows[0][3].ToString(),                           /*numeroCI*/
+
+                        /*Estado, Fecha de Registro, Fecha de Actualización.*/
+                        byte.Parse(dt.Rows[0][4].ToString()),
+                        DateTime.Parse(dt.Rows[0][5].ToString()),
+                        dt.Rows[0][6].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return c;
+        }
         public DataTable Select()
         {
             string query = @"SELECT idCliente as ID, nombre as Nombre, numeroCelular AS Celular, numeroCI AS Carnet, " + Session.FormatoFechaMySql("fechaRegistro") + @" AS 'Fecha de Registro', IFNULL(" + Session.FormatoFechaMySql("fechaActualizacion") + @",'-') as 'Fecha de Actualizacion' 

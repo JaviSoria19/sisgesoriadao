@@ -189,7 +189,19 @@ namespace sisgesoriadao
             try
             {
                 implVenta = new VentaImpl();
-                infoTotalSalesFromToday.Text = "HOY SE HAN CONCRETADO " + implVenta.GetTodaySales(DateTime.Today) + " VENTAS.";
+                int totalSales = int.Parse(implVenta.GetTodaySales(DateTime.Today));
+                if (totalSales <= 0)
+                {
+                    infoTotalSalesFromToday.Text = "AÚN NO SE HA REALIZADO NINGUNA VENTA HOY.";
+                }
+                else if(totalSales == 1)
+                {
+                    infoTotalSalesFromToday.Text = "HOY SE HA REALIZADO " + totalSales + " VENTA.";
+                }
+                else
+                {
+                    infoTotalSalesFromToday.Text = "HOY SE HA REALIZADO " + totalSales + " VENTAS.";
+                }
             }
             catch (Exception ex)
             {
@@ -198,7 +210,15 @@ namespace sisgesoriadao
             try
             {
                 implVenta = new VentaImpl();
-                infoTotalProductsFromToday.Text = "PRODUCTOS VENDIDOS DE HOY: " + implVenta.GetTodayProducts(DateTime.Today);
+                int totalProducts = int.Parse(implVenta.GetTodayProducts(DateTime.Today));
+                if (totalProducts <= 0)
+                {
+                    infoTotalProductsFromToday.Text = "AÚN NO SE HA VENDIDO NINGÚN PRODUCTO HOY.";
+                }
+                else
+                {
+                    infoTotalProductsFromToday.Text = "PRODUCTOS VENDIDOS DE HOY: " + totalProducts + ".";
+                }
             }
             catch (Exception ex)
             {
@@ -250,6 +270,16 @@ namespace sisgesoriadao
                 dgvDatos.ItemsSource = implVenta.SelectSalesWithPendingBalanceByCustomers().DefaultView;
                 dgvDatos.Columns[0].Visibility = Visibility.Collapsed;
                 lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + implVenta.SelectSalesWithPendingBalanceByCustomers().Rows.Count;
+                
+                double saldoTotal = 0;
+                if (dgvDatos.Items.Count > 0)
+                {
+                    foreach (DataRowView item in dgvDatos.Items)
+                    {
+                        saldoTotal += double.Parse(item[3].ToString());
+                    }
+                }
+                txtTotalSaldoUSD.Text = "Saldo Total $.: " + Math.Round(saldoTotal, 2).ToString();
             }
             catch (Exception ex)
             {

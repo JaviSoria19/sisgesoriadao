@@ -6,6 +6,7 @@ using System.Data;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using DYMO.Label.Framework;
 
 namespace sisgesoriadao.Model
 {
@@ -13,7 +14,7 @@ namespace sisgesoriadao.Model
     {
         //Cadena de conexión requerida para llamar a la base de datos.
         public static string CadenaConexionBdD { get; set; } = "server=localhost;database=bdventacelular;uid=root;pwd=1234567890;port=3306";
-        public static string VersionApp { get; set; } = "v. 1.8.4";
+        public static string VersionApp { get; set; } = "v. 1.9";
         //Atributo indispensable para manejar la totalidad del sistema.
         public static byte IdUsuario { get; set; }
         //Atributo de referencia para dar a conocer al usuario que ha iniciado sesión correctamente.
@@ -45,6 +46,32 @@ namespace sisgesoriadao.Model
         // Victor = "DYMO LabelWriter 450 Turbo"
         // Jose Luis = "DYMO LabelWriter 450"
         public static string ModeloDeEtiquetadoraDYMO { get; set; } = "DYMO LabelWriter 450 Turbo";
+
+        public static void ObtenerPrimeraEtiquetadoraDYMO()
+        {
+            try
+            {
+                IEnumerable<IPrinter> printers = Framework.GetPrinters();
+
+                if (printers != null)
+                {
+                    foreach (IPrinter printer in printers)
+                    {
+                        if (printer.IsConnected)
+                        {
+                            ModeloDeEtiquetadoraDYMO = printer.Name;
+                            //MessageBox.Show(ModeloDeEtiquetadoraDYMO);
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocurrió un error de DYMO: {ex.Message}");
+            }
+        }
+
         public static bool VerificarProductoEnCola(Producto producto, string operacion)
         {
             bool productoEnCola = false;

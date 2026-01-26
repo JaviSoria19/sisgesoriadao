@@ -410,7 +410,7 @@ namespace sisgesoriadao
         {
             btnInsert.IsEnabled = false;
             btnUpdate.IsEnabled = false;
-            btnDelete.IsEnabled = false;
+            // btnDelete.IsEnabled = false;
 
             btnSave.IsEnabled = true;
             btnCancel.IsEnabled = true;
@@ -431,7 +431,7 @@ namespace sisgesoriadao
         {
             btnInsert.IsEnabled = true;
             btnUpdate.IsEnabled = true;
-            btnDelete.IsEnabled = true;
+            // btnDelete.IsEnabled = true;
 
             btnSave.IsEnabled = false;
             btnCancel.IsEnabled = false;

@@ -14,14 +14,14 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectSalesWithPendingBalanceFromBranch();
         DataTable SelectLikeReporteUtilidades(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios);
         DataTable SelectLikeReportePerdidas(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios);
-        DataTable SelectLikeReporteVentasGlobales(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo);
-        DataTable SelectLikeReporteVentasGlobalesCantidad(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo);
+        DataTable SelectLikeReporteVentasGlobales(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo, string esVentaPorMayor);
+        DataTable SelectLikeReporteVentasGlobalesCantidad(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo, string esVentaPorMayor);
         DataTable SelectLikeReporteVentasLocales(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI);
         DataTable SelectLikeReporteVentasLocalesByID(int idVenta);
         DataTable SelectLikeReporteVentasLocalesDELETED(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI);
         DataTable SelectLikeReporteVentasLocalesByIDDELETED(int idVenta);
         DataTable SelectLikeReporteVentasLocalesGroupByEmpleados(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI);
-        DataTable SelectLikeReporteVentasGlobalesGroupByEmpleados(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo);
+        DataTable SelectLikeReporteVentasGlobalesGroupByEmpleados(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo, string esVentaPorMayor);
         DataTable SelectSaleDetails1();
         DataTable SelectSaleDetails2();
         int GetIDAfterInsert();
@@ -37,5 +37,6 @@ namespace sisgesoriadao.Interfaces
         string DeleteAfterSaleProductTransaction(Venta venta, int IdProducto);
         DataTable SelectLikePaymentMethodsByCustomers(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo);
         int UpdateSaleEmployee(byte IdEmpleado, int IdVenta);
+        int UpdateSaleIsWholesale(byte EsVentaPorMayor, int IdVenta);
     }
 }

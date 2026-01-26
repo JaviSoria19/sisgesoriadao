@@ -25,7 +25,7 @@ namespace sisgesoriadao
         CategoriaImpl implCategoria;
         Categoria categoria;
         EmpleadoImpl implEmpleado;
-
+        byte esVentaPorMayor = 0;
         double venta_TotalUSD = 0;
         double venta_TotalBOB = 0;
         double venta_pagoTotalUSD = 0;
@@ -196,7 +196,28 @@ namespace sisgesoriadao
                 if (resultado > 0)
                 {
                     MostrarPanelClienteEncontrado();
-                    BuscarYMostrarClientePorCI(txtRegister_NumeroCI.Text.Trim());
+                    GetUltimoClienteRegistrado();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Transacción no completada; comuníquese con el Administrador de Sistemas, error: \n" + ex.Message);
+            }
+        }
+
+        private void GetUltimoClienteRegistrado()
+        {
+            try
+            {
+                implCliente = new ClienteImpl();
+                cliente = implCliente.GetLastRegisteredCustomer();
+
+                if (cliente != null)
+                {
+                    MostrarDatosClienteEnPantalla();
+                    DisableCustomerButtons();
+                    acbxGetClientesFromDatabase();
+                    btnEditCustomer.IsEnabled = true;
                 }
             }
             catch (Exception ex)
@@ -524,7 +545,7 @@ namespace sisgesoriadao
 
             ExportarVariablesAListas();
             venta = new Venta(cliente.IdCliente, Session.IdUsuario, Session.Sucursal_IdSucursal, byte.Parse((cbxEmployees.SelectedItem as ComboboxItem).Valor.ToString()),
-                              venta_TotalUSD, venta_TotalBOB, venta_saldoUSD, venta_saldoBOB, txtObservacionVenta.Text);
+                              esVentaPorMayor, venta_TotalUSD, venta_TotalBOB, venta_saldoUSD, venta_saldoBOB, txtObservacionVenta.Text);
             implVenta = new VentaImpl();
 
             try
@@ -1090,6 +1111,18 @@ namespace sisgesoriadao
         private void btndgvRemoverMetodoPago(object sender, RoutedEventArgs e)
         {
             removeFromDGVPaymentMethod(dgvMetodosPago.SelectedIndex);
+        }
+
+        private void tglWholesale_Click(object sender, RoutedEventArgs e)
+        {
+            if(tglWholesale.IsChecked == true)
+            {
+                esVentaPorMayor = 1;
+            }
+            else
+            {
+                esVentaPorMayor = 0;
+            }
         }
     }
 }

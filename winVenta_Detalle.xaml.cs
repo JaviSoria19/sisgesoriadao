@@ -126,8 +126,16 @@ namespace sisgesoriadao
                     implVenta = new VentaImpl();
                     dt = implVenta.SelectSaleDetails1();
                     int idVenta = int.Parse(dt.Rows[0][0].ToString());
-                    txtIdVenta.Text = "Nro.: " + idVenta.ToString("D5");
+                    byte esVentaPorMayor = byte.Parse(dt.Rows[0][25].ToString());
 
+                    if (esVentaPorMayor == 1)
+                    {
+                        txtTitulo.Text = "NOTA DE VENTA";
+                        thTotal.Text = "TOTAL $.";
+                        txtSubtituloPagos.Text = "PAGOS ($.)";
+                    }
+
+                    txtIdVenta.Text = "Nro.: " + idVenta.ToString("D5");
                     txtSucursal_nombre.Text = dt.Rows[0][1].ToString();
                     txtSucursal_direccion.Text = dt.Rows[0][2].ToString();
                     txtSucursal_telefono.Text = dt.Rows[0][3].ToString();
@@ -141,14 +149,27 @@ namespace sisgesoriadao
 
                     txtVenta_fecha.Text = "Fecha: " + dt.Rows[0][21].ToString();
 
-                    double venta_total = double.Parse(dt.Rows[0][18].ToString());
-                    double venta_saldo = double.Parse(dt.Rows[0][19].ToString());
-                    double venta_adelanto = venta_total - venta_saldo;
-                    txtVenta_Total.Text = venta_total + " Bs.";
-                    txtVenta_Adelanto.Text = Math.Round(venta_adelanto, 2) + " Bs.";
-                    txtVenta_Saldo.Text = venta_saldo + " Bs.";
+                    double venta_total, venta_saldo, venta_adelanto = 0;
 
+                    // Si es venta por mayor se muestran los totales en USD
+                    if (esVentaPorMayor == 1)
+                    {
+                        venta_total = double.Parse(dt.Rows[0][22].ToString());
+                        venta_saldo = double.Parse(dt.Rows[0][23].ToString());
+                        venta_adelanto = venta_total - venta_saldo;
+                    }
+                    else
+                    {
+                        venta_total = double.Parse(dt.Rows[0][18].ToString());
+                        venta_saldo = double.Parse(dt.Rows[0][19].ToString());
+                        venta_adelanto = venta_total - venta_saldo;
+                    }
 
+                    txtVenta_Total.Text = (esVentaPorMayor == 1) ? venta_total + " $." : venta_total + " Bs.";
+                    txtVenta_Adelanto.Text = (esVentaPorMayor == 1) ? Math.Round(venta_adelanto, 2) + " $." : Math.Round(venta_adelanto, 2) + " Bs.";
+                    txtVenta_Saldo.Text = (esVentaPorMayor == 1) ? venta_saldo + " $." : venta_saldo + " Bs.";
+
+                    
                     txtProducto_Descripcion.Text = "";
                     txtProducto_Detalle.Text = "";
                     txtProducto_Garantia.Text = "";
@@ -159,7 +180,7 @@ namespace sisgesoriadao
                     txtProducto_TotalBOB.Text = "";
                     foreach (DataRow item in dt.Rows)
                     {
-                        if (item[10].ToString().Length > 30)
+                        if (item[10].ToString().Length > 45)// antes era a 40 cuando se mostraba el porcentaje de descuento
                         {
                             txtProducto_Descripcion.Text += item[10].ToString() + "\n";
                         }
@@ -167,13 +188,14 @@ namespace sisgesoriadao
                         {
                             txtProducto_Descripcion.Text += item[10].ToString() + "\n \n";
                         }
+
                         txtProducto_Detalle.Text += item[11].ToString() + "\n \n";
-                        txtProducto_Garantia.Text += item[12].ToString() + " Meses\n \n";
+                        txtProducto_Garantia.Text += (esVentaPorMayor == 1) ? "N/A\n \n" : item[12].ToString() + " Meses\n \n";
                         txtProducto_Cantidad.Text += item[13].ToString() + "\n \n";
                         txtProducto_Precio.Text += item[14].ToString() + "\n \n";
                         txtProducto_DescuentoPorcentaje.Text += item[15].ToString() + "\n \n";
                         txtProducto_DescuentoBOB.Text += item[16].ToString() + "\n \n";
-                        txtProducto_TotalBOB.Text += item[17].ToString() + "\n \n";
+                        txtProducto_TotalBOB.Text += (esVentaPorMayor == 1) ? item[26].ToString() + "\n \n" : item[17].ToString() + "\n \n";
 
                         clipboardTexto += item[10].ToString() + " " + item[11].ToString() + "\n";
                     }
@@ -182,11 +204,12 @@ namespace sisgesoriadao
                     txtPagos.Text = "";
                     DataTable dt_two = new DataTable();
                     dt_two = implVenta.SelectSaleDetails2();
+
                     if (dt_two.Rows.Count > 0)
                     {
                         foreach (DataRow item_two in dt_two.Rows)
                         {
-                            txtPagos.Text += item_two[1].ToString() + "    " + item_two[0].ToString() + "\n";
+                            txtPagos.Text += (esVentaPorMayor == 1) ? item_two[2].ToString() + "    " + item_two[1].ToString() + "\n" : item_two[2].ToString() + "    " + item_two[0].ToString() + "\n";
                         }
                     }
                     else

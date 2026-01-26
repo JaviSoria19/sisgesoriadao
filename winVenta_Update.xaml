@@ -53,6 +53,8 @@
                         <Button x:Name="btnDeleteSale" Content="ELIMINAR VENTA" Margin="10,0" ToolTip="ELIMINAR VENTA" Click="btnDeleteSale_Click" IsEnabled="False" VerticalAlignment="Center" Background="Red" Foreground="White" BorderBrush="Red"/>
                         <Label Content="EMPLEADO:" VerticalAlignment="Center"/>
                         <ComboBox x:Name="cbxEmployees" IsEnabled="True" SelectionChanged="cbxEmployees_SelectionChanged"/>
+                        <Label Content="VENTA POR MAYOR:" VerticalAlignment="Center"/>
+                        <ToggleButton x:Name="tglWholesale" Style="{StaticResource MaterialDesignSwitchToggleButton}" ToolTip="INDICAR SI ES VENTA POR MAYOR" Click="tglWholesale_Click"/>
                     </StackPanel>
                 </StackPanel>
                 <TextBlock Text="DETALLE CLIENTE" FontWeight="Bold" FontSize="20"/>
@@ -105,13 +107,13 @@
                             <DataGridTextColumn Header="Codigo" Binding="{Binding codigoSublote}" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Producto" Binding="{Binding nombreProducto}" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Detalle" Binding="{Binding identificador}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Precio USD" Binding="{Binding precioUSD}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Precio Bs." Binding="{Binding precioBOB}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Precio USD" Binding="{Binding precioUSD}" IsReadOnly="True" Foreground="DeepSkyBlue" FontWeight="Bold"/>
+                            <DataGridTextColumn Header="Precio Bs." Binding="{Binding precioBOB}" IsReadOnly="True" Foreground="DeepSkyBlue" FontWeight="Bold"/>
                             <DataGridTextColumn Header="Desc. %" Binding="{Binding descuentoPorcentaje}"/>
                             <DataGridTextColumn Header="Desc. $." Binding="{Binding descuentoUSD}"/>
                             <DataGridTextColumn Header="Desc. Bs." Binding="{Binding descuentoBOB}"/>
-                            <DataGridTextColumn Header="Total $." Binding="{Binding totalproductoUSD}"/>
-                            <DataGridTextColumn Header="Total Bs." Binding="{Binding totalproductoBOB}"/>
+                            <DataGridTextColumn Header="Total $." Binding="{Binding totalproductoUSD}" Foreground="Orange" FontWeight="Bold"/>
+                            <DataGridTextColumn Header="Total Bs." Binding="{Binding totalproductoBOB}" Foreground="Orange" FontWeight="Bold"/>
                             <DataGridTextColumn Header="Garantia" Binding="{Binding garantia}" Foreground="Red" FontWeight="Bold"/>
                             <DataGridTextColumn Header="Costo $." Binding="{Binding costoUSD}" IsReadOnly="True" Visibility="Collapsed"/>
 

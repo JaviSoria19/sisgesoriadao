@@ -277,8 +277,9 @@ namespace sisgesoriadao
                 {
                     foreach (DataRowView item in dgvDatos.Items)
                     {
-                        if (item[4].ToString() == txtCodigoProducto.Text.Trim())
-                        {//Producto Encontrado
+                        if (txtCodigoProducto.Text.Trim() == item[4].ToString() || txtCodigoProducto.Text.Trim() == item[6].ToString())
+                        {
+                            //Producto Encontrado
                             DataRowView dtAuxiliar = item;
                             item.Delete();
                             dgvDatosVerificados.Items.Add(dtAuxiliar);
