@@ -98,6 +98,12 @@
                     </Button>
                 </StackPanel>
                 <DataGrid x:Name="dgvProductos" Loaded="dgvProductos_Loaded" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CellEditEnding="dgvProductos_CellEditEnding" HorizontalAlignment="Center">
+                    <DataGrid.Resources>
+                        <Style x:Key="NumericTextBoxStyle" TargetType="TextBox">
+                            <EventSetter Event="PreviewTextInput" Handler="NumericTextBox_PreviewTextInput"/>
+                        </Style>
+                    </DataGrid.Resources>
+
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID SUCURSAL" Binding="{Binding IdSucursal}" IsReadOnly="True" Visibility="Collapsed"/>
                         <DataGridTextColumn Header="ID CATEGORIA" Binding="{Binding IdCategoria}" IsReadOnly="True" Visibility="Collapsed"/>
@@ -107,10 +113,10 @@
                         <DataGridTextColumn Header="Codigo" Binding="{Binding CodigoSublote}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Producto" Binding="{Binding NombreProducto}"/>
                         <DataGridTextColumn Header="SN/IMEI" Binding="{Binding Identificador}"/>
-                        <DataGridTextColumn Header="C. $." Binding="{Binding CostoUSD}"/>
-                        <DataGridTextColumn Header="C. Bs." Binding="{Binding CostoBOB}"/>
-                        <DataGridTextColumn Header="P. $." Binding="{Binding PrecioVentaUSD}"/>
-                        <DataGridTextColumn Header="P. Bs." Binding="{Binding PrecioVentaBOB}"/>
+                        <DataGridTextColumn Header="C. $." Binding="{Binding CostoUSD}" EditingElementStyle="{StaticResource NumericTextBoxStyle}"/>
+                        <DataGridTextColumn Header="C. Bs." Binding="{Binding CostoBOB}" EditingElementStyle="{StaticResource NumericTextBoxStyle}"/>
+                        <DataGridTextColumn Header="P. $." Binding="{Binding PrecioVentaUSD}" EditingElementStyle="{StaticResource NumericTextBoxStyle}"/>
+                        <DataGridTextColumn Header="P. Bs." Binding="{Binding PrecioVentaBOB}" EditingElementStyle="{StaticResource NumericTextBoxStyle}"/>
                         <DataGridTextColumn Header="Obs." Binding="{Binding Observaciones}" MaxWidth="100"/>
                     </DataGrid.Columns>
                 </DataGrid>

@@ -93,7 +93,7 @@ namespace sisgesoriadao
                 ajuste = implAjuste.Get();
                 if (ajuste != null)
                 {
-                    txtCambioDolar.Text = ajuste.CambioDolar.ToString().Trim();
+                    txtCambioDolar.Text = ajuste.CambioDolar.ToString("0.00").Trim();
                     txtLimiteDescuento.Text = ajuste.LimiteDescuento.ToString().Trim();
                     txtIntervaloHora.Text = ajuste.IntervaloHora.ToString().Trim();
                     cbxTheme.SelectedIndex = ajuste.TemaPredeterminado;

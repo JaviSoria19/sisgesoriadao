@@ -128,14 +128,14 @@
                             
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0,10">
                                 <StackPanel VerticalAlignment="Bottom">
-                                    <Rectangle Fill="Black" Height="1" Margin="40,2"/>
-                                    <TextBlock Text="Firma Responsable" FontSize="15" HorizontalAlignment="Center" Margin="100,0"/>
+                                    <Rectangle x:Name="shapeFirmaResponsable" Fill="Black" Height="1" Margin="40,2"/>
+                                    <TextBlock x:Name="txtFirmaResponsable" Text="Firma Responsable" FontSize="15" HorizontalAlignment="Center" Margin="100,0"/>
                                 </StackPanel>
                                 <StackPanel VerticalAlignment="Bottom">
-                                    <Rectangle Fill="Black" Height="1" Margin="0,2"/>
-                                    <TextBlock Text="Conformidad Cliente" FontSize="15" HorizontalAlignment="Center" Margin="50,0"/>
+                                    <Rectangle x:Name="shapeFirmaCliente" Fill="Black" Height="1" Margin="0,2"/>
+                                    <TextBlock x:Name="txtFirmaCliente" Text="Conformidad Cliente" FontSize="15" HorizontalAlignment="Center" Margin="50,0"/>
                                 </StackPanel>
-                                <StackPanel Width="250" MinHeight="90">
+                                <StackPanel Width="220" MinHeight="90">
                                     <TextBlock x:Name="txtSubtituloPagos" Text="PAGOS (Bs.)" FontWeight="DemiBold" FontSize="15" HorizontalAlignment="Center"/>
                                     <TextBlock x:Name="txtPagos" Text="1/1/2000  0" FontSize="15" HorizontalAlignment="Center"/>
                                 </StackPanel>
@@ -151,7 +151,7 @@
                                 </StackPanel>
                             </StackPanel>
                             
-                            <TextBlock Text="¡GRACIAS POR SU PREFERENCIA!" FontSize="18" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,10"/>
+                            <TextBlock x:Name="txtThanks" Text="¡GRACIAS POR SU PREFERENCIA!" FontSize="18" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,10"/>
                         </StackPanel>
 
                         <Grid>
@@ -159,7 +159,7 @@
                                 <ColumnDefinition Width="8*"/>
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="IMPORTANTE: Por favor tenga en cuenta que si el equipo sufre daños por caída, aplastamiento, daño por agua o mala actualización de software, quedará fuera de garantía. También es importante destacar que cualquier modificación no autorizada en el dispositivo o uso inadecuado del mismo también invalidará la garantía. Por favor, lea detenidamente las instrucciones de uso y conservación del equipo para asegurar su correcto funcionamiento y durabilidad." FontSize="18" TextWrapping="Wrap" FontWeight="DemiBold" HorizontalAlignment="Center" Foreground="DarkRed"/>
+                            <TextBlock x:Name="txtDisclaimer" Text="IMPORTANTE: Por favor tenga en cuenta que si el equipo sufre daños por caída, aplastamiento, daño por agua o mala actualización de software, quedará fuera de garantía. También es importante destacar que cualquier modificación no autorizada en el dispositivo o uso inadecuado del mismo también invalidará la garantía. Por favor, lea detenidamente las instrucciones de uso y conservación del equipo para asegurar su correcto funcionamiento y durabilidad." FontSize="18" TextWrapping="Wrap" FontWeight="DemiBold" HorizontalAlignment="Center" Foreground="DarkRed"/>
                             <Image Height="120" Width="120" x:Name="imgQR" Grid.Column="1"/>
                         </Grid>
                     </StackPanel>

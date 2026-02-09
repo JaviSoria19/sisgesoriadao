@@ -57,7 +57,7 @@ namespace sisgesoriadao
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
-            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
+            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString("0.00");
             txtSucursal.Text = Session.Sucursal_NombreSucursal;
         }
         private void dgvDatos_Loaded(object sender, RoutedEventArgs e)

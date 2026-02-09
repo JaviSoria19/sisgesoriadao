@@ -127,7 +127,7 @@ namespace sisgesoriadao
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
-            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
+            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString("0.00");
             cbxGetCategoriaFromDatabase();
             cbxGetLoteFromDatabase();
             cbxGetCondicionFromDatabase();
@@ -151,34 +151,57 @@ namespace sisgesoriadao
         }
         private void txtCostoUSD_KeyUp(object sender, KeyEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtCostoUSD.Text) != true)
+            if (double.TryParse(txtCostoUSD.Text, out double valorUSD))
             {
-                double costoBOB = Math.Round(double.Parse(txtCostoUSD.Text) * Session.Ajuste_Cambio_Dolar, 2);
+                double costoBOB = Math.Round(valorUSD * Session.Ajuste_Cambio_Dolar, 2);
                 txtCostoBOB.Text = costoBOB.ToString();
             }
+            else
+            {
+                txtCostoUSD.Text = "0";
+                txtCostoBOB.Text = "0";
+            }
         }
+
         private void txtCostoBOB_KeyUp(object sender, KeyEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtCostoBOB.Text) != true)
+            if (double.TryParse(txtCostoBOB.Text, out double valorBOB))
             {
-                double costoUSD = Math.Round(double.Parse(txtCostoBOB.Text) / Session.Ajuste_Cambio_Dolar, 2);
+                double costoUSD = Math.Round(valorBOB / Session.Ajuste_Cambio_Dolar, 2);
                 txtCostoUSD.Text = costoUSD.ToString();
             }
-        }
-        private void txtPrecioUSD_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (string.IsNullOrEmpty(txtPrecioUSD.Text) != true)
+            else
             {
-                double precioBOB = Math.Round(double.Parse(txtPrecioUSD.Text) * Session.Ajuste_Cambio_Dolar, 2);
-                txtPrecioBOB.Text = precioBOB.ToString();
+                txtCostoBOB.Text = "0";
+                txtCostoUSD.Text = "0";
             }
         }
+
+        private void txtPrecioUSD_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (double.TryParse(txtPrecioUSD.Text, out double valorUSD))
+            {
+                double precioBOB = Math.Round(valorUSD * Session.Ajuste_Cambio_Dolar, 2);
+                txtPrecioBOB.Text = precioBOB.ToString();
+            }
+            else
+            {
+                txtPrecioUSD.Text = "0";
+                txtPrecioBOB.Text = "0";
+            }
+        }
+
         private void txtPrecioBOB_KeyUp(object sender, KeyEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtPrecioBOB.Text) != true)
+            if (double.TryParse(txtPrecioBOB.Text, out double valorBOB))
             {
-                double precioUSD = Math.Round(double.Parse(txtPrecioBOB.Text) / Session.Ajuste_Cambio_Dolar, 2);
+                double precioUSD = Math.Round(valorBOB / Session.Ajuste_Cambio_Dolar, 2);
                 txtPrecioUSD.Text = precioUSD.ToString();
+            }
+            else
+            {
+                txtPrecioBOB.Text = "0";
+                txtPrecioUSD.Text = "0";
             }
         }
         private void txtIdentificador_KeyDown(object sender, KeyEventArgs e)
@@ -217,7 +240,7 @@ namespace sisgesoriadao
                         IdCondicion = byte.Parse((cbxCondicion.SelectedItem as ComboboxItem).Valor.ToString()),
                         IdUsuario = Session.IdUsuario,
                         CodigoSublote = txtCodigoSublote.Text,
-                        NombreProducto = acbtxtNombreProducto.Text,
+                        NombreProducto = Regex.Replace(acbtxtNombreProducto.Text.Trim(), @"\s+", " "),
                         Identificador = txtIdentificador.Text,
                         CostoUSD = double.Parse(txtCostoUSD.Text),
                         CostoBOB = double.Parse(txtCostoBOB.Text),
@@ -479,148 +502,227 @@ namespace sisgesoriadao
         }
         private void dgvProductos_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            int indexSeleccionado = e.Column.DisplayIndex;
+            int indexColumna = e.Column.DisplayIndex;
             DataGridRowDetalleHelper filaSeleccionada = e.Row.Item as DataGridRowDetalleHelper;
-            TextBox valorNuevo = e.EditingElement as TextBox;  // Assumes columns are all TextBoxes
+            TextBox valorNuevo = e.EditingElement as TextBox;
+
+            if (valorNuevo == null || filaSeleccionada == null)
+                return;
 
             try
             {
-                if (indexSeleccionado == 6)/*NOMBRE PRODUCTO*/
-                {
-                    if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
-                    {
-                        for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
-                        {
-                            listaHelper[i].NombreProducto = valorNuevo.Text.Trim().ToString();
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("EL NOMBRE DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
-                    }
-                }
-                else if (indexSeleccionado == 7)/*IDENTIFICADOR*/
-                {
-                    if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
-                    {
-                        listaHelper[dgvProductos.SelectedIndex].Identificador = valorNuevo.Text.Trim().ToString();
-                    }
-                    else
-                    {
-                        MessageBox.Show("EL IDENTIFICADOR DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
-                    }
+                string valorTexto = System.Text.RegularExpressions.Regex.Replace(valorNuevo.Text.Trim(), @"\s+", " ");
+                bool esValido = true;
 
-                }
-                else if (indexSeleccionado == 8)/*COSTO USD*/
+                switch (indexColumna)
                 {
-                    if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
-                    {
-                        for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
-                        {
-                            listaHelper[i].CostoUSD = double.Parse(valorNuevo.Text.Trim());
-                            listaHelper[i].CostoBOB = Math.Round(listaHelper[i].CostoUSD * Session.Ajuste_Cambio_Dolar, 2);
-                        }
-                        if (double.Parse(valorNuevo.Text.Trim()) > filaSeleccionada.PrecioVentaUSD)
-                        {
-                            for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
-                            {
-                                listaHelper[i].PrecioVentaUSD = listaHelper[i].CostoUSD + 10;
-                                listaHelper[i].PrecioVentaBOB = Math.Round(listaHelper[i].CostoBOB + (Session.Ajuste_Cambio_Dolar * 10), 2);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("EL COSTO EN USD DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
-                    }
+                    case 6: // NOMBRE PRODUCTO
+                        esValido = ActualizarNombreProducto(valorTexto);
+                        break;
+
+                    case 7: // IDENTIFICADOR
+                        esValido = ActualizarIdentificador(valorTexto);
+                        break;
+
+                    case 8: // COSTO USD
+                        esValido = ActualizarCostoUSD(valorTexto, filaSeleccionada);
+                        break;
+
+                    case 9: // COSTO BOB
+                        esValido = ActualizarCostoBOB(valorTexto, filaSeleccionada);
+                        break;
+
+                    case 10: // PRECIO USD
+                        esValido = ActualizarPrecioUSD(valorTexto, filaSeleccionada);
+                        break;
+
+                    case 11: // PRECIO BOB
+                        esValido = ActualizarPrecioBOB(valorTexto, filaSeleccionada);
+                        break;
+
+                    case 12: // OBSERVACIONES
+                        esValido = ActualizarObservaciones(valorTexto);
+                        break;
                 }
-                else if (indexSeleccionado == 9)/*COSTO BOB*/
+
+                if (!esValido)
                 {
-                    if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
-                    {
-                        for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
-                        {
-                            listaHelper[i].CostoBOB = double.Parse(valorNuevo.Text.Trim());
-                            listaHelper[i].CostoUSD = Math.Round(listaHelper[i].CostoBOB / Session.Ajuste_Cambio_Dolar, 2);
-                        }
-                        if (double.Parse(valorNuevo.Text.Trim()) > filaSeleccionada.PrecioVentaBOB)
-                        {
-                            for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
-                            {
-                                listaHelper[i].PrecioVentaBOB = listaHelper[i].CostoBOB + (Session.Ajuste_Cambio_Dolar * 10);
-                                listaHelper[i].PrecioVentaUSD = Math.Round(listaHelper[i].CostoUSD + 10, 2);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("EL COSTO EN USD DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
-                    }
+                    e.Cancel = true; // Cancela la edición y restaura el valor anterior
                 }
-                else if (indexSeleccionado == 10)/*PRECIO USD*/
+                else
                 {
-                    if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
-                    {
-                        if (double.Parse(valorNuevo.Text.Trim()) > filaSeleccionada.CostoUSD)
-                        {
-                            for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
-                            {
-                                listaHelper[i].PrecioVentaUSD = double.Parse(valorNuevo.Text.Trim());
-                                listaHelper[i].PrecioVentaBOB = Math.Round(listaHelper[i].PrecioVentaUSD * Session.Ajuste_Cambio_Dolar, 2);
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("EL PRECIO EN $. NO PUEDE SER MENOR O IGUAL AL COSTO EN $. DEL PRODUCTO!");
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("EL PRECIO EN USD DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
-                    }
+                    RefrescarDataGrid();
                 }
-                else if (indexSeleccionado == 11)/*PRECIO BOB*/
-                {
-                    if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
-                    {
-                        if (double.Parse(valorNuevo.Text.Trim()) > filaSeleccionada.CostoBOB)
-                        {
-                            for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
-                            {
-                                listaHelper[i].PrecioVentaBOB = double.Parse(valorNuevo.Text.Trim());
-                                listaHelper[i].PrecioVentaUSD = Math.Round(listaHelper[i].PrecioVentaBOB / Session.Ajuste_Cambio_Dolar, 2);
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("EL PRECIO EN Bs. NO PUEDE SER MENOR O IGUAL AL COSTO EN Bs. DEL PRODUCTO!");
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("EL PRECIO EN USD DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
-                    }
-                }
-                else if (indexSeleccionado == 12)/*OBSERVACIONES*/
-                {
-                    if (!string.IsNullOrEmpty(valorNuevo.Text.Trim().ToString()))
-                    {
-                        listaHelper[dgvProductos.SelectedIndex].Observaciones = valorNuevo.Text.Trim().ToString();
-                    }
-                    else
-                    {
-                        MessageBox.Show("LA OBSERVACION DEL PRODUCTO NO PUEDE ESTAR VACÍA!");
-                    }
-                }
-                dgvProductos.ItemsSource = null;
-                dgvProductos.ItemsSource = listaHelper;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + "\nDebido a la excepción presentada, se cerrará esta ventana para evitar errores.");
+                MessageBox.Show($"{ex.Message}\nDebido a la excepción presentada, se cerrará esta ventana para evitar errores.");
                 loteRegistrado = true;
                 this.Close();
             }
+        }
+
+        private bool ActualizarNombreProducto(string valor)
+        {
+            if (string.IsNullOrEmpty(valor))
+            {
+                MessageBox.Show("EL NOMBRE DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
+                return false;
+            }
+
+            for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
+            {
+                listaHelper[i].NombreProducto = valor;
+            }
+            return true;
+        }
+
+        private bool ActualizarIdentificador(string valor)
+        {
+            if (string.IsNullOrEmpty(valor))
+            {
+                MessageBox.Show("EL IDENTIFICADOR DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
+                return false;
+            }
+
+            listaHelper[dgvProductos.SelectedIndex].Identificador = valor;
+            return true;
+        }
+
+        private bool ActualizarCostoUSD(string valor, DataGridRowDetalleHelper filaSeleccionada)
+        {
+            if (string.IsNullOrEmpty(valor))
+            {
+                MessageBox.Show("EL COSTO EN USD DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
+                return false;
+            }
+
+            if (!double.TryParse(valor, out double costoUSD))
+            {
+                MessageBox.Show("EL COSTO EN USD DEBE SER UN VALOR NUMÉRICO VÁLIDO!");
+                return false;
+            }
+
+            for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
+            {
+                listaHelper[i].CostoUSD = costoUSD;
+                listaHelper[i].CostoBOB = Math.Round(costoUSD * Session.Ajuste_Cambio_Dolar, 2);
+            }
+
+            if (costoUSD > filaSeleccionada.PrecioVentaUSD)
+            {
+                for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
+                {
+                    listaHelper[i].PrecioVentaUSD = listaHelper[i].CostoUSD + 10;
+                    listaHelper[i].PrecioVentaBOB = Math.Round(listaHelper[i].CostoBOB + (Session.Ajuste_Cambio_Dolar * 10), 2);
+                }
+            }
+            return true;
+        }
+
+        private bool ActualizarCostoBOB(string valor, DataGridRowDetalleHelper filaSeleccionada)
+        {
+            if (string.IsNullOrEmpty(valor))
+            {
+                MessageBox.Show("EL COSTO EN BOB DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
+                return false;
+            }
+
+            if (!double.TryParse(valor, out double costoBOB))
+            {
+                MessageBox.Show("EL COSTO EN BOB DEBE SER UN VALOR NUMÉRICO VÁLIDO!");
+                return false;
+            }
+
+            for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
+            {
+                listaHelper[i].CostoBOB = costoBOB;
+                listaHelper[i].CostoUSD = Math.Round(costoBOB / Session.Ajuste_Cambio_Dolar, 2);
+            }
+
+            if (costoBOB > filaSeleccionada.PrecioVentaBOB)
+            {
+                for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
+                {
+                    listaHelper[i].PrecioVentaBOB = listaHelper[i].CostoBOB + (Session.Ajuste_Cambio_Dolar * 10);
+                    listaHelper[i].PrecioVentaUSD = Math.Round(listaHelper[i].CostoUSD + 10, 2);
+                }
+            }
+            return true;
+        }
+
+        private bool ActualizarPrecioUSD(string valor, DataGridRowDetalleHelper filaSeleccionada)
+        {
+            if (string.IsNullOrEmpty(valor))
+            {
+                MessageBox.Show("EL PRECIO EN USD DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
+                return false;
+            }
+
+            if (!double.TryParse(valor, out double precioUSD))
+            {
+                MessageBox.Show("EL PRECIO EN USD DEBE SER UN VALOR NUMÉRICO VÁLIDO!");
+                return false;
+            }
+
+            if (precioUSD <= filaSeleccionada.CostoUSD)
+            {
+                MessageBox.Show("EL PRECIO EN $. NO PUEDE SER MENOR O IGUAL AL COSTO EN $. DEL PRODUCTO!");
+                return false;
+            }
+
+            for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
+            {
+                listaHelper[i].PrecioVentaUSD = precioUSD;
+                listaHelper[i].PrecioVentaBOB = Math.Round(precioUSD * Session.Ajuste_Cambio_Dolar, 2);
+            }
+            return true;
+        }
+
+        private bool ActualizarPrecioBOB(string valor, DataGridRowDetalleHelper filaSeleccionada)
+        {
+            if (string.IsNullOrEmpty(valor))
+            {
+                MessageBox.Show("EL PRECIO EN BOB DEL PRODUCTO NO PUEDE ESTAR VACÍO!");
+                return false;
+            }
+
+            if (!double.TryParse(valor, out double precioBOB))
+            {
+                MessageBox.Show("EL PRECIO EN BOB DEBE SER UN VALOR NUMÉRICO VÁLIDO!");
+                return false;
+            }
+
+            if (precioBOB <= filaSeleccionada.CostoBOB)
+            {
+                MessageBox.Show("EL PRECIO EN Bs. NO PUEDE SER MENOR O IGUAL AL COSTO EN Bs. DEL PRODUCTO!");
+                return false;
+            }
+
+            for (int i = dgvProductos.SelectedIndex; i < listaHelper.Count; i++)
+            {
+                listaHelper[i].PrecioVentaBOB = precioBOB;
+                listaHelper[i].PrecioVentaUSD = Math.Round(precioBOB / Session.Ajuste_Cambio_Dolar, 2);
+            }
+            return true;
+        }
+
+        private bool ActualizarObservaciones(string valor)
+        {
+            if (string.IsNullOrEmpty(valor))
+            {
+                MessageBox.Show("LA OBSERVACION DEL PRODUCTO NO PUEDE ESTAR VACÍA!");
+                return false;
+            }
+
+            listaHelper[dgvProductos.SelectedIndex].Observaciones = valor;
+            return true;
+        }
+
+        private void RefrescarDataGrid()
+        {
+            dgvProductos.ItemsSource = null;
+            dgvProductos.ItemsSource = listaHelper;
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -708,6 +810,11 @@ namespace sisgesoriadao
                     }
                 }
             }
+        }
+
+        private void NumericTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !IsTextAllowed(e.Text);
         }
     }
 }

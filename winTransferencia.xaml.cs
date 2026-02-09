@@ -35,7 +35,7 @@ namespace sisgesoriadao
         private void dtpFechaFin_Loaded(object sender, RoutedEventArgs e)
         {
             dtpFechaFin.SelectedDate = DateTime.Today;
-            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
+            dtpFechaInicio.SelectedDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
         }
         private void dgvDatos_Loaded(object sender, RoutedEventArgs e)
         {
@@ -76,7 +76,7 @@ namespace sisgesoriadao
             cbxSucursalOrigen.SelectedIndex = 0;
             cbxSucursalDestino.SelectedIndex = 0;
             dtpFechaFin.SelectedDate = DateTime.Today;
-            dtpFechaInicio.SelectedDate = new DateTime(2023, 01, 01);
+            dtpFechaInicio.SelectedDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
         }
         void cbxSelectSucursalFromDatabase()
         {

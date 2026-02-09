@@ -427,6 +427,9 @@ namespace sisgesoriadao
                 labelSuccess(lblSeleccion);
                 dgvProveedores.SelectedItem = null;
                 acbtxtNombreProveedor.Text = nombreProveedor;
+
+                txtPagoGeneralUSD.IsEnabled = true;
+                btnAddGeneralPayment.IsEnabled = true;
             }
         }
 
@@ -491,6 +494,107 @@ namespace sisgesoriadao
                 {
                     MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
+        }
+
+        private void txtPagoGeneralUSD_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                addPaymentMethods();
+            }
+            if (e.Key == Key.Escape)
+            {
+                (sender as TextBox).Text = "";
+            }
+        }
+
+        private void btnAddGeneralPayment_Click(object sender, RoutedEventArgs e)
+        {
+            addPaymentMethods();
+        }
+
+        void addPaymentMethods()
+        {
+            // Primera validación, si txtPagoUSD están vacíos.
+            if (string.IsNullOrEmpty(txtPagoGeneralUSD.Text.Trim()))
+            {
+                MessageBox.Show("Por favor rellene los montos para realizar el(los) pago(s).");
+                return;
+            }
+            // Segunda validación, si el pago es cero.
+            if (double.Parse(txtPagoGeneralUSD.Text) <= 0)
+            {
+                MessageBox.Show("No puede ingresar un número negativo o cero como método de pago!.");
+                return;
+            }
+
+            double pagoUSD = double.Parse(txtPagoGeneralUSD.Text.ToString().Trim());
+            double SaldoUSD = 0;
+            foreach( DataRowView row in dgvDatos.Items)
+            {
+                SaldoUSD += double.Parse(row[6].ToString());
+            }
+
+            // Tercera validación, si el pago es mayor al saldo pendiente.
+            if (pagoUSD > SaldoUSD)
+            {
+                MessageBox.Show("ATENCIÓN, EL MONTO INGRESADO NO ES VÁLIDO PORQUE SUPERA EL SALDO TOTAL DEL/LOS SUBLOTE/S \n" +
+                    "MONTO INGRESADO: " + pagoUSD + " $.\n" +
+                    "SALDO TOTAL:" + SaldoUSD + " $.", "RESULTADO DE LA OPERACIÓN", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Si se cumplen las validaciones, se procede a registrar el pago.
+            if (MessageBox.Show("Está a punto de saldar uno o más sublotes con saldo pendiente. ¿Está seguro de que desea continuar con el pago?", "REGISTRAR PAGOS Y ACTUALIZAR SUBLOTES", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                List<int> listaIDSublotes = new List<int>();
+                List<double> listaSaldosUSD = new List<double>();
+                foreach (DataRowView row in dgvDatos.Items)
+                {
+                    int idSublote = int.Parse(row.Row.ItemArray[0].ToString());
+                    double saldoUSD = double.Parse(row.Row.ItemArray[6].ToString());
+                    if (saldoUSD > 0)
+                    {
+                        listaIDSublotes.Add(idSublote);
+                        listaSaldosUSD.Add(saldoUSD);
+                    }
+                }
+                string mensaje = "";
+
+                int i = 0;
+
+                implProducto = new ProductoImpl();
+
+                while (pagoUSD > 0 && i < listaIDSublotes.Count)
+                {
+                    int id = listaIDSublotes[i];
+                    double saldo = listaSaldosUSD[i];
+
+                    double montoAPagar = pagoUSD >= saldo ? saldo : pagoUSD;
+
+                    PagoSublote pagoSublote = new PagoSublote(id, montoAPagar, DateTime.Now);
+                    int resultado = implProducto.InsertPaymentSubBatch(pagoSublote);
+
+                    if (resultado > 0)
+                    {
+                        mensaje += montoAPagar == saldo
+                            ? $"¡Pago EXITOSO en el lote #{id}!\n"
+                            : $"Se pagó PARCIALMENTE el lote #{id}\n";
+                    }
+                    else
+                    {
+                        mensaje += "Error\n";
+                    }
+
+                    pagoUSD -= montoAPagar;
+                    pagoUSD = Math.Round(pagoUSD, 2);
+                    i++;
+                }
+
+                MessageBox.Show(mensaje, "RESULTADO DE LA OPERACIÓN", MessageBoxButton.OK, MessageBoxImage.Information);
+                txtPagoGeneralUSD.Text = "";
+                SelectSublotes(txtNombreProveedor.Text, 0.01);
             }
         }
     }

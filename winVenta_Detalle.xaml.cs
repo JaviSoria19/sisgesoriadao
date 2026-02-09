@@ -8,6 +8,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -131,8 +132,16 @@ namespace sisgesoriadao
                     if (esVentaPorMayor == 1)
                     {
                         txtTitulo.Text = "NOTA DE VENTA";
+                        txtTitulo.Foreground = new SolidColorBrush(System.Windows.Media.Colors.DarkBlue);
                         thTotal.Text = "TOTAL $.";
                         txtSubtituloPagos.Text = "PAGOS ($.)";
+                        shapeFirmaResponsable.Visibility = Visibility.Hidden;
+                        txtFirmaResponsable.Visibility = Visibility.Hidden;
+                        shapeFirmaCliente.Visibility = Visibility.Hidden;
+                        txtFirmaCliente.Visibility = Visibility.Hidden;
+                        txtDisclaimer.Visibility = Visibility.Hidden;
+                        txtThanks.Visibility = Visibility.Hidden;
+                        imgQR.Visibility = Visibility.Hidden;
                     }
 
                     txtIdVenta.Text = "Nro.: " + idVenta.ToString("D5");

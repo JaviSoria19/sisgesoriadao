@@ -100,11 +100,11 @@ namespace sisgesoriadao
                 implEmpleado = new EmpleadoImpl();
                 dataTable = implEmpleado.SelectForComboBox();
                 listcomboboxEmpleado = (from DataRow dr in dataTable.Rows
-                                         select new ComboboxItem()
-                                         {
-                                             Valor = Convert.ToByte(dr["idEmpleado"]),
-                                             Texto = dr["empleado"].ToString()
-                                         }).ToList();
+                                        select new ComboboxItem()
+                                        {
+                                            Valor = Convert.ToByte(dr["idEmpleado"]),
+                                            Texto = dr["empleado"].ToString()
+                                        }).ToList();
                 foreach (var item in listcomboboxEmpleado)
                 {
                     cbxEmployees.Items.Add(item);
@@ -254,6 +254,9 @@ namespace sisgesoriadao
             stackpanelCustomerFound.Visibility = Visibility.Visible;
             stackpanelCustomerForm.Visibility = Visibility.Collapsed;
             stackpanelCustomerButtons.Visibility = Visibility.Collapsed;
+
+            lblCustomerNumeroCI.Foreground = new SolidColorBrush(Colors.ForestGreen);
+            lblCustomerNumeroCelular.Foreground = new SolidColorBrush(Colors.ForestGreen);
         }
 
         private void BuscarYMostrarClientePorCI(string numeroCI)
@@ -280,8 +283,8 @@ namespace sisgesoriadao
         private void MostrarDatosClienteEnPantalla()
         {
             acbtxtNameCustomer.Text = cliente.Nombre.Trim();
-            lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
-            lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
+            lblCustomerNumeroCelular.Text = "Celular: " + cliente.NumeroCelular.Trim();
+            lblCustomerNumeroCI.Text = "C.I.: " + cliente.NumeroCI.Trim();
         }
 
         private void btnCancelNewCustomer_Click(object sender, RoutedEventArgs e)
@@ -307,7 +310,7 @@ namespace sisgesoriadao
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = Session.NombreUsuario;
-            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
+            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString("0.00");
             txtSearchProduct.Focus();
             txtSucursal.Text = Session.Sucursal_NombreSucursal;
             acbxGetClientesFromDatabase();
@@ -344,23 +347,23 @@ namespace sisgesoriadao
             currentContainer.Text = currentContainer.Text.ToUpper();
             currentContainer.SelectionStart = caretPosition++;
         }
-        public void labelClear(Label label)
+        public void labelClear(TextBlock label)
         {
             label.Foreground = new SolidColorBrush(Colors.Transparent);
             label.Background = new SolidColorBrush(Colors.Transparent);
-            label.Content = "";
+            label.Text = "";
         }
-        public void labelSuccess(Label label)
+        public void labelSuccess(TextBlock label)
         {
             label.Foreground = new SolidColorBrush(Colors.Black);
             label.Background = new SolidColorBrush(Colors.SpringGreen);
         }
-        public void labelWarning(Label label)
+        public void labelWarning(TextBlock label)
         {
             label.Foreground = new SolidColorBrush(Colors.Black);
             label.Background = new SolidColorBrush(Colors.Gold);
         }
-        public void labelDanger(Label label)
+        public void labelDanger(TextBlock label)
         {
             label.Foreground = new SolidColorBrush(Colors.Black);
             label.Background = new SolidColorBrush(Colors.Red);
@@ -430,7 +433,7 @@ namespace sisgesoriadao
                 {
                     AddProductAndWarrantyToListAndDataGrid(producto, categoria);
                     LimpiarCampoBusquedaProducto();
-                    lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
+                    lblDataGridRows.Text = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
                 }
             }
             catch (Exception ex)
@@ -456,7 +459,7 @@ namespace sisgesoriadao
                     break;
             }
 
-            lblSearchProductInfo.Content = mensaje;
+            lblSearchProductInfo.Text = mensaje;
             txtSearchProduct.Text = "";
         }
 
@@ -483,7 +486,7 @@ namespace sisgesoriadao
         void LimpiarCampoBusquedaProducto()
         {
             labelClear(lblSearchProductInfo);
-            lblSearchProductInfo.Content = "";
+            lblSearchProductInfo.Text = "";
             txtSearchProduct.Text = "";
         }
 
@@ -663,9 +666,12 @@ namespace sisgesoriadao
                     {
                         stackpanelCustomerFound.Visibility = Visibility.Visible;
                         acbtxtNameCustomer.Text = cliente.Nombre.Trim();
-                        lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
-                        lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
+                        lblCustomerNumeroCelular.Text = "Celular: " + cliente.NumeroCelular.Trim();
+                        lblCustomerNumeroCI.Text = "C.I.: " + cliente.NumeroCI.Trim();
                         btnEditCustomer.IsEnabled = true;
+
+                        lblCustomerNumeroCI.Foreground = new SolidColorBrush(Colors.ForestGreen);
+                        lblCustomerNumeroCelular.Foreground = new SolidColorBrush(Colors.ForestGreen);
                     }
                     else
                     {
@@ -679,6 +685,10 @@ namespace sisgesoriadao
                         btnSaveNewCustomer.BorderBrush = new SolidColorBrush(Colors.LimeGreen);
                         btnSaveNewCustomer.Content = "REGISTRAR CLIENTE";
                         btnEditCustomer.IsEnabled = false;
+
+                        //colores por defecto
+                        lblCustomerNumeroCI.Foreground = new SolidColorBrush(Colors.Gray);
+                        lblCustomerNumeroCelular.Foreground = new SolidColorBrush(Colors.Gray);
                     }
                 }
                 catch (Exception ex)
@@ -740,9 +750,12 @@ namespace sisgesoriadao
                         {
                             stackpanelCustomerFound.Visibility = Visibility.Visible;
                             acbtxtNameCustomer.Text = cliente.Nombre.Trim();
-                            lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
-                            lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
+                            lblCustomerNumeroCelular.Text = "Celular: " + cliente.NumeroCelular.Trim();
+                            lblCustomerNumeroCI.Text = "C.I.: " + cliente.NumeroCI.Trim();
                             btnEditCustomer.IsEnabled = true;
+
+                            lblCustomerNumeroCI.Foreground = new SolidColorBrush(Colors.ForestGreen);
+                            lblCustomerNumeroCelular.Foreground = new SolidColorBrush(Colors.ForestGreen);
                         }
                         else
                         {
@@ -856,7 +869,7 @@ namespace sisgesoriadao
                 }
             }
         }
-        
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (listaHelper.Count > 0 && ventaRegistrada == false)
@@ -912,7 +925,7 @@ namespace sisgesoriadao
 
                     Session.RemoverProductoEnCola(listaHelper[dgvProductos.SelectedIndex].codigoSublote);
                     listaHelper.RemoveAt(dgvProductos.SelectedIndex);
-                    lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
+                    lblDataGridRows.Text = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
                 }
             }
         }
@@ -1115,7 +1128,7 @@ namespace sisgesoriadao
 
         private void tglWholesale_Click(object sender, RoutedEventArgs e)
         {
-            if(tglWholesale.IsChecked == true)
+            if (tglWholesale.IsChecked == true)
             {
                 esVentaPorMayor = 1;
             }

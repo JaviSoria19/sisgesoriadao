@@ -172,8 +172,8 @@ namespace sisgesoriadao
                                 if (n > 0)
                                 {
                                     acbtxtNameCustomer.Text = cliente.Nombre.Trim();
-                                    lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
-                                    lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
+                                    lblCustomerNumeroCelular.Text = "Celular: " + cliente.NumeroCelular.Trim();
+                                    lblCustomerNumeroCI.Text = "C.I.: " + cliente.NumeroCI.Trim();
                                     DisableCustomerButtons();
                                     acbxGetClientesFromDatabase();
                                     stackpanelCustomerFound.Visibility = Visibility.Visible;
@@ -212,7 +212,7 @@ namespace sisgesoriadao
         {
             idVenta = Session.IdVentaDetalle;
             txtBlockWelcome.Text = Session.NombreUsuario;
-            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
+            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString("0.00");
             txtSucursal.Text = Session.Sucursal_NombreSucursal;
             acbxGetClientesFromDatabase();
             cbxPaymentMethod.Items.Add(new ComboboxItem("EFECTIVO", 1));
@@ -299,8 +299,8 @@ namespace sisgesoriadao
                 {
                     stackpanelCustomerFound.Visibility = Visibility.Visible;
                     acbtxtNameCustomer.Text = cliente.Nombre.Trim();
-                    lblCustomerNumeroCelular.Content = "Celular: " + cliente.NumeroCelular.Trim();
-                    lblCustomerNumeroCI.Content = "C.I.: " + cliente.NumeroCI.Trim();
+                    lblCustomerNumeroCelular.Text = "Celular: " + cliente.NumeroCelular.Trim();
+                    lblCustomerNumeroCI.Text = "C.I.: " + cliente.NumeroCI.Trim();
                 }
             }
             catch (Exception ex)
@@ -457,7 +457,7 @@ namespace sisgesoriadao
                     clipboardTexto += item.codigoSublote + " " + item.nombreProducto + " " + item.identificador + "\n";
                 }
                 clipboardTexto = clipboardTexto.Trim();
-                lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
+                lblDataGridRows.Text = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
             }
             catch (Exception ex)
             {
@@ -752,7 +752,7 @@ namespace sisgesoriadao
                 MessageBox.Show("Por favor rellene los montos para realizar el pago.");
             }
         }
-        private void dgvMetodosPago_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void btndgvRemoverMetodoPago_Click(object sender, SelectionChangedEventArgs e)
         {
             removeFromDGVPaymentMethod(dgvMetodosPago.SelectedIndex);
         }
@@ -1209,7 +1209,7 @@ namespace sisgesoriadao
                     txtVentaTotalSaldoBOB.Text = venta_saldoBOB.ToString();
                     listaHelper.Remove(listaHelper[dgvProductos.SelectedIndex]);
                     dgvProductos.Items.Refresh();
-                    lblDataGridRows.Content = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
+                    lblDataGridRows.Text = "NÚMERO DE REGISTROS: " + dgvProductos.Items.Count;
                     Venta venta = new Venta
                     {
                         IdVenta = idVenta,
@@ -1335,6 +1335,11 @@ namespace sisgesoriadao
             {
                 MessageBox.Show("ERROR AL CAMBIAR EL TIPO DE VENTA, INTENTE NUEVAMENTE.");
             }
+        }
+
+        private void btndgvRemoverMetodoPago_Click(object sender, RoutedEventArgs e)
+        {
+            removeFromDGVPaymentMethod(dgvMetodosPago.SelectedIndex);
         }
 
         public class DataGridRowDetalleHelper

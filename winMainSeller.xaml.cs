@@ -20,7 +20,7 @@ namespace sisgesoriadao
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             txtBlockWelcome.Text = "Bienvenid@ a " + Session.Sucursal_NombreSucursal + " , " + Session.NombreUsuario;
-            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
+            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString("0.00");
             txtVersionApp.Text = Session.VersionApp;
             LoadInfoFromDB();
             if (Session.TemaPredeterminado == 1)
@@ -113,7 +113,7 @@ namespace sisgesoriadao
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             LoadInfoFromDB();
-            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
+            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString("0.00");
         }
         void LoadInfoFromDB()
         {

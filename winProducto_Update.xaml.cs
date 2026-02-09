@@ -263,11 +263,12 @@ namespace sisgesoriadao
                 }
                 dgvProductos.ItemsSource = null;
                 dgvProductos.ItemsSource = listaHelper;
+                btnSave.IsEnabled = true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                throw;
+                btnSave.IsEnabled = false;
             }
         }
         private void btnSearch_Click(object sender, RoutedEventArgs e)

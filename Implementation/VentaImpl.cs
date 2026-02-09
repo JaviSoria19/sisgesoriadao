@@ -471,7 +471,7 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectPaymentMethodsFromSale(int IdVenta)
         {
-            string query = @"SELECT idMetodoPago AS ID, montoUSD AS 'Monto USD', montoBOB AS 'Monto Bs', IF(Tipo = 1, 'EFECTIVO',IF(Tipo = 2, 'TRANSFERENCIA BANCARIA', 'TARJETA')) AS 'Metodo Pago', " + Session.FormatoFechaMySql("fechaRegistro") + @" AS Fecha FROM Metodo_Pago
+            string query = @"SELECT idMetodoPago AS ID, montoUSD, montoBOB, IF(Tipo = 1, 'EFECTIVO',IF(Tipo = 2, 'TRANSFERENCIA BANCARIA', 'TARJETA')) AS tipo, " + Session.FormatoFechaMySql("fechaRegistro") + @" AS fechaRegistro FROM Metodo_Pago
                             WHERE idVenta = @idVenta";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idVenta", IdVenta);

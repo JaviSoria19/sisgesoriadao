@@ -33,7 +33,7 @@ namespace sisgesoriadao
             acbxGetProductosFromDatabase();
             acbxGetClientesFromDatabase();
             txtBlockWelcome.Text = Session.NombreUsuario;
-            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString();
+            txtCambioDolar.Text = Session.Ajuste_Cambio_Dolar.ToString("0.00");
             acbtxtNombreCliente.Focus();
         }
         private void btnReturn_Click(object sender, RoutedEventArgs e)
