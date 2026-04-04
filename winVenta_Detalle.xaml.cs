@@ -2,7 +2,7 @@
 using sisgesoriadao.Implementation;
 using sisgesoriadao.Model;
 using System;
-using System.Data;//ADO.NET
+using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -11,7 +11,6 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-
 namespace sisgesoriadao
 {
     /// <summary>
@@ -22,10 +21,15 @@ namespace sisgesoriadao
         VentaImpl implVenta;
         string clipboardTexto = "";
         int idVenta = 0;
+
         public winVenta_Detalle()
         {
             InitializeComponent();
         }
+
+        // ════════════════════════════════════════════════════════════
+        //  CARGA DE VENTANA
+        // ════════════════════════════════════════════════════════════
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -37,6 +41,10 @@ namespace sisgesoriadao
                 btnModifySale.IsEnabled = false;
             }
         }
+
+        // ════════════════════════════════════════════════════════════
+        //  BOTONES EXISTENTES
+        // ════════════════════════════════════════════════════════════
 
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
@@ -50,41 +58,37 @@ namespace sisgesoriadao
                 btnPrintPDF.IsEnabled = false;
                 btnPrint.IsEnabled = false;
                 System.Windows.FrameworkElement fe = ZonaImpresionGrid as System.Windows.FrameworkElement;
-                if (fe == null)
-                    return;
+                if (fe == null) return;
 
                 PrintDialog pd = new PrintDialog();
                 if (pd.ShowDialog() == true)
                 {
-                    //store original scale
                     Transform originalScale = fe.LayoutTransform;
-                    //get selected printer capabilities
-                    System.Printing.PrintCapabilities capabilities = pd.PrintQueue.GetPrintCapabilities(pd.PrintTicket);
+                    System.Printing.PrintCapabilities capabilities =
+                        pd.PrintQueue.GetPrintCapabilities(pd.PrintTicket);
 
-                    //get scale of the print wrt to screen of WPF visual
-                    double scale = Math.Min(capabilities.PageImageableArea.ExtentWidth / fe.ActualWidth, capabilities.PageImageableArea.ExtentHeight /
-                                   fe.ActualHeight);
+                    double scale = Math.Min(
+                        capabilities.PageImageableArea.ExtentWidth / fe.ActualWidth,
+                        capabilities.PageImageableArea.ExtentHeight / fe.ActualHeight);
 
-                    //Transform the Visual to scale
                     fe.LayoutTransform = new ScaleTransform(scale, scale);
 
-                    //get the size of the printer page
-                    System.Windows.Size sz = new System.Windows.Size(capabilities.PageImageableArea.ExtentWidth, capabilities.PageImageableArea.ExtentHeight);
+                    System.Windows.Size sz = new System.Windows.Size(
+                        capabilities.PageImageableArea.ExtentWidth,
+                        capabilities.PageImageableArea.ExtentHeight);
 
-                    //update the layout of the visual to the printer page size.
                     fe.Measure(sz);
-                    fe.Arrange(new System.Windows.Rect(new System.Windows.Point(capabilities.PageImageableArea.OriginWidth, capabilities.PageImageableArea.OriginHeight), sz));
+                    fe.Arrange(new System.Windows.Rect(
+                        new System.Windows.Point(
+                            capabilities.PageImageableArea.OriginWidth,
+                            capabilities.PageImageableArea.OriginHeight), sz));
 
-                    //now print the visual to printer to fit on the one page.
                     pd.PrintVisual(ZonaImpresionGrid, "My Print");
-
-                    //apply the original transform.
                     fe.LayoutTransform = originalScale;
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -94,6 +98,7 @@ namespace sisgesoriadao
                 Focus();
             }
         }
+
         private void btnPrintPDF_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -108,7 +113,6 @@ namespace sisgesoriadao
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -117,6 +121,381 @@ namespace sisgesoriadao
                 btnPrint.IsEnabled = true;
             }
         }
+
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("¡Se ha copiado la descripción de los Productos e IMEI's o S/N en el portapapeles!");
+            Clipboard.SetText(clipboardTexto);
+        }
+
+        private void btnModifySale_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Session.IdVentaDetalle = idVenta;
+                winVenta_Update winVenta_Update = new winVenta_Update();
+                winVenta_Update.Show();
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                throw;
+            }
+        }
+
+        // ════════════════════════════════════════════════════════════
+        //  NUEVO — BOTÓN IMPRIMIR ROLLO
+        // ════════════════════════════════════════════════════════════
+
+        private void btnPrintRollo_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                btnPrintRollo.IsEnabled = false;
+
+                // Ancho en píxeles del rollo:
+                //   58 mm → 211 px  |  80 mm → 302 px  (a 96 dpi)
+                // Cambia este valor según el ancho de tu impresora.
+                const double TICKET_WIDTH = 302;
+
+                PrintDialog pd = new PrintDialog();
+                if (pd.ShowDialog() != true) return;
+
+                // Configurar el ticket de impresión para rollo
+                var pt = pd.PrintTicket;
+                pt.PageMediaSize = new System.Printing.PageMediaSize(
+                    System.Printing.PageMediaSizeName.Unknown,
+                    TICKET_WIDTH,
+                    2800    // alto generoso; la térmica corta al terminar el contenido
+                );
+                pt.PageOrientation = System.Printing.PageOrientation.Portrait;
+                pd.PrintTicket = pt;
+
+                // Construir y medir el visual del ticket
+                StackPanel rollo = ConstruirTicketRollo(TICKET_WIDTH);
+
+                // Envolver en un Border que actúa como contenedor estricto
+                Border contenedor = new Border
+                {
+                    Width = TICKET_WIDTH,
+                    Child = rollo,
+                    ClipToBounds = true,   // corta cualquier cosa que se desborde
+                    Background = System.Windows.Media.Brushes.White,
+                    Padding = new Thickness(0)
+                };
+
+                contenedor.Measure(new System.Windows.Size(TICKET_WIDTH, double.PositiveInfinity));
+                contenedor.Arrange(new System.Windows.Rect(
+                    new System.Windows.Size(TICKET_WIDTH, contenedor.DesiredSize.Height)));
+                contenedor.UpdateLayout();
+
+                pd.PrintVisual(contenedor, "Ticket Rollo - " + txtIdVenta.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al imprimir en rollo: " + ex.Message);
+            }
+            finally
+            {
+                btnPrintRollo.IsEnabled = true;
+            }
+        }
+
+        // ════════════════════════════════════════════════════════════
+        //  NUEVO — CONSTRUCTOR DEL TICKET EN ROLLO
+        // ════════════════════════════════════════════════════════════
+
+        private StackPanel ConstruirTicketRollo(double ticketWidth)
+        {
+            const double MARGIN = 16;
+            const double FS = 11;
+            const double FS_SM = 9.5;
+            const double FS_LG = 14;
+
+            var ticket = new StackPanel
+            {
+                Width = ticketWidth - (MARGIN * 2), // ancho real descontando márgenes
+                MaxWidth = ticketWidth - (MARGIN * 2),
+                Orientation = Orientation.Vertical,
+                Margin = new Thickness(MARGIN),
+                Background = System.Windows.Media.Brushes.White
+            };
+
+            // ── ENCABEZADO ───────────────────────────────────────────
+            ticket.Children.Add(TB(txtSucursal_nombre.Text, FS_LG, bold: true, center: true));
+            ticket.Children.Add(TB(txtSucursal_direccion.Text, FS_SM, center: true));
+            ticket.Children.Add(TB(txtSucursal_telefono.Text, FS_SM, center: true));
+            ticket.Children.Add(TB(txtSucursal_correo.Text, FS_SM, center: true));
+            ticket.Children.Add(Sep());
+
+            // ── TIPO DE DOCUMENTO Y NÚMERO ───────────────────────────
+            ticket.Children.Add(TB(txtTitulo.Text, FS_LG, bold: true, center: true));
+            ticket.Children.Add(TB(txtIdVenta.Text, FS, bold: true, center: true));
+            ticket.Children.Add(TB(txtVenta_fecha.Text, FS_SM));
+            ticket.Children.Add(Sep());
+
+            // ── DATOS DEL CLIENTE ────────────────────────────────────
+            ticket.Children.Add(TB(txtCliente_nombre.Text, FS_SM, bold: true));
+            ticket.Children.Add(TB(txtCliente_celular.Text, FS_SM));
+            ticket.Children.Add(TB(txtCliente_ci.Text, FS_SM));
+            ticket.Children.Add(Sep());
+
+            // ── CABECERA TABLA DE PRODUCTOS ──────────────────────────
+            ticket.Children.Add(CabeceraProductos(FS_SM));
+            ticket.Children.Add(LineaDivisora());
+
+            // ── ITEMS ────────────────────────────────────────────────
+            // Leemos los mismos TextBlock ya cargados por SelectDetalle()
+            // y los dividimos línea por línea.
+            string[] descripciones = txtProducto_Descripcion.Text.Split('\n');
+            string[] detalles = txtProducto_Detalle.Text.Split('\n');
+            string[] garantias = txtProducto_Garantia.Text.Split('\n');
+            string[] cantidades = txtProducto_Cantidad.Text.Split('\n');
+            string[] precios = txtProducto_Precio.Text.Split('\n');
+            string[] totales = txtProducto_TotalBOB.Text.Split('\n');
+
+            // Filtramos líneas que son solo espacios (los "\n \n" generan blancos)
+            var descFilt = Array.FindAll(descripciones, s => s.Trim().Length > 1);
+            var detFilt = Array.FindAll(detalles, s => s.Trim().Length > 0);
+            var garFilt = Array.FindAll(garantias, s => s.Trim().Length > 0);
+            var cantFilt = Array.FindAll(cantidades, s => s.Trim().Length > 0);
+            var precFilt = Array.FindAll(precios, s => s.Trim().Length > 0);
+            var totFilt = Array.FindAll(totales, s => s.Trim().Length > 0);
+
+            int count = Math.Min(descFilt.Length, cantFilt.Length);
+            for (int i = 0; i < count; i++)
+            {
+                ticket.Children.Add(FilaProducto(
+                    desc: descFilt[i].Trim(),
+                    detalle: i < detFilt.Length ? detFilt[i].Trim() : "",
+                    garantia: i < garFilt.Length ? garFilt[i].Trim() : "",
+                    cant: cantFilt[i].Trim(),
+                    /*precio: i < precFilt.Length ? precFilt[i].Trim() : "",*/
+                    total: i < totFilt.Length ? totFilt[i].Trim() : "",
+                    fs: FS_SM
+                ));
+            }
+
+            ticket.Children.Add(Sep());
+
+            // ── TOTALES ──────────────────────────────────────────────
+            ticket.Children.Add(FilaDoble("TOTAL:", txtVenta_Total.Text, FS_LG, bold: true));
+            ticket.Children.Add(FilaDoble("Adelanto:", txtVenta_Adelanto.Text, FS));
+            ticket.Children.Add(FilaDoble("Saldo:", txtVenta_Saldo.Text, FS));
+            ticket.Children.Add(Sep());
+
+            // ── PAGOS ────────────────────────────────────────────────
+            ticket.Children.Add(TB(txtSubtituloPagos.Text, FS, bold: true));
+            ticket.Children.Add(TB(txtPagos.Text, FS_SM));
+            ticket.Children.Add(Sep());
+
+            // ── OBSERVACIONES ────────────────────────────────────────
+            ticket.Children.Add(TB(txtObservaciones.Text, FS_SM, wrap: true));
+            ticket.Children.Add(Sep());
+
+            // ── QR (solo en venta minorista) ─────────────────────────
+            if (imgQR.Visibility == Visibility.Visible && imgQR.Source != null)
+            {
+                var qr = new System.Windows.Controls.Image
+                {
+                    Source = imgQR.Source,
+                    Width = 90,
+                    Height = 90,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    Margin = new Thickness(0, 4, 0, 4)
+                };
+                ticket.Children.Add(qr);
+            }
+
+            // ── PIE ──────────────────────────────────────────────────
+            ticket.Children.Add(TB("¡GRACIAS POR SU PREFERENCIA!", FS, bold: true, center: true));
+            ticket.Children.Add(TB("La garantía de los celulares y tablet's es de 1 año.", FS_SM, bold: false, center: true));
+            ticket.Children.Add(new Border { Height = 28 }); // espacio antes del corte
+
+            return ticket;
+        }
+
+        // ════════════════════════════════════════════════════════════
+        //  HELPERS VISUALES PARA EL TICKET
+        // ════════════════════════════════════════════════════════════
+
+        /// <summary>TextBlock configurable.</summary>
+        private System.Windows.Controls.TextBlock TB(
+            string texto,
+            double fs,
+            bool bold = false,
+            bool center = false,
+            bool wrap = true)
+        {
+            return new System.Windows.Controls.TextBlock
+            {
+                Text = texto,
+                FontSize = fs,
+                FontWeight = bold ? FontWeights.Bold : FontWeights.Normal,
+                TextAlignment = center ? TextAlignment.Center : TextAlignment.Left,
+                HorizontalAlignment = center
+                    ? HorizontalAlignment.Center
+                    : HorizontalAlignment.Left,
+                TextWrapping = wrap ? TextWrapping.Wrap : TextWrapping.NoWrap,
+                Margin = new Thickness(0, 1, 0, 1)
+            };
+        }
+
+        /// <summary>Fila con etiqueta a la izquierda y valor a la derecha.</summary>
+        private Grid FilaDoble(string izq, string der, double fs, bool bold = false)
+        {
+            var g = new Grid();
+            g.ColumnDefinitions.Add(new ColumnDefinition
+            { Width = new GridLength(1, GridUnitType.Star) });
+            g.ColumnDefinitions.Add(new ColumnDefinition
+            { Width = new GridLength(1, GridUnitType.Star) });
+
+            var fw = bold ? FontWeights.Bold : FontWeights.Normal;
+
+            var tbIzq = new System.Windows.Controls.TextBlock
+            {
+                Text = izq,
+                FontSize = fs,
+                FontWeight = fw,
+                HorizontalAlignment = HorizontalAlignment.Left
+            };
+            var tbDer = new System.Windows.Controls.TextBlock
+            {
+                Text = der,
+                FontSize = fs,
+                FontWeight = fw,
+                HorizontalAlignment = HorizontalAlignment.Right
+            };
+
+            Grid.SetColumn(tbIzq, 0);
+            Grid.SetColumn(tbDer, 1);
+            g.Children.Add(tbIzq);
+            g.Children.Add(tbDer);
+            g.Margin = new Thickness(0, 1, 0, 1);
+            return g;
+        }
+
+        /// <summary>Encabezado de la tabla de productos.</summary>
+        private Grid CabeceraProductos(double fs)
+        {
+            var g = new Grid();
+            // Desc | Detalle | Garantia | Cant | Precio | Total
+            g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2.5, GridUnitType.Star) });
+            g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1.5, GridUnitType.Star) });
+            //g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            //g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.7, GridUnitType.Star) });
+            //g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1.3, GridUnitType.Star) });
+            g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            string[] cols = { "Descripción", "Detalle", /*"Garantía", "Cant.", "Precio",*/ "Total" };
+            HorizontalAlignment[] aligns =
+            {
+                HorizontalAlignment.Left,   HorizontalAlignment.Left,
+                /*HorizontalAlignment.Center, HorizontalAlignment.Center,
+                HorizontalAlignment.Right,*/ HorizontalAlignment.Right
+            };
+
+            for (int i = 0; i < cols.Length; i++)
+            {
+                var tb = new System.Windows.Controls.TextBlock
+                {
+                    Text = cols[i],
+                    FontSize = fs,
+                    FontWeight = FontWeights.Bold,
+                    HorizontalAlignment = aligns[i]
+                };
+                Grid.SetColumn(tb, i);
+                g.Children.Add(tb);
+            }
+            return g;
+        }
+
+        /// <summary>Fila de un producto en el ticket.</summary>
+        private Grid FilaProducto(
+            string desc, string detalle, string garantia,
+            string cant, /*string precio,*/ string total,
+            double fs)
+        {
+            var g = new Grid();
+            g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2.5, GridUnitType.Star) });
+            g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1.5, GridUnitType.Star) });
+            //g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            //g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.7, GridUnitType.Star) });
+            //g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1.3, GridUnitType.Star) });
+            g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            g.Margin = new Thickness(1, 1, 1, 2);
+
+            var tbDesc = new System.Windows.Controls.TextBlock
+            {
+                Text = desc,
+                FontSize = fs,
+                TextWrapping = TextWrapping.Wrap,
+                HorizontalAlignment = HorizontalAlignment.Left
+            };
+            var tbDet = new System.Windows.Controls.TextBlock
+            {
+                Text = detalle,
+                FontSize = fs,
+                TextWrapping = TextWrapping.Wrap,
+                HorizontalAlignment = HorizontalAlignment.Left
+            };
+            /*var tbGar = new System.Windows.Controls.TextBlock
+            {
+                Text = garantia,
+                FontSize = fs,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+            var tbCant = new System.Windows.Controls.TextBlock
+            {
+                Text = cant,
+                FontSize = fs,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+            var tbPrec = new System.Windows.Controls.TextBlock
+            {
+                Text = precio,
+                FontSize = fs,
+                HorizontalAlignment = HorizontalAlignment.Right
+            };*/
+            var tbTot = new System.Windows.Controls.TextBlock
+            {
+                Text = total,
+                FontSize = fs,
+                HorizontalAlignment = HorizontalAlignment.Right
+            };
+
+            Grid.SetColumn(tbDesc, 0); Grid.SetColumn(tbDet, 1);
+            /*Grid.SetColumn(tbGar, 2); Grid.SetColumn(tbCant, 3);
+            Grid.SetColumn(tbPrec, 4);*/ Grid.SetColumn(tbTot, 2);
+
+            g.Children.Add(tbDesc); g.Children.Add(tbDet);
+            /*g.Children.Add(tbGar); g.Children.Add(tbCant);
+            g.Children.Add(tbPrec);*/
+            g.Children.Add(tbTot);
+            return g;
+        }
+
+        /// <summary>Línea separadora sólida negra.</summary>
+        private Border Sep() => new Border
+        {
+            BorderThickness = new Thickness(0, 1, 0, 0),
+            BorderBrush = System.Windows.Media.Brushes.Black,
+            Margin = new Thickness(0, 4, 0, 4)
+        };
+
+        /// <summary>Línea divisora delgada gris (entre cabecera e ítems).</summary>
+        private Border LineaDivisora() => new Border
+        {
+            BorderThickness = new Thickness(0, 1, 0, 0),
+            BorderBrush = System.Windows.Media.Brushes.Gray,
+            Margin = new Thickness(0, 2, 0, 2)
+        };
+
+        // ════════════════════════════════════════════════════════════
+        //  CARGA DE DATOS (sin cambios)
+        // ════════════════════════════════════════════════════════════
+
         void SelectDetalle()
         {
             if (Session.IdVentaDetalle != 0)
@@ -154,13 +533,14 @@ namespace sisgesoriadao
                     txtCliente_celular.Text = "Telefono/Celular: " + dt.Rows[0][6].ToString();
                     txtCliente_ci.Text = "C.I.: " + dt.Rows[0][7].ToString();
 
-                    txtObservaciones.Text = "Observaciones: " + dt.Rows[0][20].ToString() + " | Ejecutivo de ventas: " + dt.Rows[0][8].ToString() + " - Cel.: " + dt.Rows[0][9].ToString();
+                    txtObservaciones.Text = "Observaciones: " + dt.Rows[0][20].ToString()
+                        + " | Ejecutivo de ventas: " + dt.Rows[0][8].ToString()
+                        + " - Cel.: " + dt.Rows[0][9].ToString();
 
                     txtVenta_fecha.Text = "Fecha: " + dt.Rows[0][21].ToString();
 
                     double venta_total, venta_saldo, venta_adelanto = 0;
 
-                    // Si es venta por mayor se muestran los totales en USD
                     if (esVentaPorMayor == 1)
                     {
                         venta_total = double.Parse(dt.Rows[0][22].ToString());
@@ -174,11 +554,16 @@ namespace sisgesoriadao
                         venta_adelanto = venta_total - venta_saldo;
                     }
 
-                    txtVenta_Total.Text = (esVentaPorMayor == 1) ? venta_total + " $." : venta_total + " Bs.";
-                    txtVenta_Adelanto.Text = (esVentaPorMayor == 1) ? Math.Round(venta_adelanto, 2) + " $." : Math.Round(venta_adelanto, 2) + " Bs.";
-                    txtVenta_Saldo.Text = (esVentaPorMayor == 1) ? venta_saldo + " $." : venta_saldo + " Bs.";
+                    txtVenta_Total.Text = (esVentaPorMayor == 1)
+                        ? venta_total + " $."
+                        : venta_total + " Bs.";
+                    txtVenta_Adelanto.Text = (esVentaPorMayor == 1)
+                        ? Math.Round(venta_adelanto, 2) + " $."
+                        : Math.Round(venta_adelanto, 2) + " Bs.";
+                    txtVenta_Saldo.Text = (esVentaPorMayor == 1)
+                        ? venta_saldo + " $."
+                        : venta_saldo + " Bs.";
 
-                    
                     txtProducto_Descripcion.Text = "";
                     txtProducto_Detalle.Text = "";
                     txtProducto_Garantia.Text = "";
@@ -187,48 +572,51 @@ namespace sisgesoriadao
                     txtProducto_DescuentoPorcentaje.Text = "";
                     txtProducto_DescuentoBOB.Text = "";
                     txtProducto_TotalBOB.Text = "";
+
                     foreach (DataRow item in dt.Rows)
                     {
-                        if (item[10].ToString().Length > 45)// antes era a 40 cuando se mostraba el porcentaje de descuento
-                        {
+                        if (item[10].ToString().Length > 45)
                             txtProducto_Descripcion.Text += item[10].ToString() + "\n";
-                        }
                         else
-                        {
                             txtProducto_Descripcion.Text += item[10].ToString() + "\n \n";
-                        }
 
                         txtProducto_Detalle.Text += item[11].ToString() + "\n \n";
-                        txtProducto_Garantia.Text += (esVentaPorMayor == 1) ? "N/A\n \n" : item[12].ToString() + " Meses\n \n";
+                        txtProducto_Garantia.Text += (esVentaPorMayor == 1)
+                            ? "N/A\n \n"
+                            : item[12].ToString() + " Meses\n \n";
                         txtProducto_Cantidad.Text += item[13].ToString() + "\n \n";
                         txtProducto_Precio.Text += item[14].ToString() + "\n \n";
                         txtProducto_DescuentoPorcentaje.Text += item[15].ToString() + "\n \n";
                         txtProducto_DescuentoBOB.Text += item[16].ToString() + "\n \n";
-                        txtProducto_TotalBOB.Text += (esVentaPorMayor == 1) ? item[26].ToString() + "\n \n" : item[17].ToString() + "\n \n";
+                        txtProducto_TotalBOB.Text += (esVentaPorMayor == 1)
+                            ? item[26].ToString() + "\n \n"
+                            : item[17].ToString() + "\n \n";
 
                         clipboardTexto += item[10].ToString() + " " + item[11].ToString() + "\n";
                     }
                     clipboardTexto = clipboardTexto.Trim();
 
                     txtPagos.Text = "";
-                    DataTable dt_two = new DataTable();
-                    dt_two = implVenta.SelectSaleDetails2();
+                    DataTable dt_two = implVenta.SelectSaleDetails2();
 
                     if (dt_two.Rows.Count > 0)
                     {
                         foreach (DataRow item_two in dt_two.Rows)
                         {
-                            txtPagos.Text += (esVentaPorMayor == 1) ? item_two[2].ToString() + "    " + item_two[1].ToString() + "\n" : item_two[2].ToString() + "    " + item_two[0].ToString() + "\n";
+                            txtPagos.Text += (esVentaPorMayor == 1)
+                                ? item_two[2].ToString() + "    " + item_two[1].ToString() + "\n"
+                                : item_two[2].ToString() + "    " + item_two[0].ToString() + "\n";
                         }
                     }
                     else
                     {
                         txtPagos.Text = "-";
                     }
+
+                    // Generación del QR
                     QRCodeEncoder encoder = new QRCodeEncoder();
-                    Bitmap bitmap;
                     encoder.QRCodeScale = 8;
-                    bitmap = encoder.Encode(clipboardTexto);
+                    Bitmap bitmap = encoder.Encode(clipboardTexto);
                     using (var memory = new MemoryStream())
                     {
                         bitmap.Save(memory, ImageFormat.Png);
@@ -246,28 +634,6 @@ namespace sisgesoriadao
                 {
                     MessageBox.Show(ex.Message);
                 }
-            }
-        }
-
-        private void btnCopy_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("¡Se ha copiado la descripción de los Productos e IMEI's o S/N en el portapapeles!");
-            Clipboard.SetText(clipboardTexto);
-        }
-
-        private void btnModifySale_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Session.IdVentaDetalle = idVenta;
-                winVenta_Update winVenta_Update = new winVenta_Update();
-                winVenta_Update.Show();
-                Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                throw;
             }
         }
     }

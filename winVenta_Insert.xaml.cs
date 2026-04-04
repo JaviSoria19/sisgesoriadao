@@ -105,6 +105,7 @@ namespace sisgesoriadao
                                             Valor = Convert.ToByte(dr["idEmpleado"]),
                                             Texto = dr["empleado"].ToString()
                                         }).ToList();
+                cbxEmployees.Items.Add(new ComboboxItem(){ Texto = "SELECCIONE EMPLEADO", Valor = 0 });
                 foreach (var item in listcomboboxEmpleado)
                 {
                     cbxEmployees.Items.Add(item);
@@ -329,15 +330,6 @@ namespace sisgesoriadao
             txtObservacionVenta.Text = "-";
 
             cbxGetEmpleadoFromDatabase();
-
-            foreach (var item in cbxEmployees.Items)
-            {
-                if (item is ComboboxItem comboboxItem && comboboxItem.Valor == Session.IdEmpleado)
-                {
-                    cbxEmployees.SelectedItem = item;
-                    break;
-                }
-            }
         }
         private void TextBoxUppercase(object sender, KeyEventArgs e)
         {
@@ -584,6 +576,11 @@ namespace sisgesoriadao
                 return false;
             }
 
+            if ((cbxEmployees.SelectedItem as ComboboxItem).Valor == 0)
+            {
+                MessageBox.Show("¡No puede registrar la venta sin seleccionar un empleado responsable!");
+                return false;
+            }
             return true;
         }
 

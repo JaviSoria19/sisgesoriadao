@@ -224,7 +224,7 @@ namespace sisgesoriadao.Implementation
                                 costoUSD, costoBOB, precioVentaUSD, precioVentaBOB, observaciones,
                                 estado, fechaRegistro, IFNULL(fechaActualizacion,'-') FROM Producto
                                 WHERE codigoSublote = @search OR identificador = @search
-                                ORDER BY fechaRegistro LIMIT 1";
+                                ORDER BY FIELD (estado, 1, 0, 2) LIMIT 1";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@search", CadenaBusqueda);
             try

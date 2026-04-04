@@ -29,6 +29,7 @@
                 <Button x:Name="btnPrint" ToolTip="IMPRIMIR VENTA" Margin="15,0,0,0" Click="btnPrint_Click" Background="White" Foreground="Black" BorderBrush="Black">
                     <materialDesign:PackIcon Kind="Printer" Width="50"/>
                 </Button>
+                <Button x:Name="btnPrintRollo" Content="IMPRIMIR ROLLO" Click="btnPrintRollo_Click" Margin="15,0,0,0" Background="White" Foreground="Black" BorderBrush="Black"/>
                 <Button x:Name="btnPrintPDF" ToolTip="IMPRIMIR PARA PDF" Margin="15,0,0,0" Click="btnPrintPDF_Click" Foreground="White">
                     <materialDesign:PackIcon Kind="FilePdfBox" Width="50"/>
                 </Button>
@@ -38,6 +39,7 @@
                 <Button x:Name="btnModifySale" ToolTip="MODIFICAR VENTA" Margin="15,0,0,0" Click="btnModifySale_Click" Background="Orange" Foreground="White" BorderBrush="Orange">
                     <materialDesign:PackIcon Kind="Edit" Width="50"/>
                 </Button>
+                
             </StackPanel>
             <Grid>
                 <Grid x:Name="ZonaImpresionGrid">

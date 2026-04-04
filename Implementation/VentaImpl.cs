@@ -316,8 +316,12 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectLikeReporteVentasLocales(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI)
         {
-            string query = @"SELECT V.idVenta AS 'ID', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, CL.nombre AS Cliente, V.idVenta AS Venta, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
-                            C.nombreCategoria AS Categoria, DV.precioUSD AS TotalUSD, IF(V.saldoUSD <= 0 || V.saldoBOB <= 0, 0, V.saldoUSD) AS SaldoUSD, CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado
+            string query = @"SELECT V.idVenta AS 'ID', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado, CL.nombre AS Cliente, V.idVenta AS Venta, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
+                            C.nombreCategoria AS Categoria, DV.precioUSD AS TotalUSD, IF(V.saldoUSD <= 0 || V.saldoBOB <= 0, 0, V.saldoUSD) AS SaldoUSD, 
+                            CASE 
+                                WHEN V.esVentaPorMayor = 1 THEN 'Venta por mayor'
+                                ELSE 'Venta normal'
+                            END AS EsVentaPorMayor
                             FROM Venta V
                             INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
@@ -347,7 +351,11 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectLikeReporteVentasLocalesGroupByEmpleados(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo, string clienteoCI)
         {
-            string query = @"SELECT CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado, COUNT(V.idVenta) AS Cantidad
+            string query = @"SELECT CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado, COUNT(V.idVenta) AS Cantidad,
+                            CASE 
+                                WHEN V.esVentaPorMayor = 1 THEN 'Venta por mayor'
+                                ELSE 'Venta normal'
+                            END AS EsVentaPorMayor                            
                             FROM Venta V
                             INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
                             INNER JOIN Detalle_Venta DV ON DV.idVenta = V.idVenta
@@ -357,7 +365,7 @@ namespace sisgesoriadao.Implementation
                             WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto OR CL.nombre LIKE @clienteoci OR CL.numeroCI LIKE @clienteoci)
                             AND V.estado = 1 AND V.idSucursal = @SessionSucursal
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
-                            GROUP BY E.idEmpleado
+                            GROUP BY E.idEmpleado, V.esVentaPorMayor
                             ORDER BY 1 DESC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@SessionSucursal", Session.Sucursal_IdSucursal);
