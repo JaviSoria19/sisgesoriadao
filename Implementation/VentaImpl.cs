@@ -422,10 +422,10 @@ namespace sisgesoriadao.Implementation
             string query = @"SELECT V.idVenta AS ID, 
                 S.nombreSucursal AS Sucursal, S.direccion AS Direccion, S.telefono AS Telefono, S.correo AS Correo,
                 CL.nombre AS Cliente, CL.numeroCelular AS Celular, CL.numeroCI AS CI,
-                U.nombreUsuario AS Usuario, E.numeroCelular AS 'Celular Usuario',
-                CONCAT(P.codigoSublote,' ',P.nombreProducto) AS Producto, P.identificador AS Detalle, DV.garantia AS Garantia, DV.cantidad AS Cantidad, P.precioVentaBOB AS Precio, DV.descuento AS DescuentoPorcentaje, (P.precioVentaBOB - DV.precioBOB) AS DescuentoBs, DV.precioBOB AS 'Total Producto',
-                V.totalBOB AS Total, V.saldoBOB AS Saldo, V.observaciones AS Observaciones, " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha,
-                V.totalUSD AS Total2, V.saldoUSD AS Saldo2, P.idProducto AS IDProducto,
+                U.nombreUsuario AS Usuario, E.numeroCelular AS CelularUsuario,
+                CONCAT(P.codigoSublote,' ',P.nombreProducto) AS Producto, P.identificador AS Detalle, DV.garantia AS Garantia, DV.cantidad AS Cantidad, P.precioVentaBOB AS Precio, DV.descuento AS DescuentoPorcentaje, (P.precioVentaBOB - DV.precioBOB) AS DescuentoBs, DV.precioBOB AS TotalProducto,
+                V.totalBOB AS TotalBOB, V.saldoBOB AS SaldoBOB, V.observaciones AS Observaciones, " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha,
+                V.totalUSD AS TotalUSD, V.saldoUSD AS SaldoUSD, P.idProducto AS IDProducto,
                 V.esVentaPorMayor AS esVentaPorMayor, DV.precioUSD AS precioUSD
                 FROM Venta V
                 INNER JOIN Cliente CL ON CL.idCliente = V.idCliente
@@ -449,7 +449,7 @@ namespace sisgesoriadao.Implementation
         }
         public DataTable SelectSaleDetails2()
         {
-            string query = @"SELECT montoBOB AS 'Monto Bs', montoUSD AS 'Monto USD', " + Session.FormatoFechaMySql("fechaRegistro") + @" AS Fecha
+            string query = @"SELECT montoBOB AS MontoBOB, montoUSD AS MontoUSD, " + Session.FormatoFechaMySql("fechaRegistro") + @" AS Fecha
                 FROM Metodo_Pago WHERE idVenta = @idVenta";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@idVenta", Session.IdVentaDetalle);

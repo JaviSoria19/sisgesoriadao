@@ -493,147 +493,162 @@ namespace sisgesoriadao
         };
 
         // ════════════════════════════════════════════════════════════
-        //  CARGA DE DATOS (sin cambios)
+        //  CARGA DE DATOS
         // ════════════════════════════════════════════════════════════
 
         void SelectDetalle()
         {
-            if (Session.IdVentaDetalle != 0)
+            if (Session.IdVentaDetalle == 0) return;
+
+            try
             {
-                try
-                {
-                    DataTable dt = new DataTable();
-                    implVenta = new VentaImpl();
-                    dt = implVenta.SelectSaleDetails1();
-                    int idVenta = int.Parse(dt.Rows[0][0].ToString());
-                    byte esVentaPorMayor = byte.Parse(dt.Rows[0][25].ToString());
+                implVenta = new VentaImpl();
 
-                    if (esVentaPorMayor == 1)
-                    {
-                        txtTitulo.Text = "NOTA DE VENTA";
-                        txtTitulo.Foreground = new SolidColorBrush(System.Windows.Media.Colors.DarkBlue);
-                        thTotal.Text = "TOTAL $.";
-                        txtSubtituloPagos.Text = "PAGOS ($.)";
-                        shapeFirmaResponsable.Visibility = Visibility.Hidden;
-                        txtFirmaResponsable.Visibility = Visibility.Hidden;
-                        shapeFirmaCliente.Visibility = Visibility.Hidden;
-                        txtFirmaCliente.Visibility = Visibility.Hidden;
-                        txtDisclaimer.Visibility = Visibility.Hidden;
-                        txtThanks.Visibility = Visibility.Hidden;
-                        imgQR.Visibility = Visibility.Hidden;
-                    }
+                DataTable dtProductos = implVenta.SelectSaleDetails1();
+                DataTable dtPagos = implVenta.SelectSaleDetails2();
 
-                    txtIdVenta.Text = "Nro.: " + idVenta.ToString("D5");
-                    txtSucursal_nombre.Text = dt.Rows[0][1].ToString();
-                    txtSucursal_direccion.Text = dt.Rows[0][2].ToString();
-                    txtSucursal_telefono.Text = dt.Rows[0][3].ToString();
-                    txtSucursal_correo.Text = dt.Rows[0][4].ToString();
+                if (dtProductos.Rows.Count == 0) return;
 
-                    txtCliente_nombre.Text = "Cliente: " + dt.Rows[0][5].ToString();
-                    txtCliente_celular.Text = "Telefono/Celular: " + dt.Rows[0][6].ToString();
-                    txtCliente_ci.Text = "C.I.: " + dt.Rows[0][7].ToString();
+                DataRow cabecera = dtProductos.Rows[0];
+                bool esVentaMayor = byte.Parse(cabecera["esVentaPorMayor"].ToString()) == 1;
 
-                    txtObservaciones.Text = "Observaciones: " + dt.Rows[0][20].ToString()
-                        + " | Ejecutivo de ventas: " + dt.Rows[0][8].ToString()
-                        + " - Cel.: " + dt.Rows[0][9].ToString();
+                CargarEncabezado(cabecera, esVentaMayor);
+                CargarProductos(dtProductos, esVentaMayor);
+                CargarPagos(dtPagos, esVentaMayor);
+                GenerarQR(clipboardTexto);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
-                    txtVenta_fecha.Text = "Fecha: " + dt.Rows[0][21].ToString();
+        // ────────────────────────────────────────────────────────────
 
-                    double venta_total, venta_saldo, venta_adelanto = 0;
+        private void CargarEncabezado(DataRow cabecera, bool esVentaMayor)
+        {
+            int idVentaLocal = int.Parse(cabecera["ID"].ToString());
 
-                    if (esVentaPorMayor == 1)
-                    {
-                        venta_total = double.Parse(dt.Rows[0][22].ToString());
-                        venta_saldo = double.Parse(dt.Rows[0][23].ToString());
-                        venta_adelanto = venta_total - venta_saldo;
-                    }
-                    else
-                    {
-                        venta_total = double.Parse(dt.Rows[0][18].ToString());
-                        venta_saldo = double.Parse(dt.Rows[0][19].ToString());
-                        venta_adelanto = venta_total - venta_saldo;
-                    }
+            // Modo venta por mayor: ajustar UI
+            if (esVentaMayor)
+            {
+                txtTitulo.Text = "NOTA DE VENTA";
+                txtTitulo.Foreground = new SolidColorBrush(System.Windows.Media.Colors.DarkBlue);
+                thTotal.Text = "TOTAL $.";
+                txtSubtituloPagos.Text = "PAGOS ($.)";
 
-                    txtVenta_Total.Text = (esVentaPorMayor == 1)
-                        ? venta_total + " $."
-                        : venta_total + " Bs.";
-                    txtVenta_Adelanto.Text = (esVentaPorMayor == 1)
-                        ? Math.Round(venta_adelanto, 2) + " $."
-                        : Math.Round(venta_adelanto, 2) + " Bs.";
-                    txtVenta_Saldo.Text = (esVentaPorMayor == 1)
-                        ? venta_saldo + " $."
-                        : venta_saldo + " Bs.";
+                shapeFirmaResponsable.Visibility = Visibility.Hidden;
+                txtFirmaResponsable.Visibility = Visibility.Hidden;
+                shapeFirmaCliente.Visibility = Visibility.Hidden;
+                txtFirmaCliente.Visibility = Visibility.Hidden;
+                txtDisclaimer.Visibility = Visibility.Hidden;
+                txtThanks.Visibility = Visibility.Hidden;
+                imgQR.Visibility = Visibility.Hidden;
+            }
 
-                    txtProducto_Descripcion.Text = "";
-                    txtProducto_Detalle.Text = "";
-                    txtProducto_Garantia.Text = "";
-                    txtProducto_Cantidad.Text = "";
-                    txtProducto_Precio.Text = "";
-                    txtProducto_DescuentoPorcentaje.Text = "";
-                    txtProducto_DescuentoBOB.Text = "";
-                    txtProducto_TotalBOB.Text = "";
+            // Datos generales
+            txtIdVenta.Text = "Nro.: " + idVentaLocal.ToString("D5");
+            txtSucursal_nombre.Text = cabecera["Sucursal"].ToString();
+            txtSucursal_direccion.Text = cabecera["Direccion"].ToString();
+            txtSucursal_telefono.Text = cabecera["Telefono"].ToString();
+            txtSucursal_correo.Text = cabecera["Correo"].ToString();
 
-                    foreach (DataRow item in dt.Rows)
-                    {
-                        if (item[10].ToString().Length > 45)
-                            txtProducto_Descripcion.Text += item[10].ToString() + "\n";
-                        else
-                            txtProducto_Descripcion.Text += item[10].ToString() + "\n \n";
+            txtCliente_nombre.Text = "Cliente: " + cabecera["Cliente"].ToString();
+            txtCliente_celular.Text = "Telefono/Celular: " + cabecera["Celular"].ToString();
+            txtCliente_ci.Text = "C.I.: " + cabecera["CI"].ToString();
 
-                        txtProducto_Detalle.Text += item[11].ToString() + "\n \n";
-                        txtProducto_Garantia.Text += (esVentaPorMayor == 1)
-                            ? "N/A\n \n"
-                            : item[12].ToString() + " Meses\n \n";
-                        txtProducto_Cantidad.Text += item[13].ToString() + "\n \n";
-                        txtProducto_Precio.Text += item[14].ToString() + "\n \n";
-                        txtProducto_DescuentoPorcentaje.Text += item[15].ToString() + "\n \n";
-                        txtProducto_DescuentoBOB.Text += item[16].ToString() + "\n \n";
-                        txtProducto_TotalBOB.Text += (esVentaPorMayor == 1)
-                            ? item[26].ToString() + "\n \n"
-                            : item[17].ToString() + "\n \n";
+            txtObservaciones.Text = "Observaciones: " + cabecera["Observaciones"].ToString()
+                + " | Ejecutivo de ventas: " + cabecera["Usuario"].ToString()
+                + " - Cel.: " + cabecera["CelularUsuario"].ToString();
 
-                        clipboardTexto += item[10].ToString() + " " + item[11].ToString() + "\n";
-                    }
-                    clipboardTexto = clipboardTexto.Trim();
+            txtVenta_fecha.Text = "Fecha: " + cabecera["Fecha"].ToString();
 
-                    txtPagos.Text = "";
-                    DataTable dt_two = implVenta.SelectSaleDetails2();
+            // Totales según moneda
+            double total = double.Parse(cabecera[esVentaMayor ? "TotalUSD" : "TotalBOB"].ToString());
+            double saldo = double.Parse(cabecera[esVentaMayor ? "SaldoUSD" : "SaldoBOB"].ToString());
+            double adelanto = Math.Round(total - saldo, 2);
+            string moneda = esVentaMayor ? "$." : "Bs.";
 
-                    if (dt_two.Rows.Count > 0)
-                    {
-                        foreach (DataRow item_two in dt_two.Rows)
-                        {
-                            txtPagos.Text += (esVentaPorMayor == 1)
-                                ? item_two[2].ToString() + "    " + item_two[1].ToString() + "\n"
-                                : item_two[2].ToString() + "    " + item_two[0].ToString() + "\n";
-                        }
-                    }
-                    else
-                    {
-                        txtPagos.Text = "-";
-                    }
+            txtVenta_Total.Text = $"{total} {moneda}";
+            txtVenta_Adelanto.Text = $"{adelanto} {moneda}";
+            txtVenta_Saldo.Text = $"{saldo} {moneda}";
+        }
 
-                    // Generación del QR
-                    QRCodeEncoder encoder = new QRCodeEncoder();
-                    encoder.QRCodeScale = 8;
-                    Bitmap bitmap = encoder.Encode(clipboardTexto);
-                    using (var memory = new MemoryStream())
-                    {
-                        bitmap.Save(memory, ImageFormat.Png);
-                        memory.Position = 0;
-                        var bitmapimage = new BitmapImage();
-                        bitmapimage.BeginInit();
-                        bitmapimage.StreamSource = memory;
-                        bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmapimage.EndInit();
-                        bitmapimage.Freeze();
-                        imgQR.Source = bitmapimage;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+        // ────────────────────────────────────────────────────────────
+
+        private void CargarProductos(DataTable dtProductos, bool esVentaMayor)
+        {
+            txtProducto_Descripcion.Text = "";
+            txtProducto_Detalle.Text = "";
+            txtProducto_Garantia.Text = "";
+            txtProducto_Cantidad.Text = "";
+            txtProducto_Precio.Text = "";
+            txtProducto_DescuentoPorcentaje.Text = "";
+            txtProducto_DescuentoBOB.Text = "";
+            txtProducto_TotalBOB.Text = "";
+            clipboardTexto = "";
+
+            foreach (DataRow fila in dtProductos.Rows)
+            {
+                string descripcion = fila["Producto"].ToString();
+                string detalle = fila["Detalle"].ToString();
+                string garantia = esVentaMayor ? "N/A" : fila["Garantia"].ToString() + " Meses";
+                string totalFila = esVentaMayor ? fila["precioUSD"].ToString() : fila["TotalProducto"].ToString();
+
+                // Descripción larga no necesita línea extra
+                txtProducto_Descripcion.Text += descripcion.Length > 45 ? descripcion + "\n" : descripcion + "\n \n";
+                txtProducto_Detalle.Text += detalle + "\n \n";
+                txtProducto_Garantia.Text += garantia + "\n \n";
+                txtProducto_Cantidad.Text += fila["Cantidad"].ToString() + "\n \n";
+                txtProducto_Precio.Text += fila["Precio"].ToString() + "\n \n";
+                txtProducto_DescuentoPorcentaje.Text += fila["DescuentoPorcentaje"].ToString() + "\n \n";
+                txtProducto_DescuentoBOB.Text += fila["DescuentoBs"].ToString() + "\n \n";
+                txtProducto_TotalBOB.Text += totalFila + "\n \n";
+
+                clipboardTexto += $"{descripcion} {detalle}\n";
+            }
+
+            clipboardTexto = clipboardTexto.Trim();
+        }
+
+        // ────────────────────────────────────────────────────────────
+
+        private void CargarPagos(DataTable dtPagos, bool esVentaMayor)
+        {
+            if (dtPagos.Rows.Count == 0)
+            {
+                txtPagos.Text = "-";
+                return;
+            }
+
+            txtPagos.Text = "";
+            foreach (DataRow pago in dtPagos.Rows)
+            {
+                string monto = esVentaMayor ? pago["MontoUSD"].ToString() : pago["MontoBOB"].ToString();
+                txtPagos.Text += $"{pago["Fecha"]}    {monto}\n";
+            }
+        }
+
+        // ────────────────────────────────────────────────────────────
+
+        private void GenerarQR(string contenido)
+        {
+            QRCodeEncoder encoder = new QRCodeEncoder { QRCodeScale = 8 };
+            Bitmap bitmap = encoder.Encode(contenido);
+
+            using (var memory = new MemoryStream())
+            {
+                bitmap.Save(memory, ImageFormat.Png);
+                memory.Position = 0;
+
+                var bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                bitmapImage.Freeze();
+
+                imgQR.Source = bitmapImage;
             }
         }
     }
