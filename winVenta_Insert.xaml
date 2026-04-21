@@ -137,6 +137,13 @@
                             <materialDesign:PackIcon Kind="AccountTie" 
                                                     VerticalAlignment="Center" 
                                                     Margin="0,0,8,0"/>
+                            <!--<TextBlock Text="Venta por mayor" 
+                                      VerticalAlignment="Center" 
+                                      Margin="0,0,12,0"/>
+                            <ToggleButton x:Name="tglWholesale" 
+                                         Style="{StaticResource MaterialDesignSwitchToggleButton}" 
+                                         ToolTip="Indicar si es venta por mayor" 
+                                         Click="tglWholesale_Click"/> -->
                             <ComboBox x:Name="cbxEmployees" 
                                      materialDesign:HintAssist.Hint="Empleado"
                                      materialDesign:HintAssist.IsFloating="True"
@@ -149,13 +156,12 @@
                             <materialDesign:PackIcon Kind="PackageVariant" 
                                                     VerticalAlignment="Center" 
                                                     Margin="0,0,8,0"/>
-                            <TextBlock Text="Venta por mayor" 
-                                      VerticalAlignment="Center" 
-                                      Margin="0,0,12,0"/>
-                            <ToggleButton x:Name="tglWholesale" 
-                                         Style="{StaticResource MaterialDesignSwitchToggleButton}" 
-                                         ToolTip="Indicar si es venta por mayor" 
-                                         Click="tglWholesale_Click"/>
+                            <ComboBox x:Name="cbxSaleType" 
+                                    SelectionChanged="cbxSaleType_SelectionChanged"
+                                    materialDesign:HintAssist.Hint="Tipo de venta"
+                                    materialDesign:HintAssist.IsFloating="True"
+                                    MinWidth="200"
+                                    IsEnabled="True"/>
                         </StackPanel>
                     </Grid>
                 </materialDesign:Card>

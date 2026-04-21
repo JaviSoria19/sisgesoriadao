@@ -88,6 +88,7 @@
                             <DataGridTextColumn Header="Categoria" Binding="{Binding Categoria}" IsReadOnly="True" Visibility="Visible"/>
                             <DataGridTextColumn Header="Precio $." Binding="{Binding PrecioUSD}" IsReadOnly="True" Visibility="Visible"/>
                             <DataGridTextColumn Header="Precio Bs." Binding="{Binding PrecioBOB}" IsReadOnly="True" Visibility="Visible"/>
+                            <DataGridTextColumn Header="Tipo de venta" Binding="{Binding EsVentaPorMayor}" IsReadOnly="True" Visibility="Visible"/>
                             <DataGridTemplateColumn>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -126,6 +127,7 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Empleado" Binding="{Binding Empleado}" IsReadOnly="True" Visibility="Visible"/>
                                     <DataGridTextColumn Header="Cantidad" Binding="{Binding Cantidad}" IsReadOnly="True" Visibility="Visible"/>
+                                    <DataGridTextColumn Header="Tipo de venta" Binding="{Binding EsVentaPorMayor}" IsReadOnly="True" Visibility="Visible"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </Border>

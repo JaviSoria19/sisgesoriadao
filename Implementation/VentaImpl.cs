@@ -256,9 +256,13 @@ namespace sisgesoriadao.Implementation
         public DataTable SelectLikeReporteVentasGlobales(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo, string esVentaPorMayor)
         {
             string query = @"SELECT " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha, S.nombreSucursal AS Sucursal, U.nombreUsuario AS Usuario, 
+                            CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado,
                             V.idVenta AS ID, P.codigoSublote AS Codigo, P.nombreProducto AS Producto, P.identificador AS Identificador,
                             C.nombreCategoria AS Categoria, DV.precioUSD AS PrecioUSD, DV.precioBOB AS PrecioBOB,
-                            CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado
+                            CASE 
+                                WHEN V.esVentaPorMayor = 1 THEN 'Venta por mayor'
+                                ELSE 'Venta normal'
+                            END AS EsVentaPorMayor
                             FROM Venta V
                             INNER JOIN Sucursal S ON S.idSucursal = V.idSucursal
                             INNER JOIN Usuario U ON U.idUsuario = V.idUsuario
@@ -287,7 +291,11 @@ namespace sisgesoriadao.Implementation
 
         public DataTable SelectLikeReporteVentasGlobalesGroupByEmpleados(DateTime fechaInicio, DateTime fechaFin, string idSucursales, string idCategorias, string idUsuarios, string productoOCodigo, string esVentaPorMayor)
         {
-            string query = @"SELECT CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado, COUNT(V.idVenta) AS Cantidad
+            string query = @"SELECT CONCAT(E.nombres, ' ', E.primerApellido, ' ', E.segundoApellido) AS Empleado, COUNT(V.idVenta) AS Cantidad,
+                            CASE 
+                                WHEN V.esVentaPorMayor = 1 THEN 'Venta por mayor'
+                                ELSE 'Venta normal'
+                            END AS EsVentaPorMayor                            
                             FROM Venta V
                             INNER JOIN Sucursal S ON S.idSucursal = V.idSucursal
                             INNER JOIN Usuario U ON U.idUsuario = V.idUsuario
@@ -298,7 +306,7 @@ namespace sisgesoriadao.Implementation
                             WHERE (P.nombreProducto LIKE @productocodigoproducto OR P.codigoSublote LIKE @productocodigoproducto)
                             AND V.estado = 1 AND V.idSucursal IN (" + idSucursales + ") AND P.idCategoria IN (" + idCategorias + ") AND V.idUsuario IN (" + idUsuarios + ") AND V.esVentaPorMayor IN (" + esVentaPorMayor + @")
                             AND V.fechaRegistro BETWEEN @FechaInicio AND @FechaFin
-                            GROUP BY E.idEmpleado
+                            GROUP BY E.idEmpleado, V.esVentaPorMayor
                             ORDER BY 1 DESC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@FechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
@@ -415,7 +423,7 @@ namespace sisgesoriadao.Implementation
                 S.nombreSucursal AS Sucursal, S.direccion AS Direccion, S.telefono AS Telefono, S.correo AS Correo,
                 CL.nombre AS Cliente, CL.numeroCelular AS Celular, CL.numeroCI AS CI,
                 U.nombreUsuario AS Usuario, E.numeroCelular AS 'Celular Usuario',
-                CONCAT(P.codigoSublote,' ',P.nombreProducto) AS Producto, P.identificador AS Detalle, DV.garantia AS Garantia, DV.cantidad AS Cantidad, P.precioVentaBOB AS Precio, DV.descuento AS 'Descuento Porcentaje', (P.precioVentaBOB - DV.precioBOB) AS 'Descuento Bs', DV.precioBOB AS 'Total Producto',
+                CONCAT(P.codigoSublote,' ',P.nombreProducto) AS Producto, P.identificador AS Detalle, DV.garantia AS Garantia, DV.cantidad AS Cantidad, P.precioVentaBOB AS Precio, DV.descuento AS DescuentoPorcentaje, (P.precioVentaBOB - DV.precioBOB) AS DescuentoBs, DV.precioBOB AS 'Total Producto',
                 V.totalBOB AS Total, V.saldoBOB AS Saldo, V.observaciones AS Observaciones, " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS Fecha,
                 V.totalUSD AS Total2, V.saldoUSD AS Saldo2, P.idProducto AS IDProducto,
                 V.esVentaPorMayor AS esVentaPorMayor, DV.precioUSD AS precioUSD

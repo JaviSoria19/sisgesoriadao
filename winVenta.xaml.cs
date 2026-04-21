@@ -75,8 +75,8 @@ namespace sisgesoriadao
                 totalBOB = 0;
                 foreach (DataRowView item in dgvDatos.Items)
                 {
-                    totalUSD += double.Parse(item[8].ToString());
-                    totalBOB += double.Parse(item[9].ToString());
+                    totalUSD += double.Parse(item[9].ToString());
+                    totalBOB += double.Parse(item[10].ToString());
                 }
                 txtTotalUSD.Text = "Total $us.: " + totalUSD.ToString();
                 txtTotalBOB.Text = "Total Bs.: " + totalBOB.ToString();
@@ -210,7 +210,7 @@ namespace sisgesoriadao
                 try
                 {
                     DataRowView d = (DataRowView)dgvDatos.SelectedItem;
-                    Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[3].ToString());
+                    Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[4].ToString());
                     winVenta_Update winVenta_Update = new winVenta_Update();
                     winVenta_Update.Show();
                     dgvDatos.SelectedItem = null;
@@ -229,7 +229,7 @@ namespace sisgesoriadao
                 try
                 {
                     DataRowView d = (DataRowView)dgvDatos.SelectedItem;
-                    Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[3].ToString());
+                    Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[4].ToString());
                     winVenta_Detalle winVenta_Detalle = new winVenta_Detalle();
                     winVenta_Detalle.Show();
                     dgvDatos.SelectedItem = null;
@@ -347,16 +347,16 @@ namespace sisgesoriadao
                 filas += "<td>" + item[0].ToString() + "</td>";//fecha
                 filas += "<td>" + item[1].ToString() + "</td>";//sucursal
                 filas += "<td>" + item[2].ToString() + "</td>";//usuario
-                filas += "<td>" + item[3].ToString() + "</td>";//nro venta
-                filas += "<td>" + item[4].ToString() + "</td>";//codigo producto
-                filas += "<td>" + item[5].ToString() + "</td>";//nombre producto
-                filas += "<td>" + item[7].ToString() + "</td>";//categoria
-                filas += "<td>" + item[8].ToString() + "</td>";//precio USD
-                filas += "<td>" + item[9].ToString() + "</td>";//precio BOB
+                filas += "<td>" + item[4].ToString() + "</td>";//nro venta
+                filas += "<td>" + item[5].ToString() + "</td>";//codigo producto
+                filas += "<td>" + item[6].ToString() + "</td>";//nombre producto
+                filas += "<td>" + item[8].ToString() + "</td>";//categoria
+                filas += "<td>" + item[9].ToString() + "</td>";//precio USD
+                filas += "<td>" + item[10].ToString() + "</td>";//precio BOB
                 filas += "</tr>";
                 pdf_contador++;
-                columnastotalUSD += double.Parse(item[8].ToString());
-                columnastotalBOB += double.Parse(item[9].ToString());
+                columnastotalUSD += double.Parse(item[9].ToString());
+                columnastotalBOB += double.Parse(item[10].ToString());
             }
             paginahtml_texto = paginahtml_texto.Replace("@TOTALUSD", "$us. " + columnastotalUSD.ToString());
             paginahtml_texto = paginahtml_texto.Replace("@TOTALBOB", "Bs. " + columnastotalBOB.ToString());

@@ -330,6 +330,11 @@ namespace sisgesoriadao
             txtObservacionVenta.Text = "-";
 
             cbxGetEmpleadoFromDatabase();
+
+            cbxSaleType.Items.Add(new ComboboxItem(){ Texto = "SELECCIONE UN TIPO DE VENTA", Valor = 2 });
+            cbxSaleType.Items.Add(new ComboboxItem(){ Texto = "VENTA NORMAL", Valor = 0 });
+            cbxSaleType.Items.Add(new ComboboxItem() { Texto = "VENTA POR MAYOR", Valor = 1 });
+            cbxSaleType.SelectedIndex = 0;
         }
         private void TextBoxUppercase(object sender, KeyEventArgs e)
         {
@@ -395,7 +400,7 @@ namespace sisgesoriadao
 
                 if (producto == null)
                 {
-                    MostrarMensajeProducto("PRODUCTO NO ENCONTRADO.", MessageType.Warning);
+                    MostrarMensajeProducto("Producto no encontrado.", MessageType.Warning);
                     return;
                 }
 
@@ -407,7 +412,7 @@ namespace sisgesoriadao
 
                 if (producto.IdSucursal != Session.Sucursal_IdSucursal)
                 {
-                    MostrarMensajeProducto($"EL PRODUCTO CON EL CÓDIGO {producto.CodigoSublote} ESTÁ DISPONIBLE PERO NO SE ENCUENTRA EN ESTA SUCURSAL, POR FAVOR REALICE LA TRANSFERENCIA CORRESPONDIENTE.", MessageType.Warning);
+                    MostrarMensajeProducto($"El producto {producto.NombreProducto} con el código {producto.CodigoSublote} | {producto.Identificador} está disponible pero no se encuentra en esta sucursal, por favor realice la transferencia correspondiente.", MessageType.Warning);
                     return;
                 }
 
@@ -461,15 +466,15 @@ namespace sisgesoriadao
 
             if (producto.Estado == 2)
             {
-                mensaje = $"EL PRODUCTO CON EL CÓDIGO {producto.CodigoSublote} YA FUE VENDIDO Y NO SE ENCUENTRA DISPONIBLE.";
+                mensaje = $"El producto {producto.NombreProducto} con el código {producto.CodigoSublote} | {producto.Identificador} ya fue vendido y no se encuentra disponible.";
             }
             else if (producto.Estado == 3)
             {
-                mensaje = $"EL PRODUCTO CON EL CÓDIGO {producto.CodigoSublote} ESTÁ EN ESPERA PARA SER CONFIRMADO Y RECIBIDO EN UNA SUCURSAL.";
+                mensaje = $"El producto {producto.NombreProducto} con el código {producto.CodigoSublote} | {producto.Identificador} está en espera para ser confirmado y recibido en una sucursal.";
             }
             else
             {
-                mensaje = $"EL PRODUCTO CON EL CÓDIGO {producto.CodigoSublote} FUE ELIMINADO DEL SISTEMA Y NO ESTÁ DISPONIBLE.";
+                mensaje = $"El producto {producto.NombreProducto} con el código {producto.CodigoSublote} | {producto.Identificador} fue eliminado y no está disponible.";
             }
 
             MostrarMensajeProducto(mensaje, MessageType.Danger);
@@ -581,6 +586,13 @@ namespace sisgesoriadao
                 MessageBox.Show("¡No puede registrar la venta sin seleccionar un empleado responsable!");
                 return false;
             }
+
+            if ((cbxSaleType.SelectedItem as ComboboxItem).Valor == 2)
+            {
+                MessageBox.Show("¡No puede registrar la venta sin seleccionar un tipo de venta!");
+                return false;
+            }
+
             return true;
         }
 
@@ -1125,6 +1137,7 @@ namespace sisgesoriadao
 
         private void tglWholesale_Click(object sender, RoutedEventArgs e)
         {
+            /*
             if (tglWholesale.IsChecked == true)
             {
                 esVentaPorMayor = 1;
@@ -1132,6 +1145,15 @@ namespace sisgesoriadao
             else
             {
                 esVentaPorMayor = 0;
+            }
+            */
+        }
+
+        private void cbxSaleType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbxSaleType.SelectedIndex != 0)
+            {
+                esVentaPorMayor = byte.Parse((cbxSaleType.SelectedItem as ComboboxItem).Valor.ToString());
             }
         }
     }
