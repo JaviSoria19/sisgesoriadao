@@ -10,7 +10,9 @@ namespace sisgesoriadao.Implementation
         public Ajuste Get()
         {
             Ajuste a = null;
-            string query = @"SELECT idAjustes, cambio_dolar, limite_descuento, intervalo_hora, tema_predeterminado, IFNULL(fechaActualizacion,'-') FROM Ajustes WHERE idAjustes=1";
+            string query = @"SELECT idAjustes, cambio_dolar, limite_descuento,
+            intervalo_hora, tema_predeterminado, disenho_boleta, IFNULL(fechaActualizacion,'-')
+            FROM Ajustes WHERE idAjustes=1";
             MySqlCommand command = CreateBasicCommand(query);
             try
             {
@@ -22,42 +24,59 @@ namespace sisgesoriadao.Implementation
                         byte.Parse(dt.Rows[0][2].ToString()),               /*limite_descuento*/
                         byte.Parse(dt.Rows[0][3].ToString()),               /*intervalo_hora*/
                         byte.Parse(dt.Rows[0][4].ToString()),               /*tema_predeterminado*/
-                        dt.Rows[0][5].ToString());                          /*fechaActualizacion*/
+                        byte.Parse(dt.Rows[0][5].ToString()),               /*disenho_boleta*/
+                        dt.Rows[0][6].ToString());                          /*fechaActualizacion*/
                     Session.Ajuste_Cambio_Dolar = a.CambioDolar;
                     Session.Ajuste_Limite_Descuento = a.LimiteDescuento;
                     Session.IntervaloHora = a.IntervaloHora;
                     Session.TemaPredeterminado = a.TemaPredeterminado;
-
+                    Session.DisenhoBoleta = a.DisenhoBoleta;
                     Session.ObtenerPrimeraEtiquetadoraDYMO();
                 }
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             return a;
         }
         public int Update(Ajuste a)
         {
-            string query = @"UPDATE Ajustes SET 
-                cambio_dolar=@cambio_dolar, limite_descuento=@limite_descuento, intervalo_hora=@intervalo_hora, tema_predeterminado=@tema_predeterminado,
-                fechaActualizacion = CURRENT_TIMESTAMP WHERE idAjustes = 1;
-                UPDATE Producto SET costoBOB = costoUSD * (SELECT cambio_dolar FROM Ajustes LIMIT 1) , precioVentaBOB = precioVentaUSD * (SELECT cambio_dolar FROM Ajustes LIMIT 1)
-                WHERE estado = 1;";
-            MySqlCommand command = CreateBasicCommand(query);
-            command.Parameters.AddWithValue("@cambio_dolar", a.CambioDolar);
-            command.Parameters.AddWithValue("@limite_descuento", a.LimiteDescuento);
-            command.Parameters.AddWithValue("@intervalo_hora", a.IntervaloHora);
-            command.Parameters.AddWithValue("@tema_predeterminado", a.TemaPredeterminado);
+            string query1 = @"UPDATE Ajustes 
+                SET cambio_dolar=@cambio_dolar, 
+                    limite_descuento=@limite_descuento, 
+                    intervalo_hora=@intervalo_hora, 
+                    tema_predeterminado=@tema_predeterminado, 
+                    disenho_boleta=@disenho_boleta, 
+                    fechaActualizacion = CURRENT_TIMESTAMP 
+                WHERE idAjustes = 1;";
+
+            string query2 = @"UPDATE Producto p
+                JOIN Ajustes a ON a.idAjustes = 1
+                SET 
+                    p.costoBOB = p.costoUSD * a.cambio_dolar,
+                    p.precioVentaBOB = p.precioVentaUSD * a.cambio_dolar
+                WHERE p.estado = 1;";
+
             try
             {
-                return ExecuteBasicCommand(command);
-            }
-            catch (Exception ex)
-            {
+                var cmd1 = CreateBasicCommand(query1);
+                cmd1.Parameters.AddWithValue("@cambio_dolar", a.CambioDolar);
+                cmd1.Parameters.AddWithValue("@limite_descuento", a.LimiteDescuento);
+                cmd1.Parameters.AddWithValue("@intervalo_hora", a.IntervaloHora);
+                cmd1.Parameters.AddWithValue("@tema_predeterminado", a.TemaPredeterminado);
+                cmd1.Parameters.AddWithValue("@disenho_boleta", a.DisenhoBoleta);
 
-                throw ex;
+                int result1 = ExecuteBasicCommand(cmd1);
+
+                var cmd2 = CreateBasicCommand(query2);
+                int result2 = ExecuteBasicCommand(cmd2);
+
+                return result1 + result2;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
         public int Delete(Ajuste o)

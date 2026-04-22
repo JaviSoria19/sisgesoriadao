@@ -13,7 +13,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sisgesoriadao"
         mc:Ignorable="d"
-        Title="Sistema de Ventas - Ajustes" Height="380" Width="300"
+        Title="Sistema de Ventas - Ajustes" Height="420" Width="300"
         WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ResizeMode="NoResize">
     <Grid>
         <StackPanel Orientation="Vertical">
@@ -35,6 +35,10 @@
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Label Content="TEMA:" FontWeight="Bold"/>
                 <ComboBox x:Name="cbxTheme" IsEnabled="True" Margin="0,0,20,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <Label Content="DISEÑO DE BOLETA:" FontWeight="Bold"/>
+                <ComboBox x:Name="cbxReceiptDesign" IsEnabled="True" Margin="0,0,20,0"/>
             </StackPanel>
             <StackPanel Margin="10,20,10,0">
                 <TextBlock Text="Nota: El límite de descuento permite vender un producto por debajo de su costo (no confundir con precio de venta)." TextWrapping="Wrap"/>

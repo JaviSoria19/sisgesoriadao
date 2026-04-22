@@ -27,6 +27,7 @@ namespace sisgesoriadao
                 ajuste.LimiteDescuento = byte.Parse(txtLimiteDescuento.Text.Trim());
                 ajuste.IntervaloHora = byte.Parse(txtIntervaloHora.Text.Trim());
                 ajuste.TemaPredeterminado = (cbxTheme.SelectedItem as ComboboxItem).Valor;
+                ajuste.DisenhoBoleta = (cbxReceiptDesign.SelectedItem as ComboboxItem).Valor;
                 implAjuste = new AjusteImpl();
                 try
                 {
@@ -37,6 +38,7 @@ namespace sisgesoriadao
                         Session.Ajuste_Limite_Descuento = ajuste.LimiteDescuento;
                         Session.IntervaloHora = ajuste.IntervaloHora;
                         Session.TemaPredeterminado = ajuste.TemaPredeterminado;
+                        Session.DisenhoBoleta = ajuste.DisenhoBoleta;
                         if (ajuste.TemaPredeterminado == 1)
                         {
                             darkMode(true);
@@ -49,9 +51,9 @@ namespace sisgesoriadao
                         this.Close();
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.");
+                    MessageBox.Show("Transacción no completada, comuníquese con el Administrador de Sistemas.\n\nDetalles del error: " + ex.Message);
                 }
             }
             else
@@ -67,6 +69,8 @@ namespace sisgesoriadao
         {
             cbxTheme.Items.Add(new ComboboxItem("TEMA CLARO", 0));
             cbxTheme.Items.Add(new ComboboxItem("TEMA OSCURO", 1));
+            cbxReceiptDesign.Items.Add(new ComboboxItem("DISEÑO 1", 1));
+            cbxReceiptDesign.Items.Add(new ComboboxItem("DISEÑO 2", 2));
             GetSettings();
         }
         private void txtCambioDolar_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -97,6 +101,7 @@ namespace sisgesoriadao
                     txtLimiteDescuento.Text = ajuste.LimiteDescuento.ToString().Trim();
                     txtIntervaloHora.Text = ajuste.IntervaloHora.ToString().Trim();
                     cbxTheme.SelectedIndex = ajuste.TemaPredeterminado;
+                    cbxReceiptDesign.SelectedIndex = ajuste.DisenhoBoleta - 1;
                 }
             }
             catch (Exception ex)

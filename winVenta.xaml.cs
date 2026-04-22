@@ -230,8 +230,18 @@ namespace sisgesoriadao
                 {
                     DataRowView d = (DataRowView)dgvDatos.SelectedItem;
                     Session.IdVentaDetalle = int.Parse(d.Row.ItemArray[4].ToString());
-                    winVenta_Detalle winVenta_Detalle = new winVenta_Detalle();
-                    winVenta_Detalle.Show();
+
+                    if (Session.DisenhoBoleta == 1)
+                    {
+                        winVenta_Detalle winVenta_Detalle = new winVenta_Detalle();
+                        winVenta_Detalle.Show();
+                    }
+                    else
+                    {
+                        winVenta_Detalle_2 winVenta_Detalle_2 = new winVenta_Detalle_2();
+                        winVenta_Detalle_2.Show();
+                    }
+
                     dgvDatos.SelectedItem = null;
                 }
                 catch (Exception ex)
