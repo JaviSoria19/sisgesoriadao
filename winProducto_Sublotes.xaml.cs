@@ -216,9 +216,19 @@ namespace sisgesoriadao
                 MessageBox.Show("Por favor, ingrese un monto de pago.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
+
             if (dgvDatos.SelectedItem == null)
             {
                 MessageBox.Show("Por favor, seleccione un sublote para registrar el pago.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            double pagoUSD = double.Parse(txtPagoUSD.Text);
+            double saldoUSD = double.Parse(((DataRowView)dgvDatos.SelectedItem).Row.ItemArray[6].ToString());
+            
+            if (pagoUSD > saldoUSD)
+            {
+                MessageBox.Show("El monto del pago no puede ser mayor al saldo disponible.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
             try
@@ -226,7 +236,7 @@ namespace sisgesoriadao
                 implProducto = new ProductoImpl();
                 DataRowView d = (DataRowView)dgvDatos.SelectedItem;
                 int id = int.Parse(d.Row.ItemArray[0].ToString());
-                double pagoUSD = double.Parse(txtPagoUSD.Text);
+                
                 PagoSublote pagoSublote = new PagoSublote(id, pagoUSD, DateTime.Now);
 
                 if (implProducto.InsertPaymentSubBatch(pagoSublote) > 0)

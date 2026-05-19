@@ -38,5 +38,6 @@ namespace sisgesoriadao.Interfaces
         DataTable SelectLikePaymentMethodsByCustomers(DateTime fechaInicio, DateTime fechaFin, string productoOCodigo);
         int UpdateSaleEmployee(byte IdEmpleado, int IdVenta);
         int UpdateSaleIsWholesale(byte EsVentaPorMayor, int IdVenta);
+        int UpdateSaleAsNoBalance(int IdVenta);
     }
 }

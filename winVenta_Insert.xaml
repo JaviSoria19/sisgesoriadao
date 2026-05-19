@@ -48,7 +48,7 @@
         </Grid.RowDefinitions>
 
         <!-- ========== ENCABEZADO PRINCIPAL ========== -->
-        <materialDesign:ColorZone Grid.Row="0" Mode="PrimaryMid" Padding="16" 
+        <materialDesign:ColorZone x:Name="colorZoneHeader" Grid.Row="0" Mode="PrimaryMid" Padding="16" 
                                    materialDesign:ElevationAssist.Elevation="Dp4">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -84,7 +84,7 @@
 
                     <materialDesign:PackIcon Kind="ShoppingOutline" Width="24" Height="24" 
                                             VerticalAlignment="Center" Foreground="White"/>
-                    <TextBlock Text="REGISTRAR VENTA" 
+                    <TextBlock x:Name="tituloVentana" Text="REGISTRAR VENTA" 
                               Margin="8,0,0,0" FontSize="18" 
                               VerticalAlignment="Center" FontWeight="Bold" Foreground="White"/>
                 </StackPanel>

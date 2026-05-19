@@ -260,27 +260,6 @@ namespace sisgesoriadao
             lblCustomerNumeroCelular.Foreground = new SolidColorBrush(Colors.ForestGreen);
         }
 
-        private void BuscarYMostrarClientePorCI(string numeroCI)
-        {
-            try
-            {
-                implCliente = new ClienteImpl();
-                cliente = implCliente.GetByCIorCelular(numeroCI);
-
-                if (cliente != null)
-                {
-                    MostrarDatosClienteEnPantalla();
-                    DisableCustomerButtons();
-                    acbxGetClientesFromDatabase();
-                    btnEditCustomer.IsEnabled = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Transacción no completada; comuníquese con el Administrador de Sistemas, error: \n" + ex.Message);
-            }
-        }
-
         private void MostrarDatosClienteEnPantalla()
         {
             acbtxtNameCustomer.Text = cliente.Nombre.Trim();
@@ -335,6 +314,22 @@ namespace sisgesoriadao
             cbxSaleType.Items.Add(new ComboboxItem(){ Texto = "VENTA NORMAL", Valor = 0 });
             cbxSaleType.Items.Add(new ComboboxItem() { Texto = "VENTA POR MAYOR", Valor = 1 });
             cbxSaleType.SelectedIndex = 0;
+
+            if (Session.MenuEsVentaPorMayor == 1)
+            {
+                cbxSaleType.SelectedIndex = 2;
+                cbxSaleType.IsEnabled = false;
+                esVentaPorMayor = 1;
+                tituloVentana.Text = "REGISTRAR VENTA POR MAYOR";
+            }
+            else
+            {
+                cbxSaleType.SelectedIndex = 1;
+                cbxSaleType.IsEnabled = false;
+                esVentaPorMayor = 0;
+                tituloVentana.Text = "REGISTRAR VENTA";
+                colorZoneHeader.Background = new SolidColorBrush(Colors.LimeGreen);
+            }
         }
         private void TextBoxUppercase(object sender, KeyEventArgs e)
         {
@@ -511,7 +506,11 @@ namespace sisgesoriadao
                 descuentoUSD = 0,
                 descuentoBOB = 0,
                 totalproductoUSD = producto.PrecioVentaUSD,
-                totalproductoBOB = producto.PrecioVentaBOB,
+                // Se cambió a calcular el total en BOB a partir del precio en USD
+                // para mantener la coherencia con el tipo de cambio actual y que el
+                // saldo pendiente refleje correctamente las fluctuaciones del dólar,
+                // en lugar de usar el precio de venta en BOB que podría no estar actualizado.
+                totalproductoBOB = Math.Round(producto.PrecioVentaUSD * Session.Ajuste_Cambio_Dolar, 2),
                 garantia = categoria.Garantia,
                 costoUSD = producto.CostoUSD
             });
@@ -519,7 +518,7 @@ namespace sisgesoriadao
             // Actualiza los totales y saldos
             venta_TotalUSD += producto.PrecioVentaUSD;
             txtVentaTotalVentaUSD.Text = venta_TotalUSD.ToString();
-            venta_TotalBOB += producto.PrecioVentaBOB;
+            venta_TotalBOB += Math.Round(producto.PrecioVentaUSD * Session.Ajuste_Cambio_Dolar, 2);
             txtVentaTotalVentaBOB.Text = venta_TotalBOB.ToString();
 
             venta_saldoUSD = Math.Round(venta_TotalUSD - venta_pagoTotalUSD, 2);
@@ -906,8 +905,18 @@ namespace sisgesoriadao
             {
                 ventaRegistrada = true;
                 Session.IdVentaDetalle = implVenta.GetIDAfterInsert();
-                winVenta_Detalle winVenta_Detalle = new winVenta_Detalle();
-                winVenta_Detalle.Show();
+
+                if (Session.DisenhoBoleta == 1)
+                {
+                    winVenta_Detalle winVenta_Detalle = new winVenta_Detalle();
+                    winVenta_Detalle.Show();
+                }
+                else
+                {
+                    winVenta_Detalle_2 winVenta_Detalle_2 = new winVenta_Detalle_2();
+                    winVenta_Detalle_2.Show();
+                }
+
                 this.Close();
             }
             catch (Exception ex)

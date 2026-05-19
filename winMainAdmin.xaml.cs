@@ -101,8 +101,15 @@ namespace sisgesoriadao
             winTransferencia winTransferencia = new winTransferencia();
             winTransferencia.Show();
         }
-        private void btnSaleAdd_Click(object sender, RoutedEventArgs e)
+        private void btnNormalSaleAdd_Click(object sender, RoutedEventArgs e)
         {
+            Session.MenuEsVentaPorMayor = 0;
+            winVenta_Insert winVenta_Insert = new winVenta_Insert();
+            winVenta_Insert.Show();
+        }
+        private void btnWholeSaleAdd_Click(object sender, RoutedEventArgs e)
+        {
+            Session.MenuEsVentaPorMayor = 1;
             winVenta_Insert winVenta_Insert = new winVenta_Insert();
             winVenta_Insert.Show();
         }

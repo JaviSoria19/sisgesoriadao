@@ -211,7 +211,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN Usuario U ON V.idUsuario = U.idUsuario
                             INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
                             INNER JOIN Producto P ON DV.idProducto = P.idProducto
-                            WHERE (V.saldoUSD > 0 AND V.saldoBOB > 0) AND V.idSucursal = @SessionIdSucursal AND V.estado = 1
+                            WHERE (V.saldoUSD > 0) AND V.idSucursal = @SessionIdSucursal AND V.estado = 1
                             GROUP BY V.idVenta ORDER BY 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
@@ -807,7 +807,7 @@ namespace sisgesoriadao.Implementation
         {
             string query = @"SELECT V.idCliente AS ID, C.nombre AS Nombre, C.numeroCelular AS Celular, SUM(V.saldoUSD) AS 'Saldo Total', " + Session.FormatoFechaMySql("V.fechaRegistro") + @" AS 'Fecha' FROM Venta V
                                 INNER JOIN Cliente C ON C.idCliente = V.idCliente
-                                WHERE (V.saldoUSD > 0 AND V.saldoBOB > 0) AND V.estado = 1 AND V.idSucursal = @SessionIdSucursal
+                                WHERE (V.saldoUSD > 0) AND V.estado = 1 AND V.idSucursal = @SessionIdSucursal
                                 GROUP BY V.idCliente
                                 ORDER BY V.fechaRegistro ASC";
             MySqlCommand command = CreateBasicCommand(query);
@@ -830,7 +830,7 @@ namespace sisgesoriadao.Implementation
                             INNER JOIN Detalle_Venta DV ON V.idVenta = DV.idVenta
                             INNER JOIN Producto P ON DV.idProducto = P.idProducto
                             LEFT JOIN Metodo_Pago MP ON V.idVenta = MP.idVenta
-                            WHERE (V.saldoUSD > 0 AND V.saldoBOB > 0) AND V.idSucursal = @SessionIdSucursal AND V.estado = 1 AND V.idCliente = @SessionIdCliente
+                            WHERE (V.saldoUSD > 0) AND V.idSucursal = @SessionIdSucursal AND V.estado = 1 AND V.idCliente = @SessionIdCliente
                             GROUP BY V.idVenta ORDER BY 1 ASC";
             MySqlCommand command = CreateBasicCommand(query);
             command.Parameters.AddWithValue("@SessionIdSucursal", Session.Sucursal_IdSucursal);
@@ -1047,6 +1047,22 @@ namespace sisgesoriadao.Implementation
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        public int UpdateSaleAsNoBalance(int IdVenta)
+        {
+            string query = @"UPDATE Venta SET saldoUSD = 0 WHERE idVenta = @idVenta AND saldoUSD <> 0 AND saldoBOB = 0";
+            MySqlCommand command = CreateBasicCommand(query);
+            command.Parameters.AddWithValue("@idVenta", IdVenta);
+            try
+            {
+                return ExecuteBasicCommand(command);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
         }
     }

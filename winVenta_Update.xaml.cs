@@ -861,8 +861,16 @@ namespace sisgesoriadao
             try
             {
                 Session.IdVentaDetalle = idVenta;
-                winVenta_Detalle winVenta_Detalle = new winVenta_Detalle();
-                winVenta_Detalle.Show();
+                if (Session.DisenhoBoleta == 1)
+                {
+                    winVenta_Detalle winVenta_Detalle = new winVenta_Detalle();
+                    winVenta_Detalle.Show();
+                }
+                else
+                {
+                    winVenta_Detalle_2 winVenta_Detalle_2 = new winVenta_Detalle_2();
+                    winVenta_Detalle_2.Show();
+                }
             }
             catch (Exception ex)
             {
@@ -1340,6 +1348,36 @@ namespace sisgesoriadao
         private void btndgvRemoverMetodoPago_Click(object sender, RoutedEventArgs e)
         {
             removeFromDGVPaymentMethod(dgvMetodosPago.SelectedIndex);
+        }
+
+        private void btnSetAsNoBalance_Click(object sender, RoutedEventArgs e)
+        {
+            if (venta_saldoUSD == 0)
+            {
+                MessageBox.Show("NO SE PUEDE REALIZAR LA OPERACIÓN, EL SALDO EN DÓLARES ES CERO.");
+                return;
+            }
+            int messageBoxResult = (int)MessageBox.Show("¿Está seguro de marcar esta venta como SIN SALDO? \nEsta acción hará que la venta ya no aparezca como pendiente y establecerá el saldo en dólares a cero.", "MARCAR VENTA COMO SIN SALDO", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            
+            if (venta_saldoBOB == 0 && messageBoxResult == (int)MessageBoxResult.Yes)
+            {
+                implVenta = new VentaImpl();
+                int resultado = implVenta.UpdateSaleAsNoBalance(idVenta);
+                if (resultado > 0)
+                {
+                    MessageBox.Show("LA VENTA HA SIDO MARCADA COMO SIN SALDO, YA NO APARECERÁ COMO PENDIENTE.");
+                    getSale_Products();
+                    imprimirVenta();
+                }
+                else
+                {
+                    MessageBox.Show("ERROR AL MARCAR LA VENTA COMO SIN SALDO, INTENTE NUEVAMENTE.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("LA VENTA AÚN CUENTA CON SALDO EN BOLIVIANOS, NO PUEDE SER MARCADA COMO SIN SALDO.\nTAMBIÉN DEBE TENER SALDO EN DÓLARES Y EL SALDO EN BOLIVIANOS DEBE SER CERO.");
+            }
         }
 
         public class DataGridRowDetalleHelper

@@ -61,11 +61,18 @@
                         <!-- WrapPanel 1 -->
                         <WrapPanel HorizontalAlignment="Center" Margin="5" ItemWidth="120" ItemHeight="150">
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                                <Button x:Name="btnSaleAdd" Width="100" Height="100" Click="btnSaleAdd_Click" Background="LimeGreen" BorderBrush="LimeGreen" Foreground="{DynamicResource MaterialDesignBody}">
+                                <Button x:Name="btnNormalSaleAdd" Width="100" Height="100" Click="btnNormalSaleAdd_Click" Background="LimeGreen" BorderBrush="LimeGreen" Foreground="{DynamicResource MaterialDesignBody}">
                                     <materialDesign:PackIcon Kind="CartAdd" Width="80" Height="80" HorizontalAlignment="Center"/>
                                 </Button>
                                 <TextBlock Text="REGISTRAR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
-                                <TextBlock Text="VENTA" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                                <TextBlock Text="VENTA NORMAL" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                <Button x:Name="btnWholeSaleAdd" Width="100" Height="100" Click="btnWholeSaleAdd_Click" Background="Red" BorderBrush="Red" Foreground="{DynamicResource MaterialDesignBody}">
+                                    <materialDesign:PackIcon Kind="CartAdd" Width="80" Height="80" HorizontalAlignment="Center"/>
+                                </Button>
+                                <TextBlock Text="REGISTRAR" Margin="0,4,0,0" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                                <TextBlock Text="VENTA POR MAYOR" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                             </StackPanel>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                                 <Button x:Name="btnLocalSales" Width="100" Height="100" Click="btnLocalSales_Click" Background="DeepSkyBlue" BorderBrush="DeepSkyBlue" Foreground="{DynamicResource MaterialDesignBody}">
